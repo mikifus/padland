@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+            android:title="@string/pref_header_general">
+
+        <CheckBoxPreference
+                android:key="auto_save_new_pads"
+                android:title="@string/settings_save_new_pads_title"
+                android:summary="@string/settings_save_new_pads_desc"
+                android:defaultValue="true"
+                />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/user_preferences">
+
+        <EditTextPreference
+            android:key="padland_default_username"
+            android:title="@string/settings_default_username"
+            android:summary="@string/settings_default_username_explanation"
+            android:dialogTitle="Set username"
+            android:dialogMessage=""
+            android:defaultValue="" />
+
+        <EditTextPreference
+            android:key="padland_default_color"
+            android:title="@string/settings_default_color"
+            android:summary="@string/settings_default_color_explanation"
+            android:dialogTitle="@string/settings_default_color_dialogtitle"
+            android:dialogMessage="@string/settings_default_color_dialogdesc"
+            android:defaultValue="#555" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

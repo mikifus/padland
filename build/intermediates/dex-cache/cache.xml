@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/home/mikifus/AndroidStudioProjects/Padland/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
+        <dex dex="/home/mikifus/AndroidStudioProjects/Padland/app/build/intermediates/pre-dexed/debug/classes-c8967b2c451f5d7ae4f7451808ecafd98a8a74c9.jar" />
+    </item>
+    <item
+        jar="/home/mikifus/AndroidStudioProjects/Padland/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/libs/internal_impl-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
+        <dex dex="/home/mikifus/AndroidStudioProjects/Padland/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-3c970629928df63ecbbd629e9b0b73d7ee6131fd.jar" />
+    </item>
+    <item
+        jar="/home/mikifus/AndroidStudioProjects/Padland/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
+        <dex dex="/home/mikifus/AndroidStudioProjects/Padland/app/build/intermediates/pre-dexed/debug/classes-f3f6e535974abba2d80df9d8d3f3adfaf9f5db57.jar" />
+    </item>
+    <item
+        jar="/home/mikifus/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/21.0.3/support-annotations-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
+        <dex dex="/home/mikifus/AndroidStudioProjects/Padland/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-6a0a6d2a91bab92c18798be04a809d1f1b0ad226.jar" />
+    </item>
+
+</items>
