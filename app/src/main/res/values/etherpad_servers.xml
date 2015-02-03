@@ -1,2 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string-array name="etherpad_servers_name">
+        <item>RiseUp.net</item>
+        <item>Titanpad.com</item>
+        <item>Meeting Words</item>
+        <item>Piratepad</item>
+        <item>Piraten Pad</item>
+        <item>Mozilla Etherpad</item>
+        <item>Framapad.org</item>
+        <item>Primarypad</item>
+    </string-array>
+
+    <string-array name="etherpad_servers_url_home">
+        <item>https://riseup.net</item>
+        <item>https://titanpad.com</item>
+        <item>http://meetingwords.com</item>
+        <item>http://piratepad.net</item>
+        <item>http://piratenpad.de</item>
+        <item>http://etherpad.mozilla.org</item>
+        <item>http://framapad.net</item>
+        <item>http://free.primarypad.com</item>
+    </string-array>
+
+    <string-array name="etherpad_servers_url_padprefix">
+        <item>https://riseup.net/p/</item>
+        <item>https://titanpad.com/</item>
+        <item>http://meetingwords.com</item>
+        <item>http://piratepad.net/</item>
+        <item>http://piratenpad.de/</item>
+        <item>http://etherpad.mozilla.org/</item>
+        <item>http://framapad.net/</item>
+        <item>http://free.primarypad.com/p/</item>
+    </string-array>
+</resources>
