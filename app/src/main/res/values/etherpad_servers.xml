@@ -23,7 +23,7 @@
     </string-array>
 
     <string-array name="etherpad_servers_url_padprefix">
-        <item>https://riseup.net/p/</item>
+        <item>https://pad.riseup.net/p/</item>
         <item>https://titanpad.com/</item>
         <item>http://meetingwords.com</item>
         <item>http://piratepad.net/</item>
