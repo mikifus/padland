@@ -9,7 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
- * Created by mikifus on 12/01/15.
+ * Just displays an about message
+ * @author
  */
 public class About extends PadLandActivity {
 
