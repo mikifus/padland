@@ -1,3 +1,18 @@
+/*
+ * Copyleft PadLand
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.mikifus.padland;
 
 import android.app.AlertDialog;
@@ -25,6 +40,13 @@ import android.widget.Toast;
 import java.text.DateFormat;
 import java.util.Date;
 
+/**
+ * This activity displays a list of previously checked documents.
+ * It handles as well the sharing intent to the app.
+ *
+ * @author mikifus
+ * @since 0.1
+ */
 public class PadListActivity extends PadLandActivity
     implements ActionMode.Callback,LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -35,11 +57,40 @@ public class PadListActivity extends PadLandActivity
 
     private SimpleCursorAdapter adapter = null;
 
+    /**
+     * Override onCreate
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        // Layout
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_padlist);
 
+        // Intent
+        this._textFromIntent();
+        
+        // Loader
+        this.initLoader( (LoaderManager.LoaderCallbacks) this );
+        
+        // Init list view
+        ListView lv = this._initListView();
+        this._setListViewEvents( lv );
+
+        // Get the data
+        SimpleCursorAdapter data_adapter = this._getDataAdapter();
+
+        // Bind to adapter.
+        lv.setAdapter(data_adapter);
+
+    }
+
+    /**
+     * If there is a share intent this function gets the extra text
+     * and copies it into clipboard
+     */
+    private void _textFromIntent() {
         String extra_text = getIntent().getStringExtra(Intent.EXTRA_TEXT);
         if(extra_text != null) {
             if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.HONEYCOMB) {
@@ -53,16 +104,26 @@ public class PadListActivity extends PadLandActivity
 
             Toast.makeText(this, getString(R.string.activity_padlist_implicitintent_text_copied), Toast.LENGTH_LONG).show();
         }
+    }
 
-        getLoaderManager().initLoader(0, null, this);
-
+    /**
+     * Makes an empty ListView and returns it.
+     * @return ListView
+     */
+    private ListView _initListView(){
         final ListView lv = (ListView) findViewById(R.id.listView);
         lv.setTextFilterEnabled(true);
         lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         lv.setEmptyView(findViewById(android.R.id.empty));
+        return lv;
+    }
 
+    /**
+     * This function adds events listeners for a ListView object to provide usage of the ActionBar
+     * @param lv
+     */
+    private void _setListViewEvents(final ListView lv){
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(mActionMode != null){
                     AdapterView.OnItemLongClickListener listener = lv.getOnItemLongClickListener();
@@ -78,7 +139,6 @@ public class PadListActivity extends PadLandActivity
         });
 
         lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 /*if (mActionMode != null) {
@@ -95,9 +155,10 @@ public class PadListActivity extends PadLandActivity
                 return true;
             }
         });
+    }
 
-        String PADLIST_REQUEST = "content://com.mikifus.padland.padlandcontentprovider/padlist";
-        Uri padlist_uri = Uri.parse(PADLIST_REQUEST);
+    private SimpleCursorAdapter _getDataAdapter(){
+        Uri padlist_uri = Uri.parse( getString( R.string.request_padlist ) );
         Cursor c = getContentResolver().query(padlist_uri,
                 new String[] {PadLandContentProvider._ID, PadLandContentProvider.NAME, PadLandContentProvider.URL, PadLandContentProvider.LAST_USED_DATE},
                 null,
@@ -129,11 +190,127 @@ public class PadListActivity extends PadLandActivity
             }
         }); // Corrects the data and displays it okay
 
-        // Bind to our new adapter.
-        lv.setAdapter(adapter);
-
+        return adapter;
     }
 
+    /**
+     * Data loader initial event
+     * @param id
+     * @param args
+     * @return
+     */
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String[] projection = { PadLandContentProvider._ID, PadLandContentProvider.NAME, PadLandContentProvider.URL, PadLandContentProvider.LAST_USED_DATE };
+        CursorLoader cursorLoader = new CursorLoader(this,
+                PadLandContentProvider.CONTENT_URI, projection, null, null, null);
+        return cursorLoader;
+    }
+
+    /**
+     * Data loader finish event
+     * @param loader
+     * @param data
+     */
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        adapter.swapCursor(data);
+    }
+
+    /**
+     * Data loader event
+     * @param loader
+     */
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        // data is not available anymore, delete reference
+        adapter.swapCursor(null);
+    }
+
+    /**
+     * Called when the action mode is created; startActionMode() was called
+     * @param mode
+     * @param menu
+     * @return boolean
+     */
+    @Override
+    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+        // Inflate a menu resource providing context menu items
+        MenuInflater inflater = mode.getMenuInflater();
+        inflater.inflate(R.menu.rowselection, menu);
+
+        mActionMode = mode;
+
+        return true;
+    }
+
+    /**
+     * Called each time the action mode is shown. Always called after onCreateActionMode, but
+     * may be called multiple times if the mode is invalidated.
+     * @param mode
+     * @param menu
+     * @return boolean
+     */
+    @Override
+    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        return false; // Return false if nothing is done
+    }
+
+    /**
+     * Called when the user selects a contextual menu item
+     * @param mode
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menuitem_delete:
+                AskDelete(selectedItem_id);
+                // Action picked, so close the CAB
+                mode.finish();
+                return true;
+            case R.id.menuitem_share:
+                menu_share(selectedItem_id);
+                // Action picked, so close the CAB
+                mode.finish();
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * Called when the user exits the action mode
+     * @param mode
+     */
+    @Override
+    public void onDestroyActionMode(ActionMode mode) {
+        ListView lv = (ListView) findViewById(R.id.listView);
+        if(selectedItem_id > 0) {
+            lv.setItemChecked(selectedItem_position, false);
+            //selectedItem.setChecked(false);
+        }
+
+        mActionMode = null;
+        selectedItem = null;
+        selectedItem_id = -1;
+        selectedItem_position = -1;
+    }
+
+    /**
+     * backbutton event
+     */
+    public void onBackPressed(){
+        onDestroyActionMode(mActionMode);
+        super.onBackPressed();
+    }
+
+    /**
+     * Asks the user to confirm deleting a document
+     * @param selectedItem_id
+     * @return AlertDialog
+     */
     private AlertDialog AskDelete(final long selectedItem_id)
     {
         AlertDialog DeleteDialogBox = new AlertDialog.Builder(this)
@@ -161,6 +338,10 @@ public class PadListActivity extends PadLandActivity
 
     }
 
+    /**
+     * Menu to share a document url
+     * @param selectedItem_id
+     */
     private void menu_share(long selectedItem_id) {
         Cursor c = getContentResolver().query(PadLandContentProvider.CONTENT_URI,
                 new String[] {PadLandContentProvider._ID, PadLandContentProvider.URL},
@@ -178,104 +359,14 @@ public class PadListActivity extends PadLandActivity
         startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.share_document)));
     }
 
+    /**
+     * Deletes element from the content provider
+     * @param selectedItem_id
+     */
     private void menu_delete(long selectedItem_id) {
         String[] ids = {String.valueOf(selectedItem_id)};
         getContentResolver().delete(PadLandContentProvider.CONTENT_URI,
                 PadLandContentProvider._ID + "=?",
                 ids);
-    }
-
-    // Called when the action mode is created; startActionMode() was called
-    @Override
-    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-        // Inflate a menu resource providing context menu items
-        MenuInflater inflater = mode.getMenuInflater();
-        inflater.inflate(R.menu.rowselection, menu);
-
-        mActionMode = mode;
-
-        return true;
-    }
-
-    // Called each time the action mode is shown. Always called after
-    // onCreateActionMode, but
-    // may be called multiple times if the mode is invalidated.
-    @Override
-    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-        return false; // Return false if nothing is done
-    }
-
-    // Called when the user selects a contextual menu item
-    @Override
-    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menuitem_delete:
-                AskDelete(selectedItem_id);
-                // Action picked, so close the CAB
-                mode.finish();
-                return true;
-            case R.id.menuitem_share:
-                menu_share(selectedItem_id);
-                // Action picked, so close the CAB
-                mode.finish();
-                return true;
-            default:
-                return false;
-        }
-    }
-
-    // Called when the user exits the action mode
-    @Override
-    public void onDestroyActionMode(ActionMode mode) {
-        ListView lv = (ListView) findViewById(R.id.listView);
-        if(selectedItem_id > 0) {
-            lv.setItemChecked(selectedItem_position, false);
-            //selectedItem.setChecked(false);
-        }
-
-        mActionMode = null;
-        selectedItem = null;
-        selectedItem_id = -1;
-        selectedItem_position = -1;
-    }
-    public void onBackPressed(){
-        onDestroyActionMode(mActionMode);
-        super.onBackPressed();
-    }
-/*
-    public void onItemCheckedStateChanged(ActionMode mode,
-                                          int position, long id, boolean checked) {
-        ListView lv = (ListView) findViewById(R.id.listView);
-        final int checkedCount = lv.getCheckedItemCount();
-        switch (checkedCount) {
-            case 0:
-                mode.setSubtitle(null);
-                break;
-            case 1:
-                mode.setSubtitle("One item selected");
-                break;
-            default:
-                mode.setSubtitle("" + checkedCount + " items selected");
-                break;
-        }
-    }*/
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String[] projection = { PadLandContentProvider._ID, PadLandContentProvider.NAME, PadLandContentProvider.URL, PadLandContentProvider.LAST_USED_DATE };
-        CursorLoader cursorLoader = new CursorLoader(this,
-                PadLandContentProvider.CONTENT_URI, projection, null, null, null);
-        return cursorLoader;
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        adapter.swapCursor(data);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        // data is not available anymore, delete reference
-        adapter.swapCursor(null);
     }
 }

@@ -10,7 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by mikifus on 13/01/15.
+ * Parent App class
+ * @author mikifus
  */
 public class PadlandApp extends Application {
 

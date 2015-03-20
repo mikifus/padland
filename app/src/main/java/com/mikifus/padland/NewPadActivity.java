@@ -12,69 +12,102 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+/**
+ * Allows the user to create a new pad, choosing a name and the host.
+ *
+ * @author mikifus
+ */
 public class NewPadActivity extends PadLandActivity {
 
+    /**
+     * onCreate override
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_newpad);
 
-        // Set default position choosen by user
-        // This can be changed on the preferences
-        Spinner spinner = (Spinner) findViewById(R.id.spinner);
-        ArrayAdapter adapter = (ArrayAdapter) spinner.getAdapter();
+        this._setSpinnerDefaultValue();
+    }
 
-        // Server list to provide a default value
-        String server_list [] = getResources().getStringArray(R.array.etherpad_servers_name);
+    /**
+     * Gets the default value from user settings and selects it in the
+     * spinner. This value can be changed in the settings activity.
+     */
+    private void _setSpinnerDefaultValue(){
+        String default_server = this._getDefaultSpinnerValue();
+
+        // We get position and set it as default
+        Spinner spinner = (Spinner) findViewById( R.id.spinner );
+        ArrayAdapter adapter = (ArrayAdapter) spinner.getAdapter();
+        spinner.setSelection( adapter.getPosition( default_server ) );
+    }
+
+    /**
+     * Returns a string with the default server name. Being a key in the server
+     * array
+     * @return
+     */
+    private String _getDefaultSpinnerValue(){
+        // Server list to provide a fallback value
+        String server_list [] = getResources().getStringArray( R.array.etherpad_servers_name );
 
         // Getting user preferences
         Context context = getApplicationContext();
-        SharedPreferences userDetails = context.getSharedPreferences(getPackageName() + "_preferences", context.MODE_PRIVATE);
-        String default_server = userDetails.getString("padland_default_server", server_list[0]);
-
-        // We get position and set it as default
-        spinner.setSelection(adapter.getPosition(default_server));
+        SharedPreferences userDetails = context.getSharedPreferences( getPackageName() + "_preferences", context.MODE_PRIVATE );
+        String default_server = userDetails.getString( "padland_default_server", server_list[0] );
+        return default_server;
     }
 
-    public boolean onCreateOptionsMenu(Menu menu) {
+    /**
+     * Creates the menu
+     * @param menu
+     * @return
+     */
+    public boolean onCreateOptionsMenu( Menu menu ) {
         return super.onCreateOptionsMenu(menu, R.menu.new_pad);
     }
 
-    public void onCreateButtonClick(View w){
+    /**
+     * Form submit
+     * @param w
+     */
+    public void onCreateButtonClick( View w ){
 
-        String padName = getPadNameFromInput((TextView) findViewById(R.id.editText));
-        String padPrefix = getPadPrefixFromSpinner((Spinner) findViewById(R.id.spinner));
-        String padServer = getPadServerFromSpinner((Spinner) findViewById(R.id.spinner));
+        String padName = this.getPadNameFromInput( (TextView) findViewById(R.id.editText) );
+        String padPrefix = this.getPadPrefixFromSpinner( (Spinner) findViewById(R.id.spinner) );
+        String padServer = this.getPadServerFromSpinner( (Spinner) findViewById(R.id.spinner) );
 
         String padUrl = padPrefix + padName;
 
-        if (padName == "") {
+        if ( padName == "" ) {
             return;
         }
 
         Intent padViewIntent =
-                new Intent(NewPadActivity.this, PadViewActivity.class);
-        padViewIntent.putExtra("padName", padName);
-        padViewIntent.putExtra("padServer", padServer);
-        padViewIntent.putExtra("padUrl", padUrl);
+                new Intent( NewPadActivity.this, PadViewActivity.class );
+        padViewIntent.putExtra( "padName", padName );
+        padViewIntent.putExtra( "padServer", padServer );
+        padViewIntent.putExtra( "padUrl", padUrl );
 
         startActivity(padViewIntent);
     }
 
-    private String getPadNameFromInput(TextView input){
+    private String getPadNameFromInput( TextView input ){
         String padName = (String) input.getText().toString();
 
         return padName;
     }
 
-    private String getPadPrefixFromSpinner(Spinner spinner){
-        String padPrefix = getResources().getStringArray(R.array.etherpad_servers_url_padprefix)[spinner.getSelectedItemPosition()];
+    private String getPadPrefixFromSpinner( Spinner spinner ){
+        String padPrefix = getResources().getStringArray( R.array.etherpad_servers_url_padprefix )[spinner.getSelectedItemPosition()];
 
         return padPrefix;
     }
 
-    private String getPadServerFromSpinner(Spinner spinner){
-        String padServer = getResources().getStringArray(R.array.etherpad_servers_url_home)[spinner.getSelectedItemPosition()];
+    private String getPadServerFromSpinner( Spinner spinner ){
+        String padServer = getResources().getStringArray( R.array.etherpad_servers_url_home )[spinner.getSelectedItemPosition()];
 
         return padServer;
     }

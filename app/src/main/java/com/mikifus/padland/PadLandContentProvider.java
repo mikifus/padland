@@ -15,16 +15,18 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import java.util.HashMap;
-import java.util.Map;
 
+/**
+ * The content provider allows to store and read database information for the app.
+ *
+ * @author mikifus
+ */
 public class PadLandContentProvider extends ContentProvider {
 
     static final String PROVIDER_NAME = "com.mikifus.padland.padlandcontentprovider";
     static final String TAG = "PadLandContentProvider";
     static final String AUTHORITY = "content://" + PROVIDER_NAME + "/padlist";
-    public static final Uri CONTENT_URI = Uri.parse(AUTHORITY);
-    static final String SINGLE_RECORD_MIME_TYPE = "vnd.android.cursor.item/vnd.mikifus.android.lifecycle.status";
-    static final String MULTIPLE_RECORDS_MIME_TYPE = "vnd.android.cursor.dir/vnd.mikifus.android.lifecycle.status";
+    public static final Uri CONTENT_URI = Uri.parse( AUTHORITY );
 
     static final String _ID = "_id";
     static final String NAME = "name";
@@ -32,12 +34,10 @@ public class PadLandContentProvider extends ContentProvider {
     static final String URL = "url";
     static final String LAST_USED_DATE = "last_used_date";
 
-    private static HashMap<String, String> PROJECTION_MAP;
-
-
-
     static final int PADLIST = 1;
     static final int PAD_ID = 2;
+
+    private static HashMap<String, String> PROJECTION_MAP;
 
     static final UriMatcher uriMatcher;
     static{
@@ -85,6 +85,10 @@ public class PadLandContentProvider extends ContentProvider {
         }
     }
 
+    /**
+     * onCreate override
+     * @return
+     */
     @Override
     public boolean onCreate() {
         Context context = getContext();
@@ -98,6 +102,13 @@ public class PadLandContentProvider extends ContentProvider {
         return (db == null)? false:true;
     }
 
+    /**
+     * Deletes a document from the db
+     * @param uri
+     * @param selection
+     * @param selectionArgs
+     * @return
+     */
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         int count = 0;
@@ -108,7 +119,7 @@ public class PadLandContentProvider extends ContentProvider {
                 break;
             case PAD_ID:
                 String id = uri.getPathSegments().get(1);
-                count = db.delete( TABLE_NAME, _ID +  " = " + id +
+                count = db.delete(TABLE_NAME, _ID + " = " + id +
                         (!TextUtils.isEmpty(selection) ? " AND (" +
                                 selection + ')' : ""), selectionArgs);
                 break;
@@ -120,78 +131,16 @@ public class PadLandContentProvider extends ContentProvider {
         return count;
     }
 
+    /**
+     * Updates a document's info
+     * @param uri
+     * @param values
+     * @param selection
+     * @param selectionArgs
+     * @return
+     */
     @Override
-    public String getType(Uri uri) {
-        switch (uriMatcher.match(uri)){
-            /**
-             * Get all student records
-             */
-            case PADLIST:
-                return "vnd.android.cursor.dir/vnd.example.students";
-            /**
-             * Get a particular student
-             */
-            case PAD_ID:
-                return "vnd.android.cursor.item/vnd.example.students";
-            default:
-                throw new IllegalArgumentException("Unsupported URI: " + uri);
-        }
-    }
-
-    @Override
-    public Uri insert(Uri uri, ContentValues values) {
-        /**
-         * Add a new record
-         */
-        long rowID = db.insert(	TABLE_NAME, "", values);
-        /**
-         * If record is added successfully
-         */
-        if (rowID > 0)
-        {
-            Uri _uri = ContentUris.withAppendedId(CONTENT_URI, rowID);
-            getContext().getContentResolver().notifyChange(_uri, null);
-            return _uri;
-        }
-        throw new SQLException("Failed to add a record into " + uri);
-    }
-
-    @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-
-        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-        qb.setTables(TABLE_NAME);
-
-        switch (uriMatcher.match(uri)) {
-            case PADLIST:
-                qb.setProjectionMap(PROJECTION_MAP);
-                break;
-            case PAD_ID:
-                qb.appendWhere( _ID + "=" + uri.getPathSegments().get(1));
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown URI " + uri);
-        }
-        if (sortOrder == null || sortOrder.isEmpty()){
-            /**
-             * By default sort
-             */
-            sortOrder = LAST_USED_DATE + " DESC ";
-        }
-        Cursor c = qb.query(db,	projection,	selection, selectionArgs,
-                null, null, sortOrder);
-        /**
-         * register to watch a content URI for changes
-         */
-        c.setNotificationUri(getContext().getContentResolver(), uri);
-
-        return c;
-    }
-
-
-    @Override
-    public int update(Uri uri, ContentValues values, String selection,
-                      String[] selectionArgs) {
+    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         int count = 0;
 
         switch (uriMatcher.match(uri)){
@@ -210,5 +159,83 @@ public class PadLandContentProvider extends ContentProvider {
         }
         getContext().getContentResolver().notifyChange(uri, null);
         return count;
+    }
+
+    /**
+     * It does nothing
+     * @param uri
+     * @return
+     */
+    @Override
+    public String getType(Uri uri) {
+/*        switch (uriMatcher.match(uri)){
+            default:
+                throw new IllegalArgumentException("Unsupported URI: " + uri);
+        }*/
+        return null;
+    }
+
+    /**
+     * Insert into db
+     * @param uri
+     * @param values
+     * @return
+     */
+    @Override
+    public Uri insert(Uri uri, ContentValues values) {
+        /**
+         * Add a new record
+         */
+        long rowID = db.insert(	TABLE_NAME, "", values);
+        /**
+         * If record is added successfully
+         */
+        if (rowID > 0)
+        {
+            Uri _uri = ContentUris.withAppendedId(CONTENT_URI, rowID);
+            getContext().getContentResolver().notifyChange(_uri, null);
+            return _uri;
+        }
+        throw new SQLException("Failed to add a record into " + uri);
+    }
+
+    /**
+     * Query to the the db
+     * @param uri
+     * @param projection
+     * @param selection
+     * @param selectionArgs
+     * @param sortOrder
+     * @return
+     */
+    @Override
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+
+        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+        qb.setTables(TABLE_NAME);
+
+        switch (uriMatcher.match(uri)) {
+            case PADLIST:
+                qb.setProjectionMap( PROJECTION_MAP );
+                break;
+            case PAD_ID:
+                qb.appendWhere( _ID + "=" + uri.getPathSegments().get(1) );
+                break;
+            default:
+                throw new IllegalArgumentException( "Unknown URI " + uri );
+        }
+        if (sortOrder == null || sortOrder.isEmpty()){
+            /**
+             * By default sort
+             */
+            sortOrder = LAST_USED_DATE + " DESC ";
+        }
+        Cursor c = qb.query( db, projection, selection, selectionArgs, null, null, sortOrder );
+        /**
+         * register to watch a content URI for changes
+         */
+        c.setNotificationUri( getContext().getContentResolver(), uri );
+
+        return c;
     }
 }

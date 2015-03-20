@@ -8,11 +8,18 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-
+/**
+ * It does only one thing: show a fullscreen splash image during the
+ * specified time.
+ */
 public class SplashActivity extends Activity {
     /** Duration of wait **/
     private final int SPLASH_DISPLAY_LENGTH = 1500;
 
+    /**
+     * onCreate override
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +37,11 @@ public class SplashActivity extends Activity {
         }, SPLASH_DISPLAY_LENGTH);
     }
 
-
+    /**
+     * Event to create menu
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -38,6 +49,11 @@ public class SplashActivity extends Activity {
         return true;
     }
 
+    /**
+     * Event when an item is selected
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
