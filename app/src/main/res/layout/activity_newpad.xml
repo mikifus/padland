@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:text="@string/go_pad"
             android:id="@+id/button"
-            android:onClick="onCreateButtonClick"
+            android:onClick="onViewButtonClick"
             android:layout_below="@+id/editText"
             android:layout_alignLeft="@+id/editText"
             android:layout_alignRight="@+id/editText"/>

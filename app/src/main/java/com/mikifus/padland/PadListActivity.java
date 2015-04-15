@@ -131,7 +131,7 @@ public class PadListActivity extends PadLandActivity
                     return;
                 }
                 Intent padViewIntent =
-                        new Intent(PadListActivity.this, PadViewActivity.class);
+                        new Intent(PadListActivity.this, PadInfoActivity.class);
                 padViewIntent.putExtra("pad_id", id);
 
                 startActivity(padViewIntent);

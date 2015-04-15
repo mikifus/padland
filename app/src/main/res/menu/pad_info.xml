@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menuitem_share"
+        android:title="@string/share"
+        android:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_menu_share"
+        android:actionProviderClass="android.widget.ShareActionProvider" />
+
+    <item android:id="@+id/menuitem_delete"
+        android:title="@string/delete"
+        android:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_menu_delete" />
+
+    <item android:id="@+id/action_settings"
+        android:title="@string/action_settings"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:icon="@android:drawable/ic_menu_preferences" />
+    <item android:id="@+id/action_about"
+        android:title="@string/about"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:icon="@android:drawable/ic_menu_info_details"/>
+</menu>
