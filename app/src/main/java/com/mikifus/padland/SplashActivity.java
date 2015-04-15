@@ -38,18 +38,6 @@ public class SplashActivity extends Activity {
     }
 
     /**
-     * Event to create menu
-     * @param menu
-     * @return
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_splash, menu);
-        return true;
-    }
-
-    /**
      * Event when an item is selected
      * @param item
      * @return

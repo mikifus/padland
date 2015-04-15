@@ -27,10 +27,9 @@ public class PadLandActivity extends Activity {
 
         return true;
     }
-    public boolean onCreateOptionsMenu(Menu menu, int menu_id) {
+    public boolean onCreateOptionsMenu( Menu menu, int menu_id ) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(menu_id, menu);
-
+        getMenuInflater().inflate( menu_id, menu );
         return true;
     }
 

@@ -43,5 +43,11 @@
         <p>If you\'d like to contribute here is the repository:\n
             <a href='https://github.com/mikifus/padland'>https://github.com/mikifus/padland</a></p>
     </string>
+    <string name="padinfo_view_pad_button">View pad</string>
+    <string name="title_activity_pad_info">Document info</string>
+    <string name="unexpected_error">An unexpected error happened.</string>
+    <string name="title_activity_pad_land_data">PadLandDataActivity</string>
+
+    <string name="hello_world">Hello world!</string>
 
 </resources>

@@ -12,24 +12,28 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <android:uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
+    <android:uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
 
     <application
         android:name=".PadlandApp"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
-
         <activity
             android:name=".SplashActivity"
             android:label="@string/app_name"
-            android:theme="@style/splashScreenTheme">
+            android:theme="@style/splashScreenTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".PadListActivity"
             android:label="@string/title_activity_padlist" >
@@ -43,7 +47,6 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".PadViewActivity"
             android:label="@string/title_activity_pad_view"
@@ -59,7 +62,9 @@
             <!-- Intent filter to catch some arbitrary etherpad services' URLs -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:scheme="https" />
                 <data
                     android:host="pad.riseup.net"
@@ -67,37 +72,49 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:scheme="https" />
                 <data android:host="titanpad.com" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:scheme="http" />
                 <data android:host="meetingwords.com" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:scheme="http" />
                 <data android:host="piratepad.net" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:scheme="https" />
                 <data android:host="piratenpad.de" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:scheme="https" />
                 <data android:host="etherpad.mozilla.org" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:scheme="https" />
                 <data
                     android:host="framapad.net"
@@ -105,12 +122,13 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:scheme="http" />
                 <data android:host="free.primarypad.com" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".NewPadActivity"
             android:label="@string/title_activity_new_pad"
@@ -121,7 +139,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".PadListActivity" />
         </activity>
-
         <activity
             android:name=".About"
             android:label="@string/title_activity_about"
@@ -151,6 +168,19 @@
             android:enabled="true"
             android:exported="true" >
         </provider>
+
+        <activity
+            android:name=".PadInfoActivity"
+            android:label="@string/title_activity_pad_info"
+            android:parentActivityName=".PadListActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mikifus.padland.PadListActivity" />
+        </activity>
+        <activity
+            android:name=".PadLandDataActivity"
+            android:label="@string/title_activity_pad_land_data" >
+        </activity>
     </application>
 
 </manifest>
