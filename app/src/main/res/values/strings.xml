@@ -49,5 +49,6 @@
     <string name="title_activity_pad_land_data">PadLandDataActivity</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="padinfo_pad_info">Document information</string>
 
 </resources>

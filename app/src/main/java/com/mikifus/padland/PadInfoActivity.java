@@ -41,14 +41,22 @@ public class PadInfoActivity extends PadLandDataActivity {
         List<Map<String,?>> datalist = new LinkedList<>();
 
         datalist.add( this._doListItem( "Pad url", pad_data.getUrl() ) );
+        datalist.add( this._doListItem( "Added to list", pad_data.getCreateDate() ) );
+        datalist.add( this._doListItem( "Last viewed", pad_data.getLastUsedDate() ) );
 
         SeparatedListAdapter adapter = new SeparatedListAdapter(this);
 
         // create our list and custom adapter
-        adapter.addSection("Array test", new ArrayAdapter<String>(this,
-                R.layout.list_item, new String[] { "First item", "Item two" }));
-        adapter.addSection("Security", new SimpleAdapter(this, datalist, R.layout.list_complex,
-                new String[] { "title", "caption" }, new int[] { R.id.list_complex_title, R.id.list_complex_caption }));
+        adapter.addSection(getString(R.string.padinfo_pad_info),
+                new SimpleAdapter(this, datalist, R.layout.list_complex,
+                        new String[] { "title", "caption" },
+                        new int[] { R.id.list_complex_title, R.id.list_complex_caption }
+                )
+        );
+
+        /*adapter.addSection("Options",
+                new ArrayAdapter<String>(this, R.layout.list_item, new String[] { "Share", "Delete" })
+        );*/
 
         ListView list = (ListView) findViewById( R.id.listView );
         list.setAdapter(adapter);
