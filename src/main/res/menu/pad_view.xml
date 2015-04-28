@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/action_go_to_list"
+          android:title="@string/action_go_to_list"
+          android:orderInCategory="100"
+          android:showAsAction="never" />
+    <item android:id="@+id/action_save_pad"
+          android:title="@string/save_pad"
+          android:orderInCategory="100"
+          android:showAsAction="never" />
+    <item android:id="@+id/action_settings"
+          android:title="@string/action_settings"
+          android:orderInCategory="100"
+          android:showAsAction="never" />
+    <item android:id="@+id/action_about"
+          android:title="@string/about"
+          android:orderInCategory="100"
+          android:showAsAction="never" />
+</menu>

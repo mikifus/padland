@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
-import android.net.Uri;
+import android.database.MatrixCursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -27,7 +27,7 @@ import android.widget.Toast;
  *
  * @author mikifus
  */
-public class PadViewActivity extends PadLandActivity {
+public class PadViewActivity extends PadLandDataActivity {
     private WebView webView;
     private String current_padUrl = "";
 
@@ -61,7 +61,7 @@ public class PadViewActivity extends PadLandActivity {
 
         // If no network...
         if( !isNetworkAvailable() ) {
-            Toast.makeText(this, getString( R.string.network_is_unreachable ), Toast.LENGTH_LONG).show();
+            Toast.makeText( this, getString( R.string.network_is_unreachable ), Toast.LENGTH_LONG ).show();
             return;
         }
 
@@ -87,31 +87,26 @@ public class PadViewActivity extends PadLandActivity {
      * Gets the pad data from the environment
      */
     private void _makePadUrl(){
-        String[] padData = this._getPadData();
+        padData padData = this._getPadData();
 
-        current_padUrl = padData[2];
+        current_padUrl = padData.getUrl();
     }
 
     /**
      * Gets back the padData set.
-     * TODO: Refactor padData as a new class
-     * @return
+     *
+     * @return padData
      */
-    private String[] _getPadData(){
+    private padData _getPadData(){
         long pad_id = this._getPadId();
-        String[] intentData;
+        padData padData;
 
         if( pad_id > 0 ){
-            intentData = this._getPadDbData( pad_id );
+            Cursor c = this._getPadDbData( pad_id );
+            padData = new padData( c );
         }else{
-            intentData = this._getIntentData();
+            padData = this._getPadDataFromIntent();
         }
-
-        String padName = intentData[0];
-        String padServer = intentData[1];
-        String padUrl = intentData[2];
-
-        String[] padData = makePadData( padName, padServer, padUrl );
         
         return padData;
     }
@@ -121,10 +116,10 @@ public class PadViewActivity extends PadLandActivity {
      * StringExtra intent.
      * @return
      */
-    private String[] _getIntentData(){
+    private padData _getPadDataFromIntent(){
         Intent myIntent = getIntent();
         String action = myIntent.getAction();
-        String[] padData;
+        padData padData;
 
         if ( Intent.ACTION_VIEW.equals( action ) ) {
             String padUrl = String.valueOf( myIntent.getData() );
@@ -145,16 +140,16 @@ public class PadViewActivity extends PadLandActivity {
      * LongExtra) or using the padUrl to make a database query.
      * @return
      */
-    private long _getPadId(){
+    public long _getPadId(){
         Intent myIntent = getIntent();
-        long pad_id = myIntent.getLongExtra( "pad_id", 0 );
+        long pad_id = myIntent.getLongExtra("pad_id", 0);
 
         if( pad_id > 0 ) {
             return pad_id;
         }
 
-        String[] padData = this._getIntentData();
-        Cursor c = this._getPadDataByUrl( padData[2] );
+        padData padData = this._getPadDataFromIntent();
+        Cursor c = this._getPadDataByUrl( padData.getUrl() );
 
         if(c != null && c.getCount() > 0) {
             c.moveToFirst();
@@ -166,30 +161,25 @@ public class PadViewActivity extends PadLandActivity {
 
     /**
      * Saves a new pad from the intent information
-     * TODO: Move data management to an independent Pad model
      */
-    private void _saveNewPad(){
+    private boolean _saveNewPad(){
         Context context = getApplicationContext();
         SharedPreferences userDetails = context.getSharedPreferences(getPackageName() + "_preferences", context.MODE_PRIVATE);
 
+        boolean result = false;
         if ( userDetails.getBoolean("auto_save_new_pads", true) && this._getPadId() == 0 ) {
             // Add a new record
             ContentValues values = new ContentValues();
 
-            String[] intentData = this._getIntentData();
+            padData intentData = this._getPadDataFromIntent();
 
-            String padName = intentData[0];
-            String padServer = intentData[1];
-            String padUrl = intentData[2];
+            values.put( PadLandContentProvider.NAME, intentData.getName() );
+            values.put( PadLandContentProvider.SERVER, intentData.getServer() );
+            values.put( PadLandContentProvider.URL, intentData.getUrl() );
 
-            values.put(PadLandContentProvider.NAME, padName);
-            values.put(PadLandContentProvider.SERVER, padServer);
-            values.put(PadLandContentProvider.URL, padUrl);
-
-            Log.d("INSERT", "Contents = " + values.toString());
-            Uri uri = getContentResolver().insert(
-                    PadLandContentProvider.CONTENT_URI, values);
+            result = savePadData( 0, values );
         }
+        return result;
     }
 
     /**
@@ -259,68 +249,6 @@ public class PadViewActivity extends PadLandActivity {
     }
 
     /**
-     * Self explanatory name.
-     * Field to compare must be specified by its identifier. Accepts only one comparation value.
-     * @param field
-     * @param comparation
-     * @return
-     */
-    private Cursor _getPadDataFromDatabase( String field, String comparation ){
-        Cursor c = null;
-        String[] comparation_set = new String[]{ comparation };
-
-        c = getContentResolver()
-                .query(
-                        PadLandContentProvider.CONTENT_URI,
-                        new String[] {
-                                PadLandContentProvider._ID,
-                                PadLandContentProvider.NAME,
-                                PadLandContentProvider.SERVER,
-                                PadLandContentProvider.URL
-                        },
-                        field + "=?",
-                        comparation_set, // AKA id
-                        null
-                );
-        return c;
-    }
-
-    /**
-     * Returns a padData object from an id
-     * @param pad_id
-     * @return
-     */
-    private String[] _getPadDbData( long pad_id ){
-        String[] padData = new String[3];
-        Cursor c = this._getPadDataById( pad_id );
-
-        if(c != null && c.getCount() > 0) {
-            c.moveToFirst();
-            padData = makePadData( c.getString(1), c.getString(2), c.getString(3) );
-        }
-
-        return padData;
-    }
-
-    /**
-     * Queries the database and compares to pad_id
-     * @param pad_id
-     * @return
-     */
-    private Cursor _getPadDataById( long pad_id ){
-        return this._getPadDataFromDatabase( PadLandContentProvider._ID, String.valueOf( pad_id ) );
-    }
-
-    /**
-     * Queries the database and compares to padUrl
-     * @param padUrl
-     * @return
-     */
-    private Cursor _getPadDataByUrl(String padUrl){
-        return this._getPadDataFromDatabase( PadLandContentProvider.URL, padUrl );
-    }
-
-    /**
      * Creates a padData object trying to complete the empty fields the others.
      * Possible combinations is like this: padName + padServer = padUrl
      *
@@ -329,10 +257,10 @@ public class PadViewActivity extends PadLandActivity {
      * @param padUrl
      * @return
      */
-    public String[] makePadData( String padName, String padServer, String padUrl ){
+    public padData makePadData(String padName, String padServer, String padUrl){
         if( padUrl == null || padUrl.isEmpty() ) {
             if (padName == null || padName.isEmpty()) {
-                return new String[0];
+                return null;
             }
             if (padUrl == null || padUrl.isEmpty()) {
                 padUrl = padServer + padName;
@@ -349,10 +277,14 @@ public class PadViewActivity extends PadLandActivity {
             padServer = padUrl.replace( padName, "" );
         }
 
-        String[] padData = new String[3];
-        padData[0] = padName;
-        padData[1] = padServer;
-        padData[2] = padUrl;
+        String[] columns = PadLandDataActivity.pad_db_fields;
+
+        // This creates a fake cursor
+        MatrixCursor matrixCursor= new MatrixCursor(columns);
+        startManagingCursor(matrixCursor);
+        matrixCursor.addRow(new Object[] { 0, padName, padServer, padUrl, 0, 0 });
+
+        padData padData = new padData( matrixCursor );
 
         return padData;
     }

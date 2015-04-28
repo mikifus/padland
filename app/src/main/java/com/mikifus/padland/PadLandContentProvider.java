@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -33,6 +34,7 @@ public class PadLandContentProvider extends ContentProvider {
     static final String SERVER = "server";
     static final String URL = "url";
     static final String LAST_USED_DATE = "last_used_date";
+    static final String CREATE_DATE = "create_date";
 
     static final int PADLIST = 1;
     static final int PAD_ID = 2;
@@ -52,14 +54,15 @@ public class PadLandContentProvider extends ContentProvider {
     private SQLiteDatabase db;
     static final String DATABASE_NAME = "padland";
     static final String TABLE_NAME = "padlist";
-    static final int DATABASE_VERSION = 2;
+    static final int DATABASE_VERSION = 3;
     static final String CREATE_DB_TABLE =
             " CREATE TABLE " + TABLE_NAME +
                     " ("+_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     " "+NAME+" TEXT NOT NULL, " +
                     " "+SERVER+" TEXT NOT NULL, " +
                     " "+URL+" TEXT NOT NULL, " +
-                    " "+LAST_USED_DATE+ " INTEGER NOT NULL DEFAULT (strftime('%s','now')));";
+                    " "+LAST_USED_DATE+ " INTEGER NOT NULL DEFAULT (strftime('%s','now')), " +
+                    " "+CREATE_DATE+ " INTEGER NOT NULL DEFAULT (strftime('%s','now')));";
 
     /**
      * Helper class that actually creates and manages
@@ -78,10 +81,11 @@ public class PadLandContentProvider extends ContentProvider {
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            Log.w(TAG, "Upgrading database. Existing contents will be lost. ["
-                    + oldVersion + "]->[" + newVersion + "]");
+            Log.w(TAG, "Upgrading database. Existing contents will be deleted. [" + oldVersion + "]->[" + newVersion + "]");
             db.execSQL("DROP TABLE IF EXISTS " +  TABLE_NAME);
             onCreate(db);
+            //Log.w(TAG, "Upgrading database. Existing contents will be migrated. [" + oldVersion + "]->[" + newVersion + "]");
+            //db.execSQL("ALTER TABLE " +  TABLE_NAME + " ADD COLUMN " + CREATE_DATE + " INTEGER NOT NULL DEFAULT (strftime('%s','now'));");
         }
     }
 
@@ -142,7 +146,11 @@ public class PadLandContentProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         int count = 0;
-
+        int now = (int) new Date().getTime();
+        if( values.get( LAST_USED_DATE ) == null ) {
+            values.put( LAST_USED_DATE, now );
+        }
+        values.put( CREATE_DATE, now );
         switch (uriMatcher.match(uri)){
             case PADLIST:
                 count = db.update(TABLE_NAME, values,

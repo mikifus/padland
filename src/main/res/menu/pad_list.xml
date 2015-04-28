@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/action_newpad"
+          android:title="@string/action_newpad"
+          android:orderInCategory="100"
+          android:showAsAction="never" />
+    <item android:id="@+id/action_settings"
+        android:title="@string/action_settings"
+        android:orderInCategory="100"
+        android:showAsAction="never" />
+    <item android:id="@+id/action_about"
+          android:title="@string/about"
+          android:orderInCategory="100"
+          android:showAsAction="never" />
+</menu>

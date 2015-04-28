@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.mikifus.padland"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="7"
+        android:targetSdkVersion="17" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme"
+        android:name=".PadlandApp" >
+        <activity
+            android:name="com.mikifus.padland.PadList"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.mikifus.padland.padView"
+            android:label="@string/title_activity_pad_view"
+            android:parentActivityName="com.mikifus.padland.PadList"
+            android:theme="@android:style/Theme.NoTitleBar" >
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mikifus.padland.PadList" />
+        </activity>
+        <activity
+            android:name="com.mikifus.padland.NewPad"
+            android:label="@string/title_activity_new_pad"
+            android:parentActivityName="com.mikifus.padland.PadList" >
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mikifus.padland.PadList" />
+        </activity>
+        <activity
+            android:name="com.mikifus.padland.About"
+            android:label="@string/title_activity_about"
+            android:parentActivityName="com.mikifus.padland.PadList" >
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mikifus.padland.PadList" />
+        </activity>
+        <activity
+            android:name="com.mikifus.padland.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName="com.mikifus.padland.PadList" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mikifus.padland.PadList" />
+        </activity>
+        <activity
+                android:name=".SettingsFragment"
+                android:label="SettingsFragment"/>
+    </application>
+
+</manifest>
