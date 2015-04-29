@@ -1,29 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="60dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:paddingTop="2dp"
+    android:paddingBottom="2dp"
     android:orientation="vertical"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    style="@style/activated" >
+    android:gravity="center_vertical"
+    android:minHeight="?android:attr/listPreferredItemHeight"
+    style="@style/activated">
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="55dp"
+        android:layout_height="fill_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:scaleType="centerInside"
+        android:contentDescription="Document"
+        android:src="@drawable/document1" />
     <TextView
         android:id="@+id/name"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="5sp"
-        android:paddingBottom="5sp"
-        android:textSize="22sp" />
+        android:layout_weight="1"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/icon"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
     <TextView
         android:id="@+id/url"
-        android:layout_width="match_parent"
+        android:layout_toRightOf="@id/icon"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15sp" />
-    <TextView
-        android:id="@+id/date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="15sp" />
-</LinearLayout>
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:gravity="center_vertical"
+        android:singleLine="true"/>
+</RelativeLayout>

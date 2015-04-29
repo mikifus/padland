@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -16,20 +17,12 @@ import android.view.MenuItem;
  */
 public class PadLandActivity extends Activity {
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.pad_list, menu);
-
-        // Share button
-        /*MenuItem share_menu_item = menu.getItem(R.id.menuitem_share);
-        if(share_menu_item != null){
-
-        }*/
-
-        return true;
-    }
     public boolean onCreateOptionsMenu( Menu menu, int menu_id ) {
+        if( menu_id == 0 )
+        {
+            //Default value
+            menu_id = R.menu.pad_list;
+        }
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate( menu_id, menu );
         return true;
