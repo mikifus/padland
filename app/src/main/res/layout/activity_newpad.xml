@@ -29,7 +29,7 @@
             android:layout_alignParentRight="true"/>
 
     <Button
-            style="?android:attr/buttonStyleSmall"
+            style="@android:style/Widget.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/go_pad"

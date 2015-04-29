@@ -32,11 +32,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import java.text.DateFormat;
-import java.util.Date;
 
 /**
  * This activity displays a list of previously checked documents.
@@ -84,7 +80,6 @@ public class PadListActivity extends PadLandDataActivity
 
         // Bind to adapter.
         lv.setAdapter(data_adapter);
-
     }
 
     /**
@@ -119,11 +114,18 @@ public class PadListActivity extends PadLandDataActivity
             switch( action )
             {
                 case "delete":
-                    deletePad(pad_id);
-                    Toast.makeText(this, "Document deleted", Toast.LENGTH_LONG).show();
+                    boolean result = deletePad(pad_id);
+                    if( result ) {
+                        Toast.makeText(this, getString(R.string.padlist_document_deleted), Toast.LENGTH_LONG).show();
+                    }
                     break;
             }
         }
+    }
+
+    public void onEmptyCreateNewClick( View view ) {
+        Intent newPadIntent = new Intent(this, NewPadActivity.class);
+        startActivity(newPadIntent);
     }
 
     /**
@@ -146,12 +148,13 @@ public class PadListActivity extends PadLandDataActivity
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(mActionMode != null){
-                    AdapterView.OnItemLongClickListener listener = lv.getOnItemLongClickListener();
-                    listener.onItemLongClick(parent, view, position, id);
+                    listItemSelect(view, position, id);
                     return;
                 }
-                Intent padViewIntent =
-                        new Intent(PadListActivity.this, PadInfoActivity.class);
+                // Clean selection
+                lv.setItemChecked(position, false);
+
+                Intent padViewIntent = new Intent(PadListActivity.this, PadInfoActivity.class);
                 padViewIntent.putExtra("pad_id", id);
 
                 startActivity(padViewIntent);
@@ -161,26 +164,35 @@ public class PadListActivity extends PadLandDataActivity
         lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                /*if (mActionMode != null) {
-                    return false;
-                }*/
-                selectedItem = view;
-                selectedItem_id = id;
-                selectedItem_position = position;
-
-                // Start the CAB using the ActionMode.Callback defined above
-                PadListActivity.this.startActionMode(PadListActivity.this);
-                //view.setSelected(true);
-                lv.setItemChecked(position, true);
+                listItemSelect(view, position, id);
                 return true;
             }
         });
     }
 
+    public void listItemSelect( View view, int position, long id )
+    {
+        Log.d("SELECTION", "NEW: pos:" + String.valueOf(position) + " id:" + String.valueOf(id) );
+
+        if( selectedItem == null )
+        {
+            // Start the CAB using the ActionMode.Callback defined above
+            PadListActivity.this.startActionMode(PadListActivity.this);
+        }
+
+        selectedItem = view;
+        selectedItem_id = id;
+        selectedItem_position = position;
+
+        // Set selected
+        ListView lv = (ListView) view.getParent();
+        lv.setItemChecked(position, true);
+    }
+
     private SimpleCursorAdapter _getDataAdapter(){
         Uri padlist_uri = Uri.parse( getString( R.string.request_padlist ) );
         Cursor c = getContentResolver().query(padlist_uri,
-                new String[] {PadLandContentProvider._ID, PadLandContentProvider.NAME, PadLandContentProvider.URL, PadLandContentProvider.LAST_USED_DATE},
+                new String[] { PadLandContentProvider._ID, PadLandContentProvider.NAME, PadLandContentProvider.URL },
                 null,
                 null,
                 PadLandContentProvider.LAST_USED_DATE + " ASC");
@@ -189,11 +201,11 @@ public class PadListActivity extends PadLandDataActivity
                 this,
                 R.layout.padlist_item,
                 c,     // Pass in the cursor to bind to.
-                new String[] {PadLandContentProvider.NAME, PadLandContentProvider.URL, PadLandContentProvider.LAST_USED_DATE}, // Array of cursor columns to bind to.
-                new int[] {R.id.name, R.id.url, R.id.date},  // Parallel array of which template objects to bind to those columns.
+                new String[] { PadLandContentProvider.NAME, PadLandContentProvider.URL }, // Array of cursor columns to bind to.
+                new int[] { R.id.name, R.id.url },  // Parallel array of which template objects to bind to those columns.
                 0);
-
-        adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder(){
+        // Corrects the data and displays it okay if necessary
+        /*adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder(){
             @Override
             public boolean setViewValue(View view, Cursor cursor, int index) {
                 if (index == cursor.getColumnIndex(PadLandContentProvider.LAST_USED_DATE)) {
@@ -208,7 +220,7 @@ public class PadListActivity extends PadLandDataActivity
                     return false;
                 }
             }
-        }); // Corrects the data and displays it okay
+        });*/
 
         return adapter;
     }
@@ -221,9 +233,8 @@ public class PadListActivity extends PadLandDataActivity
      */
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String[] projection = { PadLandContentProvider._ID, PadLandContentProvider.NAME, PadLandContentProvider.URL, PadLandContentProvider.LAST_USED_DATE };
-        CursorLoader cursorLoader = new CursorLoader(this,
-                PadLandContentProvider.CONTENT_URI, projection, null, null, null);
+        String[] projection = { PadLandContentProvider._ID, PadLandContentProvider.NAME, PadLandContentProvider.URL };
+        CursorLoader cursorLoader = new CursorLoader(this, PadLandContentProvider.CONTENT_URI, projection, null, null, null);
         return cursorLoader;
     }
 
@@ -306,10 +317,11 @@ public class PadListActivity extends PadLandDataActivity
      */
     @Override
     public void onDestroyActionMode(ActionMode mode) {
-        ListView lv = (ListView) findViewById(R.id.listView);
-        if(selectedItem_id > 0) {
-            lv.setItemChecked(selectedItem_position, false);
-            //selectedItem.setChecked(false);
+        Log.d( "SELECTION", "unset_checked " + String.valueOf(selectedItem_position) );
+        if( selectedItem != null )
+        {
+            ListView lv = (ListView) selectedItem.getParent();
+            lv.setItemChecked( selectedItem_position, false );
         }
 
         mActionMode = null;
@@ -324,5 +336,9 @@ public class PadListActivity extends PadLandDataActivity
     public void onBackPressed(){
         onDestroyActionMode(mActionMode);
         super.onBackPressed();
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu){
+        return super.onCreateOptionsMenu( menu, R.menu.pad_list );
     }
 }

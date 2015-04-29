@@ -125,7 +125,7 @@ public class PadLandDataActivity extends PadLandActivity {
     }
 
     /**
-     * Saves a new pad if pad_id=0 or updates an existing one.
+     * Deletes a pad by its id
      *
      * @param pad_id
      * @return
@@ -161,6 +161,7 @@ public class PadLandDataActivity extends PadLandActivity {
                         intent.putExtra( "pad_id", selectedItem_id );
                         context.startActivity(intent);
                         dialog.dismiss();
+                        finish();
                     }
 
                 })
@@ -179,13 +180,8 @@ public class PadLandDataActivity extends PadLandActivity {
      * @param selectedItem_id
      */
     public void menu_share(long selectedItem_id) {
-        Cursor c = getContentResolver().query(PadLandContentProvider.CONTENT_URI,
-                new String[] {PadLandContentProvider._ID, PadLandContentProvider.URL},
-                PadLandContentProvider._ID+"=?",
-                new String[] {String.valueOf(selectedItem_id)},
-                null);
-        c.moveToFirst();
-        String padUrl = c.getString(1);
+        padData padData = _getPadData( selectedItem_id );
+        String padUrl = padData.getUrl();
         Log.d("SHARING_PAD", selectedItem_id + " - " + padUrl);
 
         Intent sendIntent = new Intent();

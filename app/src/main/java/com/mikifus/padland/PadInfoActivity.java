@@ -2,6 +2,7 @@ package com.mikifus.padland;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,9 +42,9 @@ public class PadInfoActivity extends PadLandDataActivity {
 
         List<Map<String,?>> datalist = new LinkedList<>();
 
-        datalist.add( this._doListItem( getString(R.string.padinfo_pad_url), pad_data.getUrl() ) );
-        datalist.add( this._doListItem( getString(R.string.padinfo_createdate), pad_data.getCreateDate() ) );
-        datalist.add( this._doListItem( getString(R.string.padinfo_lastuseddate), pad_data.getLastUsedDate() ) );
+        datalist.add( this._doListItem( pad_data.getUrl(), getString(R.string.padinfo_pad_url) ) );
+        datalist.add( this._doListItem( pad_data.getCreateDate(), getString(R.string.padinfo_createdate) ) );
+        datalist.add( this._doListItem( pad_data.getLastUsedDate(), getString(R.string.padinfo_lastuseddate) ) );
 
         SeparatedListAdapter adapter = new SeparatedListAdapter(this);
 
@@ -81,11 +82,10 @@ public class PadInfoActivity extends PadLandDataActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;
 
-        switch(item.getItemId()) {
+        switch( item.getItemId() ) {
             case R.id.menuitem_share:
-                intent = new Intent(this, About.class);
-                intent.putExtra( "pad_id", pad_id );
-                menu_share( pad_id );
+                Log.d("MENU_SHARE", String.valueOf(pad_id) );
+                menu_share(pad_id);
                 break;
             case R.id.menuitem_delete:
                 AskDelete( pad_id );

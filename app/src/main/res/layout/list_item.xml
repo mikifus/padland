@@ -7,4 +7,4 @@
     android:paddingBottom="10dip"
     android:paddingLeft="15dip"
     android:textAppearance="?android:attr/textAppearanceLarge"
-    />  
+    />

@@ -2,11 +2,10 @@
     <item android:id="@+id/menuitem_share"
         android:title="@string/share"
         android:showAsAction="ifRoom"
-        android:icon="@android:drawable/ic_menu_share"
-        android:actionProviderClass="android.widget.ShareActionProvider" />
+        android:icon="@android:drawable/ic_menu_share" />
 
     <item android:id="@+id/menuitem_delete"
         android:title="@string/delete"
-        android:showAsAction="ifRoom"
+        android:showAsAction="never"
         android:icon="@android:drawable/ic_menu_delete" />
 </menu>

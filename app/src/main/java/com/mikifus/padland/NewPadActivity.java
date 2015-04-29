@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Allows the user to create a new pad, choosing a name and the host.
@@ -74,14 +76,14 @@ public class NewPadActivity extends PadLandActivity {
      * @param w
      */
     public void onCreateButtonClick( View w ){
-
         String padName = this.getPadNameFromInput( (TextView) findViewById(R.id.editText) );
         String padPrefix = this.getPadPrefixFromSpinner( (Spinner) findViewById(R.id.spinner) );
         String padServer = this.getPadServerFromSpinner( (Spinner) findViewById(R.id.spinner) );
 
         String padUrl = padPrefix + padName;
-
-        if ( padName == "" ) {
+        Log.d("CREATENEW", padName);
+        if ( padName.isEmpty() ) {
+            Toast.makeText(this, (getString(R.string.newpad_noname_warning)), Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -92,23 +94,21 @@ public class NewPadActivity extends PadLandActivity {
         padViewIntent.putExtra( "padUrl", padUrl );
 
         startActivity(padViewIntent);
+        finish();
     }
 
     private String getPadNameFromInput( TextView input ){
         String padName = (String) input.getText().toString();
-
         return padName;
     }
 
     private String getPadPrefixFromSpinner( Spinner spinner ){
         String padPrefix = getResources().getStringArray( R.array.etherpad_servers_url_padprefix )[spinner.getSelectedItemPosition()];
-
         return padPrefix;
     }
 
     private String getPadServerFromSpinner( Spinner spinner ){
         String padServer = getResources().getStringArray( R.array.etherpad_servers_url_home )[spinner.getSelectedItemPosition()];
-
         return padServer;
     }
 }
