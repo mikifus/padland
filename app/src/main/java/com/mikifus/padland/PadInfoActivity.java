@@ -3,6 +3,7 @@ package com.mikifus.padland;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -40,9 +41,9 @@ public class PadInfoActivity extends PadLandDataActivity {
 
         List<Map<String,?>> datalist = new LinkedList<>();
 
-        datalist.add( this._doListItem( "Pad url", pad_data.getUrl() ) );
-        datalist.add( this._doListItem( "Added to list", pad_data.getCreateDate() ) );
-        datalist.add( this._doListItem( "Last viewed", pad_data.getLastUsedDate() ) );
+        datalist.add( this._doListItem( getString(R.string.padinfo_pad_url), pad_data.getUrl() ) );
+        datalist.add( this._doListItem( getString(R.string.padinfo_createdate), pad_data.getCreateDate() ) );
+        datalist.add( this._doListItem( getString(R.string.padinfo_lastuseddate), pad_data.getLastUsedDate() ) );
 
         SeparatedListAdapter adapter = new SeparatedListAdapter(this);
 
@@ -70,6 +71,31 @@ public class PadInfoActivity extends PadLandDataActivity {
         return item;
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.pad_info, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
+
+        switch(item.getItemId()) {
+            case R.id.menuitem_share:
+                intent = new Intent(this, About.class);
+                intent.putExtra( "pad_id", pad_id );
+                menu_share( pad_id );
+                break;
+            case R.id.menuitem_delete:
+                AskDelete( pad_id );
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+        return true;
+    }
 
     /**
      * Form submit
@@ -80,14 +106,5 @@ public class PadInfoActivity extends PadLandDataActivity {
         padViewIntent.putExtra( "pad_id", pad_id );
 
         startActivity(padViewIntent);
-    }
-
-    /**
-     * Creates the menu
-     * @param menu
-     * @return boolean
-     */
-    public boolean onCreateOptionsMenu( Menu menu ) {
-        return super.onCreateOptionsMenu(menu, R.menu.pad_info);
     }
 }

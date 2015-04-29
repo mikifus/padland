@@ -116,16 +116,17 @@ public class PadLandContentProvider extends ContentProvider {
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         int count = 0;
+        Log.d("DELETE_QUERY", selection + " - " + selectionArgs.toString() );
 
         switch (uriMatcher.match(uri)){
             case PADLIST:
+                Log.d("DELETE_PADLIST", selection + " - " + selectionArgs.toString() );
                 count = db.delete(TABLE_NAME, selection, selectionArgs);
                 break;
             case PAD_ID:
+                Log.d("DELETE_PAD_ID", selection + " - " + selectionArgs.toString() );
                 String id = uri.getPathSegments().get(1);
-                count = db.delete(TABLE_NAME, _ID + " = " + id +
-                        (!TextUtils.isEmpty(selection) ? " AND (" +
-                                selection + ')' : ""), selectionArgs);
+                count = db.delete(TABLE_NAME, _ID + " = " + id + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ')' : ""), selectionArgs);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);

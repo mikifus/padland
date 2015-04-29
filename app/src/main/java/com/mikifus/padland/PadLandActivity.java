@@ -1,7 +1,9 @@
 package com.mikifus.padland;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.LoaderManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -49,10 +51,6 @@ public class PadLandActivity extends Activity {
             case R.id.action_settings:
                 intent = new Intent(this, SettingsActivity.class);
                 this.startActivity(intent);
-/*                SettingsActivity.GeneralPreferenceFragment fragment = new SettingsActivity.GeneralPreferenceFragment();
-                getFragmentManager().beginTransaction()
-                        .replace(android.R.id.content , fragment)
-                        .commit();*/
                 break;
             default:
                 return super.onOptionsItemSelected(item);
