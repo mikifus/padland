@@ -1,6 +1,8 @@
 package com.mikifus.padland;
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -121,6 +123,78 @@ public class PadLandDataActivity extends PadLandActivity {
             return ( result != null );
         }
     }
+
+    /**
+     * Saves a new pad if pad_id=0 or updates an existing one.
+     *
+     * @param pad_id
+     * @return
+     */
+    public boolean deletePad(long pad_id){
+        if( pad_id > 0 ) {
+            int result = getContentResolver().delete( PadLandContentProvider.CONTENT_URI, PadLandContentProvider._ID + "=?", new String[] {String.valueOf(pad_id)} );
+            return (result > 0);
+        }
+        else {
+            throw new IllegalArgumentException("Pad id is not valid");
+        }
+    }
+
+    /**
+     * Asks the user to confirm deleting a document
+     * @param selectedItem_id
+     * @return AlertDialog
+     */
+    public AlertDialog AskDelete(final long selectedItem_id)
+    {
+        final PadLandDataActivity context = this;
+        AlertDialog DeleteDialogBox = new AlertDialog.Builder(this)
+                //set message, title, and icon
+                .setTitle(R.string.delete)
+                .setMessage(getString(R.string.sure_to_delete))
+                .setIcon(android.R.drawable.ic_menu_delete)
+                .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        Intent intent = new Intent(context, PadListActivity.class);
+                        intent.putExtra( "action", "delete" );
+                        intent.putExtra( "pad_id", selectedItem_id );
+                        context.startActivity(intent);
+                        dialog.dismiss();
+                    }
+
+                })
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+        DeleteDialogBox.show();
+        return DeleteDialogBox;
+    }
+
+    /**
+     * Menu to share a document url
+     * @param selectedItem_id
+     */
+    public void menu_share(long selectedItem_id) {
+        Cursor c = getContentResolver().query(PadLandContentProvider.CONTENT_URI,
+                new String[] {PadLandContentProvider._ID, PadLandContentProvider.URL},
+                PadLandContentProvider._ID+"=?",
+                new String[] {String.valueOf(selectedItem_id)},
+                null);
+        c.moveToFirst();
+        String padUrl = c.getString(1);
+        Log.d("SHARING_PAD", selectedItem_id + " - " + padUrl);
+
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_auto_text) + padUrl);
+        sendIntent.setType("text/plain");
+        startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.share_document)));
+    }
+
     /**
      * Creates the menu
      * @param menu

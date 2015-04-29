@@ -15,11 +15,9 @@
  */
 package com.mikifus.padland;
 
-import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.Context;
 import android.content.CursorLoader;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
@@ -47,7 +45,7 @@ import java.util.Date;
  * @author mikifus
  * @since 0.1
  */
-public class PadListActivity extends PadLandActivity
+public class PadListActivity extends PadLandDataActivity
     implements ActionMode.Callback,LoaderManager.LoaderCallbacks<Cursor> {
 
     protected ActionMode mActionMode;
@@ -70,6 +68,9 @@ public class PadListActivity extends PadLandActivity
 
         // Intent
         this._textFromIntent();
+
+        // Intent
+        this._actionFromIntent();
         
         // Loader
         this.initLoader( (LoaderManager.LoaderCallbacks) this );
@@ -103,6 +104,25 @@ public class PadListActivity extends PadLandActivity
             }
 
             Toast.makeText(this, getString(R.string.activity_padlist_implicitintent_text_copied), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /**
+     * If there is a share intent this function gets the extra text
+     * and copies it into clipboard
+     */
+    private void _actionFromIntent() {
+        String action = getIntent().getStringExtra("action");
+        long pad_id = getIntent().getLongExtra("pad_id", 0);
+        Log.d("DELETE_PAD_INTENT", action + String.valueOf(pad_id)  );
+        if( action != null && pad_id > 0 ) {
+            switch( action )
+            {
+                case "delete":
+                    deletePad(pad_id);
+                    Toast.makeText(this, "Document deleted", Toast.LENGTH_LONG).show();
+                    break;
+            }
         }
     }
 
@@ -304,69 +324,5 @@ public class PadListActivity extends PadLandActivity
     public void onBackPressed(){
         onDestroyActionMode(mActionMode);
         super.onBackPressed();
-    }
-
-    /**
-     * Asks the user to confirm deleting a document
-     * @param selectedItem_id
-     * @return AlertDialog
-     */
-    private AlertDialog AskDelete(final long selectedItem_id)
-    {
-        AlertDialog DeleteDialogBox = new AlertDialog.Builder(this)
-                //set message, title, and icon
-                .setTitle(R.string.delete)
-                .setMessage(getString(R.string.sure_to_delete))
-                .setIcon(android.R.drawable.ic_menu_delete)
-                .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        menu_delete(selectedItem_id);
-                        dialog.dismiss();
-                    }
-
-                })
-                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
-                .create();
-
-        DeleteDialogBox.show();
-        return DeleteDialogBox;
-
-    }
-
-    /**
-     * Menu to share a document url
-     * @param selectedItem_id
-     */
-    private void menu_share(long selectedItem_id) {
-        Cursor c = getContentResolver().query(PadLandContentProvider.CONTENT_URI,
-                new String[] {PadLandContentProvider._ID, PadLandContentProvider.URL},
-                PadLandContentProvider._ID+"=?",
-                new String[] {String.valueOf(selectedItem_id)},
-                null);
-        c.moveToFirst();
-        String padUrl = c.getString(1);
-        Log.d("SHARING_PAD", selectedItem_id + " - " + padUrl);
-
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_auto_text) + padUrl);
-        sendIntent.setType("text/plain");
-        startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.share_document)));
-    }
-
-    /**
-     * Deletes element from the content provider
-     * @param selectedItem_id
-     */
-    private void menu_delete(long selectedItem_id) {
-        String[] ids = {String.valueOf(selectedItem_id)};
-        getContentResolver().delete(PadLandContentProvider.CONTENT_URI,
-                PadLandContentProvider._ID + "=?",
-                ids);
     }
 }
