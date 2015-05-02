@@ -17,6 +17,12 @@ import android.view.MenuItem;
  */
 public class PadLandActivity extends Activity {
 
+    /**
+     * The default menu will be the pad_list one.
+     * @param menu
+     * @param menu_id
+     * @return
+     */
     public boolean onCreateOptionsMenu( Menu menu, int menu_id ) {
         if( menu_id == 0 )
         {
@@ -28,6 +34,11 @@ public class PadLandActivity extends Activity {
         return true;
     }
 
+    /**
+     * Manage the menu options when selected
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;

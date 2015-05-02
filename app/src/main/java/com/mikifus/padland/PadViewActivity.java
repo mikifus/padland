@@ -21,9 +21,12 @@ import android.webkit.WebViewClient;
 import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
+import java.util.Date;
+
 /**
  * This activity makes a webapp view into a browser and loads the document
  * url.
+ * It does as well save the new visited urls in the documents list.
  *
  * @author mikifus
  */
@@ -52,7 +55,7 @@ public class PadViewActivity extends PadLandDataActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
 
-        // Progress bar for fancyness
+        // ProgressBar
         // WARNING: it does not work
         this._loadProgressBar();
 
@@ -69,6 +72,7 @@ public class PadViewActivity extends PadLandDataActivity {
 
         this._makePadUrl();
         this._saveNewPad();
+        this._updateViewedPad();
         this._makeWebView();
 
         this.loadUrl( "file:///android_asset/PadView.html" );
@@ -79,8 +83,10 @@ public class PadViewActivity extends PadLandDataActivity {
      * I don't see it at all, but there is no error.
      */
     private void _loadProgressBar(){
-        this.requestWindowFeature(Window.FEATURE_PROGRESS);
-        this.setProgressBarVisibility(true);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        requestWindowFeature(Window.FEATURE_PROGRESS);
+        setProgressBarIndeterminateVisibility(true);
+        setProgressBarVisibility(true);
     }
 
     /**
@@ -102,7 +108,7 @@ public class PadViewActivity extends PadLandDataActivity {
         padData padData;
 
         if( pad_id > 0 ){
-            Cursor c = this._getPadDbData( pad_id );
+            Cursor c = this._getPadDataById( pad_id );
             padData = new padData( c );
         }else{
             padData = this._getPadDataFromIntent();
@@ -183,6 +189,23 @@ public class PadViewActivity extends PadLandDataActivity {
     }
 
     /**
+     * Updates the last used date of a pad.
+     * It might update more details in the future.
+     */
+    private boolean _updateViewedPad(){
+        boolean result = false;
+        long pad_id = this._getPadId();
+        long now = ( (long) new Date().getTime() ) / 1000;
+        if ( pad_id != 0 ) {
+            ContentValues values = new ContentValues();
+            values.put( PadLandContentProvider.LAST_USED_DATE, now  );
+
+            result = savePadData( pad_id, values );
+        }
+        return result;
+    }
+
+    /**
      * Makes the webview that will contain a document.
      * It loads asynchronously by calling Javascript.
      * @return
@@ -191,32 +214,32 @@ public class PadViewActivity extends PadLandDataActivity {
         final String current_padUrl = this.getCurrentPadUrl();
         webView = (WebView) findViewById(R.id.activity_main_webview);
 
-        // ProgressBar
-        final Activity activity = this;
-        webView.setWebChromeClient(new WebChromeClient() {
-            public void onProgressChanged(WebView view, int progress) {
-                activity.setProgress(progress * 100);
-            }
-        });
-
-        //final String padUrlparameter = padData[2];
-
         // WebViewClient is neeed in order to load asynchronously
-        webView.setWebViewClient(new WebViewClient(){
+        webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
                 //webView.loadUrl("javascript:start('"+ padUrlparameter +"', 'username2', '#555' )");
 
                 Context context = getApplicationContext();
-                SharedPreferences userDetails = context.getSharedPreferences( getPackageName() + "_preferences", context.MODE_PRIVATE );
-                String default_username = userDetails.getString( "padland_default_username", "PadLand Viewer User" );
-                String default_color = userDetails.getString( "padland_default_color", "#555" );
+                SharedPreferences userDetails = context.getSharedPreferences(getPackageName() + "_preferences", context.MODE_PRIVATE);
+                String default_username = userDetails.getString("padland_default_username", "PadLand Viewer User");
+                String default_color = userDetails.getString("padland_default_color", "#555");
 
-                webView.loadUrl("javascript:start('"+ current_padUrl +"', '"+ default_username +"', '"+ default_color +"' )");
+                webView.loadUrl("javascript:start('" + current_padUrl + "', '" + default_username + "', '" + default_color + "' )");
+            }
+        });
+        this._makeWebSettings( webView );
+
+        webView.setWebChromeClient(new WebChromeClient() {
+            public void onProgressChanged(WebView view, int progress) {
+                setProgress(progress * 100);
+                if(progress > 99) {
+                    setProgressBarIndeterminateVisibility(false);
+                    setProgressBarVisibility(false);
+                }
             }
         });
 
-        this._makeWebSettings( webView );
         this._addJavascriptOnLoad( webView );
 
         return webView;

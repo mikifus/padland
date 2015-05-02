@@ -16,10 +16,18 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * This activity shows pad info like the last time it was used or when
+ * it was created. It can be upgraded to show useful info.
+ * Its menu as well allows to delete.
+ */
 public class PadInfoActivity extends PadLandDataActivity {
     long pad_id = 0;
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,9 +45,20 @@ public class PadInfoActivity extends PadLandDataActivity {
         // Action bar title
         getActionBar().setTitle( pad_data.getName() );
 
-        //TextView padname = (TextView) findViewById( R.id.padInfo );
-        //padname.setText( pad_data.getUrl() );
+        SeparatedListAdapter adapter = this._doInfoList( pad_data );
 
+        ListView list = (ListView) findViewById( R.id.listView );
+        list.setAdapter(adapter);
+    }
+
+    /**
+     * Takes the pad data and prepares a list with information,
+     * then returns the adapter for the view.
+     * @param pad_data
+     * @return
+     */
+    private SeparatedListAdapter _doInfoList( padData pad_data )
+    {
         List<Map<String,?>> datalist = new LinkedList<>();
 
         datalist.add( this._doListItem( pad_data.getUrl(), getString(R.string.padinfo_pad_url) ) );
@@ -55,15 +74,20 @@ public class PadInfoActivity extends PadLandDataActivity {
                         new int[] { R.id.list_complex_title, R.id.list_complex_caption }
                 )
         );
-
+        // I leave this here to show an example of how to show another list
         /*adapter.addSection("Options",
                 new ArrayAdapter<String>(this, R.layout.list_item, new String[] { "Share", "Delete" })
         );*/
 
-        ListView list = (ListView) findViewById( R.id.listView );
-        list.setAdapter(adapter);
+        return adapter;
     }
 
+    /**
+     * Makes a list item for the previous method.
+     * @param title
+     * @param caption
+     * @return
+     */
     private Map<String,?> _doListItem( String title, String caption )
     {
         Map<String,String> item = new HashMap<String,String>();
@@ -98,7 +122,7 @@ public class PadInfoActivity extends PadLandDataActivity {
     }
 
     /**
-     * Form submit
+     * Takes you to the padView activity
      * @param w
      */
     public void onViewButtonClick( View w ){

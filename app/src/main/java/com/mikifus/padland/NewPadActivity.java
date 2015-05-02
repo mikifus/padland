@@ -97,16 +97,31 @@ public class NewPadActivity extends PadLandActivity {
         finish();
     }
 
+    /**
+     * Given an input view, gets the text
+     * @param input
+     * @return
+     */
     private String getPadNameFromInput( TextView input ){
         String padName = (String) input.getText().toString();
         return padName;
     }
 
+    /**
+     * Same as previous but with a spinner
+     * @param spinner
+     * @return
+     */
     private String getPadPrefixFromSpinner( Spinner spinner ){
         String padPrefix = getResources().getStringArray( R.array.etherpad_servers_url_padprefix )[spinner.getSelectedItemPosition()];
         return padPrefix;
     }
 
+    /**
+     * Almost the same as the previous one.
+     * @param spinner
+     * @return
+     */
     private String getPadServerFromSpinner( Spinner spinner ){
         String padServer = getResources().getStringArray( R.array.etherpad_servers_url_home )[spinner.getSelectedItemPosition()];
         return padServer;

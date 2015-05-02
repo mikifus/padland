@@ -17,10 +17,18 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
+/**
+ * A data activity inherits from the main activity and provides methods
+ * to insert, update and delete the documents data. Each activity that
+ * deals with data must either inherit from this or make an intent
+ * to another activity which does.
+ */
 public class PadLandDataActivity extends PadLandActivity {
 
-
+    /**
+     * The db fields in a single string array to use
+     * the variable directly.
+     */
     public static String[] pad_db_fields = new String[] {
             PadLandContentProvider._ID,
             PadLandContentProvider.NAME,
@@ -30,8 +38,7 @@ public class PadLandDataActivity extends PadLandActivity {
             PadLandContentProvider.CREATE_DATE
     };
     /**
-     * It gets the pad id by all possible means. This is, reading it from the Intent (in a
-     * LongExtra) or using the padUrl to make a database query.
+     * It gets the pad id from an intent if there is such info, else 0
      * @return
      */
     public long _getPadId(){
@@ -46,22 +53,11 @@ public class PadLandDataActivity extends PadLandActivity {
      * @return
      */
     public padData _getPadData( long pad_id ){
-        Cursor cursor = (Cursor) this._getPadDbData(pad_id);
+        Cursor cursor = (Cursor) this._getPadDataById(pad_id);
 
         padData pad_data = new padData( cursor );
 
         return pad_data;
-    }
-
-    /**
-     * Returns a padData object from an id
-     * @param pad_id
-     * @return
-     */
-    public Cursor _getPadDbData( long pad_id ){
-        Cursor c = this._getPadDataById( pad_id );
-
-        return c;
     }
 
     /**
@@ -106,12 +102,11 @@ public class PadLandDataActivity extends PadLandActivity {
 
     /**
      * Saves a new pad if pad_id=0 or updates an existing one.
-     *
      * @param pad_id
      * @param values
      * @return
      */
-    public boolean savePadData( int pad_id, ContentValues values ){
+    public boolean savePadData( long pad_id, ContentValues values ){
         if( pad_id > 0 ) {
             String[] where_value = { String.valueOf(pad_id) };
             int result = getContentResolver().update(PadLandContentProvider.CONTENT_URI, values, PadLandContentProvider._ID  + "=?", where_value );
@@ -119,14 +114,13 @@ public class PadLandDataActivity extends PadLandActivity {
         }
         else {
             Log.d("INSERT", "Contents = " + values.toString());
-            Uri result = getContentResolver().insert(PadLandContentProvider.CONTENT_URI, values);
+            Uri result = getContentResolver().insert( PadLandContentProvider.CONTENT_URI, values );
             return ( result != null );
         }
     }
 
     /**
-     * Deletes a pad by its id
-     *
+     * Deletes a pad by its id, no confirmation, won't be recoverable
      * @param pad_id
      * @return
      */
@@ -141,7 +135,9 @@ public class PadLandDataActivity extends PadLandActivity {
     }
 
     /**
-     * Asks the user to confirm deleting a document
+     * Asks the user to confirm deleting a document.
+     * If confirmed, will make an intent to PadListActivity, where the info will be
+     * deleted.
      * @param selectedItem_id
      * @return AlertDialog
      */
@@ -191,15 +187,19 @@ public class PadLandDataActivity extends PadLandActivity {
         startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.share_document)));
     }
 
-    /**
-     * Creates the menu
-     * @param menu
-     * @return
-     */
+    public long getNowDate() {
+        return PadLandContentProvider.getNowDate();
+    }
+
     public boolean onCreateOptionsMenu( Menu menu, int id_menu ) {
         return super.onCreateOptionsMenu( menu, id_menu );
     }
 
+    /**
+     * The padData subclass is the summary of information the App needs
+     * to deal with the documents. It has the info and returns it
+     * in the right format.
+     */
     public class padData
     {
         private long id;

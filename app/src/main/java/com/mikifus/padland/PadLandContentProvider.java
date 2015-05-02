@@ -131,13 +131,12 @@ public class PadLandContentProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
-
         getContext().getContentResolver().notifyChange(uri, null);
         return count;
     }
 
     /**
-     * Updates a document's info
+     * Updates documents' info
      * @param uri
      * @param values
      * @param selection
@@ -147,11 +146,10 @@ public class PadLandContentProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         int count = 0;
-        int now = (int) new Date().getTime();
-        if( values.get( LAST_USED_DATE ) == null ) {
-            values.put( LAST_USED_DATE, now );
+        if (values.get(LAST_USED_DATE) == null) {
+            long now = getNowDate();
+            values.put(LAST_USED_DATE, now);
         }
-        values.put( CREATE_DATE, now );
         switch (uriMatcher.match(uri)){
             case PADLIST:
                 count = db.update(TABLE_NAME, values,
@@ -246,5 +244,14 @@ public class PadLandContentProvider extends ContentProvider {
         c.setNotificationUri( getContext().getContentResolver(), uri );
 
         return c;
+    }
+
+    /**
+     * Gets the current time in the format that the database uses.
+     * As it is static, it can be used by other classes.
+     * @return
+     */
+    public static long getNowDate() {
+        return ((long) new Date().getTime()) / 1000;
     }
 }
