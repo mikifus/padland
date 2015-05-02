@@ -36,6 +36,7 @@ import android.widget.Toast;
 
 /**
  * This activity displays a list of previously checked documents.
+ * Here documents can be deleted via Intent.
  * It handles as well the sharing intent to the app.
  *
  * @author mikifus
@@ -44,11 +45,28 @@ import android.widget.Toast;
 public class PadListActivity extends PadLandDataActivity
     implements ActionMode.Callback,LoaderManager.LoaderCallbacks<Cursor> {
 
+    /**
+     * mActionMode defines behaviour of the action-bar
+     */
     protected ActionMode mActionMode;
+    /**
+     * Currently selected item (View) in the list
+     */
     public View selectedItem = null;
+    /**
+     * The id of the selected pad
+     * Default: -1 = none
+     */
     public long selectedItem_id = -1;
+    /**
+     * The position of the selected item in the list
+     * Default: -1 = none
+     */
     public int selectedItem_position = -1;
 
+    /**
+     * Adapter to play with the listView
+     */
     private SimpleCursorAdapter adapter = null;
 
     /**
@@ -103,17 +121,17 @@ public class PadListActivity extends PadLandDataActivity
     }
 
     /**
-     * If there is a share intent this function gets the extra text
-     * and copies it into clipboard
+     * If there is an intent with "action", here it is processed
+     * For now there's only the delete action.
      */
     private void _actionFromIntent() {
         String action = getIntent().getStringExtra("action");
         long pad_id = getIntent().getLongExtra("pad_id", 0);
-        Log.d("DELETE_PAD_INTENT", action + String.valueOf(pad_id)  );
         if( action != null && pad_id > 0 ) {
             switch( action )
             {
                 case "delete":
+                    Log.d("DELETE_PAD_INTENT", action + String.valueOf(pad_id)  );
                     boolean result = deletePad(pad_id);
                     if( result ) {
                         Toast.makeText(this, getString(R.string.padlist_document_deleted), Toast.LENGTH_LONG).show();
@@ -123,6 +141,11 @@ public class PadListActivity extends PadLandDataActivity
         }
     }
 
+    /**
+     * When the list is empty a message with a button is shown.
+     * This handles the button onClick.
+     * @param view
+     */
     public void onEmptyCreateNewClick( View view ) {
         Intent newPadIntent = new Intent(this, NewPadActivity.class);
         startActivity(newPadIntent);
@@ -170,6 +193,13 @@ public class PadListActivity extends PadLandDataActivity
         });
     }
 
+    /**
+     * Check an item and set is as selected.
+     *
+     * @param view
+     * @param position
+     * @param id
+     */
     public void listItemSelect( View view, int position, long id )
     {
         Log.d("SELECTION", "NEW: pos:" + String.valueOf(position) + " id:" + String.valueOf(id) );
@@ -189,6 +219,11 @@ public class PadListActivity extends PadLandDataActivity
         lv.setItemChecked(position, true);
     }
 
+    /**
+     * Gets an adapter for the listView with the contents from the database
+     *
+     * @return
+     */
     private SimpleCursorAdapter _getDataAdapter(){
         Uri padlist_uri = Uri.parse( getString( R.string.request_padlist ) );
         Cursor c = getContentResolver().query(padlist_uri,

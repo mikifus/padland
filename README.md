@@ -2,11 +2,16 @@
 Padland is a tool to manage, share, remember and read collaborative documents based on the Etherpad technology in Android.
 
 ## Current version
-0.1
+0.2
 
 ## Changelog
-- v0.1 - Added multiple-server support
-- v0.1 - Just commit
+v0.2
+- Added a view with pad data
+- The "last used date" parameter is updated correctly
+
+v0.1
+- Added multiple-server support
+- Just commit
 
 ## Technology
 Etherpad depends on:
