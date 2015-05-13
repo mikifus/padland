@@ -30,11 +30,12 @@ public class PadLandContentProvider extends ContentProvider {
     public static final Uri CONTENT_URI = Uri.parse( AUTHORITY );
 
     static final String _ID = "_id";
-    static final String NAME = "name";
-    static final String SERVER = "server";
-    static final String URL = "url";
-    static final String LAST_USED_DATE = "last_used_date";
-    static final String CREATE_DATE = "create_date";
+    static final String NAME = "name"; // Name of the pad, actually it is the last part of the url
+    static final String SERVER = "server"; // server, might contain the suffix
+    static final String URL = "url"; // the full address including server and name
+    static final String LAST_USED_DATE = "last_used_date"; // Date the pad was accessed last time
+    static final String CREATE_DATE = "create_date"; // Date when the pad was added into the app
+    static final String ACCESS_COUNT = "access_count"; // How many times the document has been accessed in the app
 
     static final int PADLIST = 1;
     static final int PAD_ID = 2;
@@ -54,7 +55,7 @@ public class PadLandContentProvider extends ContentProvider {
     private SQLiteDatabase db;
     static final String DATABASE_NAME = "padland";
     static final String TABLE_NAME = "padlist";
-    static final int DATABASE_VERSION = 3;
+    static final int DATABASE_VERSION = 4;
     static final String CREATE_DB_TABLE =
             " CREATE TABLE " + TABLE_NAME +
                     " ("+_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -62,7 +63,9 @@ public class PadLandContentProvider extends ContentProvider {
                     " "+SERVER+" TEXT NOT NULL, " +
                     " "+URL+" TEXT NOT NULL, " +
                     " "+LAST_USED_DATE+ " INTEGER NOT NULL DEFAULT (strftime('%s','now')), " +
-                    " "+CREATE_DATE+ " INTEGER NOT NULL DEFAULT (strftime('%s','now')));";
+                    " "+CREATE_DATE+ " INTEGER NOT NULL DEFAULT (strftime('%s','now'))," +
+                    " "+ACCESS_COUNT+ "INTEGER NOT NULL DEFAULT 0 "+
+                    ");";
 
     /**
      * Helper class that actually creates and manages
@@ -81,11 +84,15 @@ public class PadLandContentProvider extends ContentProvider {
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            Log.w(TAG, "Upgrading database. Existing contents will be deleted. [" + oldVersion + "]->[" + newVersion + "]");
-            db.execSQL("DROP TABLE IF EXISTS " +  TABLE_NAME);
-            onCreate(db);
-            //Log.w(TAG, "Upgrading database. Existing contents will be migrated. [" + oldVersion + "]->[" + newVersion + "]");
-            //db.execSQL("ALTER TABLE " +  TABLE_NAME + " ADD COLUMN " + CREATE_DATE + " INTEGER NOT NULL DEFAULT (strftime('%s','now'));");
+            if( oldVersion < 3 ) {
+                Log.w(TAG, "Upgrading database. Existing contents will be deleted. [" + oldVersion + "]->[" + newVersion + "]");
+                db.execSQL("DROP TABLE IF EXISTS " +  TABLE_NAME);
+                onCreate(db);
+            }
+            if( oldVersion == 3 && newVersion == 4 ) {
+                Log.w(TAG, "Upgrading database. Existing contents will be migrated. [" + oldVersion + "]->[" + newVersion + "]");
+                db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + ACCESS_COUNT + " INTEGER NOT NULL DEFAULT 0;");
+            }
         }
     }
 
@@ -116,11 +123,11 @@ public class PadLandContentProvider extends ContentProvider {
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         int count = 0;
-        Log.d("DELETE_QUERY", selection + " - " + selectionArgs.toString() );
+        Log.d("DELETE_QUERY", selection + " - " + selectionArgs.toString());
 
         switch (uriMatcher.match(uri)){
             case PADLIST:
-                Log.d("DELETE_PADLIST", selection + " - " + selectionArgs.toString() );
+                Log.d("DELETE_PADLIST", selection + " - " + selectionArgs.toString());
                 count = db.delete(TABLE_NAME, selection, selectionArgs);
                 break;
             case PAD_ID:
@@ -136,7 +143,8 @@ public class PadLandContentProvider extends ContentProvider {
     }
 
     /**
-     * Updates documents' info
+     * Updates documents' info.
+     * Returns an int parameter indicating the amount of rows modified.
      * @param uri
      * @param values
      * @param selection
@@ -145,21 +153,19 @@ public class PadLandContentProvider extends ContentProvider {
      */
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+        Log.d("PAD_UPDATE", uri.toString() );
         int count = 0;
-        if (values.get(LAST_USED_DATE) == null) {
-            long now = getNowDate();
-            values.put(LAST_USED_DATE, now);
-        }
-        switch (uriMatcher.match(uri)){
+        String id;
+        switch ( uriMatcher.match(uri) ){
             case PADLIST:
-                count = db.update(TABLE_NAME, values,
-                        selection, selectionArgs);
+                count = db.update(TABLE_NAME, values, selection, selectionArgs);
                 break;
             case PAD_ID:
-                count = db.update(TABLE_NAME, values, _ID +
-                        " = " + uri.getPathSegments().get(1) +
-                        (!TextUtils.isEmpty(selection) ? " AND (" +
-                                selection + ')' : ""), selectionArgs);
+                id = uri.getPathSegments().get(1);
+                count = db.update(TABLE_NAME,
+                        values,
+                        _ID +  " = " + id + ( !TextUtils.isEmpty(selection) ? " AND (" + selection + ')' : "" ),
+                        selectionArgs);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri );

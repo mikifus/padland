@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -35,7 +36,8 @@ public class PadLandDataActivity extends PadLandActivity {
             PadLandContentProvider.SERVER,
             PadLandContentProvider.URL,
             PadLandContentProvider.LAST_USED_DATE,
-            PadLandContentProvider.CREATE_DATE
+            PadLandContentProvider.CREATE_DATE,
+            PadLandContentProvider.ACCESS_COUNT
     };
     /**
      * It gets the pad id from an intent if there is such info, else 0
@@ -126,11 +128,28 @@ public class PadLandDataActivity extends PadLandActivity {
      */
     public boolean deletePad(long pad_id){
         if( pad_id > 0 ) {
-            int result = getContentResolver().delete( PadLandContentProvider.CONTENT_URI, PadLandContentProvider._ID + "=?", new String[] {String.valueOf(pad_id)} );
+            int result = getContentResolver().delete(PadLandContentProvider.CONTENT_URI, PadLandContentProvider._ID + "=?", new String[]{String.valueOf(pad_id)});
             return (result > 0);
         }
         else {
             throw new IllegalArgumentException("Pad id is not valid");
+        }
+    }
+
+    /**
+     * Gets current pad data and saves the modified values (LAST_USED_DATE and ACCESS_COUNT).
+     * I tried to optimize it in such way that there's no need to use _getPadData, but it didn't work.
+     * @param pad_id
+     * @return
+     */
+    public void accessUpdate( long pad_id ){
+        if( pad_id > 0 ) {
+            padData data = _getPadData( pad_id );
+            ContentValues values = new ContentValues();
+            values.put( PadLandContentProvider.LAST_USED_DATE, getNowDate() );
+            values.put( PadLandContentProvider.ACCESS_COUNT, (data.getAccessCount() + 1));
+            String[] where_value = { String.valueOf(pad_id) };
+            getContentResolver().update(PadLandContentProvider.CONTENT_URI, values, PadLandContentProvider._ID  + "=?", where_value );
         }
     }
 
@@ -192,7 +211,7 @@ public class PadLandDataActivity extends PadLandActivity {
     }
 
     public boolean onCreateOptionsMenu( Menu menu, int id_menu ) {
-        return super.onCreateOptionsMenu( menu, id_menu );
+        return super.onCreateOptionsMenu(menu, id_menu);
     }
 
     /**
@@ -208,10 +227,12 @@ public class PadLandDataActivity extends PadLandActivity {
         private String url;
         private long last_used_date;
         private long create_date;
+        private long access_count;
 
         public padData(Cursor c) {
             if(c != null && c.getCount() > 0) {
                 c.moveToFirst();
+                Log.d("padData LOADED", DatabaseUtils.dumpCursorToString(c));
 
                 id = c.getLong(0);
                 name = c.getString(1);
@@ -219,6 +240,7 @@ public class PadLandDataActivity extends PadLandActivity {
                 url = c.getString(3);
                 last_used_date = c.getLong(4);
                 create_date = c.getLong(5);
+                access_count = c.getLong(6);
             }
         }
         public long getId() {
@@ -235,6 +257,9 @@ public class PadLandDataActivity extends PadLandActivity {
         }
         public String getLastUsedDate() {
             return lon_to_date( last_used_date );
+        }
+        public long getAccessCount() {
+            return access_count;
         }
         public String getCreateDate() {
             return lon_to_date( create_date );
