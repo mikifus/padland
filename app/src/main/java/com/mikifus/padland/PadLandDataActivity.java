@@ -232,7 +232,7 @@ public class PadLandDataActivity extends PadLandActivity {
         public padData(Cursor c) {
             if(c != null && c.getCount() > 0) {
                 c.moveToFirst();
-                Log.d("padData LOADED", DatabaseUtils.dumpCursorToString(c));
+//                Log.d("padData LOADED", DatabaseUtils.dumpCursorToString(c));
 
                 id = c.getLong(0);
                 name = c.getString(1);

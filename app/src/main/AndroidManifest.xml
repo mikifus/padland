@@ -52,8 +52,8 @@
             android:name=".PadViewActivity"
             android:label="@string/title_activity_pad_view"
             android:parentActivityName=".PadListActivity"
-            android:screenOrientation="landscape"
-            android:theme="@style/splashScreenTheme" >
+            android:theme="@style/splashScreenTheme"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
@@ -118,8 +118,7 @@
 
                 <data android:scheme="https" />
                 <data
-                    android:host="framapad.net"
-                    android:pathPrefix="/p/" />
+                    android:host="framapad.org" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

@@ -18,7 +18,7 @@
         <item>http://piratepad.net</item>
         <item>http://piratenpad.de</item>
         <item>http://etherpad.mozilla.org</item>
-        <item>http://framapad.net</item>
+        <item>https://framapad.org</item>
         <item>http://free.primarypad.com</item>
     </string-array>
 
@@ -29,7 +29,7 @@
         <item>http://piratepad.net/</item>
         <item>http://piratenpad.de/</item>
         <item>http://etherpad.mozilla.org/</item>
-        <item>http://framapad.net/</item>
+        <item>https://framapad.org/</item>
         <item>http://free.primarypad.com/p/</item>
     </string-array>
 </resources>

@@ -14,6 +14,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Allows the user to create a new pad, choosing a name and the host.
  *
@@ -76,16 +79,24 @@ public class NewPadActivity extends PadLandActivity {
      * @param w
      */
     public void onCreateButtonClick( View w ){
-        String padName = this.getPadNameFromInput( (TextView) findViewById(R.id.editText) );
-        String padPrefix = this.getPadPrefixFromSpinner( (Spinner) findViewById(R.id.spinner) );
+        String padName = this.getPadNameFromInput((TextView) findViewById(R.id.editText));
+        String padPrefix = this.getPadPrefixFromSpinner((Spinner) findViewById(R.id.spinner));
         String padServer = this.getPadServerFromSpinner( (Spinner) findViewById(R.id.spinner) );
 
-        String padUrl = padPrefix + padName;
         Log.d("CREATENEW", padName);
         if ( padName.isEmpty() ) {
             Toast.makeText(this, (getString(R.string.newpad_noname_warning)), Toast.LENGTH_LONG).show();
             return;
         }
+        Pattern p = Pattern.compile( "[a-zA-Z0-9-_]+" );
+        Matcher m = p.matcher( padName );
+        if( !m.matches() )
+        {
+            Toast.makeText(this, "The pad name contains invalid characters.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        String padUrl = padPrefix + padName;
 
         Intent padViewIntent =
                 new Intent( NewPadActivity.this, PadViewActivity.class );
