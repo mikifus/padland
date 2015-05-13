@@ -191,16 +191,15 @@ public class PadViewActivity extends PadLandDataActivity {
     /**
      * Updates the last used date of a pad.
      * It might update more details in the future.
+     *
+     * Actually it only calls accessUpdate, where the bussiness is made.
      */
     private boolean _updateViewedPad(){
         boolean result = false;
         long pad_id = this._getPadId();
-        long now = ( (long) new Date().getTime() ) / 1000;
         if ( pad_id != 0 ) {
-            ContentValues values = new ContentValues();
-            values.put( PadLandContentProvider.LAST_USED_DATE, now  );
-
-            result = savePadData( pad_id, values );
+            accessUpdate( pad_id );
+            result = true;
         }
         return result;
     }
