@@ -89,7 +89,7 @@ public class PadLandContentProvider extends ContentProvider {
                 db.execSQL("DROP TABLE IF EXISTS " +  TABLE_NAME);
                 onCreate(db);
             }
-            if( oldVersion == 3 && newVersion == 4 ) {
+            if( oldVersion == 3 || newVersion == 4 ) {
                 Log.w(TAG, "Upgrading database. Existing contents will be migrated. [" + oldVersion + "]->[" + newVersion + "]");
                 db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + ACCESS_COUNT + " INTEGER NOT NULL DEFAULT 0;");
             }
