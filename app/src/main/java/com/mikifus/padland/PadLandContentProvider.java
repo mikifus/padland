@@ -55,7 +55,7 @@ public class PadLandContentProvider extends ContentProvider {
     private SQLiteDatabase db;
     static final String DATABASE_NAME = "padland";
     static final String TABLE_NAME = "padlist";
-    static final int DATABASE_VERSION = 4;
+    static final int DATABASE_VERSION = 5;
     static final String CREATE_DB_TABLE =
             " CREATE TABLE " + TABLE_NAME +
                     " ("+_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -89,7 +89,7 @@ public class PadLandContentProvider extends ContentProvider {
                 db.execSQL("DROP TABLE IF EXISTS " +  TABLE_NAME);
                 onCreate(db);
             }
-            if( oldVersion == 3 || newVersion == 4 ) {
+            if( oldVersion == 3 && (newVersion == 4 || newVersion == 5 ) ) {
                 Log.w(TAG, "Upgrading database. Existing contents will be migrated. [" + oldVersion + "]->[" + newVersion + "]");
                 db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + ACCESS_COUNT + " INTEGER NOT NULL DEFAULT 0;");
             }
