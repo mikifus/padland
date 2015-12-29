@@ -17,8 +17,11 @@ ADDED from AndroidManifest.xml:2:1
 		INJECTED from AndroidManifest.xml:0:0
 uses-sdk
 ADDED from AndroidManifest.xml:7:5
-MERGED from com.android.support:appcompat-v7:21.0.3:15:5
-MERGED from com.android.support:support-v4:21.0.3:15:5
+MERGED from com.android.support:appcompat-v7:22.0.0:20:5
+MERGED from com.android.support:support-v4:22.0.0:20:5
+MERGED from com.pnikosis:materialish-progress:1.5:7:5
+MERGED from com.android.support:appcompat-v7:22.0.0:20:5
+MERGED from com.android.support:support-v4:22.0.0:20:5
 	android:targetSdkVersion
 		ADDED from AndroidManifest.xml:9:9
 		INJECTED from AndroidManifest.xml:0:0
@@ -39,111 +42,142 @@ android:uses-permission#android.permission.READ_PHONE_STATE
 ADDED from AndroidManifest.xml:14:5
 	android:name
 		ADDED from AndroidManifest.xml:14:30
-application
-ADDED from AndroidManifest.xml:16:5
-MERGED from com.android.support:appcompat-v7:21.0.3:16:5
-MERGED from com.android.support:support-v4:21.0.3:16:5
-	android:label
-		ADDED from AndroidManifest.xml:20:9
-	android:allowBackup
-		ADDED from AndroidManifest.xml:18:9
-	android:icon
-		ADDED from AndroidManifest.xml:19:9
-	android:name
+android:uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from AndroidManifest.xml:15:5
+	android:maxSdkVersion
 		ADDED from AndroidManifest.xml:17:9
+	android:name
+		ADDED from AndroidManifest.xml:16:9
+android:uses-permission#android.permission.READ_EXTERNAL_STORAGE
+ADDED from AndroidManifest.xml:18:5
+	android:maxSdkVersion
+		ADDED from AndroidManifest.xml:20:9
+	android:name
+		ADDED from AndroidManifest.xml:19:9
+application
+ADDED from AndroidManifest.xml:22:5
+MERGED from com.android.support:appcompat-v7:22.0.0:22:5
+MERGED from com.android.support:support-v4:22.0.0:22:5
+MERGED from com.pnikosis:materialish-progress:1.5:11:5
+MERGED from com.android.support:appcompat-v7:22.0.0:22:5
+MERGED from com.android.support:support-v4:22.0.0:22:5
+	android:label
+		ADDED from AndroidManifest.xml:26:9
+	android:allowBackup
+		ADDED from AndroidManifest.xml:24:9
+	android:icon
+		ADDED from AndroidManifest.xml:25:9
+	android:theme
+		ADDED from AndroidManifest.xml:27:9
+	android:name
+		ADDED from AndroidManifest.xml:23:9
 activity#com.mikifus.padland.SplashActivity
-ADDED from AndroidManifest.xml:22:9
+ADDED from AndroidManifest.xml:28:9
 	android:label
-		ADDED from AndroidManifest.xml:24:13
+		ADDED from AndroidManifest.xml:30:13
 	android:theme
-		ADDED from AndroidManifest.xml:25:13
+		ADDED from AndroidManifest.xml:31:13
 	android:name
-		ADDED from AndroidManifest.xml:23:13
+		ADDED from AndroidManifest.xml:29:13
 intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
-ADDED from AndroidManifest.xml:26:13
+ADDED from AndroidManifest.xml:32:13
 action#android.intent.action.MAIN
-ADDED from AndroidManifest.xml:27:17
+ADDED from AndroidManifest.xml:33:17
 	android:name
-		ADDED from AndroidManifest.xml:27:25
+		ADDED from AndroidManifest.xml:33:25
 category#android.intent.category.LAUNCHER
-ADDED from AndroidManifest.xml:29:17
+ADDED from AndroidManifest.xml:35:17
 	android:name
-		ADDED from AndroidManifest.xml:29:27
+		ADDED from AndroidManifest.xml:35:27
 activity#com.mikifus.padland.PadListActivity
-ADDED from AndroidManifest.xml:33:9
+ADDED from AndroidManifest.xml:38:9
 	android:label
-		ADDED from AndroidManifest.xml:35:13
+		ADDED from AndroidManifest.xml:40:13
 	android:name
-		ADDED from AndroidManifest.xml:34:13
+		ADDED from AndroidManifest.xml:39:13
 intent-filter#android.intent.action.SEND+android.intent.action.VIEW+android.intent.category.DEFAULT
-ADDED from AndroidManifest.xml:36:13
+ADDED from AndroidManifest.xml:41:13
 action#android.intent.action.VIEW
-ADDED from AndroidManifest.xml:37:17
+ADDED from AndroidManifest.xml:42:17
 	android:name
-		ADDED from AndroidManifest.xml:37:25
+		ADDED from AndroidManifest.xml:42:25
 action#android.intent.action.SEND
-ADDED from AndroidManifest.xml:39:17
+ADDED from AndroidManifest.xml:44:17
 	android:name
-		ADDED from AndroidManifest.xml:39:25
+		ADDED from AndroidManifest.xml:44:25
 category#android.intent.category.DEFAULT
-ADDED from AndroidManifest.xml:41:17
+ADDED from AndroidManifest.xml:46:17
 	android:name
-		ADDED from AndroidManifest.xml:41:27
+		ADDED from AndroidManifest.xml:46:27
 data
-ADDED from AndroidManifest.xml:43:17
+ADDED from AndroidManifest.xml:48:17
 	android:mimeType
-		ADDED from AndroidManifest.xml:43:23
+		ADDED from AndroidManifest.xml:48:23
 activity#com.mikifus.padland.PadViewActivity
-ADDED from AndroidManifest.xml:47:9
-	android:screenOrientation
-		ADDED from AndroidManifest.xml:51:13
+ADDED from AndroidManifest.xml:51:9
 	android:label
-		ADDED from AndroidManifest.xml:49:13
+		ADDED from AndroidManifest.xml:53:13
+	android:configChanges
+		ADDED from AndroidManifest.xml:56:13
 	android:theme
+		ADDED from AndroidManifest.xml:55:13
+	android:parentActivityName
+		ADDED from AndroidManifest.xml:54:13
+	android:name
 		ADDED from AndroidManifest.xml:52:13
-	android:parentActivityName
-		ADDED from AndroidManifest.xml:50:13
-	android:name
-		ADDED from AndroidManifest.xml:48:13
 meta-data#android.support.PARENT_ACTIVITY
-ADDED from AndroidManifest.xml:55:13
+ADDED from AndroidManifest.xml:59:13
 	android:name
-		ADDED from AndroidManifest.xml:56:17
+		ADDED from AndroidManifest.xml:60:17
 	android:value
-		ADDED from AndroidManifest.xml:57:17
+		ADDED from AndroidManifest.xml:61:17
 intent-filter#android.intent.action.VIEW+android.intent.category.DEFAULT
-ADDED from AndroidManifest.xml:60:13
+ADDED from AndroidManifest.xml:64:13
 activity#com.mikifus.padland.NewPadActivity
-ADDED from AndroidManifest.xml:114:9
+ADDED from AndroidManifest.xml:132:9
 	android:label
-		ADDED from AndroidManifest.xml:116:13
+		ADDED from AndroidManifest.xml:134:13
 	android:parentActivityName
-		ADDED from AndroidManifest.xml:117:13
+		ADDED from AndroidManifest.xml:135:13
 	android:name
-		ADDED from AndroidManifest.xml:115:13
+		ADDED from AndroidManifest.xml:133:13
 activity#com.mikifus.padland.About
-ADDED from AndroidManifest.xml:125:9
+ADDED from AndroidManifest.xml:142:9
 	android:label
-		ADDED from AndroidManifest.xml:127:13
+		ADDED from AndroidManifest.xml:144:13
 	android:parentActivityName
-		ADDED from AndroidManifest.xml:128:13
+		ADDED from AndroidManifest.xml:145:13
 	android:name
-		ADDED from AndroidManifest.xml:126:13
+		ADDED from AndroidManifest.xml:143:13
 activity#com.mikifus.padland.SettingsActivity
-ADDED from AndroidManifest.xml:135:9
+ADDED from AndroidManifest.xml:152:9
 	android:label
-		ADDED from AndroidManifest.xml:137:13
+		ADDED from AndroidManifest.xml:154:13
 	android:parentActivityName
-		ADDED from AndroidManifest.xml:138:13
+		ADDED from AndroidManifest.xml:155:13
 	android:name
-		ADDED from AndroidManifest.xml:136:13
+		ADDED from AndroidManifest.xml:153:13
 provider#com.mikifus.padland.PadLandContentProvider
-ADDED from AndroidManifest.xml:148:9
+ADDED from AndroidManifest.xml:165:9
 	android:exported
-		ADDED from AndroidManifest.xml:152:13
+		ADDED from AndroidManifest.xml:169:13
 	android:authorities
-		ADDED from AndroidManifest.xml:150:13
+		ADDED from AndroidManifest.xml:167:13
 	android:enabled
-		ADDED from AndroidManifest.xml:151:13
+		ADDED from AndroidManifest.xml:168:13
 	android:name
-		ADDED from AndroidManifest.xml:149:13
+		ADDED from AndroidManifest.xml:166:13
+activity#com.mikifus.padland.PadInfoActivity
+ADDED from AndroidManifest.xml:172:9
+	android:label
+		ADDED from AndroidManifest.xml:174:13
+	android:parentActivityName
+		ADDED from AndroidManifest.xml:175:13
+	android:name
+		ADDED from AndroidManifest.xml:173:13
+activity#com.mikifus.padland.PadLandDataActivity
+ADDED from AndroidManifest.xml:180:9
+	android:label
+		ADDED from AndroidManifest.xml:182:13
+	android:name
+		ADDED from AndroidManifest.xml:181:13
