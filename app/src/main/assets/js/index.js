@@ -14,12 +14,15 @@ function start(url, username, color){
         'borderStyle' : "double",
     });
 
-    /*
-    var iframe = $("#pad iframe").contents();
+    var iframe = $("#pad iframe");
     $(iframe).load(function(){
             $(this).show();
-            iframe.find("#chatbox").hide();
-            console.log('laod the iframe');
+            //webviewScriptAPI.unsetLoading();
+            console.log('iframe loaded');
         });
-        */
+
+}
+function PadViewResize( w, h ){
+    $("#pad").width(w).height(h);
+    console.log("Pad view resize triggered: " + w + ", " + h )
 }

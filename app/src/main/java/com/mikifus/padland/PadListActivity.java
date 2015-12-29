@@ -23,6 +23,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.view.MotionEventCompat;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
@@ -33,6 +34,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
+
+import static android.support.v4.view.MotionEventCompat.getActionIndex;
 
 /**
  * This activity displays a list of previously checked documents.
