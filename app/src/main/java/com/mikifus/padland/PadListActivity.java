@@ -16,15 +16,19 @@
 package com.mikifus.padland;
 
 import android.app.LoaderManager;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MotionEventCompat;
+import android.text.ClipboardManager;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,6 +38,12 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
+
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
+
+import java.util.ArrayList;
 
 import static android.support.v4.view.MotionEventCompat.getActionIndex;
 
@@ -46,12 +56,21 @@ import static android.support.v4.view.MotionEventCompat.getActionIndex;
  * @since 0.1
  */
 public class PadListActivity extends PadLandDataActivity
-    implements ActionMode.Callback,LoaderManager.LoaderCallbacks<Cursor> {
+        implements ActionMode.Callback, LoaderManager.LoaderCallbacks<Cursor> {
 
     /**
      * mActionMode defines behaviour of the action-bar
      */
     protected ActionMode mActionMode;
+
+    /**
+     * List of selected items
+     */
+    private ArrayList<String> selectedItems = new ArrayList<String>();
+    /**
+     * listView
+     */
+    private ListView listView;
     /**
      * Currently selected item (View) in the list
      */
@@ -71,6 +90,11 @@ public class PadListActivity extends PadLandDataActivity
      * Adapter to play with the listView
      */
     private SimpleCursorAdapter adapter = null;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     /**
      * Override onCreate
@@ -88,19 +112,22 @@ public class PadListActivity extends PadLandDataActivity
 
         // Intent
         this._actionFromIntent();
-        
+
         // Loader
-        this.initLoader( (LoaderManager.LoaderCallbacks) this );
-        
+        this.initLoader((LoaderManager.LoaderCallbacks) this);
+
         // Init list view
-        ListView lv = this._initListView();
-        this._setListViewEvents( lv );
+        this._initListView();
+        this._setListViewEvents();
 
         // Get the data
         SimpleCursorAdapter data_adapter = this._getDataAdapter();
 
         // Bind to adapter.
-        lv.setAdapter(data_adapter);
+        listView.setAdapter(data_adapter);
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     /**
@@ -109,13 +136,13 @@ public class PadListActivity extends PadLandDataActivity
      */
     private void _textFromIntent() {
         String extra_text = getIntent().getStringExtra(Intent.EXTRA_TEXT);
-        if(extra_text != null) {
-            if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.HONEYCOMB) {
-                android.text.ClipboardManager clipboard = (android.text.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        if (extra_text != null) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 clipboard.setText(extra_text);
             } else {
                 android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                android.content.ClipData clip = android.content.ClipData.newPlainText("Copied Text", extra_text);
+                ClipData clip = ClipData.newPlainText("Copied Text", extra_text);
                 clipboard.setPrimaryClip(clip);
             }
 
@@ -125,19 +152,21 @@ public class PadListActivity extends PadLandDataActivity
 
     /**
      * If there is an intent with "action", here it is processed
-     * For now there's only the delete action.
+     * For now there is only the delete action.
      */
     private void _actionFromIntent() {
         String action = getIntent().getStringExtra("action");
-        long pad_id = getIntent().getLongExtra("pad_id", 0);
-        if( action != null && pad_id > 0 ) {
-            switch( action )
-            {
+        ArrayList<String> pad_id_list = getIntent().getStringArrayListExtra("pad_id");
+        if (action != null && pad_id_list.size() > 0) {
+            switch (action) {
                 case "delete":
-                    Log.d("DELETE_PAD_INTENT", action + String.valueOf(pad_id)  );
-                    boolean result = deletePad(pad_id);
-                    if( result ) {
-                        Toast.makeText(this, getString(R.string.padlist_document_deleted), Toast.LENGTH_LONG).show();
+                    for(int i = 0 ; i < pad_id_list.size(); i++)
+                    {
+                        Log.d("DELETE_PAD_INTENT", action + pad_id_list.get(i).toString());
+                        boolean result = deletePad( Long.valueOf(pad_id_list.get(i)).longValue());
+                        if (result) {
+                            Toast.makeText(this, getString(R.string.padlist_document_deleted), Toast.LENGTH_LONG).show();
+                        }
                     }
                     break;
             }
@@ -147,38 +176,38 @@ public class PadListActivity extends PadLandDataActivity
     /**
      * When the list is empty a message with a button is shown.
      * This handles the button onClick.
+     *
      * @param view
      */
-    public void onEmptyCreateNewClick( View view ) {
+    public void onEmptyCreateNewClick(View view) {
         Intent newPadIntent = new Intent(this, NewPadActivity.class);
         startActivity(newPadIntent);
     }
 
     /**
      * Makes an empty ListView and returns it.
+     *
      * @return ListView
      */
-    private ListView _initListView(){
-        final ListView lv = (ListView) findViewById(R.id.listView);
-        lv.setTextFilterEnabled(true);
-        lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        lv.setEmptyView(findViewById(android.R.id.empty));
-        return lv;
+    private void _initListView() {
+        listView = (ListView) findViewById(R.id.listView);
+        listView.setTextFilterEnabled(true);
+        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        listView.setEmptyView(findViewById(android.R.id.empty));
     }
 
     /**
      * This function adds events listeners for a ListView object to provide usage of the ActionBar
-     * @param lv
      */
-    private void _setListViewEvents(final ListView lv){
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    private void _setListViewEvents() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(mActionMode != null){
+                if (mActionMode != null) {
                     listItemSelect(view, position, id);
                     return;
                 }
                 // Clean selection
-                lv.setItemChecked(position, false);
+                listView.setItemChecked(position, false);
 
                 Intent padViewIntent = new Intent(PadListActivity.this, PadInfoActivity.class);
                 padViewIntent.putExtra("pad_id", id);
@@ -187,7 +216,7 @@ public class PadListActivity extends PadLandDataActivity
             }
         });
 
-        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 listItemSelect(view, position, id);
@@ -203,12 +232,10 @@ public class PadListActivity extends PadLandDataActivity
      * @param position
      * @param id
      */
-    public void listItemSelect( View view, int position, long id )
-    {
-        Log.d("SELECTION", "NEW: pos:" + String.valueOf(position) + " id:" + String.valueOf(id) );
+    public void listItemSelect(View view, int position, long id) {
+        Log.d("SELECTION", "NEW: pos:" + String.valueOf(position) + " id:" + String.valueOf(id));
 
-        if( selectedItem == null )
-        {
+        if (selectedItem == null) {
             // Start the CAB using the ActionMode.Callback defined above
             PadListActivity.this.startActionMode(PadListActivity.this);
         }
@@ -218,8 +245,7 @@ public class PadListActivity extends PadLandDataActivity
         selectedItem_position = position;
 
         // Set selected
-        ListView lv = (ListView) view.getParent();
-        lv.setItemChecked(position, true);
+        listView.setItemChecked(position, true);
     }
 
     /**
@@ -227,10 +253,10 @@ public class PadListActivity extends PadLandDataActivity
      *
      * @return
      */
-    private SimpleCursorAdapter _getDataAdapter(){
-        Uri padlist_uri = Uri.parse( getString( R.string.request_padlist ) );
+    private SimpleCursorAdapter _getDataAdapter() {
+        Uri padlist_uri = Uri.parse(getString(R.string.request_padlist));
         Cursor c = getContentResolver().query(padlist_uri,
-                new String[] { PadLandContentProvider._ID, PadLandContentProvider.NAME, PadLandContentProvider.URL },
+                new String[]{PadLandContentProvider._ID, PadLandContentProvider.NAME, PadLandContentProvider.URL},
                 null,
                 null,
                 PadLandContentProvider.LAST_USED_DATE + " ASC");
@@ -239,8 +265,8 @@ public class PadListActivity extends PadLandDataActivity
                 this,
                 R.layout.padlist_item,
                 c,     // Pass in the cursor to bind to.
-                new String[] { PadLandContentProvider.NAME, PadLandContentProvider.URL }, // Array of cursor columns to bind to.
-                new int[] { R.id.name, R.id.url },  // Parallel array of which template objects to bind to those columns.
+                new String[]{PadLandContentProvider.NAME, PadLandContentProvider.URL}, // Array of cursor columns to bind to.
+                new int[]{R.id.name, R.id.url},  // Parallel array of which template objects to bind to those columns.
                 0);
         // Corrects the data and displays it okay if necessary
         /*adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder(){
@@ -265,19 +291,21 @@ public class PadListActivity extends PadLandDataActivity
 
     /**
      * Data loader initial event
+     *
      * @param id
      * @param args
      * @return
      */
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String[] projection = { PadLandContentProvider._ID, PadLandContentProvider.NAME, PadLandContentProvider.URL };
+        String[] projection = {PadLandContentProvider._ID, PadLandContentProvider.NAME, PadLandContentProvider.URL};
         CursorLoader cursorLoader = new CursorLoader(this, PadLandContentProvider.CONTENT_URI, projection, null, null, null);
         return cursorLoader;
     }
 
     /**
      * Data loader finish event
+     *
      * @param loader
      * @param data
      */
@@ -288,6 +316,7 @@ public class PadListActivity extends PadLandDataActivity
 
     /**
      * Data loader event
+     *
      * @param loader
      */
     @Override
@@ -298,6 +327,7 @@ public class PadListActivity extends PadLandDataActivity
 
     /**
      * Called when the action mode is created; startActionMode() was called
+     *
      * @param mode
      * @param menu
      * @return boolean
@@ -316,6 +346,7 @@ public class PadListActivity extends PadLandDataActivity
     /**
      * Called each time the action mode is shown. Always called after onCreateActionMode, but
      * may be called multiple times if the mode is invalidated.
+     *
      * @param mode
      * @param menu
      * @return boolean
@@ -327,6 +358,7 @@ public class PadListActivity extends PadLandDataActivity
 
     /**
      * Called when the user selects a contextual menu item
+     *
      * @param mode
      * @param item
      * @return
@@ -335,12 +367,12 @@ public class PadListActivity extends PadLandDataActivity
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menuitem_delete:
-                AskDelete(selectedItem_id);
+                AskDelete(getCheckedItemPositions());
                 // Action picked, so close the CAB
                 mode.finish();
                 return true;
             case R.id.menuitem_share:
-                menu_share(selectedItem_id);
+                menu_share(getCheckedItemPositions());
                 // Action picked, so close the CAB
                 mode.finish();
                 return true;
@@ -349,17 +381,31 @@ public class PadListActivity extends PadLandDataActivity
         }
     }
 
+    private ArrayList<String> getCheckedItemPositions()
+    {
+        SparseBooleanArray checked = listView.getCheckedItemPositions();
+
+        ArrayList<String> selectedItems = new ArrayList<String>();
+        for (int i = 0; i < checked.size(); i++) {
+            // Item position in adapter
+            int position = checked.keyAt(i);
+            // Add sport if it is checked i.e.) == TRUE!
+            if (checked.valueAt(i))
+                selectedItems.add(String.valueOf(_getDataAdapter().getItem(position)));
+        }
+        return selectedItems;
+    }
+
     /**
      * Called when the user exits the action mode
+     *
      * @param mode
      */
     @Override
     public void onDestroyActionMode(ActionMode mode) {
-        Log.d( "SELECTION", "unset_checked " + String.valueOf(selectedItem_position) );
-        if( selectedItem != null )
-        {
-            ListView lv = (ListView) selectedItem.getParent();
-            lv.setItemChecked( selectedItem_position, false );
+        Log.d("SELECTION", "unset_checked " + String.valueOf(selectedItem_position));
+        if (selectedItem != null) {
+            listView.setItemChecked(selectedItem_position, false);
         }
 
         mActionMode = null;
@@ -371,12 +417,52 @@ public class PadListActivity extends PadLandDataActivity
     /**
      * backbutton event
      */
-    public void onBackPressed(){
+    public void onBackPressed() {
         onDestroyActionMode(mActionMode);
         super.onBackPressed();
     }
 
-    public boolean onCreateOptionsMenu(Menu menu){
-        return super.onCreateOptionsMenu( menu, R.menu.pad_list );
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu, R.menu.pad_list);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "PadList Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.mikifus.padland/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "PadList Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.mikifus.padland/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
     }
 }
