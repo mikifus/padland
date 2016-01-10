@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -111,7 +112,7 @@ public class PadLandDataActivity extends PadLandActivity {
     public boolean savePadData( long pad_id, ContentValues values ){
         if( pad_id > 0 ) {
             String[] where_value = { String.valueOf(pad_id) };
-            int result = getContentResolver().update(PadLandContentProvider.CONTENT_URI, values, PadLandContentProvider._ID  + "=?", where_value );
+            int result = getContentResolver().update(PadLandContentProvider.CONTENT_URI, values, PadLandContentProvider._ID + "=?", where_value);
             return (result > 0);
         }
         else {
@@ -157,12 +158,13 @@ public class PadLandDataActivity extends PadLandActivity {
      * Asks the user to confirm deleting a document.
      * If confirmed, will make an intent to PadListActivity, where the info will be
      * deleted.
-     * @param selectedItem_id
+     * @param selectedItems
      * @return AlertDialog
      */
-    public AlertDialog AskDelete(final long selectedItem_id)
+    public AlertDialog AskDelete(final ArrayList<String> selectedItems)
     {
         final PadLandDataActivity context = this;
+
         AlertDialog DeleteDialogBox = new AlertDialog.Builder(this)
                 //set message, title, and icon
                 .setTitle(R.string.delete)
@@ -172,8 +174,9 @@ public class PadLandDataActivity extends PadLandActivity {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
                         Intent intent = new Intent(context, PadListActivity.class);
-                        intent.putExtra( "action", "delete" );
-                        intent.putExtra( "pad_id", selectedItem_id );
+                        intent.putExtra("action", "delete");
+//                        intent.putExtra("pad_id", outputStrArr);
+                        intent.putStringArrayListExtra("pad_id", selectedItems);
                         context.startActivity(intent);
                         dialog.dismiss();
                         finish();
@@ -192,9 +195,11 @@ public class PadLandDataActivity extends PadLandActivity {
 
     /**
      * Menu to share a document url
-     * @param selectedItem_id
+     * @param selectedItems
      */
-    public void menu_share(long selectedItem_id) {
+    public void menu_share(final ArrayList<String> selectedItems) {
+        // Only the first one
+        final long selectedItem_id = Long.valueOf(selectedItems.get(0));
         padData padData = _getPadData( selectedItem_id );
         String padUrl = padData.getUrl();
         Log.d("SHARING_PAD", selectedItem_id + " - " + padUrl);

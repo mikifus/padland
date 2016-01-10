@@ -20,7 +20,7 @@
     <string name="share">Share</string>
     <string name="delete">Delete</string>
     <string name="no_pads">There are no saved documents.</string>
-    <string name="sure_to_delete">Are you sure you want to delete this document?</string>
+    <string name="sure_to_delete">Are you sure you want to delete the selected documents?</string>
     <string name="cancel">Cancel</string>
     <string name="share_document">Share document</string>
     <string name="share_auto_text">"Come join me on padland! "</string>

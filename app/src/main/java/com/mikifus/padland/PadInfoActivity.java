@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -107,13 +108,17 @@ public class PadInfoActivity extends PadLandDataActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;
 
+        final ArrayList<String> pad_list = new ArrayList<String>();
+        pad_list.add(String.valueOf(pad_id));
+
         switch( item.getItemId() ) {
             case R.id.menuitem_share:
                 Log.d("MENU_SHARE", String.valueOf(pad_id) );
-                menu_share(pad_id);
+                menu_share(pad_list);
                 break;
             case R.id.menuitem_delete:
-                AskDelete( pad_id );
+                Log.d("MENU_DELETE", String.valueOf(pad_id) );
+                AskDelete( pad_list );
                 break;
             default:
                 return super.onOptionsItemSelected(item);
