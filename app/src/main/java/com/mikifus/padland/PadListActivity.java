@@ -25,7 +25,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.view.MotionEventCompat;
 import android.text.ClipboardManager;
 import android.util.Log;
 import android.util.SparseBooleanArray;
@@ -35,17 +34,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
-
 import java.util.ArrayList;
-
-import static android.support.v4.view.MotionEventCompat.getActionIndex;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * This activity displays a list of previously checked documents.
@@ -58,43 +53,22 @@ import static android.support.v4.view.MotionEventCompat.getActionIndex;
 public class PadListActivity extends PadLandDataActivity
         implements ActionMode.Callback, LoaderManager.LoaderCallbacks<Cursor> {
 
+    public static final String TAG = "PadListActivity";
+
     /**
      * mActionMode defines behaviour of the action-bar
      */
     protected ActionMode mActionMode;
 
     /**
-     * List of selected items
+     * expandableListView
      */
-    private ArrayList<String> selectedItems = new ArrayList<String>();
-    /**
-     * listView
-     */
-    private ListView listView;
-    /**
-     * Currently selected item (View) in the list
-     */
-    public View selectedItem = null;
-    /**
-     * The id of the selected pad
-     * Default: -1 = none
-     */
-    public long selectedItem_id = -1;
-    /**
-     * The position of the selected item in the list
-     * Default: -1 = none
-     */
-    public int selectedItem_position = -1;
+    private ExpandableListView expandableListView;
 
     /**
-     * Adapter to play with the listView
+     * Adapter to play with the expandableListView
      */
-    private SimpleCursorAdapter adapter = null;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
+    private PadListAdapter adapter = null;
 
     /**
      * Override onCreate
@@ -114,20 +88,11 @@ public class PadListActivity extends PadLandDataActivity
         this._actionFromIntent();
 
         // Loader
-        this.initLoader((LoaderManager.LoaderCallbacks) this);
+        this.initLoader(this);
 
         // Init list view
         this._initListView();
-        this._setListViewEvents();
 
-        // Get the data
-        SimpleCursorAdapter data_adapter = this._getDataAdapter();
-
-        // Bind to adapter.
-        listView.setAdapter(data_adapter);
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     /**
@@ -158,12 +123,13 @@ public class PadListActivity extends PadLandDataActivity
         String action = getIntent().getStringExtra("action");
         ArrayList<String> pad_id_list = getIntent().getStringArrayListExtra("pad_id");
         if (action != null && pad_id_list.size() > 0) {
+            Log.d("DELETE_PAD_INTENT", "list: " + pad_id_list.toString());
             switch (action) {
                 case "delete":
                     for(int i = 0 ; i < pad_id_list.size(); i++)
                     {
-                        Log.d("DELETE_PAD_INTENT", action + pad_id_list.get(i).toString());
-                        boolean result = deletePad( Long.valueOf(pad_id_list.get(i)).longValue());
+                        Log.d("DELETE_PAD_INTENT", "action: " + action + " list_get: " + pad_id_list.get(i));
+                        boolean result = deletePad( Long.parseLong(pad_id_list.get(i)) );
                         if (result) {
                             Toast.makeText(this, getString(R.string.padlist_document_deleted), Toast.LENGTH_LONG).show();
                         }
@@ -190,37 +156,70 @@ public class PadListActivity extends PadLandDataActivity
      * @return ListView
      */
     private void _initListView() {
-        listView = (ListView) findViewById(R.id.listView);
-        listView.setTextFilterEnabled(true);
-        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        listView.setEmptyView(findViewById(android.R.id.empty));
+        expandableListView = (ExpandableListView) findViewById(R.id.listView);
+        expandableListView.setTextFilterEnabled(true);
+        expandableListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        expandableListView.setEmptyView(findViewById(android.R.id.empty));
+
+        // Set the data
+        setAdapter();
+
+        // events
+        this._setListViewEvents();
     }
 
     /**
      * This function adds events listeners for a ListView object to provide usage of the ActionBar
      */
     private void _setListViewEvents() {
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                Log.d(TAG, "child click: " + id);
+
                 if (mActionMode != null) {
-                    listItemSelect(view, position, id);
-                    return;
+//                    startActionMode(view, position, id);
+                    int position = ExpandableListView.getPackedPositionChild(id);
+                    Log.d(TAG, "Childclick: position: " + position + " childPosition:" + childPosition + " waschecked?" + expandableListView.isItemChecked(position));
+
+                    int final_position = childPosition + 1;
+                    expandableListView.setItemChecked(final_position, (!expandableListView.isItemChecked(final_position)));
+                    if (expandableListView.getCheckedItemCount() == 0) {
+                        mActionMode.finish();
+                    }
+                    return false;
                 }
-                // Clean selection
-                listView.setItemChecked(position, false);
+
 
                 Intent padViewIntent = new Intent(PadListActivity.this, PadInfoActivity.class);
                 padViewIntent.putExtra("pad_id", id);
 
                 startActivity(padViewIntent);
+
+                return true;
             }
         });
 
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        expandableListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                listItemSelect(view, position, id);
-                return true;
+                if (ExpandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+                    int groupPosition = ExpandableListView.getPackedPositionGroup(id);
+                    int childPosition = ExpandableListView.getPackedPositionChild(id);
+
+                    Log.d(TAG, "Longclick: childpos:" + childPosition + " pos:" + position + " id:" + id);
+
+                    long childId = adapter.getChildId(groupPosition, position - 1); // position does not start by 0
+
+                    startActionMode(view, position, childId);
+                    expandableListView.setItemChecked(position, true);
+                    view.setSelected(true);
+
+                    // Return true as we are handling the event.
+                    return true;
+                }
+
+                return false;
             }
         });
     }
@@ -232,62 +231,82 @@ public class PadListActivity extends PadLandDataActivity
      * @param position
      * @param id
      */
-    public void listItemSelect(View view, int position, long id) {
-        Log.d("SELECTION", "NEW: pos:" + String.valueOf(position) + " id:" + String.valueOf(id));
-
-        if (selectedItem == null) {
-            // Start the CAB using the ActionMode.Callback defined above
+    public void startActionMode(View view, int position, long id) {
+        Log.d(TAG, "SELECTION NEW: pos:" + String.valueOf(position) + " id:" + String.valueOf(id));
+//
+        if (mActionMode == null) {
+//            // Start the CAB using the ActionMode.Callback defined above
             PadListActivity.this.startActionMode(PadListActivity.this);
         }
-
-        selectedItem = view;
-        selectedItem_id = id;
-        selectedItem_position = position;
-
-        // Set selected
-        listView.setItemChecked(position, true);
     }
 
     /**
-     * Gets an adapter for the listView with the contents from the database
+     * Gets an adapter for the expandableListView with the contents from the database
      *
      * @return
      */
-    private SimpleCursorAdapter _getDataAdapter() {
-        Uri padlist_uri = Uri.parse(getString(R.string.request_padlist));
-        Cursor c = getContentResolver().query(padlist_uri,
-                new String[]{PadLandContentProvider._ID, PadLandContentProvider.NAME, PadLandContentProvider.URL},
-                null,
-                null,
-                PadLandContentProvider.LAST_USED_DATE + " ASC");
+    private void setAdapter()
+    {
+        HashMap<Long, ArrayList<String>> padlist_data = _getPadListData();
+        ArrayList<Long> pad_id_list = new ArrayList<>();
 
-        adapter = new SimpleCursorAdapter(
-                this,
-                R.layout.padlist_item,
-                c,     // Pass in the cursor to bind to.
-                new String[]{PadLandContentProvider.NAME, PadLandContentProvider.URL}, // Array of cursor columns to bind to.
-                new int[]{R.id.name, R.id.url},  // Parallel array of which template objects to bind to those columns.
-                0);
-        // Corrects the data and displays it okay if necessary
-        /*adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder(){
-            @Override
-            public boolean setViewValue(View view, Cursor cursor, int index) {
-                if (index == cursor.getColumnIndex(PadLandContentProvider.LAST_USED_DATE)) {
-                    // get a locale based string for the date
-                    DateFormat formatter = android.text.format.DateFormat
-                            .getDateFormat(getApplicationContext());
-                    long date = cursor.getLong(index);
-                    Date dateObj = new Date(date * 1000);
-                    ((TextView) view).setText(formatter.format(dateObj));
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        });*/
+        Iterator iterator = padlist_data.keySet().iterator();
+        while(iterator.hasNext())
+        {
+            long next = (long) iterator.next();
+            pad_id_list.add(next);
+        }
 
-        return adapter;
+        ArrayList<HashMap<String, ArrayList>> group_data = new ArrayList<>();
+        HashMap<String, ArrayList> header = new HashMap<>();
+        header.put("Unclassified", pad_id_list);
+        group_data.add(header);
+
+        adapter = new PadListAdapter(this, group_data, padlist_data);
+
+        // Bind to adapter.
+        expandableListView.setAdapter(adapter);
     }
+
+    private HashMap<Long, ArrayList<String>> _getPadListData()
+    {
+        Uri padlist_uri = Uri.parse(getString(R.string.request_padlist));
+        Cursor cursor = getContentResolver()
+                .query(padlist_uri,
+                        new String[]{PadLandContentProvider._ID, PadLandContentProvider.NAME, PadLandContentProvider.URL},
+                        null,
+                        null,
+                        PadLandContentProvider.LAST_USED_DATE + " ASC");
+
+        HashMap<Long, ArrayList<String>> result = new HashMap<>();
+
+        if (cursor.getCount() == 0) {
+            return result;
+        }
+
+        HashMap<Long, ArrayList<String>> pad_data = new HashMap<>();
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast())
+        {
+            long id = cursor.getLong(0);
+            String name = cursor.getString(1);
+            String url = cursor.getString(2);
+
+            ArrayList<String> pad_strings = new ArrayList<String>();
+            pad_strings.add(name);
+            pad_strings.add(url);
+
+            pad_data.put(id, pad_strings);
+
+            // do something
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+        return pad_data;
+    }
+
 
     /**
      * Data loader initial event
@@ -311,7 +330,7 @@ public class PadListActivity extends PadLandDataActivity
      */
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        adapter.swapCursor(data);
+        setAdapter();
     }
 
     /**
@@ -322,7 +341,7 @@ public class PadListActivity extends PadLandDataActivity
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         // data is not available anymore, delete reference
-        adapter.swapCursor(null);
+        setAdapter();
     }
 
     /**
@@ -367,12 +386,12 @@ public class PadListActivity extends PadLandDataActivity
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menuitem_delete:
-                AskDelete(getCheckedItemPositions());
+                AskDelete(getCheckedItemIds());
                 // Action picked, so close the CAB
                 mode.finish();
                 return true;
             case R.id.menuitem_share:
-                menu_share(getCheckedItemPositions());
+                menu_share(getCheckedItemIds());
                 // Action picked, so close the CAB
                 mode.finish();
                 return true;
@@ -381,18 +400,54 @@ public class PadListActivity extends PadLandDataActivity
         }
     }
 
-    private ArrayList<String> getCheckedItemPositions()
+    private ArrayList<String> getCheckedItemIds()
     {
-        SparseBooleanArray checked = listView.getCheckedItemPositions();
+        ArrayList<String> selectedItems = new ArrayList<>();
+        HashMap<Long, ArrayList<String>> padlist_data = _getPadListData();
 
-        ArrayList<String> selectedItems = new ArrayList<String>();
-        for (int i = 0; i < checked.size(); i++) {
-            // Item position in adapter
-            int position = checked.keyAt(i);
-            // Add sport if it is checked i.e.) == TRUE!
-            if (checked.valueAt(i))
-                selectedItems.add(String.valueOf(_getDataAdapter().getItem(position)));
+        SparseBooleanArray positions = expandableListView.getCheckedItemPositions();
+        Log.d(TAG, "selectedItemsPositions: " + positions);
+        for (int i = 0; i < positions.size(); ++i)
+        {
+            int position = positions.keyAt(i);
+            if ( positions.valueAt(i) ) {
+                long packed_position = expandableListView.getExpandableListPosition(position);
+                int group = expandableListView.getPackedPositionGroup(packed_position);
+                int child = expandableListView.getPackedPositionChild(packed_position);
+                Log.d(TAG, "selectedItemsPositions: g: " + group + "c: " + child);
+                if( child == -1 )
+                {
+                    continue;
+                }
+                selectedItems.add( String.valueOf(adapter.getChildId(group, child)) );
+            }
         }
+
+        // almost old try
+//        SparseArray<SparseBooleanArray> groupPositions = adapter.getCheckedPositions();
+//        Log.d(TAG, "Selected? g:" + groupPositions.toString() );
+//        for (int i = 0; i < groupPositions.size(); ++i)
+//        {
+//            SparseBooleanArray childPositions = groupPositions.get(i);
+//            for (int a = 0; a < childPositions.size(); ++a)
+//            {
+//                Log.d(TAG, "Selected? g:" + i + " c:" + a + " ->" + (childPositions.get(a)?1:0) );
+//                if( childPositions.get(a) )
+//                {
+//                    selectedItems.add( String.valueOf(adapter.getChildId(i, a)) );
+//                }
+//            }
+//        }
+
+        // Old try
+//        long[] id_list = expandableListView.getCheckedItemIds();
+//
+//        for (long i : id_list) {
+//            selectedItems.add(String.valueOf(i));
+//        }
+//        Log.d(TAG, "selctedItemsPosition: " + adapter.getCheckedPositions());
+        Log.d(TAG, "selectedItemsIds: " + selectedItems.toString());
+//        adapter.getCheckedPositions();
         return selectedItems;
     }
 
@@ -403,15 +458,20 @@ public class PadListActivity extends PadLandDataActivity
      */
     @Override
     public void onDestroyActionMode(ActionMode mode) {
-        Log.d("SELECTION", "unset_checked " + String.valueOf(selectedItem_position));
-        if (selectedItem != null) {
-            listView.setItemChecked(selectedItem_position, false);
-        }
-
         mActionMode = null;
-        selectedItem = null;
-        selectedItem_id = -1;
-        selectedItem_position = -1;
+        uncheckAllItems();
+    }
+
+    private void uncheckAllItems() {
+        SparseBooleanArray checked = expandableListView.getCheckedItemPositions();
+        for (int i = 0; i < checked.size(); i++) {
+            // Item position in adapter
+            int position = checked.keyAt(i);
+            // Add sport if it is checked i.e.) == TRUE!
+            if (checked.valueAt(i)) {
+                expandableListView.setItemChecked(position, false);
+            }
+        }
     }
 
     /**
@@ -429,40 +489,10 @@ public class PadListActivity extends PadLandDataActivity
     @Override
     public void onStart() {
         super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "PadList Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://com.mikifus.padland/http/host/path")
-        );
-        AppIndex.AppIndexApi.start(client, viewAction);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "PadList Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://com.mikifus.padland/http/host/path")
-        );
-        AppIndex.AppIndexApi.end(client, viewAction);
-        client.disconnect();
     }
 }

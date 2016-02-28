@@ -1,18 +1,16 @@
 package com.mikifus.padland;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.os.Handler;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
+import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 /**
  * It does only one thing: show a fullscreen splash image during the
  * specified time.
  */
-public class SplashActivity extends Activity {
+public class SplashActivity extends AppCompatActivity {
     /** Duration of wait **/
     private final int SPLASH_DISPLAY_LENGTH = 1500;
 

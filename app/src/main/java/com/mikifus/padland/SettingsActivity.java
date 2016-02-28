@@ -16,10 +16,9 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.view.MenuItem;
-
-import java.util.List;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -32,7 +31,7 @@ import java.util.List;
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
  */
-public class SettingsActivity extends PreferenceActivity {
+public class SettingsActivity extends ActionBarActivity {
     /**
      * Determines whether to always show the simplified settings UI, where
      * settings are presented in a single list. When false, settings are shown
@@ -44,7 +43,7 @@ public class SettingsActivity extends PreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setupActionBar();
+//        setupActionBar();
     }
 
     /**
@@ -81,7 +80,11 @@ public class SettingsActivity extends PreferenceActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        setupSimplePreferencesScreen();
+//        setupSimplePreferencesScreen();
+        // Display the fragment as the main content.
+        getFragmentManager().beginTransaction()
+                .replace(android.R.id.content, new SettingsFragment())
+                .commit();
     }
 
     /**
@@ -98,7 +101,7 @@ public class SettingsActivity extends PreferenceActivity {
         // use the older PreferenceActivity APIs.
 
         // Add 'general' pref_general.
-        addPreferencesFromResource(R.xml.pref_general);
+//        addPreferencesFromResource(R.xml.pref_general);
 
         // Add 'notifications' pref_general, and a corresponding header.
         //PreferenceCategory fakeHeader = new PreferenceCategory(this);
@@ -114,10 +117,10 @@ public class SettingsActivity extends PreferenceActivity {
     }
 
     /** {@inheritDoc} */
-    @Override
-    public boolean onIsMultiPane() {
-        return isXLargeTablet(this) && !isSimplePreferences(this);
-    }
+//    @Override
+//    public boolean onIsMultiPane() {
+//        return isXLargeTablet(this) && !isSimplePreferences(this);
+//    }
 
     /**
      * Helper method to determine if the device has an extra-large screen. For
@@ -142,13 +145,13 @@ public class SettingsActivity extends PreferenceActivity {
     }
 
     /** {@inheritDoc} */
-    @Override
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public void onBuildHeaders(List<Header> target) {
-        if (!isSimplePreferences(this)) {
-            loadHeadersFromResource(R.xml.pref_headers, target);
-        }
-    }
+//    @Override
+//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+//    public void onBuildHeaders(List<Header> target) {
+//        if (!isSimplePreferences(this)) {
+//            loadHeadersFromResource(R.xml.pref_headers, target);
+//        }
+//    }
 
     /**
      * A preference value change listener that updates the preference's summary
@@ -308,4 +311,13 @@ public class SettingsActivity extends PreferenceActivity {
             bindPreferenceSummaryToValue(findPreference("sync_frequency"));
         }
     }*/
+
+
+    public static class SettingsFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle paramBundle) {
+            super.onCreate(paramBundle);
+            addPreferencesFromResource(R.xml.pref_general);
+        }
+    }
 }

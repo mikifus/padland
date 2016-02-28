@@ -1,13 +1,10 @@
 package com.mikifus.padland;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.LoaderManager;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -15,7 +12,7 @@ import android.view.MenuItem;
  * It is just the Activity parent class to inherit
  * @author mikifus
  */
-public class PadLandActivity extends Activity {
+public class PadLandActivity extends AppCompatActivity {
 
     /**
      * The default menu will be the pad_list one.
