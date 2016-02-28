@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
@@ -23,6 +22,9 @@ import java.util.Map;
  * Its menu as well allows to delete.
  */
 public class PadInfoActivity extends PadLandDataActivity {
+
+    private static final String TAG = "PadInfoActivity";
+
     long pad_id = 0;
 
     /**
@@ -44,7 +46,7 @@ public class PadInfoActivity extends PadLandDataActivity {
         padData pad_data = this._getPadData( pad_id );
 
         // Action bar title
-        getActionBar().setTitle( pad_data.getName() );
+        getSupportActionBar().setTitle( pad_data.getName() );
 
         SeparatedListAdapter adapter = this._doInfoList( pad_data );
 
@@ -106,15 +108,16 @@ public class PadInfoActivity extends PadLandDataActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Intent intent;
+//        Intent intent;
 
-        final ArrayList<String> pad_list = new ArrayList<String>();
+//        Log.d(TAG, "OptionsItemSelected pad_id: " + pad_id);
+        final ArrayList<String> pad_list = new ArrayList<>();
         pad_list.add(String.valueOf(pad_id));
 
         switch( item.getItemId() ) {
             case R.id.menuitem_share:
                 Log.d("MENU_SHARE", String.valueOf(pad_id) );
-                menu_share(pad_list);
+                menu_share( pad_list );
                 break;
             case R.id.menuitem_delete:
                 Log.d("MENU_DELETE", String.valueOf(pad_id) );

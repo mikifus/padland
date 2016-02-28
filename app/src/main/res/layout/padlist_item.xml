@@ -8,11 +8,12 @@
     android:orientation="vertical"
     android:gravity="center_vertical"
     android:minHeight="?android:attr/listPreferredItemHeight"
+    android:textAppearance="?android:attr/textAppearanceLarge"
     style="@style/activated">
     <ImageView
         android:id="@+id/icon"
         android:layout_width="55dp"
-        android:layout_height="fill_parent"
+        android:layout_height="55dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:scaleType="centerInside"

@@ -1,17 +1,20 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:padland="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.mikifus.padland.PadListActivity">
     <item android:id="@+id/action_newpad"
         android:title="@string/action_newpad"
         android:orderInCategory="100"
-        android:showAsAction="always"
+        padland:showAsAction="always"
         android:icon="@android:drawable/ic_menu_add" />
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings"
         android:orderInCategory="100"
-        android:showAsAction="ifRoom"
+        padland:showAsAction="ifRoom"
         android:icon="@android:drawable/ic_menu_preferences" />
     <item android:id="@+id/action_about"
         android:title="@string/about"
         android:orderInCategory="100"
-        android:showAsAction="ifRoom"
+        padland:showAsAction="ifRoom"
         android:icon="@android:drawable/ic_menu_info_details"/>
 </menu>

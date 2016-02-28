@@ -5,17 +5,12 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.net.Uri;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.TextView;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -26,6 +21,8 @@ import java.util.Date;
  * to another activity which does.
  */
 public class PadLandDataActivity extends PadLandActivity {
+
+    private static final String TAG = "PadLandDataActivity";
 
     /**
      * The db fields in a single string array to use
@@ -56,10 +53,8 @@ public class PadLandDataActivity extends PadLandActivity {
      * @return
      */
     public padData _getPadData( long pad_id ){
-        Cursor cursor = (Cursor) this._getPadDataById(pad_id);
-
+        Cursor cursor = this._getPadDataById(pad_id);
         padData pad_data = new padData( cursor );
-
         return pad_data;
     }
 
@@ -173,10 +168,11 @@ public class PadLandDataActivity extends PadLandActivity {
                 .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
+                        Bundle extra = new Bundle();
+                        extra.putString("action", "delete");
+                        extra.putStringArrayList("pad_id", selectedItems);
                         Intent intent = new Intent(context, PadListActivity.class);
-                        intent.putExtra("action", "delete");
-//                        intent.putExtra("pad_id", outputStrArr);
-                        intent.putStringArrayListExtra("pad_id", selectedItems);
+                        intent.putExtras(extra);
                         context.startActivity(intent);
                         dialog.dismiss();
                         finish();
@@ -195,12 +191,14 @@ public class PadLandDataActivity extends PadLandActivity {
 
     /**
      * Menu to share a document url
+     * TODO: Share multiple pads.
      * @param selectedItems
      */
     public void menu_share(final ArrayList<String> selectedItems) {
+        Log.d("PadLandDataActivity", selectedItems.get(0).toString());
         // Only the first one
-        final long selectedItem_id = Long.valueOf(selectedItems.get(0));
-        padData padData = _getPadData( selectedItem_id );
+        final String selectedItem_id = selectedItems.get(0);
+        padData padData = _getPadData( Long.parseLong(selectedItem_id) );
         String padUrl = padData.getUrl();
         Log.d("SHARING_PAD", selectedItem_id + " - " + padUrl);
 
