@@ -246,12 +246,11 @@ public class PadViewActivity extends PadLandDataActivity {
         if (userDetails.getBoolean("auto_save_new_pads", true) && this._getPadId() == 0) {
             // Add a new record
             ContentValues values = new ContentValues();
-
             padData intentData = this._getPadDataFromIntent();
 
-            values.put(PadLandContentProvider.NAME, intentData.getName());
-            values.put(PadLandContentProvider.SERVER, intentData.getServer());
-            values.put(PadLandContentProvider.URL, intentData.getUrl());
+            values.put(PadContentProvider.NAME, intentData.getName());
+            values.put(PadContentProvider.SERVER, intentData.getServer());
+            values.put(PadContentProvider.URL, intentData.getUrl());
 
             result = savePadData(0, values);
         }
@@ -405,7 +404,7 @@ public class PadViewActivity extends PadLandDataActivity {
             padServer = padUrl.replace(padName, "");
         }
 
-        String[] columns = PadLandDataActivity.pad_db_fields;
+        String[] columns = PadContentProvider.getPadFieldsList();
 
         // This creates a fake cursor
         MatrixCursor matrixCursor = new MatrixCursor(columns);
