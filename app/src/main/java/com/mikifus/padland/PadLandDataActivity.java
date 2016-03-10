@@ -25,19 +25,6 @@ public class PadLandDataActivity extends PadLandActivity {
     private static final String TAG = "PadLandDataActivity";
 
     /**
-     * The db fields in a single string array to use
-     * the variable directly.
-     */
-    public static String[] pad_db_fields = new String[] {
-            PadLandContentProvider._ID,
-            PadLandContentProvider.NAME,
-            PadLandContentProvider.SERVER,
-            PadLandContentProvider.URL,
-            PadLandContentProvider.LAST_USED_DATE,
-            PadLandContentProvider.CREATE_DATE,
-            PadLandContentProvider.ACCESS_COUNT
-    };
-    /**
      * It gets the pad id from an intent if there is such info, else 0
      * @return
      */
@@ -64,7 +51,7 @@ public class PadLandDataActivity extends PadLandActivity {
      * @return
      */
     public Cursor _getPadDataById( long pad_id ){
-        return this._getPadDataFromDatabase( PadLandContentProvider._ID, String.valueOf( pad_id ) );
+        return this._getPadDataFromDatabase( PadContentProvider._ID, String.valueOf( pad_id ) );
     }
 
     /**
@@ -73,7 +60,7 @@ public class PadLandDataActivity extends PadLandActivity {
      * @return
      */
     public Cursor _getPadDataByUrl(String padUrl){
-        return this._getPadDataFromDatabase( PadLandContentProvider.URL, padUrl );
+        return this._getPadDataFromDatabase( PadContentProvider.URL, padUrl );
     }
 
     /**
@@ -89,8 +76,8 @@ public class PadLandDataActivity extends PadLandActivity {
 
         c = getContentResolver()
                 .query(
-                        PadLandContentProvider.CONTENT_URI,
-                        pad_db_fields,
+                        PadContentProvider.PADLIST_CONTENT_URI,
+                        PadContentProvider.getPadFieldsList(),
                         field + "=?",
                         comparation_set, // AKA id
                         null
@@ -107,12 +94,12 @@ public class PadLandDataActivity extends PadLandActivity {
     public boolean savePadData( long pad_id, ContentValues values ){
         if( pad_id > 0 ) {
             String[] where_value = { String.valueOf(pad_id) };
-            int result = getContentResolver().update(PadLandContentProvider.CONTENT_URI, values, PadLandContentProvider._ID + "=?", where_value);
+            int result = getContentResolver().update(PadContentProvider.PADLIST_CONTENT_URI, values, PadContentProvider._ID + "=?", where_value);
             return (result > 0);
         }
         else {
             Log.d("INSERT", "Contents = " + values.toString());
-            Uri result = getContentResolver().insert( PadLandContentProvider.CONTENT_URI, values );
+            Uri result = getContentResolver().insert(PadContentProvider.PADLIST_CONTENT_URI, values);
             return ( result != null );
         }
     }
@@ -124,7 +111,7 @@ public class PadLandDataActivity extends PadLandActivity {
      */
     public boolean deletePad(long pad_id){
         if( pad_id > 0 ) {
-            int result = getContentResolver().delete(PadLandContentProvider.CONTENT_URI, PadLandContentProvider._ID + "=?", new String[]{String.valueOf(pad_id)});
+            int result = getContentResolver().delete(PadContentProvider.PADLIST_CONTENT_URI, PadContentProvider._ID + "=?", new String[]{String.valueOf(pad_id)});
             return (result > 0);
         }
         else {
@@ -142,10 +129,10 @@ public class PadLandDataActivity extends PadLandActivity {
         if( pad_id > 0 ) {
             padData data = _getPadData( pad_id );
             ContentValues values = new ContentValues();
-            values.put( PadLandContentProvider.LAST_USED_DATE, getNowDate() );
-            values.put( PadLandContentProvider.ACCESS_COUNT, (data.getAccessCount() + 1));
+            values.put( PadContentProvider.LAST_USED_DATE, getNowDate() );
+            values.put( PadContentProvider.ACCESS_COUNT, (data.getAccessCount() + 1));
             String[] where_value = { String.valueOf(pad_id) };
-            getContentResolver().update(PadLandContentProvider.CONTENT_URI, values, PadLandContentProvider._ID  + "=?", where_value );
+            getContentResolver().update(PadContentProvider.PADLIST_CONTENT_URI, values, PadContentProvider._ID  + "=?", where_value );
         }
     }
 
@@ -210,7 +197,7 @@ public class PadLandDataActivity extends PadLandActivity {
     }
 
     public long getNowDate() {
-        return PadLandContentProvider.getNowDate();
+        return PadContentProvider.getNowDate();
     }
 
     public boolean onCreateOptionsMenu( Menu menu, int id_menu ) {

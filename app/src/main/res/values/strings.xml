@@ -21,6 +21,7 @@
     <string name="delete">Delete</string>
     <string name="no_pads">There are no saved documents.</string>
     <string name="sure_to_delete">Are you sure you want to delete the selected documents?</string>
+    <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="share_document">Share document</string>
     <string name="share_auto_text">"Come join me on padland! "</string>
@@ -56,5 +57,8 @@
     <string name="newpad_noname_warning">You must specify a name for the document.</string>
     <string name="padlist_empty_createnew">Create a new document</string>
     <string name="padlist_document_deleted">Document deleted</string>
+    <string name="padlist_dialog_new_padgroup_title">New group</string>
+    <string name="padlist_dialog_new_padgroup_label">Insert the name of the new group</string>
+    <string name="padlist_dialog_new_padgroup_invalid">Invalid group name.</string>
 
 </resources>

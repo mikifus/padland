@@ -164,7 +164,7 @@
                 android:label="SettingsFragment"/>
         -->
         <provider
-            android:name=".PadLandContentProvider"
+            android:name=".PadContentProvider"
             android:authorities="com.mikifus.padland.padlandcontentprovider"
             android:enabled="true"
             android:exported="true" >

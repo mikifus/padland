@@ -25,6 +25,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.text.ClipboardManager;
 import android.util.Log;
 import android.util.SparseBooleanArray;
@@ -37,6 +38,8 @@ import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.mikifus.padland.Dialog.NewPadGroup;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -92,7 +95,6 @@ public class PadListActivity extends PadLandDataActivity
 
         // Init list view
         this._initListView();
-
     }
 
     /**
@@ -145,9 +147,25 @@ public class PadListActivity extends PadLandDataActivity
      *
      * @param view
      */
-    public void onEmptyCreateNewClick(View view) {
+    public void onNewPadClick(View view) {
         Intent newPadIntent = new Intent(this, NewPadActivity.class);
         startActivity(newPadIntent);
+    }
+
+    /**
+     * When the list is empty a message with a button is shown.
+     * This handles the button onClick.
+     *
+     * @param view
+     */
+    public void onNewPadgroupClick(View view) {
+        showNewPadgroupDialog();
+    }
+
+    private void showNewPadgroupDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        NewPadGroup dialog = new NewPadGroup();
+        dialog.show(fm, "dialog_new_padgroup");
     }
 
     /**
@@ -273,14 +291,14 @@ public class PadListActivity extends PadLandDataActivity
         Uri padlist_uri = Uri.parse(getString(R.string.request_padlist));
         Cursor cursor = getContentResolver()
                 .query(padlist_uri,
-                        new String[]{PadLandContentProvider._ID, PadLandContentProvider.NAME, PadLandContentProvider.URL},
+                        new String[]{PadContentProvider._ID, PadContentProvider.NAME, PadContentProvider.URL},
                         null,
                         null,
-                        PadLandContentProvider.LAST_USED_DATE + " ASC");
+                        PadContentProvider.LAST_USED_DATE + " ASC");
 
         HashMap<Long, ArrayList<String>> result = new HashMap<>();
 
-        if (cursor.getCount() == 0) {
+        if (cursor == null || cursor.getCount() == 0) {
             return result;
         }
 
@@ -317,8 +335,8 @@ public class PadListActivity extends PadLandDataActivity
      */
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String[] projection = {PadLandContentProvider._ID, PadLandContentProvider.NAME, PadLandContentProvider.URL};
-        CursorLoader cursorLoader = new CursorLoader(this, PadLandContentProvider.CONTENT_URI, projection, null, null, null);
+        String[] projection = {PadContentProvider._ID, PadContentProvider.NAME, PadContentProvider.URL};
+        CursorLoader cursorLoader = new CursorLoader(this, PadContentProvider.PADLIST_CONTENT_URI, projection, null, null, null);
         return cursorLoader;
     }
 
