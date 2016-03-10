@@ -44,6 +44,7 @@ import com.mikifus.padland.Dialog.NewPadGroup;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * This activity displays a list of previously checked documents.
@@ -265,20 +266,8 @@ public class PadListActivity extends PadLandDataActivity
      */
     private void setAdapter()
     {
+        ArrayList<HashMap<String, ArrayList>> group_data = getGroupsForAdapter();
         HashMap<Long, ArrayList<String>> padlist_data = _getPadListData();
-        ArrayList<Long> pad_id_list = new ArrayList<>();
-
-        Iterator iterator = padlist_data.keySet().iterator();
-        while(iterator.hasNext())
-        {
-            long next = (long) iterator.next();
-            pad_id_list.add(next);
-        }
-
-        ArrayList<HashMap<String, ArrayList>> group_data = new ArrayList<>();
-        HashMap<String, ArrayList> header = new HashMap<>();
-        header.put("Unclassified", pad_id_list);
-        group_data.add(header);
 
         adapter = new PadListAdapter(this, group_data, padlist_data);
 
@@ -512,5 +501,34 @@ public class PadListActivity extends PadLandDataActivity
     @Override
     public void onStop() {
         super.onStop();
+    }
+
+    public ArrayList<HashMap<String,ArrayList>> getGroupsForAdapter() {
+        ArrayList<HashMap<String, ArrayList>> group_data = new ArrayList<>();
+        HashMap<String, ArrayList> header = new HashMap<>();
+        HashMap<Long, ArrayList<String>> padgroups_data = _getPadgroupsData();
+
+        Iterator iterator = padgroups_data.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry pair = (Map.Entry) iterator.next();
+            ArrayList<String> groupdata = (ArrayList<String>) pair.getValue();
+            HashMap<String, ArrayList> group = new HashMap<>();
+            group.put(groupdata.get(0), new ArrayList());
+            group_data.add(group);
+        }
+
+        HashMap<Long, ArrayList<String>> padlist_data = _getPadListData();
+        ArrayList<Long> pad_id_list = new ArrayList<>();
+
+        iterator = padlist_data.keySet().iterator();
+        while(iterator.hasNext())
+        {
+            long next = (long) iterator.next();
+            pad_id_list.add(next);
+        }
+        header.put("Unclassified", pad_id_list);
+        group_data.add(header);
+
+        return group_data;
     }
 }

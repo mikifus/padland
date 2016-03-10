@@ -13,6 +13,7 @@ import android.view.Menu;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * A data activity inherits from the main activity and provides methods
@@ -70,7 +71,7 @@ public class PadLandDataActivity extends PadLandActivity {
      * @param comparation
      * @return
      */
-    public Cursor _getPadDataFromDatabase( String field, String comparation ){
+    private Cursor _getPadDataFromDatabase( String field, String comparation ){
         Cursor c = null;
         String[] comparation_set = new String[]{ comparation };
 
@@ -83,6 +84,65 @@ public class PadLandDataActivity extends PadLandActivity {
                         null
                 );
         return c;
+    }
+
+    /**
+     * Self explanatory name.
+     * Field to compare must be specified by its identifier. Accepts only one comparation value.
+     * @param field
+     * @param comparation
+     * @return
+     */
+    public Cursor _getPadgroupsDataFromDatabase( String field, String comparation ){
+        Cursor c = null;
+        String[] comparation_set = new String[]{ comparation };
+
+        c = getContentResolver()
+                .query(
+                        PadContentProvider.PADGROUPS_CONTENT_URI,
+                        PadContentProvider.getPadFieldsList(),
+                        field + "=?",
+                        comparation_set, // AKA id
+                        null
+                );
+        return c;
+    }
+
+    protected HashMap<Long, ArrayList<String>> _getPadgroupsData()
+    {
+        Uri padlist_uri = Uri.parse(getString(R.string.request_padgroups));
+        Cursor cursor = getContentResolver()
+                .query(padlist_uri,
+                        new String[]{PadContentProvider._ID, PadContentProvider.NAME},
+                        null,
+                        null,
+                        PadContentProvider.CREATE_DATE + " ASC");
+
+        HashMap<Long, ArrayList<String>> result = new HashMap<>();
+
+        if (cursor == null || cursor.getCount() == 0) {
+            return result;
+        }
+
+        HashMap<Long, ArrayList<String>> pad_data = new HashMap<>();
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast())
+        {
+            long id = cursor.getLong(0);
+            String name = cursor.getString(1);
+
+            ArrayList<String> pad_strings = new ArrayList<String>();
+            pad_strings.add(name);
+
+            pad_data.put(id, pad_strings);
+
+            // do something
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+        return pad_data;
     }
 
     /**
@@ -100,6 +160,25 @@ public class PadLandDataActivity extends PadLandActivity {
         else {
             Log.d("INSERT", "Contents = " + values.toString());
             Uri result = getContentResolver().insert(PadContentProvider.PADLIST_CONTENT_URI, values);
+            return ( result != null );
+        }
+    }
+
+    /**
+     * Saves a new group if padgroup_id=0 or updates an existing one.
+     * @param padgroup_id
+     * @param values
+     * @return
+     */
+    public boolean savePadgroupData( long padgroup_id, ContentValues values ){
+        if( padgroup_id > 0 ) {
+            String[] where_value = { String.valueOf(padgroup_id) };
+            int result = getContentResolver().update(PadContentProvider.PADGROUPS_CONTENT_URI, values, PadContentProvider._ID + "=?", where_value);
+            return (result > 0);
+        }
+        else {
+            Log.d("INSERT", "Contents = " + values.toString());
+            Uri result = getContentResolver().insert(PadContentProvider.PADGROUPS_CONTENT_URI, values);
             return ( result != null );
         }
     }
