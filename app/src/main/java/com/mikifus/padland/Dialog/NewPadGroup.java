@@ -1,6 +1,7 @@
 package com.mikifus.padland.Dialog;
 
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -9,6 +10,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.mikifus.padland.PadContentProvider;
+import com.mikifus.padland.PadLandDataActivity;
 import com.mikifus.padland.R;
 
 import java.util.regex.Pattern;
@@ -55,8 +58,7 @@ public class NewPadGroup extends DialogFragment {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         String text = String.valueOf(mEditText.getText());
                         if( NAME_VALIDATION.matcher(text).matches() ) {
-                            Toast.makeText(getContext(), "It should save it", Toast.LENGTH_LONG).show();
-
+                            saveNewPadGroup( text );
                             dialog.dismiss();
                         } else {
                             Toast.makeText(getContext(), getString(R.string.padlist_dialog_new_padgroup_invalid), Toast.LENGTH_LONG).show();
@@ -72,5 +74,12 @@ public class NewPadGroup extends DialogFragment {
                 }
         );
         return builder.create();
+    }
+
+    private void saveNewPadGroup( String title ) {
+        Toast.makeText(getContext(), "It should save it", Toast.LENGTH_LONG).show();
+        ContentValues values = new ContentValues();
+        values.put(PadContentProvider.NAME, title);
+        ((PadLandDataActivity) getActivity()).savePadgroupData(0, values);
     }
 }
