@@ -429,32 +429,8 @@ public class PadListActivity extends PadLandDataActivity
                 selectedItems.add( String.valueOf(adapter.getChildId(group, child)) );
             }
         }
-
-        // almost old try
-//        SparseArray<SparseBooleanArray> groupPositions = adapter.getCheckedPositions();
-//        Log.d(TAG, "Selected? g:" + groupPositions.toString() );
-//        for (int i = 0; i < groupPositions.size(); ++i)
-//        {
-//            SparseBooleanArray childPositions = groupPositions.get(i);
-//            for (int a = 0; a < childPositions.size(); ++a)
-//            {
-//                Log.d(TAG, "Selected? g:" + i + " c:" + a + " ->" + (childPositions.get(a)?1:0) );
-//                if( childPositions.get(a) )
-//                {
-//                    selectedItems.add( String.valueOf(adapter.getChildId(i, a)) );
-//                }
-//            }
-//        }
-
-        // Old try
-//        long[] id_list = expandableListView.getCheckedItemIds();
-//
-//        for (long i : id_list) {
-//            selectedItems.add(String.valueOf(i));
-//        }
-//        Log.d(TAG, "selctedItemsPosition: " + adapter.getCheckedPositions());
         Log.d(TAG, "selectedItemsIds: " + selectedItems.toString());
-//        adapter.getCheckedPositions();
+
         return selectedItems;
     }
 
