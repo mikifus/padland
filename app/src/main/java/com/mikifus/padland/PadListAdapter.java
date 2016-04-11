@@ -45,7 +45,7 @@ public class PadListAdapter extends BaseExpandableListAdapter {
      */
     public static final int CHOICE_MODE_SINGLE_ABSOLUTE = 10001;
 
-    private Context context;
+    private PadLandDataActivity context;
     private ArrayList<HashMap<String, ArrayList>> group_data;
     private HashMap<Long, ArrayList<String>> pad_data;
     private LayoutInflater layoutInflater;
@@ -57,9 +57,10 @@ public class PadListAdapter extends BaseExpandableListAdapter {
 
 
     // Initialize constructor for array list
-    public PadListAdapter(Context context,
+    public PadListAdapter(PadLandDataActivity context,
                           ArrayList<HashMap<String, ArrayList>> group_data,
                           HashMap<Long, ArrayList<String>> pad_data, int choiceMode) {
+        // TODO: group_data can be a LinkedHashMap or something better
         this(context, group_data, pad_data);
         // For now the choice mode CHOICE_MODE_MULTIPLE_MODAL
         // is not implemented
@@ -70,7 +71,7 @@ public class PadListAdapter extends BaseExpandableListAdapter {
     }
 
     // Initialize constructor for array list
-    public PadListAdapter(Context context,
+    public PadListAdapter(PadLandDataActivity context,
                                 ArrayList<HashMap<String, ArrayList>> group_data,
                                 HashMap<Long, ArrayList<String>> pad_data) {
         this.context = context;
@@ -78,40 +79,49 @@ public class PadListAdapter extends BaseExpandableListAdapter {
         this.pad_data = pad_data;
         layoutInflater = (LayoutInflater) this.context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        checkedPositions = new SparseArray<SparseBooleanArray>();
+        checkedPositions = new SparseArray<>();
     }
 
     @Override
     public int getGroupCount() {
-        return group_data.size();
+//        return group_data.size();
+        return context.padlandDb.getPadgroupsCount();
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return pad_data.size();
+        HashMap<String, String> group = getGroup(groupPosition);
+        return context.padlandDb
+                .getPadgroupChildrenCount(
+                        Long.parseLong(group.get(PadContentProvider._ID)));
     }
 
     @Override
-    public Object getGroup(int groupPosition) {
-        return group_data.get(groupPosition).keySet().iterator().next();
+    public HashMap<String, String> getGroup(int groupPosition) {
+        HashMap<String, String> group = context.padlandDb.getPadgroupAtPosition(groupPosition);
+        return group;
     }
 
 
     @Override
-    public ArrayList<String> getChild(int groupPosition, int childPosition) {
-        return this.pad_data.get(getChildId(groupPosition, childPosition));
+    public PadLandDataActivity.padData getChild(int groupPosition, int childPosition) {
+        long id = getChildId(groupPosition, childPosition);
+        return context._getPadData(id);
     }
 
     @Override
     public long getGroupId(int groupPosition) {
-        return groupPosition;
+        HashMap<String, String> group = context.padlandDb.getPadgroupAtPosition(groupPosition);
+        return Long.parseLong(group.get(PadContentProvider._ID));
     }
 
     @Override
     public long getChildId(int groupPosition, int childPosition) {
-        HashMap group = this.group_data.get(groupPosition);
-        ArrayList padlist = (ArrayList) group.get(group.keySet().iterator().next());
-        if( padlist.size() < childPosition )
+        HashMap<String, String> group = context.padlandDb.getPadgroupAtPosition(groupPosition);
+//        HashMap group = this.group_data.get(groupPosition);
+//        ArrayList padlist = (ArrayList) group.get(group.keySet().iterator().next());
+        ArrayList padlist = context.padlandDb.getPadgroupChildrenIds(Long.parseLong(group.get(PadContentProvider._ID)));
+        if( padlist.size() == 0 )
         {
             return 0;
         }
@@ -125,7 +135,7 @@ public class PadListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        String headerTitle = (String) getGroup(groupPosition);
+        HashMap<String, String> group = getGroup(groupPosition);
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -134,7 +144,7 @@ public class PadListAdapter extends BaseExpandableListAdapter {
 
         TextView header = (TextView) convertView.findViewById(R.id.list_header_title);
 //        lblListHeader.setTypeface(null, Typeface.BOLD);
-        header.setText(headerTitle);
+        header.setText(group.get(PadContentProvider.NAME));
 
         return convertView;
     }
@@ -144,13 +154,19 @@ public class PadListAdapter extends BaseExpandableListAdapter {
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.padlist_item, null);
         }
+
+        PadLandDataActivity.padData child = getChild(groupPosition, childPosition);
+//        if( child == null )
+//        {
+//            return null;
+//        }
 //        Log.d("PadListAdapter", convertView.findViewById(R.id.name).toString());
 
         TextView name = (TextView) convertView.findViewById(R.id.name);
-        name.setText( getChild(groupPosition, childPosition).get(0) );
+        name.setText(child.getName());
 
         TextView url = (TextView) convertView.findViewById(R.id.url);
-        url.setText( getChild(groupPosition, childPosition).get(1) );
+        url.setText( child.getUrl() );
 
 
         if (checkedPositions.get(groupPosition) != null) {

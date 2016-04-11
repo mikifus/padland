@@ -8,7 +8,6 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
@@ -35,7 +34,7 @@ public class PadContentProvider extends ContentProvider {
      * Database specific constant declarations
      */
     protected SQLiteDatabase db;
-    static final int DATABASE_VERSION = 5;
+    static final int DATABASE_VERSION = 6;
 
     public static final String _ID = "_id";
     public static final String NAME = "name"; // Name of the pad, actually it is the last part of the url
@@ -44,6 +43,8 @@ public class PadContentProvider extends ContentProvider {
     public static final String LAST_USED_DATE = "last_used_date"; // Date the pad was accessed last time
     public static final String CREATE_DATE = "create_date"; // Date when the pad was added into the app
     public static final String ACCESS_COUNT = "access_count"; // How many times the document has been accessed in the app
+
+    public static final String POSITION = "position"; // Position inside a sortable data set
 
     public static final String _ID_GROUP = "_id_group";
     public static final String _ID_PAD = "_id_pad";
@@ -83,6 +84,7 @@ public class PadContentProvider extends ContentProvider {
             " CREATE TABLE " + PADGROUP_TABLE_NAME +
                     " ("+ _ID+" INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     " "+ NAME+" TEXT NOT NULL, " +
+                    " "+ POSITION + " INTEGER DEFAULT 0, " +
                     " "+ LAST_USED_DATE+ " INTEGER NOT NULL DEFAULT (strftime('%s','now')), " +
                     " "+ CREATE_DATE+ " INTEGER NOT NULL DEFAULT (strftime('%s','now'))," +
                     " "+ ACCESS_COUNT+ " INTEGER NOT NULL DEFAULT 0 "+
@@ -91,7 +93,7 @@ public class PadContentProvider extends ContentProvider {
     static final String RELATION_TABLE_CREATE_QUERY =
             " CREATE TABLE " + RELATION_TABLE_NAME +
                     " ("+ _ID_GROUP +" INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    " " + _ID_PAD +" TEXT NOT NULL " +
+                    " " + _ID_PAD +" INTEGER NOT NULL " +
                     ");";
 
     /**
@@ -282,7 +284,7 @@ public class PadContentProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         Context context = getContext();
-        DatabaseHelper dbHelper = new DatabaseHelper(context);
+        PadlandDbHelper dbHelper = new PadlandDbHelper(context);
 
         /**
          * Create a write able database which will trigger its
@@ -290,38 +292,6 @@ public class PadContentProvider extends ContentProvider {
          */
         db = dbHelper.getWritableDatabase();
         return (db != null);
-    }
-
-
-    /**
-     * Helper class that actually creates and manages
-     * the provider's underlying data repository.
-     */
-    protected static class DatabaseHelper extends SQLiteOpenHelper {
-        DatabaseHelper(Context context){
-            super(context, PAD_TABLE_NAME, null, DATABASE_VERSION);
-        }
-
-        @Override
-        public void onCreate(SQLiteDatabase db)
-        {
-            db.execSQL(PAD_TABLE_CREATE_QUERY);
-            db.execSQL(PADGROUP_TABLE_CREATE_QUERY);
-            db.execSQL(RELATION_TABLE_CREATE_QUERY);
-        }
-
-        @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            if( oldVersion < 3 ) {
-                Log.w(TAG, "Upgrading database. Existing contents will be deleted. [" + oldVersion + "]->[" + newVersion + "]");
-                db.execSQL("DROP TABLE IF EXISTS " + PAD_TABLE_NAME);
-                onCreate(db);
-            }
-            if( oldVersion == 3 && newVersion == 4 ) {
-                Log.w(TAG, "Upgrading database. Existing contents will be migrated. [" + oldVersion + "]->[" + newVersion + "]");
-                db.execSQL("ALTER TABLE " + PAD_TABLE_NAME + " ADD COLUMN " + ACCESS_COUNT + " INTEGER NOT NULL DEFAULT 0;");
-            }
-        }
     }
 
     public static String[] getPadFieldsList() {
