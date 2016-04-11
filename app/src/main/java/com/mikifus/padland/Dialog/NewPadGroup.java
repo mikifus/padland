@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.mikifus.padland.PadContentProvider;
-import com.mikifus.padland.PadLandDataActivity;
+import com.mikifus.padland.PadListActivity;
 import com.mikifus.padland.R;
 
 import java.util.regex.Pattern;
@@ -77,9 +77,11 @@ public class NewPadGroup extends DialogFragment {
     }
 
     private void saveNewPadGroup( String title ) {
-        Toast.makeText(getContext(), "It should save it", Toast.LENGTH_LONG).show();
+//        Toast.makeText(getContext(), "It should save it", Toast.LENGTH_LONG).show();
         ContentValues values = new ContentValues();
         values.put(PadContentProvider.NAME, title);
-        ((PadLandDataActivity) getActivity()).savePadgroupData(0, values);
+        PadListActivity activity = (PadListActivity) getActivity();
+        activity.padlandDb.savePadgroupData(0, values);
+        activity.notifyDataSetChanged();
     }
 }

@@ -35,6 +35,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -80,7 +81,7 @@ public class PadListActivity extends PadLandDataActivity
      * @param savedInstanceState
      */
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         // Layout
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_padlist);
@@ -132,7 +133,7 @@ public class PadListActivity extends PadLandDataActivity
                     for(int i = 0 ; i < pad_id_list.size(); i++)
                     {
                         Log.d("DELETE_PAD_INTENT", "action: " + action + " list_get: " + pad_id_list.get(i));
-                        boolean result = deletePad( Long.parseLong(pad_id_list.get(i)) );
+                        boolean result = padlandDb.deletePad(Long.parseLong(pad_id_list.get(i)));
                         if (result) {
                             Toast.makeText(this, getString(R.string.padlist_document_deleted), Toast.LENGTH_LONG).show();
                         }
@@ -446,6 +447,9 @@ public class PadListActivity extends PadLandDataActivity
     }
 
     private void uncheckAllItems() {
+        if( expandableListView == null ) {
+            return;
+        }
         SparseBooleanArray checked = expandableListView.getCheckedItemPositions();
         for (int i = 0; i < checked.size(); i++) {
             // Item position in adapter
@@ -482,7 +486,8 @@ public class PadListActivity extends PadLandDataActivity
     public ArrayList<HashMap<String,ArrayList>> getGroupsForAdapter() {
         ArrayList<HashMap<String, ArrayList>> group_data = new ArrayList<>();
         HashMap<String, ArrayList> header = new HashMap<>();
-        HashMap<Long, ArrayList<String>> padgroups_data = _getPadgroupsData();
+        Log.d(TAG, "Requesting groups data");
+        HashMap<Long, ArrayList<String>> padgroups_data = padlandDb._getPadgroupsData();
 
         Iterator iterator = padgroups_data.entrySet().iterator();
         while (iterator.hasNext()) {
@@ -506,5 +511,11 @@ public class PadListActivity extends PadLandDataActivity
         group_data.add(header);
 
         return group_data;
+    }
+
+    public void notifyDataSetChanged() {
+        if( expandableListView != null ) {
+            ((BaseExpandableListAdapter) expandableListView.getExpandableListAdapter()).notifyDataSetChanged();
+        }
     }
 }

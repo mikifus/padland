@@ -2,4 +2,5 @@
 <resources>
     <string name="request_padlist">content://com.mikifus.padland.padlandcontentprovider/padlist</string>
     <string name="request_padgroups">content://com.mikifus.padland.padlandcontentprovider/padgroups</string>
+    <string name="request_padlist_padgroup_id">content://com.mikifus.padland.padlandcontentprovider/padlist_padgroup_id/</string>
 </resources>

@@ -9,6 +9,8 @@ import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.support.v4.view.MenuItemCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,7 +22,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ShareActionProvider;
+import android.support.v7.widget.ShareActionProvider;
 import android.widget.Toast;
 
 import com.pnikosis.materialishprogress.ProgressWheel;
@@ -97,8 +99,8 @@ public class PadViewActivity extends PadLandDataActivity {
      * @param savedInstanceState
      */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
+        super.onCreate(savedInstanceState, persistentState);
 
         // Forces landscape view
 //        this.setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_PORTRAIT );
@@ -173,7 +175,7 @@ public class PadViewActivity extends PadLandDataActivity {
         padData padData;
 
         if (pad_id > 0) {
-            Cursor c = this._getPadDataById(pad_id);
+            Cursor c = padlandDb._getPadDataById(pad_id);
             padData = new padData(c);
             c.close();
         } else {
@@ -223,7 +225,7 @@ public class PadViewActivity extends PadLandDataActivity {
         }
 
         padData padData = this._getPadDataFromIntent();
-        Cursor c = this._getPadDataByUrl(padData.getUrl());
+        Cursor c = padlandDb._getPadDataByUrl(padData.getUrl());
 
         if (c != null && c.getCount() > 0) {
             c.moveToFirst();
@@ -252,7 +254,7 @@ public class PadViewActivity extends PadLandDataActivity {
             values.put(PadContentProvider.SERVER, intentData.getServer());
             values.put(PadContentProvider.URL, intentData.getUrl());
 
-            result = savePadData(0, values);
+            result = padlandDb.savePadData(0, values);
         }
         return result;
     }
@@ -267,7 +269,7 @@ public class PadViewActivity extends PadLandDataActivity {
         boolean result = false;
         long pad_id = this._getPadId();
         if (pad_id != 0) {
-            accessUpdate(pad_id);
+            padlandDb.accessUpdate(pad_id);
             result = true;
         }
         return result;
@@ -475,7 +477,7 @@ public class PadViewActivity extends PadLandDataActivity {
         MenuItem item = menu.findItem(R.id.menuitem_share);
 
         // Fetch and store ShareActionProvider
-        ShareActionProvider actionProvider = (ShareActionProvider) item.getActionProvider();
+        ShareActionProvider actionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
 
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
@@ -483,6 +485,9 @@ public class PadViewActivity extends PadLandDataActivity {
         sendIntent.setType("text/plain");
         startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.share_document)));
 
+        if( actionProvider == null ) {
+            return false;
+        }
         actionProvider.setShareIntent(sendIntent);
 
         // Return true to display menu
