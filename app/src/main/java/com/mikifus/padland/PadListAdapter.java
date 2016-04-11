@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by mikifus on 20/02/16.
@@ -84,21 +85,28 @@ public class PadListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getGroupCount() {
-//        return group_data.size();
-        return context.padlandDb.getPadgroupsCount();
+        int count = context.padlandDb.getPadgroupsCount();
+        return count + 1; // Adds one in the end. The unclassified
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
         HashMap<String, String> group = getGroup(groupPosition);
+        String id_string = group.get(PadContentProvider._ID);
+        long id = Long.parseLong(id_string);
+        if( id == 0 ) {
+            return getUnclassifiedGroupChildrenCount(groupPosition);
+        }
         return context.padlandDb
-                .getPadgroupChildrenCount(
-                        Long.parseLong(group.get(PadContentProvider._ID)));
+                .getPadgroupChildrenCount(id);
     }
 
     @Override
     public HashMap<String, String> getGroup(int groupPosition) {
         HashMap<String, String> group = context.padlandDb.getPadgroupAtPosition(groupPosition);
+        if( group.size() == 0 ) {
+            return getUnclassifiedGroup(groupPosition);
+        }
         return group;
     }
 
@@ -112,15 +120,22 @@ public class PadListAdapter extends BaseExpandableListAdapter {
     @Override
     public long getGroupId(int groupPosition) {
         HashMap<String, String> group = context.padlandDb.getPadgroupAtPosition(groupPosition);
+        if( group.size() == 0 ) {
+            return getUnclassifiedGroupId(groupPosition);
+        }
         return Long.parseLong(group.get(PadContentProvider._ID));
     }
 
     @Override
     public long getChildId(int groupPosition, int childPosition) {
         HashMap<String, String> group = context.padlandDb.getPadgroupAtPosition(groupPosition);
-//        HashMap group = this.group_data.get(groupPosition);
-//        ArrayList padlist = (ArrayList) group.get(group.keySet().iterator().next());
-        ArrayList padlist = context.padlandDb.getPadgroupChildrenIds(Long.parseLong(group.get(PadContentProvider._ID)));
+        String id = group.get(PadContentProvider._ID);
+        ArrayList padlist;
+        if( id == null ) {
+            padlist = getUnclassifiedGroupChildList(groupPosition);
+        } else {
+            padlist = context.padlandDb.getPadgroupChildrenIds(Long.parseLong(id));
+        }
         if( padlist.size() == 0 )
         {
             return 0;
@@ -275,5 +290,31 @@ public class PadListAdapter extends BaseExpandableListAdapter {
      */
     public SparseArray<SparseBooleanArray> getCheckedPositions() {
         return checkedPositions;
+    }
+
+    private int getUnclassifiedGroupChildrenCount(int groupPosition) {
+        for( Map.Entry e : group_data.get(groupPosition).entrySet() ) {
+            return ((ArrayList) e.getValue()).size();
+        }
+        return 0;
+    }
+
+    private HashMap<String, String> getUnclassifiedGroup(int groupPosition) {
+        HashMap group = group_data.get(groupPosition);
+        HashMap<String, String> group_deal = new HashMap<>();
+//        String id = (String) group.get(PadContentProvider._ID);
+        String name = (String) group.keySet().iterator().next();
+        group_deal.put(PadContentProvider._ID, "0");
+        group_deal.put(PadContentProvider.NAME, name);
+        return group_deal;
+    }
+
+    private long getUnclassifiedGroupId(int groupPosition) {
+        return 0;
+    }
+
+    private ArrayList getUnclassifiedGroupChildList(int groupPosition) {
+        HashMap group = group_data.get(groupPosition);
+        return (ArrayList) group.get(group.keySet().iterator().next());
     }
 }

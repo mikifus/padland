@@ -229,7 +229,7 @@ public class PadListActivity extends PadLandDataActivity
 
                     Log.d(TAG, "Longclick: childpos:" + childPosition + " pos:" + position + " id:" + id);
 
-                    long childId = adapter.getChildId(groupPosition, position - 1); // position does not start by 0
+                    long childId = adapter.getChildId(groupPosition, childPosition); // position does not start by 0
 
                     startActionMode(view, position, childId);
                     expandableListView.setItemChecked(position, true);

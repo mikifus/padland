@@ -6,7 +6,7 @@
 
     <uses-sdk
         android:minSdkVersion="7"
-        android:targetSdkVersion="17" />
+        android:targetSdkVersion="21" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -14,10 +14,10 @@
     <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <android:uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18" />
+        android:maxSdkVersion="14" />
     <android:uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18" />
+        android:maxSdkVersion="23" />
 
     <application
         android:name=".PadlandApp"
@@ -132,8 +132,7 @@
         </activity>
         <activity
             android:name=".NewPadActivity"
-            android:label="@string/title_activity_new_pad"
-            android:parentActivityName=".PadListActivity" >
+            android:label="@string/title_activity_new_pad" >
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
@@ -142,8 +141,7 @@
         </activity>
         <activity
             android:name=".About"
-            android:label="@string/title_activity_about"
-            android:parentActivityName=".PadListActivity" >
+            android:label="@string/title_activity_about" >
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
@@ -152,8 +150,7 @@
         </activity>
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:parentActivityName=".PadListActivity" >
+            android:label="@string/title_activity_settings" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".PadListActivity" />
@@ -172,8 +169,7 @@
 
         <activity
             android:name=".PadInfoActivity"
-            android:label="@string/title_activity_pad_info"
-            android:parentActivityName=".PadListActivity" >
+            android:label="@string/title_activity_pad_info" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mikifus.padland.PadListActivity" />
