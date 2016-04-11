@@ -362,7 +362,7 @@ public class PadLandDataActivity extends PadLandActivity {
 
         public ArrayList<Long> getPadgroupChildrenIds(long id) {
             final String QUERY =
-                    "SELECT " + PadContentProvider._ID + " " +
+                    "SELECT " + PadContentProvider._ID_PAD + " " +
                     "FROM " + PadContentProvider.RELATION_TABLE_NAME + " " +
                     "WHERE " + PadContentProvider._ID_GROUP + "=? ";
 
