@@ -10,7 +10,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.Menu;
+import android.widget.ListView;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -94,6 +96,117 @@ public class PadLandDataActivity extends PadLandActivity {
                         context.startActivity(intent);
                         dialog.dismiss();
                         finish();
+                    }
+
+                })
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+        DeleteDialogBox.show();
+        return DeleteDialogBox;
+    }
+
+    /**
+     * Asks the user to confirm deleting a document.
+     * If confirmed, will make an intent to PadListActivity, where the info will be
+     * deleted.
+     * @return AlertDialog
+     */
+
+    protected Long getIdGroupFromAdapterData(int groupPosition) {
+        HashMap<String, String> padgroups_data = padlandDb.getPadgroupAt(groupPosition);
+        long id = 0L;
+        if( padgroups_data.size() > 0 ) {
+            id = Long.parseLong(padgroups_data.get(PadContentProvider._ID));
+        }
+        return id;
+    }
+
+    protected HashMap<String, String> getGroupFromAdapterData(ArrayList<HashMap<String, ArrayList>> groupsForAdapter, int groupPosition) {
+        HashMap group = groupsForAdapter.get(groupPosition);
+        HashMap<String, String> group_deal = new HashMap<>();
+        String id = (String) group.get(PadContentProvider._ID);
+        String name = (String) group.keySet().iterator().next();
+        group_deal.put(PadContentProvider._ID, id);
+        group_deal.put(PadContentProvider.NAME, name);
+        return group_deal;
+    }
+
+    public AlertDialog menu_group(final ArrayList<String> selectedItems, final ArrayList<HashMap<String, ArrayList>> groupsForAdapter)
+    {
+        final PadLandDataActivity context = this;
+        final ArrayList<Long> selectedGroups = new ArrayList<>();
+//        CharSequence[] group_names = new CharSequence[groupsForAdapter.size()];
+        String[] group_names = new String[groupsForAdapter.size()];
+        for( int i = 0; i < groupsForAdapter.size(); ++i ) {
+            HashMap<String, String> group_data = getGroupFromAdapterData(groupsForAdapter, i);
+            group_names[ i ] = group_data.get(PadContentProvider.NAME);
+        }
+        final boolean[] checkboxStatusArray = new boolean[groupsForAdapter.size()];
+
+        AlertDialog DeleteDialogBox = new AlertDialog.Builder(this)
+                //set message, title, and icon
+                .setTitle(R.string.delete)
+                .setIcon(android.R.drawable.ic_menu_delete)
+                .setMultiChoiceItems(group_names, checkboxStatusArray,
+                    new DialogInterface.OnMultiChoiceClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which,
+                                            boolean isChecked) {
+                            if (isChecked) {
+                                
+                                // Noew clean and set the view
+                                ListView listView = ((AlertDialog) dialog).getListView();
+                                SparseBooleanArray checked = listView.getCheckedItemPositions();
+                                for( int i = 0; i < checkboxStatusArray.length; ++i ) {
+                                    if ( checkboxStatusArray[i] && i != which ) {
+                                        checkboxStatusArray[ i ] = false;
+                                        listView.setItemChecked(i, false);
+                                    }
+                                }
+
+                                // clean to just select one
+                                selectedGroups.clear();
+
+                                // If the user checked the item, add it to the selected items
+                                Long group_id = context.getIdGroupFromAdapterData(which);
+                                selectedGroups.add(group_id);
+                            } else if (selectedGroups.contains(which)) {
+                                // Else, if the item is already in the array, remove it
+//                                selectedGroups.remove(Integer.valueOf(which));
+                                ((AlertDialog) dialog).getListView().setItemChecked(which, true);
+                            }
+                        }
+                    })
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        long save_pad_id;
+                        for(String pad_id_string : selectedItems) {
+                            save_pad_id = Long.parseLong(pad_id_string);
+                            for(Long save_padgroup_id : selectedGroups) {
+                                boolean saved = context.padlandDb.savePadgroupRelation(save_padgroup_id,  save_pad_id);
+                                Log.d(TAG, "Added to group? " + saved);
+                            }
+                        }
+//                        Intent intent = new Intent(context, PadListActivity.class);
+//                        context.startActivity(intent);
+                        dialog.dismiss();
+                        ((PadListActivity) context).notifyDataSetChanged();
+//                        finish();
+                        /*
+                        Bundle extra = new Bundle();
+                        extra.putString("action", "group");
+                        extra.putStringArrayList("pad_id", selectedItems);
+                        extra.putIntegerArrayList("group_id", selectedGroups);
+                        Intent intent = new Intent(context, PadListActivity.class);
+                        intent.putExtras(extra);
+                        context.startActivity(intent);
+                        dialog.dismiss();
+                        finish();
+                        */
                     }
 
                 })
@@ -327,6 +440,33 @@ public class PadLandDataActivity extends PadLandActivity {
             return cursor.getCount();
         }
 
+        public HashMap<String, String> getPadgroupAt(int position) {
+            Uri padlist_uri = Uri.parse(getString(R.string.request_padgroups));
+            Cursor cursor = contentResolver.query(padlist_uri,
+                    new String[]{PadContentProvider._ID, PadContentProvider.NAME, PadContentProvider.POSITION},
+                    "",
+                    null,
+                    PadContentProvider.CREATE_DATE + " ASC LIMIT " + position + ", 1");
+
+            HashMap<String, String> group = new HashMap<>();
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast())
+            {
+                String id = cursor.getString(0);
+                String name = cursor.getString(1);
+                String pos = cursor.getString(2);
+
+                group.put(PadContentProvider._ID, id);
+                group.put(PadContentProvider.NAME, name);
+                group.put(PadContentProvider.POSITION, pos);
+
+                break;
+            }
+            cursor.close();
+
+            return group;
+        }
+
         public HashMap<String, String> getPadgroupAtPosition(int position) {
 //            final String QUERY =
 //                    "SELECT * FROM " + PadContentProvider.PADGROUP_TABLE_NAME +
@@ -361,14 +501,28 @@ public class PadLandDataActivity extends PadLandActivity {
         }
 
         public ArrayList<Long> getPadgroupChildrenIds(long id) {
-            final String QUERY =
-                    "SELECT " + PadContentProvider._ID_PAD + " " +
-                    "FROM " + PadContentProvider.RELATION_TABLE_NAME + " " +
-                    "WHERE " + PadContentProvider._ID_GROUP + "=? ";
+            String QUERY;
+            String[] values;
+            if( id == 0 ) {
+                QUERY =
+                        "SELECT " + PadContentProvider._ID + " " +
+                            "FROM " + PadContentProvider.PAD_TABLE_NAME + " " +
+                            "WHERE " + PadContentProvider._ID + " NOT IN (" +
+                                "SELECT DISTINCT " + PadContentProvider._ID_PAD + " FROM " + PadContentProvider.RELATION_TABLE_NAME +
+                                ") ";
+                values = new String[]{};
+            } else {
+                QUERY =
+                        "SELECT DISTINCT " + PadContentProvider._ID_PAD + " " +
+                                "FROM " + PadContentProvider.RELATION_TABLE_NAME + " " +
+                                "WHERE " + PadContentProvider._ID_GROUP + "=? ";
+                values = new String[]{String.valueOf(id)};
+            }
+            Cursor cursor = db.rawQuery(QUERY, values);
 
-            Cursor cursor = db.rawQuery(QUERY, new String[]{String.valueOf(id)});
 
             ArrayList<Long> pad_ids = new ArrayList<>();
+
             cursor.moveToFirst();
             while (!cursor.isAfterLast())
             {
@@ -382,13 +536,43 @@ public class PadLandDataActivity extends PadLandActivity {
         }
 
         public int getPadgroupChildrenCount(long id) {
-            final String QUERY =
+            String QUERY;
+            String[] values;
+            if( id == 0 ) {
+                QUERY =
+                        "SELECT " + PadContentProvider._ID + " " +
+                                "FROM " + PadContentProvider.PAD_TABLE_NAME + " " +
+                                "WHERE " + PadContentProvider._ID + " NOT IN (" +
+                                "SELECT " + PadContentProvider._ID_PAD + " FROM " + PadContentProvider.RELATION_TABLE_NAME +
+                                ") ";
+                values = new String[]{};
+            } else {
+                QUERY =
                     "SELECT * FROM " + PadContentProvider.RELATION_TABLE_NAME + " " +
-                    "WHERE " + PadContentProvider._ID_GROUP + "=? ";
+                            "WHERE " + PadContentProvider._ID_GROUP + "=? ";
+                values = new String[]{String.valueOf(id)};
+            }
 
-            Cursor cursor = db.rawQuery(QUERY, new String[]{String.valueOf(id)});
+            Cursor cursor = db.rawQuery(QUERY, values);
+            int count = cursor.getCount();
+            cursor.close();
+            return count;
+        }
 
-            return cursor.getCount();
+        public void _debug_relations() {
+            String QUERY = "SELECT " + PadContentProvider._ID_GROUP + ", " + PadContentProvider._ID_PAD + " FROM " + PadContentProvider.RELATION_TABLE_NAME;
+            String[] values = new String[]{};
+            Cursor cursor = db.rawQuery(QUERY, values);
+
+            HashMap<Long, Long> hashMap = new HashMap<>();
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast())
+            {
+                hashMap.put(cursor.getLong(0), cursor.getLong(1));
+                cursor.moveToNext();
+            }
+            cursor.close();
+            Log.d(TAG, hashMap.toString());
         }
 
         /**
@@ -427,6 +611,43 @@ public class PadLandDataActivity extends PadLandActivity {
                 Uri result = contentResolver.insert(PadContentProvider.PADGROUPS_CONTENT_URI, values);
                 return ( result != null );
             }
+        }
+
+        /**
+         * Saves a new group if padgroup_id=0 or updates an existing one.
+         * @param padgroup_id
+         * @param pad_id
+         * @return
+         */
+        public boolean savePadgroupRelation( long padgroup_id, long pad_id ){
+            removePadFromAllGroups(pad_id);
+
+            if( padgroup_id == 0 ) {
+                return false;
+            }
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(PadContentProvider._ID_PAD, pad_id);
+            contentValues.put(PadContentProvider._ID_GROUP, padgroup_id);
+
+            boolean result = db.insert(PadContentProvider.RELATION_TABLE_NAME, null, contentValues) > 0;
+            _debug_relations();
+            return result;
+        }
+
+        /**
+         * Destroys all possible relation between a pad and any group
+         * @param pad_id
+         * @return
+         */
+        public boolean removePadFromAllGroups(long pad_id) {
+            int deleted = db.delete(PadContentProvider.RELATION_TABLE_NAME, PadContentProvider._ID_PAD + "=? ", new String[]{String.valueOf(pad_id)});
+            return deleted > 0;
+//            final String QUERY =
+//                    "DELETE FROM " + PadContentProvider.RELATION_TABLE_NAME + " " +
+//                            "WHERE " + PadContentProvider._ID_PAD + "=? ";
+//
+//            db.rawQuery(QUERY, new String[]{String.valueOf(pad_id)});
+//            return true;
         }
 
         /**

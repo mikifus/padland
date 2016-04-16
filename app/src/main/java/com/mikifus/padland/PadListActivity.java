@@ -35,7 +35,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -84,13 +83,14 @@ public class PadListActivity extends PadLandDataActivity
     protected void onCreate(Bundle savedInstanceState) {
         // Layout
         super.onCreate(savedInstanceState);
+
+        // Intent
+        this._actionFromIntent();
+
         setContentView(R.layout.activity_padlist);
 
         // Intent
         this._textFromIntent();
-
-        // Intent
-        this._actionFromIntent();
 
         // Loader
         this.initLoader(this);
@@ -141,6 +141,9 @@ public class PadListActivity extends PadLandDataActivity
                     break;
             }
         }
+//        if( adapter != null ) {
+//            adapter.notifyDataSetChanged();
+//        }
     }
 
     /**
@@ -223,10 +226,21 @@ public class PadListActivity extends PadLandDataActivity
         expandableListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                if (ExpandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
-                    int groupPosition = ExpandableListView.getPackedPositionGroup(id);
-                    int childPosition = ExpandableListView.getPackedPositionChild(id);
+                //  convert the input flat list position to a packed position
+                long packedPosition = expandableListView.getExpandableListPosition(position);
 
+                int itemType        = ExpandableListView.getPackedPositionType(packedPosition);
+                int groupPosition   = ExpandableListView.getPackedPositionGroup(packedPosition);
+                int childPosition   = ExpandableListView.getPackedPositionChild(packedPosition);
+
+                //  GROUP-item clicked
+                if (itemType == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
+                    //  ...
+//                        onGroupLongClick(groupPosition);
+//                    return false;
+                }
+                //  CHILD-item clicked
+                else if (itemType == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
                     Log.d(TAG, "Longclick: childpos:" + childPosition + " pos:" + position + " id:" + id);
 
                     long childId = adapter.getChildId(groupPosition, childPosition); // position does not start by 0
@@ -393,6 +407,11 @@ public class PadListActivity extends PadLandDataActivity
     @Override
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menuitem_group:
+                menu_group(getCheckedItemIds(), getGroupsForAdapter());
+                // Action picked, so close the CAB
+                mode.finish();
+                return true;
             case R.id.menuitem_delete:
                 AskDelete(getCheckedItemIds());
                 // Action picked, so close the CAB
@@ -515,7 +534,8 @@ public class PadListActivity extends PadLandDataActivity
 
     public void notifyDataSetChanged() {
         if( expandableListView != null ) {
-            ((BaseExpandableListAdapter) expandableListView.getExpandableListAdapter()).notifyDataSetChanged();
+            setAdapter();
+//            ((BaseExpandableListAdapter) expandableListView.getExpandableListAdapter()).notifyDataSetChanged();
         }
     }
 }

@@ -94,16 +94,16 @@ public class PadListAdapter extends BaseExpandableListAdapter {
         HashMap<String, String> group = getGroup(groupPosition);
         String id_string = group.get(PadContentProvider._ID);
         long id = Long.parseLong(id_string);
-        if( id == 0 ) {
-            return getUnclassifiedGroupChildrenCount(groupPosition);
-        }
-        return context.padlandDb
-                .getPadgroupChildrenCount(id);
+//        if( id == 0 ) {
+//            return getUnclassifiedGroupChildrenCount(groupPosition);
+//        }
+        int count = context.padlandDb.getPadgroupChildrenCount(id);
+        return count;
     }
 
     @Override
     public HashMap<String, String> getGroup(int groupPosition) {
-        HashMap<String, String> group = context.padlandDb.getPadgroupAtPosition(groupPosition);
+        HashMap<String, String> group = context.padlandDb.getPadgroupAt(groupPosition);
         if( group.size() == 0 ) {
             return getUnclassifiedGroup(groupPosition);
         }
@@ -119,7 +119,7 @@ public class PadListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public long getGroupId(int groupPosition) {
-        HashMap<String, String> group = context.padlandDb.getPadgroupAtPosition(groupPosition);
+        HashMap<String, String> group = context.padlandDb.getPadgroupAt(groupPosition);
         if( group.size() == 0 ) {
             return getUnclassifiedGroupId(groupPosition);
         }
@@ -128,11 +128,12 @@ public class PadListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public long getChildId(int groupPosition, int childPosition) {
-        HashMap<String, String> group = context.padlandDb.getPadgroupAtPosition(groupPosition);
+        HashMap<String, String> group = context.padlandDb.getPadgroupAt(groupPosition);
         String id = group.get(PadContentProvider._ID);
         ArrayList padlist;
         if( id == null ) {
-            padlist = getUnclassifiedGroupChildList(groupPosition);
+//            padlist = getUnclassifiedGroupChildList(groupPosition);
+            padlist = context.padlandDb.getPadgroupChildrenIds(0);
         } else {
             padlist = context.padlandDb.getPadgroupChildrenIds(Long.parseLong(id));
         }
