@@ -34,7 +34,7 @@ public class PadContentProvider extends ContentProvider {
      * Database specific constant declarations
      */
     protected SQLiteDatabase db;
-    static final int DATABASE_VERSION = 6;
+    static final int DATABASE_VERSION = 7;
 
     public static final String _ID = "_id";
     public static final String NAME = "name"; // Name of the pad, actually it is the last part of the url
@@ -92,7 +92,7 @@ public class PadContentProvider extends ContentProvider {
     static final String RELATION_TABLE_NAME = "padlist_padgroups";
     static final String RELATION_TABLE_CREATE_QUERY =
             " CREATE TABLE " + RELATION_TABLE_NAME +
-                    " ("+ _ID_GROUP +" INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    " ("+ _ID_GROUP +" INTEGER NOT NULL, " +
                     " " + _ID_PAD +" INTEGER NOT NULL " +
                     ");";
 
