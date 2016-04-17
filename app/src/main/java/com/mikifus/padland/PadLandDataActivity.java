@@ -66,6 +66,7 @@ public class PadLandDataActivity extends PadLandActivity {
     public padData _getPadData( long pad_id ){
         Cursor cursor = padlandDb._getPadDataById(pad_id);
         padData pad_data = new padData( cursor );
+        cursor.close();
         return pad_data;
     }
 
@@ -83,7 +84,7 @@ public class PadLandDataActivity extends PadLandActivity {
         AlertDialog DeleteDialogBox = new AlertDialog.Builder(this)
                 //set message, title, and icon
                 .setTitle(R.string.delete)
-                .setMessage(getString(R.string.sure_to_delete))
+                .setMessage(getString(R.string.sure_to_delete_pad))
                 .setIcon(android.R.drawable.ic_menu_delete)
                 .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
 
@@ -139,7 +140,6 @@ public class PadLandDataActivity extends PadLandActivity {
     {
         final PadLandDataActivity context = this;
         final ArrayList<Long> selectedGroups = new ArrayList<>();
-//        CharSequence[] group_names = new CharSequence[groupsForAdapter.size()];
         String[] group_names = new String[groupsForAdapter.size()];
         for( int i = 0; i < groupsForAdapter.size(); ++i ) {
             HashMap<String, String> group_data = getGroupFromAdapterData(groupsForAdapter, i);
@@ -191,22 +191,36 @@ public class PadLandDataActivity extends PadLandActivity {
                                 Log.d(TAG, "Added to group? " + saved);
                             }
                         }
-//                        Intent intent = new Intent(context, PadListActivity.class);
-//                        context.startActivity(intent);
-                        dialog.dismiss();
                         ((PadListActivity) context).notifyDataSetChanged();
-//                        finish();
-                        /*
-                        Bundle extra = new Bundle();
-                        extra.putString("action", "group");
-                        extra.putStringArrayList("pad_id", selectedItems);
-                        extra.putIntegerArrayList("group_id", selectedGroups);
-                        Intent intent = new Intent(context, PadListActivity.class);
-                        intent.putExtras(extra);
-                        context.startActivity(intent);
                         dialog.dismiss();
-                        finish();
-                        */
+                    }
+
+                })
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+        DeleteDialogBox.show();
+        return DeleteDialogBox;
+    }
+
+    public AlertDialog menu_delete_group(final long group_id)
+    {
+        final PadLandDataActivity context = this;
+
+        AlertDialog DeleteDialogBox = new AlertDialog.Builder(this)
+                //set message, title, and icon
+                .setTitle(R.string.delete)
+                .setMessage(getString(R.string.sure_to_delete_group))
+                .setIcon(android.R.drawable.ic_menu_delete)
+                .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        context.padlandDb.deleteGroup(group_id);
+                        ((PadListActivity) context).notifyDataSetChanged();
+                        dialog.dismiss();
                     }
 
                 })
@@ -437,7 +451,9 @@ public class PadLandDataActivity extends PadLandActivity {
                     null,
                     PadContentProvider.CREATE_DATE + " ASC");
 
-            return cursor.getCount();
+            int count = cursor.getCount();
+            cursor.close();
+            return count;
         }
 
         public HashMap<String, String> getPadgroupAt(int position) {
@@ -630,7 +646,7 @@ public class PadLandDataActivity extends PadLandActivity {
             contentValues.put(PadContentProvider._ID_GROUP, padgroup_id);
 
             boolean result = db.insert(PadContentProvider.RELATION_TABLE_NAME, null, contentValues) > 0;
-            _debug_relations();
+//            _debug_relations();
             return result;
         }
 
@@ -642,12 +658,6 @@ public class PadLandDataActivity extends PadLandActivity {
         public boolean removePadFromAllGroups(long pad_id) {
             int deleted = db.delete(PadContentProvider.RELATION_TABLE_NAME, PadContentProvider._ID_PAD + "=? ", new String[]{String.valueOf(pad_id)});
             return deleted > 0;
-//            final String QUERY =
-//                    "DELETE FROM " + PadContentProvider.RELATION_TABLE_NAME + " " +
-//                            "WHERE " + PadContentProvider._ID_PAD + "=? ";
-//
-//            db.rawQuery(QUERY, new String[]{String.valueOf(pad_id)});
-//            return true;
         }
 
         /**
@@ -663,6 +673,34 @@ public class PadLandDataActivity extends PadLandActivity {
             else {
                 throw new IllegalArgumentException("Pad id is not valid");
             }
+        }
+
+        /**
+         * Deletes a group by its id, no confirmation, won't be recoverable.
+         * The group pads will be moved to the zero-group (Unclassified)
+         * @param group_id
+         * @return
+         */
+        public boolean deleteGroup(long group_id){
+            if( group_id > 0 ) {
+                emptyGroup(group_id);
+
+                int result = db.delete(PadContentProvider.PADGROUP_TABLE_NAME, PadContentProvider._ID + "=?", new String[]{String.valueOf(group_id)});
+                return (result > 0);
+            }
+            else {
+                throw new IllegalArgumentException("Group id is not valid");
+            }
+        }
+
+        /**
+         * Erases all relations with stablished with this group
+         * @param group_id
+         * @return
+         */
+        public boolean emptyGroup(long group_id) {
+            int result = db.delete(PadContentProvider.RELATION_TABLE_NAME, PadContentProvider._ID_GROUP + "=?", new String[]{String.valueOf(group_id)});
+            return result > 0;
         }
     }
 }

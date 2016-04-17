@@ -233,19 +233,29 @@ public class PadListActivity extends PadLandDataActivity
                 int groupPosition   = ExpandableListView.getPackedPositionGroup(packedPosition);
                 int childPosition   = ExpandableListView.getPackedPositionChild(packedPosition);
 
+                Log.d(TAG, "Longclick: item: "+itemType+" childpos:" + childPosition + " pos:" + position + " id:" + id);
+
                 //  GROUP-item clicked
                 if (itemType == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
+                    long groupId = adapter.getGroupId(groupPosition);
+                    if( groupId > 0 ) {
+                        menu_delete_group(groupId);
+                        expandableListView.setSelectedGroup(groupPosition);
+                        expandableListView.setItemChecked(position, true);
+                        view.setSelected(true);
+                        return true;
+                    }
                     //  ...
 //                        onGroupLongClick(groupPosition);
 //                    return false;
                 }
                 //  CHILD-item clicked
                 else if (itemType == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
-                    Log.d(TAG, "Longclick: childpos:" + childPosition + " pos:" + position + " id:" + id);
 
-                    long childId = adapter.getChildId(groupPosition, childPosition); // position does not start by 0
+                    long childId = adapter.getChildId(groupPosition, childPosition);
 
                     startActionMode(view, position, childId);
+                    expandableListView.setSelectedChild(groupPosition, childPosition, true);
                     expandableListView.setItemChecked(position, true);
                     view.setSelected(true);
 
