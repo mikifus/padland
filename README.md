@@ -9,8 +9,8 @@ v0.4
 - Now documents can be classified in groups
 - Pads will by default appear in the "Unclassified" group
 - Groups can be added and deleted
-- Pads can be moved to groups
-- Some design improvements
+- Pads can be moved to groups in bulk
+- Design improvements
 
 
 v0.3
