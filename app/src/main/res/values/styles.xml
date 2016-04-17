@@ -15,6 +15,8 @@
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="colorAccent">@android:color/holo_orange_light</item>
+        <item name="android:colorBackground">@color/dim_foreground_material_dark</item>
     </style>
 
     <style name="activated" parent="AppBaseTheme">
