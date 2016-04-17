@@ -117,7 +117,7 @@ public class PadLandDataActivity extends PadLandActivity {
      * @return AlertDialog
      */
 
-    protected Long getIdGroupFromAdapterData(int groupPosition) {
+    protected Long getGroupIdFromAdapterData(int groupPosition) {
         HashMap<String, String> padgroups_data = padlandDb.getPadgroupAt(groupPosition);
         long id = 0L;
         if( padgroups_data.size() > 0 ) {
@@ -126,26 +126,29 @@ public class PadLandDataActivity extends PadLandActivity {
         return id;
     }
 
-    protected HashMap<String, String> getGroupFromAdapterData(ArrayList<HashMap<String, ArrayList>> groupsForAdapter, int groupPosition) {
-        HashMap group = groupsForAdapter.get(groupPosition);
-        HashMap<String, String> group_deal = new HashMap<>();
-        String id = (String) group.get(PadContentProvider._ID);
-        String name = (String) group.keySet().iterator().next();
-        group_deal.put(PadContentProvider._ID, id);
-        group_deal.put(PadContentProvider.NAME, name);
-        return group_deal;
+    protected String getGroupNameFromAdapterData(int groupPosition) {
+        HashMap<String, String> padgroups_data = padlandDb.getPadgroupAt(groupPosition);
+        String name = "";
+        if( padgroups_data.size() > 0 ) {
+            name = padgroups_data.get(PadContentProvider.NAME);
+        }
+        return name;
     }
 
-    public AlertDialog menu_group(final ArrayList<String> selectedItems, final ArrayList<HashMap<String, ArrayList>> groupsForAdapter)
+    public AlertDialog menu_group(final ArrayList<String> selectedItems)
     {
         final PadLandDataActivity context = this;
         final ArrayList<Long> selectedGroups = new ArrayList<>();
-        String[] group_names = new String[groupsForAdapter.size()];
-        for( int i = 0; i < groupsForAdapter.size(); ++i ) {
-            HashMap<String, String> group_data = getGroupFromAdapterData(groupsForAdapter, i);
-            group_names[ i ] = group_data.get(PadContentProvider.NAME);
+        int group_count = padlandDb.getPadgroupsCount();
+        String[] group_names = new String[ group_count + 1 ];
+        for( int i = 0; i < group_count; ++i ) {
+            group_names[ i ] = getGroupNameFromAdapterData(i);
         }
-        final boolean[] checkboxStatusArray = new boolean[groupsForAdapter.size()];
+
+        // Add unclassified group as choice
+        group_names[ group_count ] = getString(R.string.padlist_group_unclassified_name);
+
+        final boolean[] checkboxStatusArray = new boolean[ group_count + 1 ];
 
         AlertDialog DeleteDialogBox = new AlertDialog.Builder(this)
                 //set message, title, and icon
@@ -172,7 +175,7 @@ public class PadLandDataActivity extends PadLandActivity {
                                 selectedGroups.clear();
 
                                 // If the user checked the item, add it to the selected items
-                                Long group_id = context.getIdGroupFromAdapterData(which);
+                                Long group_id = context.getGroupIdFromAdapterData(which);
                                 selectedGroups.add(group_id);
                             } else if (selectedGroups.contains(which)) {
                                 // Else, if the item is already in the array, remove it

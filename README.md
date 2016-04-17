@@ -2,9 +2,17 @@
 Padland is a tool to manage, share, remember and read collaborative documents based on the Etherpad technology in Android.
 
 ## Current version
-0.3
+0.4
 
 ## Changelog
+v0.4
+- Now documents can be classified in groups
+- Pads will by default appear in the "Unclassified" group
+- Groups can be added and deleted
+- Pads can be moved to groups
+- Some design improvements
+
+
 v0.3
 - Added a parameter to count the times a pad was accessed
 - Added a loading animation

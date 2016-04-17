@@ -47,14 +47,6 @@ public class PadLandActivity extends AppCompatActivity {
         Intent intent;
 
         switch(item.getItemId()) {
-            case R.id.action_newpad:
-                intent = new Intent(this, NewPadActivity.class);
-                this.startActivity(intent);
-                break;
-            case R.id.action_about:
-                intent = new Intent(this, About.class);
-                this.startActivity(intent);
-                break;
             case R.id.action_settings:
                 intent = new Intent(this, SettingsActivity.class);
                 this.startActivity(intent);

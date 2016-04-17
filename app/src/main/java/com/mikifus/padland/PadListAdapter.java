@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by mikifus on 20/02/16.
@@ -62,7 +61,7 @@ public class PadListAdapter extends BaseExpandableListAdapter {
                           ArrayList<HashMap<String, ArrayList>> group_data,
                           HashMap<Long, ArrayList<String>> pad_data, int choiceMode) {
         // TODO: group_data can be a LinkedHashMap or something better
-        this(context, group_data, pad_data);
+        this(context);
         // For now the choice mode CHOICE_MODE_MULTIPLE_MODAL
         // is not implemented
         if (choiceMode == CHOICE_MODE_MULTIPLE_MODAL) {
@@ -72,12 +71,8 @@ public class PadListAdapter extends BaseExpandableListAdapter {
     }
 
     // Initialize constructor for array list
-    public PadListAdapter(PadLandDataActivity context,
-                                ArrayList<HashMap<String, ArrayList>> group_data,
-                                HashMap<Long, ArrayList<String>> pad_data) {
+    public PadListAdapter(PadLandDataActivity context) {
         this.context = context;
-        this.group_data = group_data;
-        this.pad_data = pad_data;
         layoutInflater = (LayoutInflater) this.context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         checkedPositions = new SparseArray<>();
@@ -105,7 +100,7 @@ public class PadListAdapter extends BaseExpandableListAdapter {
     public HashMap<String, String> getGroup(int groupPosition) {
         HashMap<String, String> group = context.padlandDb.getPadgroupAt(groupPosition);
         if( group.size() == 0 ) {
-            return getUnclassifiedGroup(groupPosition);
+            return getUnclassifiedGroup();
         }
         return group;
     }
@@ -155,7 +150,7 @@ public class PadListAdapter extends BaseExpandableListAdapter {
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.list_header, null);
+            convertView = infalInflater.inflate(R.layout.padlist_header, null);
         }
 
         TextView header = (TextView) convertView.findViewById(R.id.list_header_title);
@@ -285,37 +280,14 @@ public class PadListAdapter extends BaseExpandableListAdapter {
         Log.v(TAG, "The choice mode has been changed. Now it is " + this.choiceMode);
     }
 
-    /**
-     * Method used to get the actual state of the checked lists
-     * @return The list of the all the positions checked
-     */
-    public SparseArray<SparseBooleanArray> getCheckedPositions() {
-        return checkedPositions;
-    }
-
-    private int getUnclassifiedGroupChildrenCount(int groupPosition) {
-        for( Map.Entry e : group_data.get(groupPosition).entrySet() ) {
-            return ((ArrayList) e.getValue()).size();
-        }
-        return 0;
-    }
-
-    private HashMap<String, String> getUnclassifiedGroup(int groupPosition) {
-        HashMap group = group_data.get(groupPosition);
+    private HashMap<String, String> getUnclassifiedGroup() {
         HashMap<String, String> group_deal = new HashMap<>();
-//        String id = (String) group.get(PadContentProvider._ID);
-        String name = (String) group.keySet().iterator().next();
         group_deal.put(PadContentProvider._ID, "0");
-        group_deal.put(PadContentProvider.NAME, name);
+        group_deal.put(PadContentProvider.NAME, context.getString(R.string.padlist_group_unclassified_name));
         return group_deal;
     }
 
     private long getUnclassifiedGroupId(int groupPosition) {
         return 0;
-    }
-
-    private ArrayList getUnclassifiedGroupChildList(int groupPosition) {
-        HashMap group = group_data.get(groupPosition);
-        return (ArrayList) group.get(group.keySet().iterator().next());
     }
 }
