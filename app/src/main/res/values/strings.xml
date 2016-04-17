@@ -58,6 +58,7 @@
     <string name="newpad_noname_warning">You must specify a name for the document.</string>
     <string name="padlist_empty_createnew">Create a new document</string>
     <string name="padlist_document_deleted">Document deleted</string>
+    <string name="padlist_group_deleted">Group deleted</string>
     <string name="padlist_dialog_new_padgroup_title">New group</string>
     <string name="padlist_dialog_new_padgroup_label">Insert the name of the new group</string>
     <string name="padlist_dialog_new_padgroup_invalid">Invalid group name.</string>

@@ -13,6 +13,7 @@ import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -221,7 +222,9 @@ public class PadLandDataActivity extends PadLandActivity {
                 .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        context.padlandDb.deleteGroup(group_id);
+                        if( context.padlandDb.deleteGroup(group_id) ) {
+                            Toast.makeText(PadLandDataActivity.this, getString(R.string.padlist_group_deleted), Toast.LENGTH_LONG).show();
+                        }
                         ((PadListActivity) context).notifyDataSetChanged();
                         dialog.dismiss();
                     }

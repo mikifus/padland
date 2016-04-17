@@ -13,22 +13,7 @@ android {
         targetSdkVersion 23
         versionName 'default'
     }
-    signingConfigs {
-        debug {
-            keyAlias 'sitem_debug'
-            keyPassword 'esquerra'
-            storeFile file('/home/mikifus/AndroidStudioProjects/sitem_debug')
-            storePassword 'esquerra'
-        }
-        release {
-            keyAlias 'gool_natura'
-            keyPassword 'androidnatura2012'
-            storeFile file('/home/mikifus/AndroidStudioProjects/gool_natura')
-            storePassword 'androidnatura2012'
-        }
-    }
     buildTypes {
-        debug{}
         release {
             minifyEnabled true
             buildConfigField "Boolean", "DEBUG_MODE", "true"
