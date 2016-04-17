@@ -198,19 +198,7 @@ public class PadListActivity extends PadLandDataActivity
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 Log.d(TAG, "child click: " + id);
 
-                if (mActionMode != null) {
-//                    startActionMode(view, position, id);
-                    int position = ExpandableListView.getPackedPositionChild(id);
-                    Log.d(TAG, "Childclick: position: " + position + " childPosition:" + childPosition + " waschecked?" + expandableListView.isItemChecked(position));
-
-                    int final_position = childPosition + 1;
-                    expandableListView.setItemChecked(final_position, (!expandableListView.isItemChecked(final_position)));
-                    if (expandableListView.getCheckedItemCount() == 0) {
-                        mActionMode.finish();
-                    }
-                    return false;
-                }
-
+                // DO NOT try to handle selection with this listener, you will hurt yourself
 
                 Intent padViewIntent = new Intent(PadListActivity.this, PadInfoActivity.class);
                 padViewIntent.putExtra("pad_id", id);
@@ -238,25 +226,18 @@ public class PadListActivity extends PadLandDataActivity
                     long groupId = adapter.getGroupId(groupPosition);
                     if( groupId > 0 ) {
                         menu_delete_group(groupId);
-                        expandableListView.setSelectedGroup(groupPosition);
-                        expandableListView.setItemChecked(position, true);
-                        view.setSelected(true);
                         return true;
                     }
-                    //  ...
-//                        onGroupLongClick(groupPosition);
-//                    return false;
                 }
                 //  CHILD-item clicked
                 else if (itemType == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
-
-                    long childId = adapter.getChildId(groupPosition, childPosition);
-
-                    startActionMode(view, position, childId);
-                    expandableListView.setSelectedChild(groupPosition, childPosition, true);
-                    expandableListView.setItemChecked(position, true);
-                    view.setSelected(true);
-
+                    startActionMode();
+                    boolean checked = expandableListView.isItemChecked(position);
+                    expandableListView.setItemChecked(position, !checked);
+                    view.setSelected(!checked);
+                    if (expandableListView.getCheckedItemCount() == 0) {
+                        mActionMode.finish();
+                    }
                     // Return true as we are handling the event.
                     return true;
                 }
@@ -264,17 +245,20 @@ public class PadListActivity extends PadLandDataActivity
                 return false;
             }
         });
+
+        // If there was something selected, just in case, we start the actionmode to allow
+        // the user cancel the previous selection at least.
+        if(expandableListView.getCheckedItemCount() > 0) {
+            startActionMode();
+        }
     }
 
     /**
      * Check an item and set is as selected.
      *
-     * @param view
-     * @param position
-     * @param id
      */
-    public void startActionMode(View view, int position, long id) {
-        Log.d(TAG, "SELECTION NEW: pos:" + String.valueOf(position) + " id:" + String.valueOf(id));
+    public void startActionMode() {
+//        Log.d(TAG, "SELECTION NEW: pos:" + String.valueOf(position) + " id:" + String.valueOf(id));
 //
         if (mActionMode == null) {
 //            // Start the CAB using the ActionMode.Callback defined above

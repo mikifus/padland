@@ -1,21 +1,41 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        release {
+        }
+    }
     compileSdkVersion 23
     buildToolsVersion "21.1.2"
-
     defaultConfig {
         applicationId "com.mikifus.padland"
-        minSdkVersion 15
+        minSdkVersion 13
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        versionName 'default'
+    }
+    signingConfigs {
+        debug {
+            keyAlias 'sitem_debug'
+            keyPassword 'esquerra'
+            storeFile file('/home/mikifus/AndroidStudioProjects/sitem_debug')
+            storePassword 'esquerra'
+        }
+        release {
+            keyAlias 'gool_natura'
+            keyPassword 'androidnatura2012'
+            storeFile file('/home/mikifus/AndroidStudioProjects/gool_natura')
+            storePassword 'androidnatura2012'
+        }
     }
     buildTypes {
+        debug{}
         release {
-            minifyEnabled false
+            minifyEnabled true
+            buildConfigField "Boolean", "DEBUG_MODE", "true"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    productFlavors {
     }
 }
 
@@ -24,7 +44,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.android.support:design:23.3.0'
     compile 'com.pnikosis:materialish-progress:1.5'
-
-//    I don't know why is this here
-//    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
+    //    I don't know why is this here
+    //    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
 }
