@@ -18,7 +18,7 @@
         android:layout_alignParentLeft="true"
         android:scaleType="centerInside"
         android:contentDescription="Document"
-        android:src="@drawable/document1" />
+        android:src="@drawable/ic_document" />
 
     <LinearLayout
         android:layout_width="wrap_content"

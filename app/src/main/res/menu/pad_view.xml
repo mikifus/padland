@@ -4,20 +4,4 @@
         android:showAsAction="ifRoom"
         android:icon="@android:drawable/ic_menu_share"
         android:actionProviderClass="android.widget.ShareActionProvider" />
-
-    <item android:id="@+id/action_newpad"
-        android:title="@string/action_newpad"
-        android:orderInCategory="100"
-        android:showAsAction="never"
-        android:icon="@android:drawable/ic_menu_add" />
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
-        android:orderInCategory="100"
-        android:showAsAction="never"
-        android:icon="@android:drawable/ic_menu_preferences" />
-    <item android:id="@+id/action_about"
-        android:title="@string/about"
-        android:orderInCategory="100"
-        android:showAsAction="never"
-        android:icon="@android:drawable/ic_menu_info_details"/>
 </menu>

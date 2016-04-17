@@ -8,7 +8,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/listView"
-            android:choiceMode="singleChoice"
             android:layout_below="@+id/editText"/>
 
     <LinearLayout
@@ -37,7 +36,7 @@
         <android.support.design.widget.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_recent_history"
+            android:src="@drawable/ic_group_add_inverted"
             android:layout_gravity="bottom|end"
             android:onClick="onNewPadgroupClick"
             android:layout_marginBottom="@dimen/action_button_margin"
@@ -48,7 +47,7 @@
         <android.support.design.widget.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_add"
+            android:src="@drawable/ic_document_add_inverted"
             android:layout_gravity="bottom|end"
             android:onClick="onNewPadClick"
             android:layout_marginBottom="@dimen/action_button_margin"

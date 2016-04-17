@@ -43,8 +43,6 @@ import com.mikifus.padland.Dialog.NewPadGroup;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 /**
  * This activity displays a list of previously checked documents.
@@ -291,13 +289,18 @@ public class PadListActivity extends PadLandDataActivity
      */
     private void setAdapter()
     {
-        ArrayList<HashMap<String, ArrayList>> group_data = getGroupsForAdapter();
+//        ArrayList<HashMap<String, ArrayList>> group_data = getGroupsForAdapter();
         HashMap<Long, ArrayList<String>> padlist_data = _getPadListData();
 
-        adapter = new PadListAdapter(this, group_data, padlist_data);
+        adapter = new PadListAdapter(this);
 
         // Bind to adapter.
         expandableListView.setAdapter(adapter);
+
+        // Expand all groups by default
+        for(int i=0; i < adapter.getGroupCount(); i++) {
+            expandableListView.expandGroup(i);
+        }
     }
 
     private HashMap<Long, ArrayList<String>> _getPadListData()
@@ -418,7 +421,7 @@ public class PadListActivity extends PadLandDataActivity
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menuitem_group:
-                menu_group(getCheckedItemIds(), getGroupsForAdapter());
+                menu_group(getCheckedItemIds());
                 // Action picked, so close the CAB
                 mode.finish();
                 return true;
@@ -510,36 +513,6 @@ public class PadListActivity extends PadLandDataActivity
     @Override
     public void onStop() {
         super.onStop();
-    }
-
-    public ArrayList<HashMap<String,ArrayList>> getGroupsForAdapter() {
-        ArrayList<HashMap<String, ArrayList>> group_data = new ArrayList<>();
-        HashMap<String, ArrayList> header = new HashMap<>();
-        Log.d(TAG, "Requesting groups data");
-        HashMap<Long, ArrayList<String>> padgroups_data = padlandDb._getPadgroupsData();
-
-        Iterator iterator = padgroups_data.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry pair = (Map.Entry) iterator.next();
-            ArrayList<String> groupdata = (ArrayList<String>) pair.getValue();
-            HashMap<String, ArrayList> group = new HashMap<>();
-            group.put(groupdata.get(0), new ArrayList());
-            group_data.add(group);
-        }
-
-        HashMap<Long, ArrayList<String>> padlist_data = _getPadListData();
-        ArrayList<Long> pad_id_list = new ArrayList<>();
-
-        iterator = padlist_data.keySet().iterator();
-        while(iterator.hasNext())
-        {
-            long next = (long) iterator.next();
-            pad_id_list.add(next);
-        }
-        header.put("Unclassified", pad_id_list);
-        group_data.add(header);
-
-        return group_data;
     }
 
     public void notifyDataSetChanged() {

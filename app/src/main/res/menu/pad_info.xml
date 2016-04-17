@@ -1,11 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/menuitem_share"
         android:title="@string/share"
-        android:showAsAction="ifRoom"
-        android:icon="@android:drawable/ic_menu_share" />
+        android:showAsAction="always"
+        android:icon="@drawable/ic_share_inverted" />
 
     <item android:id="@+id/menuitem_delete"
         android:title="@string/delete"
-        android:showAsAction="never"
+        android:showAsAction="always"
         android:icon="@android:drawable/ic_menu_delete" />
 </menu>
