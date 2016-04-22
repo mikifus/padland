@@ -153,8 +153,8 @@ public class PadLandDataActivity extends PadLandActivity {
 
         AlertDialog DeleteDialogBox = new AlertDialog.Builder(this)
                 //set message, title, and icon
-                .setTitle(R.string.delete)
-                .setIcon(android.R.drawable.ic_menu_delete)
+                .setTitle(R.string.padlist_group_select_dialog)
+                .setIcon(R.drawable.ic_group_add)
                 .setMultiChoiceItems(group_names, checkboxStatusArray,
                     new DialogInterface.OnMultiChoiceClickListener() {
                         @Override
