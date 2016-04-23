@@ -5,7 +5,6 @@
         <item>Titanpad.com</item>
         <item>Meeting Words</item>
         <item>Piratepad</item>
-        <item>Piraten Pad</item>
         <item>Mozilla Etherpad</item>
         <item>Framapad.org</item>
         <item>Primarypad</item>
@@ -16,7 +15,6 @@
         <item>https://titanpad.com</item>
         <item>http://meetingwords.com</item>
         <item>http://piratepad.net</item>
-        <item>http://piratenpad.de</item>
         <item>http://etherpad.mozilla.org</item>
         <item>https://framapad.org</item>
         <item>http://free.primarypad.com</item>
@@ -27,9 +25,8 @@
         <item>https://titanpad.com/</item>
         <item>http://meetingwords.com/</item>
         <item>http://piratepad.net/</item>
-        <item>http://piratenpad.de/</item>
-        <item>http://etherpad.mozilla.org/</item>
-        <item>https://framapad.org/</item>
+        <item>http://etherpad.mozilla.org/p/</item>
+        <item>https://framapad.org/p/</item>
         <item>http://free.primarypad.com/p/</item>
     </string-array>
 </resources>
