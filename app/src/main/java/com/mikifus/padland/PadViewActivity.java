@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,10 +22,10 @@ import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.support.v7.widget.ShareActionProvider;
 import android.widget.Toast;
 
+import com.mikifus.padland.SaferWebView.SaferWebViewClient;
+import com.mikifus.padland.SaferWebView.WebviewUtil;
 import com.pnikosis.materialishprogress.ProgressWheel;
 
 /**
@@ -52,17 +53,6 @@ public class PadViewActivity extends PadLandDataActivity {
     Maximum size for the webView, it is quite complicated
      */
     private int max_viewport_size = 400;
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
 
     /**
      * Local class to handle the Javascript onLoad callback
@@ -119,7 +109,7 @@ public class PadViewActivity extends PadLandDataActivity {
         this._updateViewedPad();
         this._makeWebView();
 
-        this.loadUrl("file:///android_asset/PadView.html");
+//        this.loadUrl("file:///android_asset/PadView.html");
 
         // Cookies will be needed for pads
         CookieManager cookieManager = CookieManager.getInstance();
@@ -127,6 +117,9 @@ public class PadViewActivity extends PadLandDataActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             cookieManager.setAcceptThirdPartyCookies(webView, true);
         }
+
+        // Load it!
+        loadUrl(current_padUrl);
     }
     @Override
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
@@ -290,8 +283,9 @@ public class PadViewActivity extends PadLandDataActivity {
         final String current_padUrl = this.getCurrentPadUrl();
         webView = (WebView) findViewById(R.id.activity_main_webview);
 
-        // WebViewClient is neeed in order to load asynchronously
-        webView.setWebViewClient(new WebViewClient() {
+        // The WebViewClient requires now a whitelist of urls that can interact with the Java side of the code
+        String[] url_whitelist = getResources().getStringArray(R.array.etherpad_servers_url_home);
+        webView.setWebViewClient(new SaferWebViewClient(url_whitelist) {
             @Override
             public void onPageFinished(WebView view, String url) {
 
@@ -440,6 +434,9 @@ public class PadViewActivity extends PadLandDataActivity {
         Log.d("onLoadCompleted", "On load was triggered. Javascript can run.");
 
         javascriptIsReady = true;
+
+        // Deactivate the unsafe setings, we don't need them anymore
+        WebviewUtil.disableRiskySettings(webView);
 
         _hideProgressWheel();
 
