@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.MatrixCursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -16,16 +17,19 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.CookieManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.mikifus.padland.SaferWebView.SaferWebViewClient;
-import com.mikifus.padland.SaferWebView.WebviewUtil;
 import com.pnikosis.materialishprogress.ProgressWheel;
 
 /**
@@ -36,6 +40,7 @@ import com.pnikosis.materialishprogress.ProgressWheel;
  * @author mikifus
  */
 public class PadViewActivity extends PadLandDataActivity {
+    public static final String TAG = "PadViewActivity";
     private WebView webView;
     private String current_padUrl = "";
 
@@ -63,24 +68,19 @@ public class PadViewActivity extends PadLandDataActivity {
          */
         @JavascriptInterface
         public void onLoad() {
+        }
+
+        @JavascriptInterface
+        public void onIframeLoaded() {
             // Must run on ui thread (async)
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    onLoadCompleted();
+                    Log.d(TAG, "onIframeLoaded");
+//                    _hideProgressWheel();
                 }
             });
         }
-
-        /*@JavascriptInterface
-        public void resize(final float height) {
-            PadViewActivity.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    webView.setLayoutParams(new LinearLayout.LayoutParams(getResources().getDisplayMetrics().widthPixels, getResources().getDisplayMetrics().heightPixels));
-                }
-            });
-        }*/
     }
 
     /**
@@ -108,8 +108,6 @@ public class PadViewActivity extends PadLandDataActivity {
         this._saveNewPad();
         this._updateViewedPad();
         this._makeWebView();
-
-//        this.loadUrl("file:///android_asset/PadView.html");
 
         // Cookies will be needed for pads
         CookieManager cookieManager = CookieManager.getInstance();
@@ -282,24 +280,27 @@ public class PadViewActivity extends PadLandDataActivity {
     private WebView _makeWebView() {
         final String current_padUrl = this.getCurrentPadUrl();
         webView = (WebView) findViewById(R.id.activity_main_webview);
+//        webView = new WebView(PadViewActivity.this);
+        webView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
         // The WebViewClient requires now a whitelist of urls that can interact with the Java side of the code
-        String[] url_whitelist = getResources().getStringArray(R.array.etherpad_servers_url_home);
+        String[] url_whitelist = getResources().getStringArray(R.array.etherpad_servers_whitelist);
         webView.setWebViewClient(new SaferWebViewClient(url_whitelist) {
             @Override
             public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                if( ! supportsJquery(url) ){
+                    return;
+                }
 
                 Context context = getApplicationContext();
                 SharedPreferences userDetails = context.getSharedPreferences(getPackageName() + "_preferences", context.MODE_PRIVATE);
                 String default_username = userDetails.getString("padland_default_username", "PadLand Viewer User");
                 String default_color = userDetails.getString("padland_default_color", "#555");
 
-                //webView.loadUrl("javascript:start('" + current_padUrl + "', '" + default_username + "', '" + default_color + "' )");
-
+                javascriptIsReady = true;
                 runJavascriptOnView(view, "start('" + current_padUrl + "', '" + default_username + "', '" + default_color + "' );");
                 javascript_padViewResize();
-
-                super.onPageFinished(view, url);
             }
 
             /**
@@ -311,6 +312,12 @@ public class PadViewActivity extends PadLandDataActivity {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 return false;
+            }
+
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                super.onReceivedError(view, request, error);
+                Log.e(TAG, "WebView Error " + error.toString() +", Request: "+ request.toString());
             }
         });
         this._makeWebSettings(webView);
@@ -332,19 +339,6 @@ public class PadViewActivity extends PadLandDataActivity {
         // remove a weird white line on the right size
         webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
 
-        /*
-        // fit the width of screen
-        webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-        webSettings.setLoadWithOverviewMode(true);
-        webSettings.setUseWideViewPort(true);
-        webSettings.setSupportZoom(true);
-        webSettings.setDisplayZoomControls(true);
-        //webSettings.setDefaultZoom(WebSettings.ZoomDensity.FAR);
-
-        webView.setPadding(0, 0, 0, 0);
-        webView.setInitialScale(getScale());
-
-        Log.d("WebViewSettings", "Get scale: " + getScale());*/
         webSettings.setUseWideViewPort(true);
         webSettings.setSupportZoom(true);
         webSettings.setBuiltInZoomControls(true);
@@ -424,45 +418,22 @@ public class PadViewActivity extends PadLandDataActivity {
      * @param url
      */
     public void loadUrl(String url) {
+        if( supportsJquery(url) ) {
+            current_padUrl = url;
+            webView.loadUrl("file:///android_asset/PadView.html");
+        }
         webView.loadUrl(url);
     }
 
-    /**
-     * Called by the JavascriptCallbackHandler class
-     */
-    public void onLoadCompleted() {
-        Log.d("onLoadCompleted", "On load was triggered. Javascript can run.");
-
-        javascriptIsReady = true;
-
-        // Deactivate the unsafe setings, we don't need them anymore
-        WebviewUtil.disableRiskySettings(webView);
-
-        _hideProgressWheel();
-
-        /*webView.evaluateJavascript("(function() { " +
-                " alert(22); " +
-                " $(\"#chatbox\").css('top','37px').css('bottom','37px'); " +
-                " setTimeout(function(){" +
-                "       $(\"#chatbox\").hide();chat.hide();  " +
-                "       $(\"#chaticon\").hide(); " +
-                "   }, 3000); " +
-                "})();", new ValueCallback<String>() {
-            @Override
-            public void onReceiveValue(String s) {
-                Log.d("onLoadCompleted", "Feedback test.");
+    private boolean supportsJquery(String url) {
+        String[] support_jquery = getResources().getStringArray(R.array.etherpad_servers_supports_jquery);
+        final String host = Uri.parse(url).getHost();
+        for (String supported_host : support_jquery){
+            if ( supported_host.equalsIgnoreCase(host) ){
+                return true;
             }
-        });*/
-
-        /*String fulljs = "(function() { " +
-                " alert(22); " +
-                " $(\"#chatbox\").css('top','37px').css('bottom','37px'); " +
-                " setTimeout(function(){ " +
-                "       $(\"#chatbox\").hide();chat.hide();  " +
-                "       $(\"#chaticon\").hide(); " +
-                "   }, 3000); " +
-                "})();";
-        webView.loadUrl(fulljs);*/
+        }
+        return false;
     }
 
     /**
@@ -512,7 +483,9 @@ public class PadViewActivity extends PadLandDataActivity {
                     return;
                 }
 
-                javascript_padViewResize();
+                if(supportsJquery(current_padUrl)) {
+                    javascript_padViewResize();
+                }
             }
         });
         webView.setWebChromeClient(new WebChromeClient() {
@@ -529,15 +502,19 @@ public class PadViewActivity extends PadLandDataActivity {
      */
     private void _addJavascriptOnLoad(WebView webView) {
         webView.addJavascriptInterface(new JavascriptCallbackHandler(), "webviewScriptAPI");
+        /*
         String fulljs = "(\n    function() { \n";
         fulljs += "        window.onload = function() {\n";
         fulljs += "            webviewScriptAPI.onLoad();\n";
         fulljs += "        };\n";
         fulljs += "    })()\n";
         runJavascriptOnView(webView, fulljs, true); // Forced
+        */
     }
 
     private void javascript_padViewResize() {
+
+
         //runJavascriptOnView(webView, "PadViewResize(" + getResources().getDisplayMetrics().widthPixels + ", " + getResources().getDisplayMetrics().heightPixels + ")");
         int local_max_viewport_size = max_viewport_size;
         int w;
@@ -568,13 +545,6 @@ public class PadViewActivity extends PadLandDataActivity {
         Log.d("RESIZE", "new w: " + w + ", h: " + h);
 
 
-        /*
-        PadViewActivity.this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                webView.setLayoutParams(new LinearLayout.LayoutParams(getResources().getDisplayMetrics().widthPixels, (int) (height * getResources().getDisplayMetrics().density)));
-            }
-        });*/
         runJavascriptOnView(webView, "PadViewResize("+w+","+h+")");
     }
 }

@@ -2,6 +2,7 @@ package com.mikifus.padland.SaferWebView;
 
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -31,7 +32,9 @@ public class SaferWebViewClient extends WebViewClient {
         }
 
         private WebResourceResponse getWebResourceResponseFromString() {
+            Log.w("SaferWebViewClient", "Blocked a JS request to an external domains.");
             return getUtf8EncodedWebResourceResponse(new StringBufferInputStream("alert('!NO!')"));
+//            return getUtf8EncodedWebResourceResponse(new StringBufferInputStream("alert('!NO!')"));
         }
 
         private WebResourceResponse getUtf8EncodedWebResourceResponse(InputStream data) {
