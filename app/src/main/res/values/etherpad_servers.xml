@@ -11,12 +11,12 @@
     </string-array>
 
     <string-array name="etherpad_servers_url_home">
-        <item>https://riseup.net</item>
+        <item>https://pad.riseup.net</item>
         <item>https://titanpad.com</item>
         <item>http://meetingwords.com</item>
         <item>http://piratepad.net</item>
-        <item>http://etherpad.mozilla.org</item>
-        <item>https://framapad.org</item>
+        <item>http://public.etherpad-mozilla.org</item>
+        <item>https://mensuel.framapad.org</item>
         <item>http://free.primarypad.com</item>
     </string-array>
 
@@ -25,8 +25,33 @@
         <item>https://titanpad.com/</item>
         <item>http://meetingwords.com/</item>
         <item>http://piratepad.net/</item>
-        <item>http://etherpad.mozilla.org/p/</item>
-        <item>https://framapad.org/p/</item>
+        <item>http://public.etherpad-mozilla.org/p/</item>
+        <item>https://mensuel.framapad.org/p/</item>
+        <item>http://free.primarypad.com/p/</item>
+    </string-array>
+
+    <string-array name="etherpad_servers_whitelist">
+        <item>pad.riseup.net</item>
+        <item>titanpad.com</item>
+        <item>meetingwords.com</item>
+        <item>piratepad.net</item>
+        <item>public.etherpad-mozilla.org</item>
+
+        <item>quotidien.framapad.org</item>
+        <item>hebdo.framapad.org</item>
+        <item>mensuel.framapad.org</item>
+        <item>bimestriel.framapad.org</item>
+        <item>semestriel.framapad.org</item>
+        <item>annuel.framapad.org</item>
+
+        <item>free.primarypad.com</item>
+    </string-array>
+
+    <string-array name="etherpad_servers_supports_jquery">
+        <item>pad.riseup.net</item>
+        <item>http://piratepad.net/</item>
+        <item>http://public.etherpad-mozilla.org/p/</item>
+        <item>https://mensuel.framapad.org/p/</item>
         <item>http://free.primarypad.com/p/</item>
     </string-array>
 </resources>
