@@ -13,6 +13,7 @@ android {
         targetSdkVersion 23
         versionName 'default'
         multiDexEnabled true
+//        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         debug {

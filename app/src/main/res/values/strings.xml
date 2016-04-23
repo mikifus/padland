@@ -10,6 +10,7 @@
     <string name="title_activity_new_pad">Create pad</string>
     <string name="new_pad_explanation">Introduce the pad name. If it does not exist it will be created, otherwise it will take you to the pad.</string>
     <string name="save_pad">Save pad</string>
+    <string name="download_pad">Save pad</string>
     <string name="title_activity_about">About</string>
     <string name="about">About</string>
     <string name="about_text">

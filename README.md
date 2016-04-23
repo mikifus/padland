@@ -11,6 +11,9 @@ v0.4
 - Groups can be added and deleted
 - Pads can be moved to groups in bulk
 - Design improvements
+- Security: Protected from undesired hosts to run java methods from javascript (disables some tracking too).
+- A hosts whitelist was added. Supports "*" wildcard for subdomains.
+- Improved compatibility with older Android versions (not lower than SDK 14)
 
 
 v0.3

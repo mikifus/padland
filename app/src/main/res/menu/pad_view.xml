@@ -1,4 +1,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--<item android:id="@+id/menuitem_download"-->
+        <!--android:title="@string/download_pad"-->
+        <!--android:showAsAction="ifRoom"-->
+        <!--android:icon="@android:drawable/ic_menu_save"-->
+        <!--android:actionProviderClass="android.widget.ShareActionProvider" />-->
     <item android:id="@+id/menuitem_share"
         android:title="@string/share"
         android:showAsAction="ifRoom"
