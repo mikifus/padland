@@ -140,7 +140,7 @@
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".PadListActivity" />
+                android:value=".SettingsActivity" />
         </activity>
         <activity
             android:name=".SettingsActivity"
@@ -148,6 +148,17 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".PadListActivity" />
+        </activity>
+        <activity
+            android:name=".PadInfoActivity"
+            android:label="@string/title_activity_pad_info" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mikifus.padland.PadInfoActivity" />
+        </activity>
+        <activity
+            android:name=".PadLandDataActivity"
+            android:label="@string/title_activity_pad_land_data" >
         </activity>
         <!--
             <activity
@@ -160,18 +171,6 @@
             android:enabled="true"
             android:exported="true" >
         </provider>
-
-        <activity
-            android:name=".PadInfoActivity"
-            android:label="@string/title_activity_pad_info" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.mikifus.padland.PadListActivity" />
-        </activity>
-        <activity
-            android:name=".PadLandDataActivity"
-            android:label="@string/title_activity_pad_land_data" >
-        </activity>
     </application>
 
 </manifest>

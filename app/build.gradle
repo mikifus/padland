@@ -12,11 +12,17 @@ android {
         minSdkVersion 13
         targetSdkVersion 23
         versionName 'default'
+        multiDexEnabled true
     }
     buildTypes {
+        debug {
+            minifyEnabled false
+            buildConfigField "Boolean", "DEBUG_MODE", "true"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
         release {
             minifyEnabled true
-            buildConfigField "Boolean", "DEBUG_MODE", "true"
+            buildConfigField "Boolean", "DEBUG_MODE", "false"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

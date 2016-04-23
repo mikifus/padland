@@ -16,8 +16,8 @@ function start(url, username, color){
     console.log('pad called');
 
     var iframe = $("iframe");
+
     $(iframe).on("load", function(){
-            $(this).show();
             console.log('iframe loaded');
             webviewScriptAPI.onIframeLoaded();
         });

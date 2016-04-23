@@ -15,48 +15,47 @@ import java.io.StringBufferInputStream;
    */
 public class SaferWebViewClient extends WebViewClient {
 
-        private String[] hostsWhitelist;
+    protected String[] hostsWhitelist;
 
-        public SaferWebViewClient(String[] hostsWhitelist){
-            super();
-            this.hostsWhitelist = hostsWhitelist;
+    public SaferWebViewClient(String[] hostsWhitelist){
+        super();
+        this.hostsWhitelist = hostsWhitelist;
+    }
+
+    @Override
+    public WebResourceResponse shouldInterceptRequest(final WebView view, String url) {
+        boolean isvalid = isValidHost(url);
+        if (isvalid) {
+            return super.shouldInterceptRequest(view, url);
+        } else {
+            return getWebResourceResponseFromString();
         }
+    }
 
-        @Override
-        public WebResourceResponse shouldInterceptRequest(final WebView view, String url) {
-            if (isValidHost(url)) {
-                return super.shouldInterceptRequest(view, url);
-            } else {
-                return getWebResourceResponseFromString();
-            }
-        }
+    protected WebResourceResponse getWebResourceResponseFromString() {
+        Log.w("SaferWebViewClient", "Blocked a JS request to an external domains.");
+        return getUtf8EncodedWebResourceResponse(new StringBufferInputStream("alert('!NO!')"));
+    }
 
-        private WebResourceResponse getWebResourceResponseFromString() {
-            Log.w("SaferWebViewClient", "Blocked a JS request to an external domains.");
-            return getUtf8EncodedWebResourceResponse(new StringBufferInputStream("alert('!NO!')"));
-//            return getUtf8EncodedWebResourceResponse(new StringBufferInputStream("alert('!NO!')"));
-        }
-
-        private WebResourceResponse getUtf8EncodedWebResourceResponse(InputStream data) {
-            return new WebResourceResponse("text/css", "UTF-8", data);
-        }
+    protected WebResourceResponse getUtf8EncodedWebResourceResponse(InputStream data) {
+        return new WebResourceResponse("text/css", "UTF-8", data);
+    }
 
 
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            return isValidHost(url);
-        }
+    @Override
+    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+        return isValidHost(url);
+    }
 
-        private boolean isValidHost(String url){
-            if (!TextUtils.isEmpty(url)) {
-                final String host = Uri.parse(url).getHost();
-                for (String whitelistedHost: hostsWhitelist){
-                    if (whitelistedHost.equalsIgnoreCase(host)){
-                        return true;
-                    }
+    protected boolean isValidHost(String url){
+        if (!TextUtils.isEmpty(url)) {
+            final String host = Uri.parse(url).getHost();
+            for (String whitelistedHost: hostsWhitelist){
+                if (whitelistedHost.equalsIgnoreCase(host)){
+                    return true;
                 }
             }
-            return false;
         }
-
+        return false;
+    }
 }
