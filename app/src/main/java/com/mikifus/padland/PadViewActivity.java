@@ -7,9 +7,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.MatrixCursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.PersistableBundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
@@ -29,7 +31,7 @@ import android.webkit.WebView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.mikifus.padland.SaferWebView.SaferWebViewClient;
+import com.mikifus.padland.SaferWebView.PadLandSaferWebViewClient;
 import com.pnikosis.materialishprogress.ProgressWheel;
 
 /**
@@ -43,6 +45,12 @@ public class PadViewActivity extends PadLandDataActivity {
     public static final String TAG = "PadViewActivity";
     private WebView webView;
     private String current_padUrl = "";
+
+    // It happens that many connections are stablished. We count them so we can track them.
+    // They must be handled asyncronously as Android calls the events for each connection,
+    // and not
+    final int[] webview_http_connections = new int[1];
+    private Handler handler;
 
     /*
     Progress wheel is a fancy alternative to the ProgressBar, that wasn't working at all.
@@ -94,6 +102,7 @@ public class PadViewActivity extends PadLandDataActivity {
 
         // Forces landscape view
 //        this.setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_PORTRAIT );
+        handler = new Handler();
 
         // If no network...
         if (!isNetworkAvailable()) {
@@ -134,17 +143,23 @@ public class PadViewActivity extends PadLandDataActivity {
     }
 
     private void _setProgressWheelProgress(int progress) {
-        if (progress < 25) {
-            // At least something visible
-            progress = 25;
-        }
         float p = progress / 100;
-        Log.d("LOAD_PROGRESS_LOG", String.valueOf(progress));
-        pwheel.setVisibility(View.VISIBLE);
-        pwheel.setProgress(p);
-        if (progress > 99) {
-            _hideProgressWheel();
+
+        if( webview_http_connections[0] > 0 ) {
+            p = p / webview_http_connections[0];
         }
+
+        Log.d("LOAD_PROGRESS_LOG", String.valueOf(progress));
+        pwheel.setProgress(p);
+
+//        if (progress > 99) {
+//            _hideProgressWheel();
+//        }
+    }
+
+    public void _showProgressWheel() {
+        pwheel.setVisibility(View.VISIBLE);
+        Log.d("LOAD_PROGRESS_LOG", "PWheel must be gone by now...");
     }
 
     public void _hideProgressWheel() {
@@ -285,22 +300,31 @@ public class PadViewActivity extends PadLandDataActivity {
 
         // The WebViewClient requires now a whitelist of urls that can interact with the Java side of the code
         String[] url_whitelist = getResources().getStringArray(R.array.etherpad_servers_whitelist);
-        webView.setWebViewClient(new SaferWebViewClient(url_whitelist) {
+        webView.setWebViewClient(new PadLandSaferWebViewClient(url_whitelist) {
             @Override
-            public void onPageFinished(WebView view, String url) {
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                ++webview_http_connections[0];
+                _showProgressWheel();
+//                Log.d(TAG, "Added connection " + webview_http_connections[0]);
+            }
+
+            @Override
+            public void onPageFinished(WebView view, final String url) {
                 super.onPageFinished(view, url);
-                if( ! supportsJquery(url) ){
-                    return;
-                }
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        --webview_http_connections[0];
+                        Log.d(TAG, "Removed connection " + webview_http_connections[0]);
 
-                Context context = getApplicationContext();
-                SharedPreferences userDetails = context.getSharedPreferences(getPackageName() + "_preferences", context.MODE_PRIVATE);
-                String default_username = userDetails.getString("padland_default_username", "PadLand Viewer User");
-                String default_color = userDetails.getString("padland_default_color", "#555");
-
-                javascriptIsReady = true;
-                runJavascriptOnView(view, "start('" + current_padUrl + "', '" + default_username + "', '" + default_color + "' );");
-                javascript_padViewResize();
+                        if( webview_http_connections[0] > 0 ) {
+                            // Wait for all of them to end.
+                            return;
+                        }
+                        _hideProgressWheel();
+                        loadJavascriptIfNeeded();
+                    }
+                }, 1200);
             }
 
             /**
@@ -317,6 +341,9 @@ public class PadViewActivity extends PadLandDataActivity {
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 super.onReceivedError(view, request, error);
+                --webview_http_connections[0];
+                _hideProgressWheel();
+//                Log.d(TAG, "Removed connection " + webview_http_connections[0]);
                 Log.e(TAG, "WebView Error " + error.toString() +", Request: "+ request.toString());
             }
         });
@@ -324,6 +351,21 @@ public class PadViewActivity extends PadLandDataActivity {
         this._addListenersToView();
         this._addJavascriptOnLoad(webView);
         return webView;
+    }
+
+    private void loadJavascriptIfNeeded() {
+        if( ! supportsJquery(current_padUrl) ){
+            return;
+        }
+        javascriptIsReady = true;
+
+        Context context = getApplicationContext();
+        SharedPreferences userDetails = context.getSharedPreferences(getPackageName() + "_preferences", context.MODE_PRIVATE);
+        String default_username = userDetails.getString("padland_default_username", "PadLand Viewer User");
+        String default_color = userDetails.getString("padland_default_color", "#555");
+
+        runJavascriptOnView(webView, "start('" + current_padUrl + "', '" + default_username + "', '" + default_color + "' );");
+        javascript_padViewResize();
     }
 
     /**
@@ -353,7 +395,7 @@ public class PadViewActivity extends PadLandDataActivity {
     private void runJavascriptOnView(WebView view, String js_string, Boolean force) {
         if (!force && !javascriptIsReady) {
             // If javascript is not ready better not to break anything
-            Log.d("LOAD_PROGRESS_LOG", "JS call has been interrupted: " + js_string);
+//            Log.d("LOAD_PROGRESS_LOG", "JS call has been interrupted: " + js_string);
             return;
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
