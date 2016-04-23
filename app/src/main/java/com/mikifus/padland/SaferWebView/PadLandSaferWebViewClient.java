@@ -60,6 +60,12 @@ public class PadLandSaferWebViewClient extends SaferWebViewClient {
         return true;
     }
 
+    /**
+     * Returning false we allow http to https redirects
+     * @param view
+     * @param url
+     * @return
+     */
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
 //        return isValidHost(url);

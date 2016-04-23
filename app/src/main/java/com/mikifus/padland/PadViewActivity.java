@@ -13,8 +13,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PersistableBundle;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,6 +31,8 @@ import android.widget.Toast;
 
 import com.mikifus.padland.SaferWebView.PadLandSaferWebViewClient;
 import com.pnikosis.materialishprogress.ProgressWheel;
+
+import java.util.ArrayList;
 
 /**
  * This activity makes a webapp view into a browser and loads the document
@@ -327,17 +327,6 @@ public class PadViewActivity extends PadLandDataActivity {
                 }, 1200);
             }
 
-            /**
-             * This method is here because of http to https redirects.
-             * @param view
-             * @param url
-             * @return
-             */
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                return false;
-            }
-
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 super.onReceivedError(view, request, error);
@@ -364,6 +353,7 @@ public class PadViewActivity extends PadLandDataActivity {
         String default_username = userDetails.getString("padland_default_username", "PadLand Viewer User");
         String default_color = userDetails.getString("padland_default_color", "#555");
 
+        // If using jQuery, here is called the pad load
         runJavascriptOnView(webView, "start('" + current_padUrl + "', '" + default_username + "', '" + default_color + "' );");
         javascript_padViewResize();
     }
@@ -467,6 +457,12 @@ public class PadViewActivity extends PadLandDataActivity {
         webView.loadUrl(url);
     }
 
+    /**
+     * Etherpad Lite can be loaded wit jQuery.
+     *
+     * @param url
+     * @return
+     */
     private boolean supportsJquery(String url) {
         String[] support_jquery = getResources().getStringArray(R.array.etherpad_servers_supports_jquery);
         final String host = Uri.parse(url).getHost();
@@ -487,25 +483,25 @@ public class PadViewActivity extends PadLandDataActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu, R.menu.pad_view);
+        return true;
+    }
 
-        // Locate MenuItem with ShareActionProvider
-        MenuItem item = menu.findItem(R.id.menuitem_share);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        final ArrayList<String> pad_list = new ArrayList<>();
+        pad_list.add(String.valueOf( _getPadId() ));
 
-        // Fetch and store ShareActionProvider
-        ShareActionProvider actionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
-
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_auto_text) + getCurrentPadUrl());
-        sendIntent.setType("text/plain");
-        startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.share_document)));
-
-        if( actionProvider == null ) {
-            return false;
+        switch( item.getItemId() ) {
+            case R.id.menuitem_share:
+                menu_share( pad_list );
+                break;
+//            case R.id.menuitem_download:
+//                downloadPadWithJavascriptIfPossible();
+//                break;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        actionProvider.setShareIntent(sendIntent);
 
-        // Return true to display menu
         return true;
     }
 
@@ -588,5 +584,13 @@ public class PadViewActivity extends PadLandDataActivity {
 
 
         runJavascriptOnView(webView, "PadViewResize("+w+","+h+")");
+    }
+
+    private void downloadPadWithJavascriptIfPossible() {
+        if( ! supportsJquery(current_padUrl) ){
+            return;
+        }
+        // TODO: Implement this:
+        // runJavascriptOnView(webView, "$('#examplePadBasic').pad({'getContents':'exampleGetContents'});");
     }
 }
