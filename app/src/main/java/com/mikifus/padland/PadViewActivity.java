@@ -160,6 +160,13 @@ public class PadViewActivity extends PadLandDataActivity {
     public void _showProgressWheel() {
         pwheel.setVisibility(View.VISIBLE);
         Log.d("LOAD_PROGRESS_LOG", "PWheel must be gone by now...");
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                if( webview_http_connections[0] > 0 && pwheel.getVisibility() == View.VISIBLE ){
+                    _hideProgressWheel();
+                }
+            }
+        }, 7000);
     }
 
     public void _hideProgressWheel() {
@@ -306,7 +313,7 @@ public class PadViewActivity extends PadLandDataActivity {
                 super.onPageStarted(view, url, favicon);
                 ++webview_http_connections[0];
                 _showProgressWheel();
-//                Log.d(TAG, "Added connection " + webview_http_connections[0]);
+                Log.d(TAG, "Added connection " + webview_http_connections[0]);
             }
 
             @Override
