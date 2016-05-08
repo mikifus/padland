@@ -33,7 +33,7 @@
     <string name="settings_default_color">Default color</string>
     <string name="settings_default_color_explanation">PadLand will try to set your default color in all documents you open.</string>
     <string name="settings_default_color_dialogtitle">Choose color</string>
-    <string name="settings_default_color_dialogdesc">Format example (hex): #FF00000</string>
+    <string name="settings_default_color_dialogdesc">Format example (hex): #FF0000</string>
     <string name="activity_padlist_implicitintent_text_copied">The text have been copied into the clipboard. Paste your clipboard data to use it.</string>
     <string name="network_is_unreachable">Network is unreachable.</string>
     <string name="title_activity_padlist">Padland documents</string>
@@ -48,15 +48,15 @@
     </string>
     <string name="padinfo_view_pad_button">View pad</string>
     <string name="title_activity_pad_info">Document info</string>
-    <string name="unexpected_error">An unexpected error happened.</string>
     <string name="title_activity_pad_land_data">PadLandDataActivity</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="padinfo_pad_info">Document information</string>
     <string name="padinfo_pad_url">Document URL</string>
     <string name="padinfo_createdate">Added to list</string>
     <string name="padinfo_lastuseddate">Last viewed</string>
+
     <string name="newpad_noname_warning">You must specify a name for the document.</string>
+
     <string name="padlist_empty_createnew">Create a new document</string>
     <string name="padlist_document_deleted">Document deleted</string>
     <string name="padlist_group_deleted">Group deleted</string>
@@ -65,5 +65,9 @@
     <string name="padlist_dialog_new_padgroup_invalid">Invalid group name.</string>
     <string name="padlist_group_unclassified_name">Unclassified</string>
     <string name="padlist_group_select_dialog">Select group</string>
+
+    <string name="unexpected_error">An unexpected error happened.</string>
+    <string name="settings_miscellaneous">Miscellaneous</string>
+    <string name="padinfo_times_accessed">Times accessed</string>
 
 </resources>

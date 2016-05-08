@@ -43,7 +43,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="Miscellaneous">
+        android:title="@string/settings_miscellaneous">
         <PreferenceScreen
             android:key="padland_about"
             android:title="@string/about"

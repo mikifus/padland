@@ -9,4 +9,9 @@
         android:showAsAction="ifRoom"
         android:icon="@android:drawable/ic_menu_share"
         android:actionProviderClass="android.widget.ShareActionProvider" />
+    <item android:id="@+id/menuitem_padlist"
+        android:title="@string/action_go_to_list"
+        android:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_menu_share"
+        android:actionProviderClass="android.widget.ShareActionProvider" />
 </menu>

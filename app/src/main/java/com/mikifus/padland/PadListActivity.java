@@ -56,6 +56,7 @@ public class PadListActivity extends PadLandDataActivity
         implements ActionMode.Callback, LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String TAG = "PadListActivity";
+    public static final String INTENT_FOCUS_PAD = "focus_pad";
 
     /**
      * mActionMode defines behaviour of the action-bar
@@ -95,6 +96,8 @@ public class PadListActivity extends PadLandDataActivity
 
         // Init list view
         this._initListView();
+
+        this._detectItemFocus();
     }
 
     /**
@@ -144,6 +147,20 @@ public class PadListActivity extends PadLandDataActivity
 //        }
     }
 
+    private void _detectItemFocus() {
+        Bundle extras = getIntent().getExtras();
+        if( extras == null ) {
+            return;
+        }
+        long pad_id = extras.getLong(INTENT_FOCUS_PAD, 0);
+        if( pad_id > 0 ) {
+//            Bundle position = adapter.getPosition(pad_id);
+//            expandableListView.smoothScrollToPosition(position.getInt("groupPosition"), position.getInt("childPosition"));
+//            expandableListView.setSelectedChild(position.getInt("groupPosition"), position.getInt("childPosition"), true);
+
+        }
+    }
+
     /**
      * When the list is empty a message with a button is shown.
      * This handles the button onClick.
@@ -187,6 +204,8 @@ public class PadListActivity extends PadLandDataActivity
 
         // events
         this._setListViewEvents();
+
+        adapter.notifyDataSetChanged();
     }
 
     /**
