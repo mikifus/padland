@@ -1,6 +1,7 @@
 package com.mikifus.padland;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
 import android.util.SparseBooleanArray;
@@ -46,29 +47,13 @@ public class PadListAdapter extends BaseExpandableListAdapter {
     public static final int CHOICE_MODE_SINGLE_ABSOLUTE = 10001;
 
     private PadLandDataActivity context;
-    private ArrayList<HashMap<String, ArrayList>> group_data;
-    private HashMap<Long, ArrayList<String>> pad_data;
     private LayoutInflater layoutInflater;
 
     private SparseArray<SparseBooleanArray> checkedPositions;
+    private HashMap<Long, Bundle> items_positions = new HashMap<>();
 
     // The default choice is the multiple one
     private int choiceMode = CHOICE_MODE_MULTIPLE;
-
-
-    // Initialize constructor for array list
-    public PadListAdapter(PadLandDataActivity context,
-                          ArrayList<HashMap<String, ArrayList>> group_data,
-                          HashMap<Long, ArrayList<String>> pad_data, int choiceMode) {
-        // TODO: group_data can be a LinkedHashMap or something better
-        this(context);
-        // For now the choice mode CHOICE_MODE_MULTIPLE_MODAL
-        // is not implemented
-        if (choiceMode == CHOICE_MODE_MULTIPLE_MODAL) {
-            throw new RuntimeException("The choice mode CHOICE_MODE_MULTIPLE_MODAL " +
-                    "has not implemented yet");
-        }
-    }
 
     // Initialize constructor for array list
     public PadListAdapter(PadLandDataActivity context) {
@@ -89,9 +74,6 @@ public class PadListAdapter extends BaseExpandableListAdapter {
         HashMap<String, String> group = getGroup(groupPosition);
         String id_string = group.get(PadContentProvider._ID);
         long id = Long.parseLong(id_string);
-//        if( id == 0 ) {
-//            return getUnclassifiedGroupChildrenCount(groupPosition);
-//        }
         int count = context.padlandDb.getPadgroupChildrenCount(id);
         return count;
     }
@@ -167,6 +149,11 @@ public class PadListAdapter extends BaseExpandableListAdapter {
         }
 
         PadLandDataActivity.padData child = getChild(groupPosition, childPosition);
+
+        Bundle position_bundle = new Bundle();
+        position_bundle.putInt("groupPosition", groupPosition);
+        position_bundle.putInt("childPosition", childPosition);
+        items_positions.put(child.getId(), position_bundle);
 //        if( child == null )
 //        {
 //            return null;
@@ -289,5 +276,9 @@ public class PadListAdapter extends BaseExpandableListAdapter {
 
     private long getUnclassifiedGroupId(int groupPosition) {
         return 0;
+    }
+
+    public Bundle getPosition(long pad_id) {
+        return items_positions.get(pad_id);
     }
 }

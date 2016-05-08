@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Padland</string>
+    <string name="about">Acerca de</string>
+    <string name="about_support_text"><p>Esta app sigue bajo desarrollo. Para enviar comentarios y detecciones de bugs por facor contacta con el desarrollador en mikifu@gmail.com</p>\n         \n         <p>Si quieres contribuir, este es el repositorio:\n             <a href="https://github.com/mikifus/padland">https://github.com/mikifus/padland</a></p></string>
+    <string name="about_text"><p>Licencia <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache</a>.</p></string>
+    <string name="action_go_to_list">Volver a la lista</string>
+    <string name="action_newpad">Añadir documento</string>
+    <string name="action_settings">Preferencias</string>
+    <string name="activity_padlist_implicitintent_text_copied">El texto se ha copiado al cortapapeles. Usa "pegar" para utilizarlo.</string>
+    <string name="cancel">Cancelar</string>
+    <string name="choose_a_server">Elige un servidor (opcional):</string>
+    <string name="choose_default_pad_server">Elige un servidor de documentos por defecto al crear uno nuevo.</string>
+    <string name="default_pad_server">Servidor por defecto</string>
+    <string name="delete">Eliminar</string>
+    <string name="download_pad">Guardar documento</string>
+    <string name="go_pad">Cear o acceder</string>
+    <string name="network_is_unreachable">Sin conexión a internet.</string>
+    <string name="new_pad_explanation">Introduce el nombre del documento. Si no existe será creado, de otro modo accederás al ya existente.</string>
+    <string name="newpad_noname_warning">Debes especificar un nombre para el documento.</string>
+    <string name="no_pads">Sin documentos guardados.</string>
+    <string name="ok">Vale</string>
+    <string name="padinfo_createdate">Añadido a la lista</string>
+    <string name="padinfo_lastuseddate">Visto por última vez</string>
+    <string name="padinfo_pad_info">Información del documento</string>
+    <string name="padinfo_pad_url">URL del documento</string>
+    <string name="padinfo_view_pad_button">Ver documento</string>
+    <string name="padlist_dialog_new_padgroup_invalid">Nombre de grupo no válido.</string>
+    <string name="padlist_dialog_new_padgroup_label">Introduce el nombre para el grupo </string>
+    <string name="padlist_dialog_new_padgroup_title">Nuevo grupo</string>
+    <string name="padlist_document_deleted">Documento eliminado</string>
+    <string name="padlist_empty_createnew">Crear un nuevo documento</string>
+    <string name="padlist_group_deleted">Grupo seleccionado</string>
+    <string name="padlist_group_select_dialog">Elige un grupo</string>
+    <string name="padlist_group_unclassified_name">Sin clasificar</string>
+    <string name="pref_default_display_name">Anónimo</string>
+    <string name="save_pad">Guardar documento</string>
+    <string name="settings_default_color">Color por defecto</string>
+    <string name="settings_default_color_dialogdesc">Ejemplo de formato (hex): #FF0000</string>
+    <string name="settings_default_color_dialogtitle">Elige color</string>
+    <string name="settings_default_color_explanation">PadLand intentará usar tu color por defecto en todos los documentos</string>
+    <string name="settings_default_username">Nombre de usuario por defecto</string>
+    <string name="settings_default_username_explanation">PadLand intentará usar tu nombre por defecto en todos los documentos</string>
+    <string name="settings_save_new_pads_desc">Añadir automaticamente todos los nuevos documentos accedidos a la lista</string>
+    <string name="settings_save_new_pads_title">Guardar automáticamente nuevos documentos</string>
+    <string name="share">Compartir</string>
+    <string name="share_auto_text">"¡Únete a mi en padland! "</string>
+    <string name="share_document">Compartir documento</string>
+    <string name="sure_to_delete_group">Quieres eliminar el grupo seleccionado?</string>
+    <string name="sure_to_delete_pad">Seguro que quieres eliminar los documentos seleccionados?</string>
+    <string name="title_activity_about">Acerca de</string>
+    <string name="title_activity_new_pad">Crear documento</string>
+    <string name="title_activity_pad_info">Información del documento</string>
+    <string name="title_activity_settings">Preferencias</string>
+    <string name="title_activity_pad_view">Padland: Editor</string>
+    <string name="title_activity_padlist">Padland: Documentos</string>
+    <string name="unexpected_error">Ha ocurrido un error inesperado.</string>
+    <string name="user_preferences">Preferencias del usuario</string>
+    <string name="write_pad_name">Nombre del documento</string>
+    <string name="settings_miscellaneous">Miscelánea</string>
+    <string name="padinfo_times_accessed">Veces accedido</string>
+</resources>

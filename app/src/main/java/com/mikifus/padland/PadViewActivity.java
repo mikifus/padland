@@ -502,6 +502,9 @@ public class PadViewActivity extends PadLandDataActivity {
             case R.id.menuitem_share:
                 menu_share( pad_list );
                 break;
+            case R.id.menuitem_padlist:
+                startPadListActivityWithPadId();
+                break;
 //            case R.id.menuitem_download:
 //                downloadPadWithJavascriptIfPossible();
 //                break;
@@ -599,5 +602,18 @@ public class PadViewActivity extends PadLandDataActivity {
         }
         // TODO: Implement this:
         // runJavascriptOnView(webView, "$('#examplePadBasic').pad({'getContents':'exampleGetContents'});");
+    }
+
+    public void startPadListActivityWithPadId() {
+        Intent intent = new Intent(PadViewActivity.this, PadListActivity.class);
+        intent.putExtra(PadListActivity.INTENT_FOCUS_PAD, _getPadId());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+        startPadListActivityWithPadId();
+        finish();
     }
 }
