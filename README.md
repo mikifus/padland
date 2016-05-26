@@ -7,15 +7,15 @@ Padland is a tool to manage, share, remember and read collaborative documents ba
 - More translations (volunteers?) 
 
 ## Current version
-0.5
+1.1
 
 ## Changelog
-### v0.5
+### v1.1
 - Added spanish and catalan translation
 - Ready for a beta release
 
 ## Changelog
-### v0.4
+### v1.0
 - Now documents can be classified in groups
 - Pads will by default appear in the "Unclassified" group
 - Groups can be added and deleted
