@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/edit_name"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:paddingTop="20dp"
+    android:paddingBottom="24dp"
+    android:paddingRight="24dp"
+    android:paddingLeft="24dp">
+
+    <TextView
+        android:id="@+id/lbl_your_name"
+        android:text="@string/padlist_dialog_new_padgroup_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/txt_padgroup_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:imeOptions="actionDone" />
+</LinearLayout>

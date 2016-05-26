@@ -3,10 +3,5 @@
         android:title="@string/action_settings"
         android:orderInCategory="100"
         android:showAsAction="ifRoom"
-        android:icon="@android:drawable/ic_menu_preferences" />
-    <item android:id="@+id/action_about"
-        android:title="@string/about"
-        android:orderInCategory="100"
-        android:showAsAction="never"
-        android:icon="@android:drawable/ic_menu_info_details"/>
+        android:icon="@drawable/ic_settings_inverted" />
 </menu>

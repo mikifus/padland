@@ -1,23 +1,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--<item android:id="@+id/menuitem_download"-->
+        <!--android:title="@string/download_pad"-->
+        <!--android:showAsAction="ifRoom"-->
+        <!--android:icon="@android:drawable/ic_menu_save"-->
+        <!--android:actionProviderClass="android.widget.ShareActionProvider" />-->
     <item android:id="@+id/menuitem_share"
         android:title="@string/share"
         android:showAsAction="ifRoom"
         android:icon="@android:drawable/ic_menu_share"
         android:actionProviderClass="android.widget.ShareActionProvider" />
-
-    <item android:id="@+id/action_newpad"
-        android:title="@string/action_newpad"
-        android:orderInCategory="100"
-        android:showAsAction="never"
-        android:icon="@android:drawable/ic_menu_add" />
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
-        android:orderInCategory="100"
-        android:showAsAction="never"
-        android:icon="@android:drawable/ic_menu_preferences" />
-    <item android:id="@+id/action_about"
-        android:title="@string/about"
-        android:orderInCategory="100"
-        android:showAsAction="never"
-        android:icon="@android:drawable/ic_menu_info_details"/>
+    <item android:id="@+id/menuitem_padlist"
+        android:title="@string/action_go_to_list"
+        android:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_menu_share"
+        android:actionProviderClass="android.widget.ShareActionProvider" />
 </menu>

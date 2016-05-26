@@ -67,7 +67,7 @@ public class PadInfoActivity extends PadLandDataActivity {
         datalist.add( this._doListItem( pad_data.getUrl(), getString(R.string.padinfo_pad_url) ) );
         datalist.add( this._doListItem( pad_data.getCreateDate(), getString(R.string.padinfo_createdate) ) );
         datalist.add( this._doListItem( pad_data.getLastUsedDate(), getString(R.string.padinfo_lastuseddate) ) );
-        datalist.add( this._doListItem( String.valueOf(pad_data.getAccessCount() ), "Times accessed" ) );
+        datalist.add( this._doListItem( String.valueOf(pad_data.getAccessCount() ), getString(R.string.padinfo_times_accessed) ) );
 
         SeparatedListAdapter adapter = new SeparatedListAdapter(this);
 
