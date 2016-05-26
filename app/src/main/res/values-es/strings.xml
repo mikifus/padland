@@ -59,4 +59,6 @@
     <string name="write_pad_name">Nombre del documento</string>
     <string name="settings_miscellaneous">Miscelánea</string>
     <string name="padinfo_times_accessed">Veces accedido</string>
+    <string name="title_activity_pad_land_data">PadLandDataActivity</string>
+    <string name="pref_header_general">Preferencias</string>
 </resources>
