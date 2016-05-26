@@ -17,7 +17,7 @@
         <p>Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache License</a>.</p>
     </string>
     <string name="settings_save_new_pads_title">Auto-save new documents</string>
-    <string name="settings_save_new_pads_desc">Automatically adds your newly visited documents to your list</string>
+    <string name="settings_save_new_pads_desc">Automatically add your newly visited documents to your list</string>
     <string name="share">Share</string>
     <string name="delete">Delete</string>
     <string name="no_pads">There are no saved documents.</string>
@@ -26,7 +26,7 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="share_document">Share document</string>
-    <string name="share_auto_text">"Come join me on padland! "</string>
+    <string name="share_auto_text">"Come join me on Padland! "</string>
     <string name="user_preferences">User preferences</string>
     <string name="settings_default_username">Default username</string>
     <string name="settings_default_username_explanation">PadLand will try to set your default username in all documents you open.</string>
