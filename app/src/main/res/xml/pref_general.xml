@@ -42,4 +42,16 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="@string/settings_miscellaneous">
+        <PreferenceScreen
+            android:key="padland_about"
+            android:title="@string/about"
+            android:summary="@string/about" >
+            <intent
+                android:targetPackage="com.mikifus.padland"
+                android:targetClass="com.mikifus.padland.About"/>
+        </PreferenceScreen>
+    </PreferenceCategory>
+
 </PreferenceScreen>

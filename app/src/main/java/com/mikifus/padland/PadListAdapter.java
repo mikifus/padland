@@ -1,6 +1,7 @@
 package com.mikifus.padland;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
 import android.util.SparseBooleanArray;
@@ -45,73 +46,75 @@ public class PadListAdapter extends BaseExpandableListAdapter {
      */
     public static final int CHOICE_MODE_SINGLE_ABSOLUTE = 10001;
 
-    private Context context;
-    private ArrayList<HashMap<String, ArrayList>> group_data;
-    private HashMap<Long, ArrayList<String>> pad_data;
+    private PadLandDataActivity context;
     private LayoutInflater layoutInflater;
 
     private SparseArray<SparseBooleanArray> checkedPositions;
+    private HashMap<Long, Bundle> items_positions = new HashMap<>();
 
     // The default choice is the multiple one
     private int choiceMode = CHOICE_MODE_MULTIPLE;
 
-
     // Initialize constructor for array list
-    public PadListAdapter(Context context,
-                          ArrayList<HashMap<String, ArrayList>> group_data,
-                          HashMap<Long, ArrayList<String>> pad_data, int choiceMode) {
-        this(context, group_data, pad_data);
-        // For now the choice mode CHOICE_MODE_MULTIPLE_MODAL
-        // is not implemented
-        if (choiceMode == CHOICE_MODE_MULTIPLE_MODAL) {
-            throw new RuntimeException("The choice mode CHOICE_MODE_MULTIPLE_MODAL " +
-                    "has not implemented yet");
-        }
-    }
-
-    // Initialize constructor for array list
-    public PadListAdapter(Context context,
-                                ArrayList<HashMap<String, ArrayList>> group_data,
-                                HashMap<Long, ArrayList<String>> pad_data) {
+    public PadListAdapter(PadLandDataActivity context) {
         this.context = context;
-        this.group_data = group_data;
-        this.pad_data = pad_data;
         layoutInflater = (LayoutInflater) this.context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        checkedPositions = new SparseArray<SparseBooleanArray>();
+        checkedPositions = new SparseArray<>();
     }
 
     @Override
     public int getGroupCount() {
-        return group_data.size();
+        int count = context.padlandDb.getPadgroupsCount();
+        return count + 1; // Adds one in the end. The unclassified
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return pad_data.size();
+        HashMap<String, String> group = getGroup(groupPosition);
+        String id_string = group.get(PadContentProvider._ID);
+        long id = Long.parseLong(id_string);
+        int count = context.padlandDb.getPadgroupChildrenCount(id);
+        return count;
     }
 
     @Override
-    public Object getGroup(int groupPosition) {
-        return group_data.get(groupPosition).keySet().iterator().next();
+    public HashMap<String, String> getGroup(int groupPosition) {
+        HashMap<String, String> group = context.padlandDb.getPadgroupAt(groupPosition);
+        if( group.size() == 0 ) {
+            return getUnclassifiedGroup();
+        }
+        return group;
     }
 
 
     @Override
-    public ArrayList<String> getChild(int groupPosition, int childPosition) {
-        return this.pad_data.get(getChildId(groupPosition, childPosition));
+    public PadLandDataActivity.padData getChild(int groupPosition, int childPosition) {
+        long id = getChildId(groupPosition, childPosition);
+        return context._getPadData(id);
     }
 
     @Override
     public long getGroupId(int groupPosition) {
-        return groupPosition;
+        HashMap<String, String> group = context.padlandDb.getPadgroupAt(groupPosition);
+        if( group.size() == 0 ) {
+            return getUnclassifiedGroupId(groupPosition);
+        }
+        return Long.parseLong(group.get(PadContentProvider._ID));
     }
 
     @Override
     public long getChildId(int groupPosition, int childPosition) {
-        HashMap group = this.group_data.get(groupPosition);
-        ArrayList padlist = (ArrayList) group.get(group.keySet().iterator().next());
-        if( padlist.size() < childPosition )
+        HashMap<String, String> group = context.padlandDb.getPadgroupAt(groupPosition);
+        String id = group.get(PadContentProvider._ID);
+        ArrayList padlist;
+        if( id == null ) {
+//            padlist = getUnclassifiedGroupChildList(groupPosition);
+            padlist = context.padlandDb.getPadgroupChildrenIds(0);
+        } else {
+            padlist = context.padlandDb.getPadgroupChildrenIds(Long.parseLong(id));
+        }
+        if( padlist.size() == 0 )
         {
             return 0;
         }
@@ -125,16 +128,16 @@ public class PadListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        String headerTitle = (String) getGroup(groupPosition);
+        HashMap<String, String> group = getGroup(groupPosition);
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.list_header, null);
+            convertView = infalInflater.inflate(R.layout.padlist_header, null);
         }
 
         TextView header = (TextView) convertView.findViewById(R.id.list_header_title);
 //        lblListHeader.setTypeface(null, Typeface.BOLD);
-        header.setText(headerTitle);
+        header.setText(group.get(PadContentProvider.NAME));
 
         return convertView;
     }
@@ -144,13 +147,24 @@ public class PadListAdapter extends BaseExpandableListAdapter {
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.padlist_item, null);
         }
+
+        PadLandDataActivity.padData child = getChild(groupPosition, childPosition);
+
+        Bundle position_bundle = new Bundle();
+        position_bundle.putInt("groupPosition", groupPosition);
+        position_bundle.putInt("childPosition", childPosition);
+        items_positions.put(child.getId(), position_bundle);
+//        if( child == null )
+//        {
+//            return null;
+//        }
 //        Log.d("PadListAdapter", convertView.findViewById(R.id.name).toString());
 
         TextView name = (TextView) convertView.findViewById(R.id.name);
-        name.setText( getChild(groupPosition, childPosition).get(0) );
+        name.setText(child.getName());
 
         TextView url = (TextView) convertView.findViewById(R.id.url);
-        url.setText( getChild(groupPosition, childPosition).get(1) );
+        url.setText( child.getUrl() );
 
 
         if (checkedPositions.get(groupPosition) != null) {
@@ -253,11 +267,18 @@ public class PadListAdapter extends BaseExpandableListAdapter {
         Log.v(TAG, "The choice mode has been changed. Now it is " + this.choiceMode);
     }
 
-    /**
-     * Method used to get the actual state of the checked lists
-     * @return The list of the all the positions checked
-     */
-    public SparseArray<SparseBooleanArray> getCheckedPositions() {
-        return checkedPositions;
+    private HashMap<String, String> getUnclassifiedGroup() {
+        HashMap<String, String> group_deal = new HashMap<>();
+        group_deal.put(PadContentProvider._ID, "0");
+        group_deal.put(PadContentProvider.NAME, context.getString(R.string.padlist_group_unclassified_name));
+        return group_deal;
+    }
+
+    private long getUnclassifiedGroupId(int groupPosition) {
+        return 0;
+    }
+
+    public Bundle getPosition(long pad_id) {
+        return items_positions.get(pad_id);
     }
 }
