@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Padland</string>
+    <string name="about">Quant a PadLand</string>
+    <string name="about_support_text"><p>Aquesta aplicació es troba en desenvolupament. Per enviar comentaris i informar d\'errors si us plau contacta amb el desenvolupador a mikifus@gmail.com</p>\n         \n         <p>Si vols contribuir aquí tens el repositori:\n             <a href="https://github.com/mikifus/padland">https://github.com/mikifus/padland</a></p></string>
+    <string name="about_text"><p>Llicència <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache</a>.</p></string>
+    <string name="action_go_to_list">Tornar a la llista</string>
+    <string name="action_newpad">Afegir document</string>
+    <string name="action_settings">Preferències</string>
+    <string name="activity_padlist_implicitintent_text_copied">El text s\'ha copiat at portaretalls. Enganxa\'l per utilitzar-lo.</string>
+    <string name="cancel">Cancel·lar</string>
+    <string name="choose_a_server">Escull un servidor (opcional):</string>
+    <string name="choose_default_pad_server">Escull un servidor de documents per defecte al crear-ne de nous.</string>
+    <string name="default_pad_server">Servidor per defecte</string>
+    <string name="delete">Eliminar</string>
+    <string name="download_pad">Guardar document</string>
+    <string name="go_pad">Crear o accedir-hi</string>
+    <string name="network_is_unreachable">Sense conexió a internet.</string>
+    <string name="new_pad_explanation">Introudeix el nom del document. Si no existeix serà creat, altrament accediràs al ja existent.</string>
+    <string name="newpad_noname_warning">Has d\'especificar un nom per al document.</string>
+    <string name="no_pads">No hi han documents guardats.</string>
+    <string name="ok">D\'acord</string>
+    <string name="padinfo_createdate">Afegit a la llista</string>
+    <string name="padinfo_lastuseddate">Vist per últim cop</string>
+    <string name="padinfo_pad_info">Informació del document</string>
+    <string name="padinfo_pad_url">URL del document</string>
+    <string name="padinfo_times_accessed">Vegades accedit</string>
+    <string name="padinfo_view_pad_button">Veure document</string>
+    <string name="padlist_dialog_new_padgroup_invalid">El nom del grup no és vàlid.</string>
+    <string name="padlist_dialog_new_padgroup_label">Introdueix un nom per al grup</string>
+    <string name="padlist_dialog_new_padgroup_title">Nou grup</string>
+    <string name="padlist_document_deleted">Document eliminat</string>
+    <string name="padlist_empty_createnew">Crear un nou document</string>
+    <string name="padlist_group_deleted">Grup seleccionat</string>
+    <string name="padlist_group_select_dialog">Escull un grup</string>
+    <string name="padlist_group_unclassified_name">Sense classificar</string>
+    <string name="pref_default_display_name">Anònim</string>
+    <string name="save_pad">Guardar document</string>
+    <string name="settings_default_color">Color per defecte</string>
+    <string name="settings_default_color_dialogdesc">Exemple de format (hex): #FF0000</string>
+    <string name="settings_default_color_dialogtitle">Escull un color</string>
+    <string name="settings_default_color_explanation">PadLand intentarà utilitzar el teu color per defecte en tots els documents.</string>
+    <string name="settings_default_username">Nom d\'usuari per defecte</string>
+    <string name="settings_default_username_explanation">PadLand intentarà utilitzar el teu nom per defecte en tots els documents</string>
+    <string name="settings_miscellaneous">Miscel·lània</string>
+    <string name="settings_save_new_pads_desc">Afegir automàticament a la llista tots els nous documents accedits</string>
+    <string name="settings_save_new_pads_title">Guardar automàticament els nous documents</string>
+    <string name="share">Compartir</string>
+    <string name="share_auto_text">"¡Vine a Padland!"</string>
+    <string name="share_document">Compartir document</string>
+    <string name="sure_to_delete_group">Vols eliminar el grup seleccionat?</string>
+    <string name="sure_to_delete_pad">Segur que vols eliminar els documents seleccionats?</string>
+    <string name="title_activity_about">Quant a PadLand</string>
+    <string name="title_activity_new_pad">Crear document</string>
+    <string name="title_activity_pad_info">Informació del document</string>
+    <string name="title_activity_pad_view">Padland: Editor</string>
+    <string name="title_activity_padlist">Padland: Documents</string>
+    <string name="title_activity_settings">Preferències</string>
+    <string name="unexpected_error">Ha ocurregut un error inesperat</string>
+    <string name="user_preferences">Preferències de l\'usuari</string>
+    <string name="write_pad_name">Nom del document</string>
+    <string name="title_activity_pad_land_data">PadLandDataActivity</string>
+    <string name="pref_header_general">Preferències</string>
+</resources>
