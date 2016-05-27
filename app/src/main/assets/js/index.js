@@ -11,18 +11,19 @@ function start(url, username, color){
         'userColor' : color || "#555",
         'showControls' : "true",
         'showChat' : "false",
-        'borderStyle' : "double",
+        'borderStyle' : "double"
     });
+    console.log('pad called');
 
-    var iframe = $("#pad iframe");
-    $(iframe).load(function(){
-            $(this).show();
-            //webviewScriptAPI.unsetLoading();
+    var iframe = $("iframe");
+
+    $(iframe).on("load", function(){
             console.log('iframe loaded');
+            webviewScriptAPI.onIframeLoaded();
         });
 
 }
 function PadViewResize( w, h ){
     $("#pad").width(w).height(h);
-    console.log("Pad view resize triggered: " + w + ", " + h )
+    console.log("Pad view resize triggered: " + w + ", " + h );
 }

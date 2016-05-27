@@ -137,7 +137,7 @@ ADDED from AndroidManifest.xml:135:9
 		ADDED from AndroidManifest.xml:138:13
 	android:name
 		ADDED from AndroidManifest.xml:136:13
-provider#com.mikifus.padland.PadLandContentProvider
+provider#com.mikifus.padland.ContentProvider.PadLandContentProvider
 ADDED from AndroidManifest.xml:148:9
 	android:exported
 		ADDED from AndroidManifest.xml:152:13

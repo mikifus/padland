@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Padland</string>
+    <string name="pref_header_general">Settings</string>
+    <string name="title_activity_settings">Settings</string>
     <string name="action_settings">Settings</string>
     <string name="go_pad">Create or go to</string>
     <string name="title_activity_pad_view">Padland Viewer</string>
@@ -10,27 +12,30 @@
     <string name="title_activity_new_pad">Create pad</string>
     <string name="new_pad_explanation">Introduce the pad name. If it does not exist it will be created, otherwise it will take you to the pad.</string>
     <string name="save_pad">Save pad</string>
+    <string name="download_pad">Save pad</string>
     <string name="title_activity_about">About</string>
     <string name="about">About</string>
     <string name="about_text">
         <p>Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache License</a>.</p>
     </string>
     <string name="settings_save_new_pads_title">Auto-save new documents</string>
-    <string name="settings_save_new_pads_desc">Automatically adds your newly visited documents to your list</string>
+    <string name="settings_save_new_pads_desc">Automatically add your newly visited documents to your list</string>
     <string name="share">Share</string>
     <string name="delete">Delete</string>
     <string name="no_pads">There are no saved documents.</string>
-    <string name="sure_to_delete">Are you sure you want to delete the selected documents?</string>
+    <string name="sure_to_delete_pad">Are you sure you want to delete the selected documents?</string>
+    <string name="sure_to_delete_group">Do you want to delete the selected group?</string>
+    <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="share_document">Share document</string>
-    <string name="share_auto_text">"Come join me on padland! "</string>
+    <string name="share_auto_text">"Come join me on Padland! "</string>
     <string name="user_preferences">User preferences</string>
     <string name="settings_default_username">Default username</string>
     <string name="settings_default_username_explanation">PadLand will try to set your default username in all documents you open.</string>
     <string name="settings_default_color">Default color</string>
     <string name="settings_default_color_explanation">PadLand will try to set your default color in all documents you open.</string>
     <string name="settings_default_color_dialogtitle">Choose color</string>
-    <string name="settings_default_color_dialogdesc">Format example (hex): #FF00000</string>
+    <string name="settings_default_color_dialogdesc">Format example (hex): #FF0000</string>
     <string name="activity_padlist_implicitintent_text_copied">The text have been copied into the clipboard. Paste your clipboard data to use it.</string>
     <string name="network_is_unreachable">Network is unreachable.</string>
     <string name="title_activity_padlist">Padland documents</string>
@@ -45,16 +50,27 @@
     </string>
     <string name="padinfo_view_pad_button">View pad</string>
     <string name="title_activity_pad_info">Document info</string>
-    <string name="unexpected_error">An unexpected error happened.</string>
     <string name="title_activity_pad_land_data">PadLandDataActivity</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="padinfo_pad_info">Document information</string>
     <string name="padinfo_pad_url">Document URL</string>
     <string name="padinfo_createdate">Added to list</string>
     <string name="padinfo_lastuseddate">Last viewed</string>
+
     <string name="newpad_noname_warning">You must specify a name for the document.</string>
+
     <string name="padlist_empty_createnew">Create a new document</string>
     <string name="padlist_document_deleted">Document deleted</string>
+    <string name="padlist_group_deleted">Group deleted</string>
+    <string name="padlist_dialog_new_padgroup_title">New group</string>
+    <string name="padlist_dialog_new_padgroup_label">Insert the name of the new group</string>
+    <string name="padlist_dialog_new_padgroup_invalid">Invalid group name.</string>
+    <string name="padlist_group_unclassified_name">Unclassified</string>
+    <string name="padlist_group_select_dialog">Select group</string>
+
+    <string name="unexpected_error">An unexpected error happened.</string>
+    <string name="settings_miscellaneous">Miscellaneous</string>
+    <string name="padinfo_times_accessed">Times accessed</string>
+    <string name="pref_default_display_name">Anonymous</string>
 
 </resources>
