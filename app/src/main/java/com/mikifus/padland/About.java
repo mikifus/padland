@@ -1,11 +1,7 @@
 package com.mikifus.padland;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -23,8 +19,15 @@ public class About extends PadLandActivity {
         // resource.  By default these links will appear but not
         // respond to user input.  To make them active, you need to
         // call setMovementMethod() on the TextView object.
-        TextView t2 = (TextView) findViewById(R.id.textView);
-        t2.setMovementMethod(LinkMovementMethod.getInstance());
+        TextView t = (TextView) findViewById(R.id.textView);
+        if (t != null) {
+            t.setMovementMethod(LinkMovementMethod.getInstance());
+        }
+
+        TextView t2 = (TextView) findViewById(R.id.textView2);
+        if (t2 != null) {
+            t2.setMovementMethod(LinkMovementMethod.getInstance());
+        }
     }
 
 }

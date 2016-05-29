@@ -39,6 +39,7 @@ import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.mikifus.padland.Adapters.PadListAdapter;
 import com.mikifus.padland.Dialog.NewPadGroup;
 
 import java.util.ArrayList;

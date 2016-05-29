@@ -1,4 +1,4 @@
-package com.mikifus.padland;
+package com.mikifus.padland.Adapters;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,6 +11,10 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
+
+import com.mikifus.padland.PadContentProvider;
+import com.mikifus.padland.PadLandDataActivity;
+import com.mikifus.padland.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
