@@ -46,11 +46,12 @@
         <p>This app is under development. To provide feedback and report bugs please contact with the developer at mikifus@gmail.com.</p>\n
         \n
         <p>If you\'d like to contribute here is the repository:\n
-            <a href='https://github.com/mikifus/padland'>https://github.com/mikifus/padland</a></p>
+            <a href='http://github.com/mikifus/padland'>https://github.com/mikifus/padland</a></p>
     </string>
     <string name="padinfo_view_pad_button">View pad</string>
     <string name="title_activity_pad_info">Document info</string>
     <string name="title_activity_pad_land_data">PadLandDataActivity</string>
+    <string name="title_activity_server_list">Server List</string>
 
     <string name="padinfo_pad_info">Document information</string>
     <string name="padinfo_pad_url">Document URL</string>
@@ -72,5 +73,8 @@
     <string name="settings_miscellaneous">Miscellaneous</string>
     <string name="padinfo_times_accessed">Times accessed</string>
     <string name="pref_default_display_name">Anonymous</string>
+
+    <string name="pref_server_list_summary">Add or remove your custom servers</string>
+    <string name="no_custom_servers">There are no saved documents.</string>
 
 </resources>

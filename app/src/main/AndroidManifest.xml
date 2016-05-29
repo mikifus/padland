@@ -160,6 +160,15 @@
             android:name=".PadLandDataActivity"
             android:label="@string/title_activity_pad_land_data" >
         </activity>
+        <activity
+            android:name=".ServerListActivity"
+            android:label="@string/title_activity_server_list" >
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SettingsActivity" />
+        </activity>
         <!--
             <activity
                 android:name=".SettingsFragment"
