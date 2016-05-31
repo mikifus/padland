@@ -46,9 +46,11 @@
         <p>Diese App ist in der Entwicklung. Um Feedback zu geben und Bugs zu reporten, kontaktiere den Entwickler unter mikifus@gmail.com.</p>\n
         \n
         <p>Wenn du zu dem Projekt beitragen willst: Hier ist das Repository:\n
-            <a href='https://github.com/mikifus/padland'>https://github.com/mikifus/padland</a></p>\n
-        \n
-        <p>Deutsche Übersetzung von rugk: <a href='https://github.com/rugk'>https://github.com/rugk</a></p>\n
+            <a href='https://github.com/mikifus/padland'>https://github.com/mikifus/padland</a>
+        </p>\n\n
+        <p>Deutsche Übersetzung von rugk:\n
+            <a href='https://github.com/rugk'>https://github.com/rugk</a>
+        </p>\n\n
     </string>
     <string name="padinfo_view_pad_button">Zeige Pad</string>
     <string name="title_activity_pad_info">Dokument-Informationen</string>
