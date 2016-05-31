@@ -46,9 +46,14 @@
         <p>This app is under development. To provide feedback and report bugs please contact with the developer at mikifus@gmail.com.</p>\n
         \n
         <p>If you\'d like to contribute here is the repository:\n
-            <a href='https://github.com/mikifus/padland'>https://github.com/mikifus/padland</a></p>
-        <p>German translation by rugk: <a href='https://github.com/rugk'>https://github.com/rugk</a></p>\n
-        <p>Japanese translation by naofum: <a href='https://github.com/naofum'>https://github.com/naofum</a></p>\n
+            <a href='https://github.com/mikifus/padland'>https://github.com/mikifus/padland</a>
+        </p>\n\n
+        <p>German translation by rugk:\n
+            <a href='https://github.com/rugk'>https://github.com/rugk</a>
+        </p>\n\n
+        <p>Japanese translation by naofum:\n
+            <a href='https://github.com/naofum'>https://github.com/naofum</a>
+        </p>\n\n
     </string>
     <string name="padinfo_view_pad_button">View pad</string>
     <string name="title_activity_pad_info">Document info</string>
