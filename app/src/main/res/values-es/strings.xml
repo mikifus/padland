@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Padland</string>
     <string name="about">Acerca de</string>
-    <string name="about_support_text"><p>Esta app sigue bajo desarrollo. Para enviar comentarios y detecciones de bugs por facor contacta con el desarrollador en mikifu@gmail.com</p>\n         \n         <p>Si quieres contribuir, este es el repositorio:\n             <a href="https://github.com/mikifus/padland">https://github.com/mikifus/padland</a></p></string>
+    <string name="about_support_text"><p>Esta app sigue bajo desarrollo. Para enviar comentarios y detecciones de bugs por facor contacta con el desarrollador en mikifus@gmail.com</p>\n         \n         <p>Si quieres contribuir, este es el repositorio:\n             <a href="https://github.com/mikifus/padland">https://github.com/mikifus/padland</a></p></string>
     <string name="about_text"><p>Licencia <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache</a>.</p></string>
     <string name="action_go_to_list">Volver a la lista</string>
     <string name="action_newpad">Añadir documento</string>
