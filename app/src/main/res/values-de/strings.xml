@@ -11,7 +11,7 @@
     <string name="action_go_to_list">Zurück zur Pad-Liste</string>
     <string name="title_activity_new_pad">Pad erstellen</string>
     <string name="new_pad_explanation">Gib den Pad-Name ein. Wenn es nicht existiert, wird es erstellt; andernfalls wird es dich zum Pad bringen.</string>
-    <string name="save_pad">Pad< speichern/string>
+    <string name="save_pad">Pad speichern</string>
     <string name="download_pad">Pad abspeichern</string>
     <string name="title_activity_about">Über</string>
     <string name="about">Über</string>
