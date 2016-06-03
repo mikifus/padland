@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Padland</string>
+    <string name="pref_header_general">設定</string>
+    <string name="title_activity_settings">設定</string>
+    <string name="action_settings">設定</string>
+    <string name="go_pad">作成または移動</string>
+    <string name="title_activity_pad_view">Padland ビューアー</string>
+    <string name="write_pad_name">パッド名</string>
+    <string name="action_newpad">ドキュメントを追加</string>
+    <string name="action_go_to_list">パッドリストに戻る</string>
+    <string name="title_activity_new_pad">パッドを作成</string>
+    <string name="new_pad_explanation">パッドの名前を導入します。 存在しない場合は作成します。 それ以外の場合はパッドを表示します。</string>
+    <string name="save_pad">パッドを作成</string>
+    <string name="download_pad">パッドを保存</string>
+    <string name="title_activity_about">アプリについて</string>
+    <string name="about">アプリについて</string>
+    <string name="about_text">
+        <p>Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache ライセンス</a>.</p>
+    </string>
+    <string name="settings_save_new_pads_title">新しいドキュメントを自動保存</string>
+    <string name="settings_save_new_pads_desc">新しく訪問したドキュメントを自動的にリストに追加します</string>
+    <string name="share">共有</string>
+    <string name="delete">削除</string>
+    <string name="no_pads">保存したドキュメントはありません。</string>
+    <string name="sure_to_delete_pad">選択したドキュメントを削除してもよろしいですか?</string>
+    <string name="sure_to_delete_group">選択したグループを削除してもよろしいですか?</string>
+    <string name="ok">OK</string>
+    <string name="cancel">キャンセル</string>
+    <string name="share_document">ドキュメントを共有</string>
+    <string name="share_auto_text">"Padland に参加しよう! "</string>
+    <string name="user_preferences">ユーザー設定</string>
+    <string name="settings_default_username">デフォルトのユーザー名</string>
+    <string name="settings_default_username_explanation">PadLand は、開いたすべてのドキュメントにデフォルトのユーザー名を設定しようとします。</string>
+    <string name="settings_default_color">デフォルトの色</string>
+    <string name="settings_default_color_explanation">PadLand は、開いたすべてのドキュメントにデフォルトの色を設定しようとします。</string>
+    <string name="settings_default_color_dialogtitle">色の選択</string>
+    <string name="settings_default_color_dialogdesc">書式の例 (hex): #FF0000</string>
+    <string name="activity_padlist_implicitintent_text_copied">テキストをクリップボードにコピーしました。クリップボードのデータを貼り付けて使用してください。</string>
+    <string name="network_is_unreachable">ネットワークが到達できません。</string>
+    <string name="title_activity_padlist">Padland ドキュメント</string>
+    <string name="choose_a_server">サーバーの選択 (任意):</string>
+    <string name="default_pad_server">デフォルトのパッド サーバー</string>
+    <string name="choose_default_pad_server">新しいサーバーを開くときの、デフォルトのパッド サーバーを選択してください。</string>
+    <string name="about_support_text">
+        <p>このアプリは開発中です。 フィードバックやバグ報告は、開発者 mikifus@gmail.com までご連絡ください。</p>\n
+        \n
+        <p>貢献していただける場合は、こちらのリポジトリまで:\n
+            <a href='https://github.com/mikifus/padland'>https://github.com/mikifus/padland</a></p>
+    </string>
+    <string name="padinfo_view_pad_button">パッドを表示</string>
+    <string name="title_activity_pad_info">ドキュメント情報</string>
+    <string name="title_activity_pad_land_data">PadLandDataActivity</string>
+
+    <string name="padinfo_pad_info">ドキュメント情報</string>
+    <string name="padinfo_pad_url">ドキュメント URL</string>
+    <string name="padinfo_createdate">リストに追加しました</string>
+    <string name="padinfo_lastuseddate">最後に表示</string>
+
+    <string name="newpad_noname_warning">ドキュメントの名前を指定する必要があります。</string>
+
+    <string name="padlist_empty_createnew">新しいドキュメントを作成</string>
+    <string name="padlist_document_deleted">ドキュメントを削除しました</string>
+    <string name="padlist_group_deleted">グループを削除しました</string>
+    <string name="padlist_dialog_new_padgroup_title">新しいグループ</string>
+    <string name="padlist_dialog_new_padgroup_label">新しいグループの名前を入力してください</string>
+    <string name="padlist_dialog_new_padgroup_invalid">グループ名が正しくありません。</string>
+    <string name="padlist_group_unclassified_name">未分類</string>
+    <string name="padlist_group_select_dialog">グループの選択</string>
+
+    <string name="unexpected_error">予期しないエラーが発生しました。</string>
+    <string name="settings_miscellaneous">その他</string>
+    <string name="padinfo_times_accessed">アクセス回数</string>
+    <string name="pref_default_display_name">匿名</string>
+
+</resources>
