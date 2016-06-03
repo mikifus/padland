@@ -2,6 +2,7 @@
 <resources>
     <string-array name="etherpad_servers_name" translatable="false">
         <item>RiseUp.net</item>
+        <item>Etherpad.net</item>
         <item>Titanpad.com</item>
         <item>Meeting Words</item>
         <item>Piratepad</item>
@@ -12,6 +13,7 @@
 
     <string-array name="etherpad_servers_url_home" translatable="false">
         <item>https://pad.riseup.net</item>
+        <item>https://etherpad.net/</item>
         <item>https://titanpad.com</item>
         <item>http://meetingwords.com</item>
         <item>http://piratepad.net</item>
@@ -22,6 +24,7 @@
 
     <string-array name="etherpad_servers_url_padprefix" translatable="false">
         <item>https://pad.riseup.net/p/</item>
+        <item>https://etherpad.net/p/</item>
         <item>https://titanpad.com/</item>
         <item>http://meetingwords.com/</item>
         <item>http://piratepad.net/</item>
@@ -32,6 +35,7 @@
 
     <string-array name="etherpad_servers_whitelist" translatable="false">
         <item>pad.riseup.net</item>
+        <item>etherpad.net</item>
         <item>titanpad.com</item>
         <item>meetingwords.com</item>
         <item>piratepad.net</item>
@@ -49,6 +53,7 @@
 
     <string-array name="etherpad_servers_supports_jquery" translatable="false">
         <item>pad.riseup.net</item>
+        <item>etherpad.net</item>
         <item>public.etherpad-mozilla.org</item>
         <item>mensuel.framapad.org</item>
         <item>free.primarypad.com</item>
