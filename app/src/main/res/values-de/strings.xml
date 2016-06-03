@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Padland</string>
+    <string name="pref_header_general">Einstellungen</string>
+    <string name="title_activity_settings">Einstellungen</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="go_pad">Erstellen oder anzeigen</string>
+    <string name="title_activity_pad_view">Padland-Anzeige</string>
+    <string name="write_pad_name">Pad-Name</string>
+    <string name="action_newpad">Dokument hinzufügen</string>
+    <string name="action_go_to_list">Zurück zur Pad-Liste</string>
+    <string name="title_activity_new_pad">Pad erstellen</string>
+    <string name="new_pad_explanation">Gib den Pad-Name ein. Wenn es nicht existiert, wird es erstellt; andernfalls wird es dich zum Pad bringen.</string>
+    <string name="save_pad">Pad speichern</string>
+    <string name="download_pad">Pad abspeichern</string>
+    <string name="title_activity_about">Über</string>
+    <string name="about">Über</string>
+    <string name="about_text">
+        <p>LLizensiert unter der <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache-Lizenz</a>.</p>
+    </string>
+    <string name="settings_save_new_pads_title">Speichere neue Pads automatisch</string>
+    <string name="settings_save_new_pads_desc">Füge automatisch die zuletzt genutzen Dokumente zu deiner Liste hinzu</string>
+    <string name="share">Teilen</string>
+    <string name="delete">Entfernen</string>
+    <string name="no_pads">Es gibt keine gespeicherten Dokumente.</string>
+    <string name="sure_to_delete_pad">Möchtest du wirklich die ausgewählten Dokumente löschen?</string>
+    <string name="sure_to_delete_group">Möchtest du wirklich die ausgewählte GRuppe löschen?</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Abbruch</string>
+    <string name="share_document">Dokument teilen</string>
+    <string name="share_auto_text">"Komm zu mir bei Padland! "</string>
+    <string name="user_preferences">Benutzer-Einstellungen</string>
+    <string name="settings_default_username">Standard-Nutzername</string>
+    <string name="settings_default_username_explanation">PadLand wird versuchen deinen Standard-Nutzername in allen Dokumenten, die du öffnest, festzulegen.</string>
+    <string name="settings_default_color">Standard-Farbe</string>
+    <string name="settings_default_color_explanation">PadLand wird versuchen deine Standard-Farbe in allen Dokumenten, die du öffnest, festzulegen.</string>
+    <string name="settings_default_color_dialogtitle">Ändere Farbe</string>
+    <string name="settings_default_color_dialogdesc">Formatierungbeispiel (hex): #FF0000</string>
+    <string name="activity_padlist_implicitintent_text_copied">Der Text wurde in die Zwischenablage kopiert. Füge den Text woanders ein, um ihn zu nutzen.</string>
+    <string name="network_is_unreachable">Netzwerk ist nicht erreichbar.</string>
+    <string name="title_activity_padlist">Padland-Dokumente</string>
+    <string name="choose_a_server">Wähle einen Server (optional):</string>
+    <string name="default_pad_server">Standard-Pad-Server</string>
+    <string name="choose_default_pad_server">Wähle einen Standard-Pad-Server für neu erstellte Dokumente.</string>
+    <string name="about_support_text">
+        <p>Diese App ist in der Entwicklung. Um Feedback zu geben und Bugs zu reporten, kontaktiere den Entwickler unter mikifus@gmail.com.</p>\n
+        \n
+        <p>Wenn du zu dem Projekt beitragen willst: Hier ist das Repository:\n
+            <a href='https://github.com/mikifus/padland'>https://github.com/mikifus/padland</a>
+        </p>\n\n
+        <p>Deutsche Übersetzung von rugk:\n
+            <a href='https://github.com/rugk'>https://github.com/rugk</a>
+        </p>\n\n
+    </string>
+    <string name="padinfo_view_pad_button">Zeige Pad</string>
+    <string name="title_activity_pad_info">Dokument-Informationen</string>
+    <string name="title_activity_pad_land_data">PadLand-DataActivity</string>
+
+    <string name="padinfo_pad_info">Dokument-Informationen</string>
+    <string name="padinfo_pad_url">Document-URL</string>
+    <string name="padinfo_createdate">Zur Liste hinzugefügt</string>
+    <string name="padinfo_lastuseddate">Zuletzt angesehen</string>
+
+    <string name="newpad_noname_warning">Du musst einen Namen für das Dokument angeben.</string>
+
+    <string name="padlist_empty_createnew">Erstelle ein neues Dokument</string>
+    <string name="padlist_document_deleted">Dokument entfernt</string>
+    <string name="padlist_group_deleted">Gruppe entfernt</string>
+    <string name="padlist_dialog_new_padgroup_title">Neue Gruppe</string>
+    <string name="padlist_dialog_new_padgroup_label">Füge den Namen der neuen Gruppe ein</string>
+    <string name="padlist_dialog_new_padgroup_invalid">Ungültiger Gruppenname.</string>
+    <string name="padlist_group_unclassified_name">Unklassifiziert</string>
+    <string name="padlist_group_select_dialog">Gruppe auswählen</string>
+
+    <string name="unexpected_error">Ein unerwarteter Fehler ist aufgetreten.</string>
+    <string name="settings_miscellaneous">Verschiedenes</string>
+    <string name="padinfo_times_accessed">Anzahl der Aufrufe</string>
+    <string name="pref_default_display_name">Anonymous</string>
+
+</resources>
