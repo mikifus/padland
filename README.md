@@ -7,10 +7,13 @@ Padland is a tool to manage, share, remember and read collaborative documents ba
 - More translations (volunteers?) 
 
 ## Current version
-1.1.1
-
+1.1.2
 
 ## Changelog
+### v1.1.2
+- Removed unused permissions
+- Added Etherpad.net server
+
 ### v1.1.1
 - Added German translation
 - Added Japanese translation
