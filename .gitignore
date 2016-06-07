@@ -34,7 +34,9 @@ Thumbs.db
 
 # Android Studio
 .idea
-/.idea/workspace.xml
-/.idea/libraries
 .gradle
 /build
+*.iml
+app/libs/
+app/src/main/res/html_asset/
+app/src/main/res/layout-v21/
