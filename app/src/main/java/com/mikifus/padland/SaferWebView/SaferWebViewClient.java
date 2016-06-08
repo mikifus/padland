@@ -7,8 +7,7 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import java.io.InputStream;
-import java.io.StringBufferInputStream;
+import java.io.ByteArrayInputStream;
 
 /**
    * Implements whitelisting on host name
@@ -34,10 +33,10 @@ public class SaferWebViewClient extends WebViewClient {
 
     protected WebResourceResponse getWebResourceResponseFromString() {
         Log.w("SaferWebViewClient", "Blocked a JS request to an external domains.");
-        return getUtf8EncodedWebResourceResponse(new StringBufferInputStream("alert('!NO!')"));
+        return getUtf8EncodedWebResourceResponse(new ByteArrayInputStream("alert('!NO!')".getBytes()));
     }
 
-    protected WebResourceResponse getUtf8EncodedWebResourceResponse(InputStream data) {
+    protected WebResourceResponse getUtf8EncodedWebResourceResponse(ByteArrayInputStream data) {
         return new WebResourceResponse("text/css", "UTF-8", data);
     }
 
