@@ -6,7 +6,7 @@ import android.util.Log;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 
-import java.io.StringBufferInputStream;
+import java.io.ByteArrayInputStream;
 
 /**
  * Extended class, I
@@ -21,7 +21,7 @@ public class PadLandSaferWebViewClient extends SaferWebViewClient {
     @Override
     protected WebResourceResponse getWebResourceResponseFromString() {
         Log.w("SaferWebViewClient", "Blocked a JS request to an external domains.");
-        return getUtf8EncodedWebResourceResponse(new StringBufferInputStream(""));
+        return getUtf8EncodedWebResourceResponse(new ByteArrayInputStream("".getBytes()));
     }
 
 
@@ -75,6 +75,9 @@ public class PadLandSaferWebViewClient extends SaferWebViewClient {
     protected boolean isValidHost(String url){
         if (!TextUtils.isEmpty(url)) {
             final String host = Uri.parse(url).getHost();
+            if( host == null ) {
+                return false;
+            }
             for (String whitelistedHost: hostsWhitelist){
                 if(wildCardMatch(host, whitelistedHost)) {
                     return true;
