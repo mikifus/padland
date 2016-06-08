@@ -79,5 +79,6 @@
     <string name="settings_miscellaneous">Miscellaneous</string>
     <string name="padinfo_times_accessed">Times accessed</string>
     <string name="pref_default_display_name">Anonymous</string>
+    <string name="settings_default_username_dialog_title">Set username</string>
 
 </resources>

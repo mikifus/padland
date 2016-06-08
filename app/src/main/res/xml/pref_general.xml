@@ -28,7 +28,7 @@
             android:key="padland_default_username"
             android:title="@string/settings_default_username"
             android:summary="@string/settings_default_username_explanation"
-            android:dialogTitle="Set username"
+            android:dialogTitle="@string/settings_default_username_dialog_title"
             android:dialogMessage=""
             android:defaultValue="" />
 
