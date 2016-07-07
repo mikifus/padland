@@ -79,6 +79,7 @@
     <string name="settings_miscellaneous">Miscellaneous</string>
     <string name="padinfo_times_accessed">Times accessed</string>
     <string name="pref_default_display_name">Anonymous</string>
+    <string name="settings_default_username_dialog_title">Set username</string>
 
     <string name="title_activity_server_list">Server list</string>
     <string name="pref_server_list_summary">Add your custom etherpad servers</string>
