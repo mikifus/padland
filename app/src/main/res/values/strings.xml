@@ -104,6 +104,6 @@
     <string name="serverlist_dialog_new_padgroup_padprefix_invalid">Invalid pad prefix.</string>
 
     <string name="serverlist_dialog_new_server_jquery_title">Supports jQuery</string>
-    <string name="serverlist_dialog_new_server_jquery_label">Check this for servers supported by "etherpad-lite-jquery-plugin" (Etherpad Lite).</string>
+    <string name="serverlist_dialog_new_server_jquery_label">Check this for servers supported by \"etherpad-lite-jquery-plugin\" (Etherpad Lite).</string>
 
 </resources>

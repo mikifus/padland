@@ -33,6 +33,7 @@ public class NewServer extends DialogFragment {
     public static final Pattern NAME_VALIDATION = Pattern.compile(
             "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+\\@\\ ]{2,256}"
     );
+    // TODO: All validations
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -56,6 +57,7 @@ public class NewServer extends DialogFragment {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         String text = String.valueOf(fieldName.getText());
                         if( NAME_VALIDATION.matcher(text).matches() ) {
+                            // TODO: Implement save
 //                            saveNewServer( text );
                             dialog.dismiss();
                         } else {
