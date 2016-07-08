@@ -193,7 +193,7 @@ public class PadViewActivity extends PadLandDataActivity {
         padData padData;
 
         if (pad_id > 0) {
-            Cursor c = padlandDb._getPadDataById(pad_id);
+            Cursor c = padlistDb._getPadDataById(pad_id);
             padData = new padData(c);
             c.close();
         } else {
@@ -243,7 +243,7 @@ public class PadViewActivity extends PadLandDataActivity {
         }
 
         padData padData = this._getPadDataFromIntent();
-        Cursor c = padlandDb._getPadDataByUrl(padData.getUrl());
+        Cursor c = padlistDb._getPadDataByUrl(padData.getUrl());
 
         if (c != null && c.getCount() > 0) {
             c.moveToFirst();
@@ -272,7 +272,7 @@ public class PadViewActivity extends PadLandDataActivity {
             values.put(PadContentProvider.SERVER, intentData.getServer());
             values.put(PadContentProvider.URL, intentData.getUrl());
 
-            result = padlandDb.savePadData(0, values);
+            result = padlistDb.savePadData(0, values);
         }
         return result;
     }
@@ -287,7 +287,7 @@ public class PadViewActivity extends PadLandDataActivity {
         boolean result = false;
         long pad_id = this._getPadId();
         if (pad_id != 0) {
-            padlandDb.accessUpdate(pad_id);
+            padlistDb.accessUpdate(pad_id);
             result = true;
         }
         return result;

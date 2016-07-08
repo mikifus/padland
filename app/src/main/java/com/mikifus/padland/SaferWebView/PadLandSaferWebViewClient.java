@@ -86,4 +86,6 @@ public class PadLandSaferWebViewClient extends SaferWebViewClient {
         }
         return false;
     }
+
+    // TODO: Recognise no-ssl urls and notify the user
 }

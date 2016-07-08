@@ -7,7 +7,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.mikifus.padland.Adapters.ServerListAdapter;
-import com.mikifus.padland.Dialog.NewServer;
+import com.mikifus.padland.Dialog.NewServerDialog;
 
 /**
  * Created by mikifus on 29/05/16.
@@ -31,7 +31,7 @@ public class ServerListActivity extends PadLandDataActivity {
 
     public void onNewServerClick(View view) {
         FragmentManager fm = getSupportFragmentManager();
-        NewServer dialog = new NewServer();
+        NewServerDialog dialog = new NewServerDialog();
         dialog.show(fm, NEW_SERVER_DIALOG);
     }
 }
