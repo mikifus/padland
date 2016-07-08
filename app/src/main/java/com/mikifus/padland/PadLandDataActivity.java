@@ -30,14 +30,14 @@ public class PadLandDataActivity extends PadLandActivity {
 
     private static final String TAG = "PadLandDataActivity";
 
-    public PadlandDb padlandDb;
+    public PadlistDb padlistDb;
 
     private ArrayList<HashMap<String, String>> meta_groups = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        padlandDb = new PadlandDb(getContentResolver());
+        padlistDb = new PadlistDb(getContentResolver());
         Log.d(TAG, "Data activity started running");
 
         HashMap<String, String> unclassified_group = new HashMap<>();
@@ -65,7 +65,7 @@ public class PadLandDataActivity extends PadLandActivity {
      * @return
      */
     public padData _getPadData( long pad_id ){
-        Cursor cursor = padlandDb._getPadDataById(pad_id);
+        Cursor cursor = padlistDb._getPadDataById(pad_id);
         padData pad_data = new padData( cursor );
         cursor.close();
         return pad_data;
@@ -119,7 +119,7 @@ public class PadLandDataActivity extends PadLandActivity {
      */
 
     protected Long getGroupIdFromAdapterData(int groupPosition) {
-        HashMap<String, String> padgroups_data = padlandDb.getPadgroupAt(groupPosition);
+        HashMap<String, String> padgroups_data = padlistDb.getPadgroupAt(groupPosition);
         long id = 0L;
         if( padgroups_data.size() > 0 ) {
             id = Long.parseLong(padgroups_data.get(PadContentProvider._ID));
@@ -128,7 +128,7 @@ public class PadLandDataActivity extends PadLandActivity {
     }
 
     protected String getGroupNameFromAdapterData(int groupPosition) {
-        HashMap<String, String> padgroups_data = padlandDb.getPadgroupAt(groupPosition);
+        HashMap<String, String> padgroups_data = padlistDb.getPadgroupAt(groupPosition);
         String name = "";
         if( padgroups_data.size() > 0 ) {
             name = padgroups_data.get(PadContentProvider.NAME);
@@ -140,7 +140,7 @@ public class PadLandDataActivity extends PadLandActivity {
     {
         final PadLandDataActivity context = this;
         final ArrayList<Long> selectedGroups = new ArrayList<>();
-        int group_count = padlandDb.getPadgroupsCount();
+        int group_count = padlistDb.getPadgroupsCount();
         String[] group_names = new String[ group_count + 1 ];
         for( int i = 0; i < group_count; ++i ) {
             group_names[ i ] = getGroupNameFromAdapterData(i);
@@ -191,7 +191,7 @@ public class PadLandDataActivity extends PadLandActivity {
                         for(String pad_id_string : selectedItems) {
                             save_pad_id = Long.parseLong(pad_id_string);
                             for(Long save_padgroup_id : selectedGroups) {
-                                boolean saved = context.padlandDb.savePadgroupRelation(save_padgroup_id,  save_pad_id);
+                                boolean saved = context.padlistDb.savePadgroupRelation(save_padgroup_id,  save_pad_id);
                                 Log.d(TAG, "Added to group? " + saved);
                             }
                         }
@@ -222,7 +222,7 @@ public class PadLandDataActivity extends PadLandActivity {
                 .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        if( context.padlandDb.deleteGroup(group_id) ) {
+                        if( context.padlistDb.deleteGroup(group_id) ) {
                             Toast.makeText(PadLandDataActivity.this, getString(R.string.padlist_group_deleted), Toast.LENGTH_LONG).show();
                         }
                         ((PadListActivity) context).notifyDataSetChanged();
@@ -321,16 +321,12 @@ public class PadLandDataActivity extends PadLandActivity {
         }
     }
 
-    public class PadlandDb {
-
+    public class PadlistDb {
         ContentResolver contentResolver;
         SQLiteDatabase db;
 
-        public PadlandDb (ContentResolver contentResolver) {
+        public PadlistDb(ContentResolver contentResolver) {
             this.contentResolver = contentResolver;
-
-            PadlandDbHelper helper = new PadlandDbHelper(getBaseContext());
-            this.db = helper.getWritableDatabase();
         }
         /**
          * Self explanatory name.

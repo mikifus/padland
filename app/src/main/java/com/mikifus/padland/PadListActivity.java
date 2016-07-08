@@ -135,7 +135,7 @@ public class PadListActivity extends PadLandDataActivity
                     for(int i = 0 ; i < pad_id_list.size(); i++)
                     {
                         Log.d("DELETE_PAD_INTENT", "action: " + action + " list_get: " + pad_id_list.get(i));
-                        boolean result = padlandDb.deletePad(Long.parseLong(pad_id_list.get(i)));
+                        boolean result = padlistDb.deletePad(Long.parseLong(pad_id_list.get(i)));
                         if (result) {
                             Toast.makeText(this, getString(R.string.padlist_document_deleted), Toast.LENGTH_LONG).show();
                         }

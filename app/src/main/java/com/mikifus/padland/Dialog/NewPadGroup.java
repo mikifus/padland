@@ -81,7 +81,7 @@ public class NewPadGroup extends DialogFragment {
         ContentValues values = new ContentValues();
         values.put(PadContentProvider.NAME, title);
         PadListActivity activity = (PadListActivity) getActivity();
-        activity.padlandDb.savePadgroupData(0, values);
+        activity.padlistDb.savePadgroupData(0, values);
         activity.notifyDataSetChanged();
     }
 }
