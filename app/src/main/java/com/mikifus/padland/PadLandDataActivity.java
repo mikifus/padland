@@ -327,6 +327,8 @@ public class PadLandDataActivity extends PadLandActivity {
 
         public PadlistDb(ContentResolver contentResolver) {
             this.contentResolver = contentResolver;
+            PadlandDbHelper padlandDbHelper = new PadlandDbHelper(PadLandDataActivity.this);
+            this.db = padlandDbHelper.getWritableDatabase();
         }
         /**
          * Self explanatory name.

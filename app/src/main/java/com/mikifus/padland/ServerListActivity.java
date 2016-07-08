@@ -25,6 +25,8 @@ public class ServerListActivity extends PadLandDataActivity {
         mAdapter = new ServerListAdapter(ServerListActivity.this, android.R.layout.simple_list_item_2);
         ListView listView = (ListView) findViewById(R.id.listView);
         if (listView != null) {
+            listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+            listView.setEmptyView(findViewById(android.R.id.empty));
             listView.setAdapter(mAdapter);
         }
     }
