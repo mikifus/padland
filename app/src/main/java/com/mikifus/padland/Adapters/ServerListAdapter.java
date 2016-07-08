@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.mikifus.padland.Models.Server;
+import com.mikifus.padland.Models.ServerModel;
 import com.mikifus.padland.ServerListActivity;
 
 /**
@@ -16,11 +17,13 @@ public class ServerListAdapter extends ArrayAdapter {
 
     private ServerListActivity mContext;
     private int layout_resource;
+    private ServerModel serverModel;
 
     public ServerListAdapter(ServerListActivity context, int resource) {
         super(context, resource);
         mContext = context;
         layout_resource = resource;
+        serverModel = new ServerModel(context);
     }
 
     @Override
@@ -32,11 +35,13 @@ public class ServerListAdapter extends ArrayAdapter {
             convertView = LayoutInflater.from(getContext()).inflate(layout_resource, parent, false);
         }
 
-        server.name = "bbbb";
-        server.url_padprefix = "test@test";
+        server = serverModel.getServerAt(position);
+
+//        server.name = "bbbb";
+//        server.url_padprefix = "test@test";
 
         ((TextView) convertView.findViewById(android.R.id.text1)).setText(server.name);
-        ((TextView) convertView.findViewById(android.R.id.text2)).setText(server.url_padprefix);
+        ((TextView) convertView.findViewById(android.R.id.text2)).setText(server.url);
         // Lookup view for data population
 //        TextView tvName = (TextView) convertView.findViewById(R.id.tvName);
 //        TextView tvHome = (TextView) convertView.findViewById(R.id.tvHome);
@@ -49,7 +54,7 @@ public class ServerListAdapter extends ArrayAdapter {
 
     @Override
     public int getCount() {
-        return 0;
+        return serverModel.getServerCount();
     }
 
     @Override

@@ -40,7 +40,7 @@ public class NewServerDialog extends DialogFragment {
     );
     public static final Pattern URL_VALIDATION = Patterns.WEB_URL;
     public static final Pattern PADPREFIX_VALIDATION = Pattern.compile(
-            "[a-zA-Z0-9\\+\\_\\-\\/\\ \\\\]{2,256}/"
+            "[a-zA-Z0-9\\+\\_\\-\\/\\ \\\\]{1,256}[/]{1}"
     );
     // TODO: All validations
 
@@ -64,14 +64,9 @@ public class NewServerDialog extends DialogFragment {
         builder.setPositiveButton(getString(R.string.ok),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        String text = String.valueOf(fieldName.getText());
-                        if( validateForm() ) {
-                            // TODO: Implement save
-                            saveNewServer();
-                            dialog.dismiss();
-                        } else {
-                            Toast.makeText(getContext(), getString(R.string.padlist_dialog_new_padgroup_invalid), Toast.LENGTH_LONG).show();
-                        }
+                        //Do nothing here because we override this button later to change the close behaviour.
+                        //However, we still need this because on older versions of Android unless we
+                        //pass a handler the button doesn't get instantiated
                     }
                 }
         )
@@ -84,7 +79,31 @@ public class NewServerDialog extends DialogFragment {
                 );
         AlertDialog alertDialog = builder.create();
         alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.setCancelable(false);
         return alertDialog;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        final AlertDialog d = (AlertDialog)getDialog();
+        if(d != null)
+        {
+            Button positiveButton = d.getButton(Dialog.BUTTON_POSITIVE);
+            positiveButton.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    String text = String.valueOf(fieldName.getText());
+                    if( validateForm() ) {
+                        // TODO: Implement save
+                        saveNewServer();
+                        d.dismiss();
+                    }
+                }
+            });
+        }
     }
 
     private void saveNewServer() {

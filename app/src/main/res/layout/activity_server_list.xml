@@ -10,12 +10,13 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:gravity="center"
         android:id="@android:id/empty">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:adjustViewBounds="true"
             android:gravity="center"
             android:layout_marginBottom="5dp"

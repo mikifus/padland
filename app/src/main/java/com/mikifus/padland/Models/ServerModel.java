@@ -47,12 +47,12 @@ public class ServerModel extends SQLiteOpenHelper {
 
     public ServerModel(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.db = getWritableDatabase();
     }
 
     @Override
     public void onCreate(SQLiteDatabase database) {
         database.execSQL(SERVERS_TABLE_CREATE_QUERY);
-        this.db = database;
     }
 
     @Override
@@ -132,15 +132,56 @@ public class ServerModel extends SQLiteOpenHelper {
 
         QUERY =
                 "SELECT " + ServerModel._ID + " " +
-                        "FROM " + ServerModel.TABLE + " " +
-//                            "WHERE " + field + "=?" +
-                        ") ";
+                    "FROM " + ServerModel.TABLE + " ";
 
         Cursor cursor = db.rawQuery(QUERY, comparation_set);
 
         int count = cursor.getCount();
         cursor.close();
         return count;
+    }
+
+    public Cursor _getServerDataByPosition(int position) {
+        String QUERY;
+        Cursor c = null;
+        String[] comparation_set = new String[]{};
+
+        QUERY =
+                "SELECT * " +
+                    "FROM " + ServerModel.TABLE + " " +
+//                            "WHERE " + field + "=?" +
+                    " ORDER BY " + POSITION + " ASC,"+ _ID +" DESC " +
+                    " LIMIT " + position + ", 1";
+
+        c = db.rawQuery(QUERY, comparation_set);
+        return c;
+    }
+
+    public Server getServerAt(int position) {
+        Server server = new Server();
+        Cursor cursor = _getServerDataByPosition(position);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast())
+        {
+            int id = cursor.getInt(0);
+            String name = cursor.getString(1);
+            String url = cursor.getString(2);
+            String padprefix = cursor.getString(3);
+            String pos = cursor.getString(4);
+            int jquery = cursor.getInt(5);
+
+            server.id = id;
+            server.name = name;
+            server.url = url;
+            server.url_padprefix = padprefix;
+            server.position = pos;
+            server.jquery = jquery == 1;
+
+            break;
+        }
+        cursor.close();
+
+        return server;
     }
 
 }
