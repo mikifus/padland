@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:padland="http://schemas.android.com/apk/res-auto">
+    <!--<item android:id="@+id/menuitem_share"-->
+        <!--android:title="@string/share"-->
+        <!--padland:showAsAction="always"-->
+        <!--android:icon="@drawable/ic_share_inverted" />-->
+
+    <item android:id="@+id/menuitem_delete"
+        android:title="@string/delete"
+        padland:showAsAction="always"
+        android:icon="@drawable/ic_delete_inverted" />
+</menu>

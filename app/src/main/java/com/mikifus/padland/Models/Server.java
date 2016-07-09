@@ -22,4 +22,8 @@ public class Server {
     public String getPadPrefix() {
         return url_padprefix;
     }
+
+    public int getId() {
+        return id;
+    }
 }

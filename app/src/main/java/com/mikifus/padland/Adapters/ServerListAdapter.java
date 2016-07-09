@@ -8,7 +8,10 @@ import android.widget.TextView;
 
 import com.mikifus.padland.Models.Server;
 import com.mikifus.padland.Models.ServerModel;
+import com.mikifus.padland.R;
 import com.mikifus.padland.ServerListActivity;
+
+import java.util.ArrayList;
 
 /**
  * Created by mikifus on 29/05/16.
@@ -18,12 +21,14 @@ public class ServerListAdapter extends ArrayAdapter {
     private ServerListActivity mContext;
     private int layout_resource;
     private ServerModel serverModel;
+    private ArrayList<Server> items;
 
     public ServerListAdapter(ServerListActivity context, int resource) {
         super(context, resource);
         mContext = context;
         layout_resource = resource;
         serverModel = new ServerModel(context);
+        items = serverModel.getEnabledServerList();
     }
 
     @Override
@@ -40,8 +45,8 @@ public class ServerListAdapter extends ArrayAdapter {
 //        server.name = "bbbb";
 //        server.url_padprefix = "test@test";
 
-        ((TextView) convertView.findViewById(android.R.id.text1)).setText(server.name);
-        ((TextView) convertView.findViewById(android.R.id.text2)).setText(server.url);
+        ((TextView) convertView.findViewById(R.id.name)).setText(server.name);
+        ((TextView) convertView.findViewById(R.id.url)).setText(server.url);
         // Lookup view for data population
 //        TextView tvName = (TextView) convertView.findViewById(R.id.tvName);
 //        TextView tvHome = (TextView) convertView.findViewById(R.id.tvHome);
@@ -59,6 +64,11 @@ public class ServerListAdapter extends ArrayAdapter {
 
     @Override
     public Server getItem(int position) {
-        return new Server();
+        return items.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return items.get(position).getId();
     }
 }

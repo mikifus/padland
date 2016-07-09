@@ -2,19 +2,38 @@ package com.mikifus.padland;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.util.SparseBooleanArray;
+import android.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.mikifus.padland.Adapters.ServerListAdapter;
 import com.mikifus.padland.Dialog.NewServerDialog;
 
+import java.util.ArrayList;
+
 /**
  * Created by mikifus on 29/05/16.
  */
-public class ServerListActivity extends PadLandDataActivity {
+public class ServerListActivity extends PadLandDataActivity
+        implements ActionMode.Callback {
+    /**
+     * Multiple choice for all the groups
+     */
+    private int choiceMode = ListView.CHOICE_MODE_MULTIPLE;
+
+    /**
+     * mActionMode defines behaviour of the action-bar
+     */
+    protected ActionMode mActionMode;
 
     ArrayAdapter mAdapter;
+    ListView listView;
 
     private static final String NEW_SERVER_DIALOG = "dialog_new_server";
 
@@ -22,18 +41,153 @@ public class ServerListActivity extends PadLandDataActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_server_list);
-        mAdapter = new ServerListAdapter(ServerListActivity.this, android.R.layout.simple_list_item_2);
-        ListView listView = (ListView) findViewById(R.id.listView);
+        mAdapter = new ServerListAdapter(ServerListActivity.this, R.layout.serverlist_item);
+        listView = (ListView) findViewById(R.id.listView);
         if (listView != null) {
-            listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+            listView.setChoiceMode(choiceMode);
             listView.setEmptyView(findViewById(android.R.id.empty));
             listView.setAdapter(mAdapter);
+            this._setListViewEvents();
         }
+    }
+
+    /**
+     * This function adds events listeners for a ListView object to provide usage of the ActionBar
+     */
+    private void _setListViewEvents() {
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                startActionMode();
+                boolean checked = listView.isItemChecked(position);
+                listView.setItemChecked(position, !checked);
+                view.setSelected(!checked);
+                if (listView.getCheckedItemCount() == 0) {
+                    mActionMode.finish();
+                }
+                // Return true as we are handling the event.
+                return true;
+            }
+        });
     }
 
     public void onNewServerClick(View view) {
         FragmentManager fm = getSupportFragmentManager();
         NewServerDialog dialog = new NewServerDialog();
         dialog.show(fm, NEW_SERVER_DIALOG);
+    }
+
+    /**
+     * Check an item and set is as selected.
+     *
+     */
+    public void startActionMode() {
+//        Log.d(TAG, "SELECTION NEW: pos:" + String.valueOf(position) + " id:" + String.valueOf(id));
+//
+        if (mActionMode == null) {
+//            // Start the CAB using the ActionMode.Callback defined above
+            this.startActionMode(this);
+        }
+    }
+
+    /**
+     * Called when the action mode is created; startActionMode() was called
+     *
+     * @param mode
+     * @param menu
+     * @return boolean
+     */
+    @Override
+    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+        // Inflate a menu resource providing context menu items
+        MenuInflater inflater = mode.getMenuInflater();
+        inflater.inflate(R.menu.server_list, menu);
+
+        mActionMode = mode;
+
+        return true;
+    }
+
+    /**
+     * Called each time the action mode is shown. Always called after onCreateActionMode, but
+     * may be called multiple times if the mode is invalidated.
+     *
+     * @param mode
+     * @param menu
+     * @return boolean
+     */
+    @Override
+    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        return false; // Return false if nothing is done
+    }
+
+    /**
+     * Called when the user exits the action mode
+     *
+     * @param mode
+     */
+    @Override
+    public void onDestroyActionMode(ActionMode mode) {
+        mActionMode = null;
+        uncheckAllItems();
+    }
+
+    private void uncheckAllItems() {
+        if( listView == null ) {
+            return;
+        }
+        SparseBooleanArray checked = listView.getCheckedItemPositions();
+        for (int i = 0; i < checked.size(); i++) {
+            // Item position in adapter
+            int position = checked.keyAt(i);
+            // Add sport if it is checked i.e.) == TRUE!
+            if (checked.valueAt(i)) {
+                listView.setItemChecked(position, false);
+            }
+        }
+    }
+
+    /**
+     * Called when the user selects a contextual menu item
+     *
+     * @param mode
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menuitem_delete:
+//                AskDelete(getCheckedItemIds());
+                // Action picked, so close the CAB
+                mode.finish();
+                return true;
+//            case R.id.menuitem_share:
+//                menu_share(getCheckedItemIds());
+                // Action picked, so close the CAB
+//                mode.finish();
+//                return true;
+            default:
+                return false;
+        }
+    }
+
+    private ArrayList<String> getCheckedItemIds()
+    {
+        ArrayList<String> selectedItems = new ArrayList<>();
+//        HashMap<Long, ArrayList<String>> padlist_data = _getPadListData();
+
+        SparseBooleanArray positions = listView.getCheckedItemPositions();
+//        Log.d(TAG, "selectedItemsPositions: " + positions);
+        for (int i = 0; i < positions.size(); ++i)
+        {
+            int position = positions.keyAt(i);
+            if ( positions.valueAt(i) ) {
+                selectedItems.add( String.valueOf(mAdapter.getItemId(position)) );
+            }
+        }
+//        Log.d(TAG, "selectedItemsIds: " + selectedItems.toString());
+
+        return selectedItems;
     }
 }
