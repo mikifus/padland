@@ -9,6 +9,8 @@ import android.util.Log;
 
 import com.mikifus.padland.PadContentProvider;
 
+import java.util.ArrayList;
+
 /**
  * Created by mikifus on 8/07/16.
  */
@@ -83,7 +85,7 @@ public class ServerModel extends SQLiteOpenHelper {
                 "SELECT * " +
                         "FROM " + ServerModel.TABLE + " " +
                         "WHERE " + field + "=?" +
-                        ") ";
+                " ORDER BY " + POSITION + " ASC,"+ _ID +" DESC ";
 
         c = db.rawQuery(QUERY, comparation_set);
         return c;
@@ -182,6 +184,36 @@ public class ServerModel extends SQLiteOpenHelper {
         cursor.close();
 
         return server;
+    }
+
+    public ArrayList<Server> getEnabledServerList() {
+        Server server;
+        ArrayList<Server> servers = new ArrayList<>();
+        Cursor cursor = _getServerDataFromDatabase(ENABLED, "1");
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast())
+        {
+            int id = cursor.getInt(0);
+            String name = cursor.getString(1);
+            String url = cursor.getString(2);
+            String padprefix = cursor.getString(3);
+            String pos = cursor.getString(4);
+            int jquery = cursor.getInt(5);
+
+            server = new Server();
+            server.id = id;
+            server.name = name;
+            server.url = url;
+            server.url_padprefix = padprefix;
+            server.position = pos;
+            server.jquery = jquery == 1;
+
+            servers.add(server);
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+        return servers;
     }
 
 }
