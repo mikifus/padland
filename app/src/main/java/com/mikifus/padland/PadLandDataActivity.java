@@ -477,7 +477,7 @@ public class PadLandDataActivity extends PadLandActivity {
                     new String[]{PadContentProvider._ID, PadContentProvider.NAME},
                     null,
                     null,
-                    PadContentProvider.CREATE_DATE + " ASC");
+                    PadContentProvider.CREATE_DATE + " DESC");
 
             HashMap<Long, ArrayList<String>> result = new HashMap<>();
 
@@ -512,7 +512,7 @@ public class PadLandDataActivity extends PadLandActivity {
                     new String[]{PadContentProvider._ID, PadContentProvider.NAME},
                     null,
                     null,
-                    PadContentProvider.CREATE_DATE + " ASC");
+                    PadContentProvider.CREATE_DATE + " DESC");
 
             int count = cursor.getCount();
             cursor.close();
@@ -525,7 +525,7 @@ public class PadLandDataActivity extends PadLandActivity {
                     new String[]{PadContentProvider._ID, PadContentProvider.NAME, PadContentProvider.POSITION},
                     "",
                     null,
-                    PadContentProvider.CREATE_DATE + " ASC LIMIT " + position + ", 1");
+                    PadContentProvider.CREATE_DATE + " DESC LIMIT " + position + ", 1");
 
             HashMap<String, String> group = new HashMap<>();
             cursor.moveToFirst();
@@ -544,6 +544,43 @@ public class PadLandDataActivity extends PadLandActivity {
             cursor.close();
 
             return group;
+        }
+
+        public ArrayList<HashMap<String, String>> getAllPadgroups() {
+            Uri padlist_uri = Uri.parse(getString(R.string.request_padgroups));
+            Cursor cursor = contentResolver.query(padlist_uri,
+                    new String[]{PadContentProvider._ID, PadContentProvider.NAME, PadContentProvider.POSITION},
+                    null,
+                    null,
+                    PadContentProvider.CREATE_DATE + " DESC");
+
+            ArrayList<HashMap<String, String>> groups = new ArrayList<>();
+            HashMap<String, String> group;
+            if( cursor == null ) {
+                return groups;
+            }
+            if( cursor.getCount() == 0 ) {
+                cursor.close();
+                return groups;
+            }
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast())
+            {
+                String id = cursor.getString(0);
+                String name = cursor.getString(1);
+                String pos = cursor.getString(2);
+
+                group = new HashMap<>();
+                group.put(PadContentProvider._ID, id);
+                group.put(PadContentProvider.NAME, name);
+                group.put(PadContentProvider.POSITION, pos);
+                groups.add(group);
+
+                cursor.moveToNext();
+            }
+            cursor.close();
+
+            return groups;
         }
 
         public ArrayList<Long> getPadgroupChildrenIds(long id) {
