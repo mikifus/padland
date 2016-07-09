@@ -19,6 +19,8 @@ import android.widget.Toast;
 import com.mikifus.padland.Models.ServerModel;
 import com.mikifus.padland.R;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.regex.Pattern;
 
 /**
@@ -149,6 +151,12 @@ public class NewServerDialog extends DialogFragment {
         values.put(ServerModel.NAME, name);
 
         String url = String.valueOf(fieldUrl.getText());
+        try {
+            URL url_object = new URL(url);
+            url = url_object.getProtocol() + "://" + url_object.getHost();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
         values.put(ServerModel.URL, url);
 
         String padprefix = String.valueOf(fieldPadprefix.getText());

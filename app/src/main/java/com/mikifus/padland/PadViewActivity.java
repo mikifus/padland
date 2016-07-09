@@ -29,10 +29,16 @@ import android.webkit.WebView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.mikifus.padland.Models.Server;
+import com.mikifus.padland.Models.ServerModel;
 import com.mikifus.padland.SaferWebView.PadLandSaferWebViewClient;
 import com.pnikosis.materialishprogress.ProgressWheel;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * This activity makes a webapp view into a browser and loads the document
@@ -306,7 +312,12 @@ public class PadViewActivity extends PadLandDataActivity {
         webView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
         // The WebViewClient requires now a whitelist of urls that can interact with the Java side of the code
-        String[] url_whitelist = getResources().getStringArray(R.array.etherpad_servers_whitelist);
+        String[] url_whitelist = new String[0];
+        try {
+            url_whitelist = getServerWhiteList();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
         webView.setWebViewClient(new PadLandSaferWebViewClient(url_whitelist) {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -347,6 +358,25 @@ public class PadViewActivity extends PadLandDataActivity {
         this._addListenersToView();
         this._addJavascriptOnLoad(webView);
         return webView;
+    }
+
+    private String[] getServerWhiteList() throws MalformedURLException {
+        String[] server_list;
+        // Load the custom servers
+        ServerModel serverModel = new ServerModel(this);
+        ArrayList<Server> custom_servers = serverModel.getEnabledServerList();
+        ArrayList<String> server_names = new ArrayList<>();
+        for(Server server : custom_servers) {
+            URL url = new URL(server.getUrl());
+            server_names.add(url.getHost());
+        }
+
+        Collection<String> collection = new ArrayList<>();
+        collection.addAll(server_names);
+        collection.addAll(Arrays.asList(getResources().getStringArray( R.array.etherpad_servers_whitelist )));
+        server_list = collection.toArray(new String[collection.size()]);
+
+        return server_list;
     }
 
     private void loadJavascriptIfNeeded() {

@@ -50,7 +50,7 @@
             android:id="@+id/txt_server_url"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
+            android:inputType="textUri"
             android:imeOptions="actionDone" />
 
         <TextView
@@ -98,7 +98,7 @@
                 android:id="@+id/txt_server_padprefix"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
+                android:inputType="textWebEmailAddress"
                 android:imeOptions="actionDone" />
 
             <TextView

@@ -10,4 +10,16 @@ public class Server {
     public String url_padprefix;
     public boolean jquery;
     public String position;
+
+    public String getName() {
+        return name;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public String getPadPrefix() {
+        return url_padprefix;
+    }
 }
