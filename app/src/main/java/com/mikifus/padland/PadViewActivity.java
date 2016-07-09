@@ -184,9 +184,9 @@ public class PadViewActivity extends PadLandDataActivity {
      * Gets the pad data from the environment
      */
     private void _makePadUrl() {
-        padData padData = this._getPadData();
+        PadData PadData = this._getPadData();
 
-        current_padUrl = padData.getUrl();
+        current_padUrl = PadData.getUrl();
     }
 
     /**
@@ -194,19 +194,20 @@ public class PadViewActivity extends PadLandDataActivity {
      *
      * @return padData
      */
-    private padData _getPadData() {
+    private PadData _getPadData() {
         long pad_id = this._getPadId();
-        padData padData;
+        PadData PadData;
 
         if (pad_id > 0) {
             Cursor c = padlistDb._getPadDataById(pad_id);
-            padData = new padData(c);
+            c.moveToFirst();
+            PadData = new PadData(c);
             c.close();
         } else {
-            padData = this._getPadDataFromIntent();
+            PadData = this._getPadDataFromIntent();
         }
 
-        return padData;
+        return PadData;
     }
 
     /**
@@ -215,23 +216,23 @@ public class PadViewActivity extends PadLandDataActivity {
      *
      * @return
      */
-    private padData _getPadDataFromIntent() {
+    private PadData _getPadDataFromIntent() {
         Intent myIntent = getIntent();
         String action = myIntent.getAction();
-        padData padData;
+        PadData PadData;
 
         if (Intent.ACTION_VIEW.equals(action)) {
             String padUrl = String.valueOf(myIntent.getData());
-            padData = makePadData(null, null, padUrl);
+            PadData = makePadData(null, null, padUrl);
         } else {
             String padName = myIntent.getStringExtra("padName");
             String padServer = myIntent.getStringExtra("padServer");
             String padUrl = myIntent.getStringExtra("padUrl");
 
-            padData = makePadData(padName, padServer, padUrl);
+            PadData = makePadData(padName, padServer, padUrl);
         }
 
-        return padData;
+        return PadData;
     }
 
     /**
@@ -248,8 +249,8 @@ public class PadViewActivity extends PadLandDataActivity {
             return pad_id;
         }
 
-        padData padData = this._getPadDataFromIntent();
-        Cursor c = padlistDb._getPadDataByUrl(padData.getUrl());
+        PadData PadData = this._getPadDataFromIntent();
+        Cursor c = padlistDb._getPadDataByUrl(PadData.getUrl());
 
         if (c != null && c.getCount() > 0) {
             c.moveToFirst();
@@ -272,7 +273,7 @@ public class PadViewActivity extends PadLandDataActivity {
         if (userDetails.getBoolean("auto_save_new_pads", true) && this._getPadId() == 0) {
             // Add a new record
             ContentValues values = new ContentValues();
-            padData intentData = this._getPadDataFromIntent();
+            PadData intentData = this._getPadDataFromIntent();
 
             values.put(PadContentProvider.NAME, intentData.getName());
             values.put(PadContentProvider.SERVER, intentData.getServer());
@@ -447,7 +448,7 @@ public class PadViewActivity extends PadLandDataActivity {
      * @param padUrl
      * @return
      */
-    public padData makePadData(String padName, String padServer, String padUrl) {
+    public PadData makePadData(String padName, String padServer, String padUrl) {
         if (padUrl == null || padUrl.isEmpty()) {
             if (padName == null || padName.isEmpty()) {
                 return null;
@@ -474,10 +475,11 @@ public class PadViewActivity extends PadLandDataActivity {
         startManagingCursor(matrixCursor);
         matrixCursor.addRow(new Object[]{0, padName, padServer, padUrl, 0, 0, 0});
 
-        padData padData = new padData(matrixCursor);
+        matrixCursor.moveToFirst();
+        PadData PadData = new PadData(matrixCursor);
         matrixCursor.close();
 
-        return padData;
+        return PadData;
     }
 
     /**
