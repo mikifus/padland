@@ -64,11 +64,25 @@ public class PadLandDataActivity extends PadLandActivity {
      * @param pad_id
      * @return
      */
-    public padData _getPadData( long pad_id ){
+    public PadData _getPadData(long pad_id ){
         Cursor cursor = padlistDb._getPadDataById(pad_id);
-        padData pad_data = new padData( cursor );
+        cursor.moveToFirst();
+        PadData pad_data = new PadData( cursor );
         cursor.close();
         return pad_data;
+    }
+
+    /**
+     * Gets back a padData array object.
+     * @return
+     */
+    public HashMap<Long, PadData> _getPadDatas(){
+        HashMap<Long, PadData> padDataHashMap = new HashMap<>();
+        ArrayList<PadData> padDatas = padlistDb._getAllPadData();
+        for(PadData padData : padDatas) {
+            padDataHashMap.put(padData.getId(), padData);
+        }
+        return padDataHashMap;
     }
 
     /**
@@ -249,8 +263,8 @@ public class PadLandDataActivity extends PadLandActivity {
         Log.d("PadLandDataActivity", selectedItems.get(0).toString());
         // Only the first one
         final String selectedItem_id = selectedItems.get(0);
-        padData padData = _getPadData( Long.parseLong(selectedItem_id) );
-        String padUrl = padData.getUrl();
+        PadData PadData = _getPadData( Long.parseLong(selectedItem_id) );
+        String padUrl = PadData.getUrl();
         Log.d("SHARING_PAD", selectedItem_id + " - " + padUrl);
 
         Intent sendIntent = new Intent();
@@ -269,7 +283,7 @@ public class PadLandDataActivity extends PadLandActivity {
      * to deal with the documents. It has the info and returns it
      * in the right format.
      */
-    public class padData
+    public class PadData
     {
         private long id;
         private String name;
@@ -279,11 +293,10 @@ public class PadLandDataActivity extends PadLandActivity {
         private long create_date;
         private long access_count;
 
-        public padData(Cursor c) {
+        public PadData(Cursor c) {
             if(c != null && c.getCount() > 0) {
-                c.moveToFirst();
+//                c.moveToNext();
 //                Log.d("padData LOADED", DatabaseUtils.dumpCursorToString(c));
-
                 id = c.getLong(0);
                 name = c.getString(1);
                 server =  c.getString(2);
@@ -350,6 +363,52 @@ public class PadLandDataActivity extends PadLandActivity {
             );
             return c;
         }
+        /**
+         * Self explanatory name.
+         * Just get all.
+         * @return
+         */
+        private Cursor _getPadDataFromDatabase(){
+            Cursor c;
+            c = contentResolver.query(
+                    PadContentProvider.PADLIST_CONTENT_URI,
+                    PadContentProvider.getPadFieldsList(),
+                    null,
+                    null, // AKA id
+                    null
+            );
+            return c;
+        }
+
+        /**
+         * Queries the database and returns all pads
+         * @return
+         */
+        public ArrayList<PadData> _getAllPadData(){
+            Cursor cursor = this._getPadDataFromDatabase();
+            ArrayList<PadData> PadDatas = new ArrayList<>();
+
+            if (cursor == null ) {
+                return PadDatas;
+            }
+            if( cursor.getCount() == 0 ) {
+                cursor.close();
+                return PadDatas;
+            }
+
+            PadData PadData;
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast())
+            {
+                // Goes to next by itself
+                PadData = new PadData(cursor);
+                PadDatas.add(PadData);
+                cursor.moveToNext();
+            }
+            cursor.close();
+
+            return PadDatas;
+        }
 
         /**
          * Queries the database and compares to pad_id
@@ -381,7 +440,7 @@ public class PadLandDataActivity extends PadLandActivity {
          */
         public void accessUpdate( long pad_id ){
             if( pad_id > 0 ) {
-                padData data = _getPadData( pad_id );
+                PadData data = _getPadData( pad_id );
                 ContentValues values = new ContentValues();
                 values.put( PadContentProvider.LAST_USED_DATE, getNowDate() );
                 values.put( PadContentProvider.ACCESS_COUNT, (data.getAccessCount() + 1));
@@ -481,39 +540,6 @@ public class PadLandDataActivity extends PadLandActivity {
                 group.put(PadContentProvider.POSITION, pos);
 
                 break;
-            }
-            cursor.close();
-
-            return group;
-        }
-
-        public HashMap<String, String> getPadgroupAtPosition(int position) {
-//            final String QUERY =
-//                    "SELECT * FROM " + PadContentProvider.PADGROUP_TABLE_NAME +
-//                            "WHERE " + PadContentProvider.POSITION + "=? ";
-//            Cursor cursor = db.rawQuery(QUERY, new String[]{String.valueOf(position)});
-            Uri padlist_uri = Uri.parse(getString(R.string.request_padgroups));
-            Cursor cursor = contentResolver.query(padlist_uri,
-                    new String[]{PadContentProvider._ID, PadContentProvider.NAME, PadContentProvider.POSITION},
-                    PadContentProvider.POSITION + " = ?",
-                    new String[]{String.valueOf(position)},
-                    PadContentProvider.CREATE_DATE + " ASC");
-
-
-            HashMap<String, String> group = new HashMap<>();
-            cursor.moveToFirst();
-            while (!cursor.isAfterLast())
-            {
-                String id = cursor.getString(0);
-                String name = cursor.getString(1);
-                String pos = cursor.getString(2);
-
-                group.put(PadContentProvider._ID, id);
-                group.put(PadContentProvider.NAME, name);
-                group.put(PadContentProvider.POSITION, pos);
-
-                break;
-//                cursor.moveToNext();
             }
             cursor.close();
 

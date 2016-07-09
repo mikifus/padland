@@ -55,6 +55,7 @@ public class PadListAdapter extends BaseExpandableListAdapter {
 
     private SparseArray<SparseBooleanArray> checkedPositions;
     private HashMap<Long, Bundle> items_positions = new HashMap<>();
+    private HashMap<Long, PadLandDataActivity.PadData> padDatas;
 
     // The default choice is the multiple one
     private int choiceMode = CHOICE_MODE_MULTIPLE;
@@ -65,6 +66,7 @@ public class PadListAdapter extends BaseExpandableListAdapter {
         layoutInflater = (LayoutInflater) this.context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         checkedPositions = new SparseArray<>();
+        padDatas = context._getPadDatas();
     }
 
     @Override
@@ -93,9 +95,9 @@ public class PadListAdapter extends BaseExpandableListAdapter {
 
 
     @Override
-    public PadLandDataActivity.padData getChild(int groupPosition, int childPosition) {
+    public PadLandDataActivity.PadData getChild(int groupPosition, int childPosition) {
         long id = getChildId(groupPosition, childPosition);
-        return context._getPadData(id);
+        return padDatas.get(id);
     }
 
     @Override
@@ -152,7 +154,7 @@ public class PadListAdapter extends BaseExpandableListAdapter {
             convertView = layoutInflater.inflate(R.layout.padlist_item, null);
         }
 
-        PadLandDataActivity.padData child = getChild(groupPosition, childPosition);
+        PadLandDataActivity.PadData child = getChild(groupPosition, childPosition);
 
         Bundle position_bundle = new Bundle();
         position_bundle.putInt("groupPosition", groupPosition);

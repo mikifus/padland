@@ -43,7 +43,7 @@ public class PadInfoActivity extends PadLandDataActivity {
             return;
         }
 
-        padData pad_data = this._getPadData( pad_id );
+        PadData pad_data = this._getPadData( pad_id );
 
         // Action bar title
         getSupportActionBar().setTitle( pad_data.getName() );
@@ -60,7 +60,7 @@ public class PadInfoActivity extends PadLandDataActivity {
      * @param pad_data
      * @return
      */
-    private SeparatedListAdapter _doInfoList( padData pad_data )
+    private SeparatedListAdapter _doInfoList( PadData pad_data )
     {
         List<Map<String,?>> datalist = new LinkedList<>();
 
