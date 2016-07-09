@@ -90,18 +90,18 @@
 
     <string name="serverlist_dialog_new_server_name_title">Server name</string>
     <string name="serverlist_dialog_new_server_name_label">Insert the name you refer to the server (or none)</string>
-    <string name="serverlist_dialog_new_padgroup_name_invalid">Invalid server name.</string>
+    <string name="serverlist_dialog_new_server_name_invalid">Invalid server name.</string>
 
     <string name="serverlist_dialog_new_server_url_title">Server url</string>
     <string name="serverlist_dialog_new_server_url_label">The url where the server is accessible</string>
-    <string name="serverlist_dialog_new_padgroup_url_invalid">Invalid server url.</string>
+    <string name="serverlist_dialog_new_server_url_invalid">Invalid server url.</string>
 
     <string name="serverlist_dialog_new_server_lite_title">Runs Etherpad Lite</string>
     <string name="serverlist_dialog_new_server_lite_label">Check this if the server runs on Etherpad Lite (or you can ignore this option).</string>
 
     <string name="serverlist_dialog_new_server_padprefix_title">Url pad prefix</string>
     <string name="serverlist_dialog_new_server_padprefix_label">In new servers (Etherpad Lite) there is a url segment between the server domain and the pad name. It is by default \"p/\".</string>
-    <string name="serverlist_dialog_new_padgroup_padprefix_invalid">Invalid pad prefix.</string>
+    <string name="serverlist_dialog_new_server_padprefix_invalid">Invalid pad prefix.</string>
 
     <string name="serverlist_dialog_new_server_jquery_title">Supports jQuery</string>
     <string name="serverlist_dialog_new_server_jquery_label">Check this for servers supported by \"etherpad-lite-jquery-plugin\" (Etherpad Lite).</string>
