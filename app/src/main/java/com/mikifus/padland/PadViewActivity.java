@@ -312,12 +312,7 @@ public class PadViewActivity extends PadLandDataActivity {
         webView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
         // The WebViewClient requires now a whitelist of urls that can interact with the Java side of the code
-        String[] url_whitelist = new String[0];
-        try {
-            url_whitelist = getServerWhiteList();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        String[] url_whitelist = getServerWhiteList();
         webView.setWebViewClient(new PadLandSaferWebViewClient(url_whitelist) {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -360,15 +355,19 @@ public class PadViewActivity extends PadLandDataActivity {
         return webView;
     }
 
-    private String[] getServerWhiteList() throws MalformedURLException {
+    private String[] getServerWhiteList() {
         String[] server_list;
         // Load the custom servers
         ServerModel serverModel = new ServerModel(this);
         ArrayList<Server> custom_servers = serverModel.getEnabledServerList();
         ArrayList<String> server_names = new ArrayList<>();
         for(Server server : custom_servers) {
-            URL url = new URL(server.getUrl());
-            server_names.add(url.getHost());
+            try {
+                URL url = new URL(server.getUrl());
+                server_names.add(url.getHost());
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
         }
 
         Collection<String> collection = new ArrayList<>();

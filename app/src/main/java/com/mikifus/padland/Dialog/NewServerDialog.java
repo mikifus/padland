@@ -122,17 +122,28 @@ public class NewServerDialog extends DialogFragment {
 
         if( ! NAME_VALIDATION.matcher(contentValues.getAsString(ServerModel.NAME)).matches() ) {
             // TODO: Change toast for something better.
-            Toast.makeText(getContext(), getString(R.string.serverlist_dialog_new_padgroup_name_invalid), Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), getString(R.string.serverlist_dialog_new_server_name_invalid), Toast.LENGTH_LONG).show();
             return false;
         }
 
-        if( ! URL_VALIDATION.matcher(contentValues.getAsString(ServerModel.URL)).matches() ) {
-            Toast.makeText(getContext(), getString(R.string.serverlist_dialog_new_padgroup_url_invalid), Toast.LENGTH_LONG).show();
+        String urlString = contentValues.getAsString(ServerModel.URL);
+        String host = "";
+        URL urlParsed;
+        try {
+            urlParsed = new URL(urlString);
+            host = urlParsed.getHost();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        if( ! URL_VALIDATION.matcher(urlString).matches()
+                || host.isEmpty() ) {
+            Toast.makeText(getContext(), getString(R.string.serverlist_dialog_new_server_url_invalid), Toast.LENGTH_LONG).show();
             return false;
         }
 
-        if( ! PADPREFIX_VALIDATION.matcher(contentValues.getAsString(ServerModel.PADPREFIX)).matches() ) {
-            Toast.makeText(getContext(), getString(R.string.serverlist_dialog_new_padgroup_padprefix_invalid), Toast.LENGTH_LONG).show();
+        if( ! contentValues.getAsString(ServerModel.PADPREFIX).isEmpty()
+                && ! PADPREFIX_VALIDATION.matcher(contentValues.getAsString(ServerModel.PADPREFIX)).matches()) {
+            Toast.makeText(getContext(), getString(R.string.serverlist_dialog_new_server_padprefix_invalid), Toast.LENGTH_LONG).show();
             return false;
         }
 
