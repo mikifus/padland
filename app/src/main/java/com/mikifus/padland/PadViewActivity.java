@@ -644,7 +644,7 @@ public class PadViewActivity extends PadLandDataActivity {
     @Override
     public void onBackPressed() {
 //        super.onBackPressed();
-//        startPadListActivityWithPadId();
+        startPadListActivityWithPadId();
         finish();
     }
 }
