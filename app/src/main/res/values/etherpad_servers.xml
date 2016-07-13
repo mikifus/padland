@@ -9,6 +9,7 @@
         <item>Mozilla Etherpad</item>
         <item>Framapad.org</item>
         <item>Primarypad</item>
+        <item>Piratenpad</item>
     </string-array>
 
     <string-array name="etherpad_servers_url_home" translatable="false">
@@ -20,6 +21,7 @@
         <item>http://public.etherpad-mozilla.org</item>
         <item>https://mensuel.framapad.org</item>
         <item>http://free.primarypad.com</item>
+        <item>https://piratenpad.de</item>
     </string-array>
 
     <string-array name="etherpad_servers_url_padprefix" translatable="false">
@@ -31,6 +33,7 @@
         <item>http://public.etherpad-mozilla.org/p/</item>
         <item>https://mensuel.framapad.org/p/</item>
         <item>http://free.primarypad.com/p/</item>
+        <item>https://piratenpad.de/p/</item>
     </string-array>
 
     <string-array name="etherpad_servers_whitelist" translatable="false">
@@ -49,6 +52,7 @@
         <item>annuel.framapad.org</item>
 
         <item>free.primarypad.com</item>
+        <item>piratenpad.de</item>
     </string-array>
 
     <string-array name="etherpad_servers_supports_jquery" translatable="false">
@@ -57,5 +61,6 @@
         <item>public.etherpad-mozilla.org</item>
         <item>mensuel.framapad.org</item>
         <item>free.primarypad.com</item>
+        <item>piratenpad.de</item>
     </string-array>
 </resources>
