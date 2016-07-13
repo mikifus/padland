@@ -54,6 +54,9 @@
         <p>Japanese translation by naofum:\n
             <a href='https://github.com/naofum'>https://github.com/naofum</a>
         </p>\n\n
+        <p>Malayalam translation by navi:\n
+            <a href='https://github.com/naviknair'>https://github.com/naviknair</a>
+        </p>\n\n
     </string>
     <string name="padinfo_view_pad_button">View pad</string>
     <string name="title_activity_pad_info">Document info</string>
