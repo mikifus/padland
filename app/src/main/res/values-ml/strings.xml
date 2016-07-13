@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <resources>
+    <string name="app_name">പാഡ് ലാൻഡ്  </string>
+    <string name="pref_header_general">ക്രമീകരണം</string>
+    <string name="title_activity_settings">ക്രമീകരണം</string>
+    <string name="action_settings">ക്രമീകരണം</string>
+    <string name="go_pad">സൃഷ്ടിക്കുക അല്ലെങ്കിൽ പോകുക</string>
+    <string name="title_activity_pad_view">പാഡ് ലാൻഡ്  വ്യൂവർ</string>
+    <string name="write_pad_name">പാഡ് പേര്</string>
+    <string name="action_newpad">പ്രമാണം ചേർക്കുക</string>
+    <string name="action_go_to_list">തിരികെ പാഡ് പട്ടികയിലേക്ക്</string>
+    <string name="title_activity_new_pad">പാഡ് സൃഷ്ടിക്കുക</string>
+    <string name="new_pad_explanation">ഐപാഡ് പേര് പരിചയപ്പെടുത്തുക. അതു സൃഷ്ടിക്കപ്പെടും നിലവിലില്ല, അല്ലെങ്കിൽ അത് പാഡ് കൊണ്ടുപോകും.</string>
+    <string name="save_pad">പാഡ് സംരക്ഷിക്കുക</string>
+    <string name="download_pad">പാഡ് സംരക്ഷിക്കുക</string>
+    <string name="title_activity_about">കുറിച്ച്</string>
+    <string name="about">കുറിച്ച്</string>
+    <string name="about_text">
+    <p>Publié sous <a href="http://www.apache.org/licenses/LICENSE-2.0.html">licence Apache</a>.</p>
+    </string>
+    <string name="settings_save_new_pads_title">പുതിയ പ്രമാണങ്ങൾ സ്വമേധയാ സൂക്ഷിക്കുക</string>
+    <string name="settings_save_new_pads_desc">യാന്ത്രികമായി നിങ്ങളുടെ ലിസ്റ്റിലേക്ക് നിങ്ങളുടെ പുതുതായി സന്ദർശിച്ചു പ്രമാണങ്ങൾ ചേർക്കുക</string>
+    <string name="share">പങ്കിടുക</string>
+    <string name="delete">ഇല്ലാതാക്കുക</string>
+    <string name="no_pads">സംരക്ഷിച്ച രേഖകൾ ഉണ്ട്.</string>
+    <string name="sure_to_delete_pad">നിങ്ങൾക്ക് തിരഞ്ഞെടുത്ത പ്രമാണങ്ങൾ ഇല്ലാതാക്കണമെന്ന് ഉറപ്പാണോ?</string>
+    <string name="sure_to_delete_group">നിങ്ങൾ തിരഞ്ഞെടുത്ത ഗ്രൂപ്പ് ഇല്ലാതാക്കാൻ ആഗ്രഹിക്കുന്നുണ്ടോ?</string>
+    <string name="ok">ശരി</string>
+    <string name="cancel">റദ്ദാക്കുക</string>
+    <string name="share_document">ഷെയർ പ്രമാണം</string>
+    <string name="share_auto_text">"Padland എന്നെ ചേരാൻ വരുക"</string>
+    <string name="user_preferences">ഉപയോക്തൃ മുൻഗണനകൾ</string>
+    <string name="settings_default_username">സ്വതേ ഉപയോക്തൃനാമം</string>
+    <string name="settings_default_username_explanation">PadLand നിങ്ങൾ തുറക്കാൻ എല്ലാ രേഖകളും നിങ്ങളുടെ സ്ഥിര ഉപയോക്തൃനാമം സജ്ജമാക്കാൻ ശ്രമിക്കും.</string>
+    <string name="settings_default_color">സ്വതേ നിറം</string>
+    <string name="settings_default_color_explanation">PadLand നിങ്ങൾ തുറക്കാൻ എല്ലാ രേഖകളും നിങ്ങളുടെ സ്ഥിര നിറം സജ്ജമാക്കാൻ ശ്രമിക്കും.</string>
+    <string name="settings_default_color_dialogtitle">നിറം തിരഞ്ഞെടുക്കുക</string>
+    <string name="settings_default_color_dialogdesc"> ഫോർമാറ്റ് ഉദാഹരണത്തിന് (ഹെക്സ്):#FF0000</string>
+    <string name="activity_padlist_implicitintent_text_copied">വാചകം ക്ലിപ്പ്ബോർഡിലേക്ക് പകർത്തി ചെയ്തിരിക്കുന്നു. അത് ഉപയോഗിക്കാൻ നിങ്ങളുടെ ക്ലിപ്പ്ബോർഡ് ഡാറ്റ ഒട്ടിക്കുക.</string>
+    <string name="network_is_unreachable">നെറ്റ്വർക്ക് ലഭ്യമല്ല.</string>
+    <string name="title_activity_padlist"> Padland പ്രമാണങ്ങൾ</string>
+    <string name="choose_a_server">ഒരു സെർവർ (ഓപ്ഷണൽ) തിരഞ്ഞെടുക്കുക:</string>
+    <string name="default_pad_server">സ്വതേ പാഡ് സെർവർ</string>
+    <string name="choose_default_pad_server">പുതിയതൊന്ന് തുറക്കുമ്പോൾ ഒരു സ്ഥിര പാഡ് സെർവർ തിരഞ്ഞെടുക്കുക</string>
+    <string name="about_support_text">
+        <p>ഈ അപ്ലിക്കേഷൻ വികസിപ്പിച്ചുകൊണ്ടിരിയ്ക്കുന്നു. ഫീഡ്ബാക്ക് റിപ്പോർട്ട് ബഗ്ഗുകൾ നൽകാൻ mikifus@gmail.com ഡവലപ്പർ കൂടെ ബന്ധപ്പെടുക.</p>\n
+        \n
+        <p>ഇവിടെ താങ്കൾക്ക് സംഭാവന താൽപ്പര്യമുണ്ടെങ്കിൽ സംഭരണിയാണ് \ n
+            <a href='https://github.com/mikifus/padland'>https://github.com/mikifus/padland</a>
+        </p>\n\n
+        <p>German translation by rugk:\n
+            <a href='https://github.com/rugk'>https://github.com/rugk</a>
+        </p>\n\n
+        <p>Japanese translation by naofum:\n
+            <a href='https://github.com/naofum'>https://github.com/naofum</a>
+        </p>\n\n
+        <p>Malayalam translation by navi:\n
+            <a href='https://github.com/naviknair'>https://github.com/naviknair</a>
+        </p>\n\n
+    </string>
+    <string name="padinfo_view_pad_button">വ്യൂ  പാഡ് </string>
+    <string name="title_activity_pad_info">പ്രമാണ വിവരം</string>
+    <string name="title_activity_pad_land_data">PadLand ഡാറ്റ പ്രവർത്തനം</string>
+    <string name="padinfo_pad_info">ഡോക്യുമെൻറ് വിവര</string>
+    <string name="padinfo_pad_url">പ്രമാണ URL</string>
+    <string name="padinfo_createdate">ലിസ്റ്റ് ചേർത്തു</string>
+    <string name="padinfo_lastuseddate">അവസാനം കണ്ടത്</string>
+    <string name="newpad_noname_warning">നിങ്ങൾ പ്രമാണത്തിന് ഒരു പേര് നൽകണം.</string>
+    <string name="padlist_empty_createnew">ഒരു പുതിയ പ്രമാണം സൃഷ്ടിക്കുക</string>
+    <string name="padlist_document_deleted">പ്രമാണം ഇല്ലാതാക്കി</string>
+    <string name="padlist_group_deleted">ഗ്രൂപ്പ് ഇല്ലാതാക്കി</string>
+    <string name="padlist_dialog_new_padgroup_title">പുതിയ ഗ്രൂപ്പ്</string>
+    <string name="padlist_dialog_new_padgroup_label">പുതിയ ഗ്രൂപ്പിന്റെ പേർ ഉൾപ്പെടുത്തുക</string>
+    <string name="padlist_dialog_new_padgroup_invalid">അസാധുവായ ഗ്രൂപ്പ് നാമം.</string>
+    <string name="padlist_group_unclassified_name">തരംതിരിയ്ക്കാത്ത</string>
+    <string name="padlist_group_select_dialog">ഗ്രൂപ്പ് തിരഞ്ഞെടുക്കുക</string>
+    <string name="unexpected_error">ഒരു അപ്രതീക്ഷിത പിശക് സംഭവിച്ചു.</string>
+    <string name="settings_miscellaneous">കലര്പ്പായ</string>
+    <string name="padinfo_times_accessed">തവണ</string>
+    <string name="pref_default_display_name">പേരറിയാത്ത</string>
+    <string name="settings_default_username_dialog_title">ഉപയോക്തൃനാമം സജ്ജീകരിക്കുക</string>
+</resources> 
