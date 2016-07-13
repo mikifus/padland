@@ -54,6 +54,9 @@
         <p>Japanese translation by naofum:\n
             <a href='https://github.com/naofum'>https://github.com/naofum</a>
         </p>\n\n
+        <p>Malayalam translation by navi:\n
+            <a href='https://github.com/naviknair'>https://github.com/naviknair</a>
+        </p>\n\n
     </string>
     <string name="padinfo_view_pad_button">View pad</string>
     <string name="title_activity_pad_info">Document info</string>
@@ -80,5 +83,30 @@
     <string name="padinfo_times_accessed">Times accessed</string>
     <string name="pref_default_display_name">Anonymous</string>
     <string name="settings_default_username_dialog_title">Set username</string>
+    <string name="serverlist_dialog_new_server_advanced">Advanced Options</string>
+
+    <string name="title_activity_server_list">Server list</string>
+    <string name="pref_server_list_summary">Add your custom etherpad servers</string>
+    <string name="no_custom_servers">No servers added.</string>
+
+    <string name="serverlist_dialog_new_server_title">New server</string>
+
+    <string name="serverlist_dialog_new_server_name_title">Server name</string>
+    <string name="serverlist_dialog_new_server_name_label">Insert the name you refer to the server (or none)</string>
+    <string name="serverlist_dialog_new_server_name_invalid">Invalid server name.</string>
+
+    <string name="serverlist_dialog_new_server_url_title">Server url</string>
+    <string name="serverlist_dialog_new_server_url_label">The url where the server is accessible</string>
+    <string name="serverlist_dialog_new_server_url_invalid">Invalid server url.</string>
+
+    <string name="serverlist_dialog_new_server_lite_title">Runs Etherpad Lite</string>
+    <string name="serverlist_dialog_new_server_lite_label">Check this if the server runs on Etherpad Lite (or you can ignore this option).</string>
+
+    <string name="serverlist_dialog_new_server_padprefix_title">Url pad prefix</string>
+    <string name="serverlist_dialog_new_server_padprefix_label">In new servers (Etherpad Lite) there is a url segment between the server domain and the pad name. It is by default \"p/\".</string>
+    <string name="serverlist_dialog_new_server_padprefix_invalid">Invalid pad prefix.</string>
+
+    <string name="serverlist_dialog_new_server_jquery_title">Supports jQuery</string>
+    <string name="serverlist_dialog_new_server_jquery_label">Check this for servers supported by \"etherpad-lite-jquery-plugin\" (Etherpad Lite).</string>
 
 </resources>
