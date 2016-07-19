@@ -29,16 +29,11 @@ import android.webkit.WebView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.mikifus.padland.Models.Server;
-import com.mikifus.padland.Models.ServerModel;
 import com.mikifus.padland.SaferWebView.PadLandSaferWebViewClient;
+import com.mikifus.padland.Utils.WhiteListMatcher;
 import com.pnikosis.materialishprogress.ProgressWheel;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 
 /**
  * This activity makes a webapp view into a browser and loads the document
@@ -106,6 +101,9 @@ public class PadViewActivity extends PadLandDataActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Checks if the url is a valid pad
+        this._makePadUrl();
+
         // Forces landscape view
 //        this.setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_PORTRAIT );
         handler = new Handler();
@@ -119,7 +117,6 @@ public class PadViewActivity extends PadLandDataActivity {
         setContentView(R.layout.activity_padview);
         _loadProgressWheel();
 
-        this._makePadUrl();
         this._saveNewPad();
         this._updateViewedPad();
         this._makeWebView();
@@ -181,10 +178,34 @@ public class PadViewActivity extends PadLandDataActivity {
     }
 
     /**
-     * Gets the pad data from the environment
+     * Gets the pad data from the environment.
+     * If the URL is not valid then the activity can't continue.
      */
     private void _makePadUrl() {
         PadData PadData = this._getPadData();
+
+
+        if( ! WhiteListMatcher.checkValidUrl(PadData.getUrl()) ) {
+            Toast.makeText(this, getString(R.string.padview_toast_invalid_url), Toast.LENGTH_SHORT).show();
+            finish();
+        }
+        if( ! WhiteListMatcher.checkWhitelistUrl(PadData.getUrl(), getServerWhiteList()) ) {
+            Toast.makeText(this, getString(R.string.padview_toast_blacklist_url), Toast.LENGTH_SHORT).show();
+            // My intention was to allow the user choose another app to open the URL
+            // with the Intent.createChooser method. It worked really bad, it's bugged
+            // and confusing for the user, so let's just go with a Toast.
+            // TODO: Make this behave in a better way. Toasts are ugly.
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            i.setData(Uri.parse(PadData.getUrl()));
+            finish();
+            startActivity(Intent.createChooser(i, getString(R.string.padview_toast_blacklist_url)));
+            return;
+        }
+
 
         current_padUrl = PadData.getUrl();
     }
@@ -199,6 +220,7 @@ public class PadViewActivity extends PadLandDataActivity {
         PadData PadData;
 
         if (pad_id > 0) {
+            // TODO: Use a method that returns directly a PadData instance
             Cursor c = padlistDb._getPadDataById(pad_id);
             c.moveToFirst();
             PadData = new PadData(c);
@@ -219,20 +241,22 @@ public class PadViewActivity extends PadLandDataActivity {
     private PadData _getPadDataFromIntent() {
         Intent myIntent = getIntent();
         String action = myIntent.getAction();
-        PadData PadData;
+        PadData padData;
+        String padName = null;
+        String padServer = null;
+        String padUrl;
 
         if (Intent.ACTION_VIEW.equals(action)) {
-            String padUrl = String.valueOf(myIntent.getData());
-            PadData = makePadData(null, null, padUrl);
+            padUrl = String.valueOf(myIntent.getData());
         } else {
-            String padName = myIntent.getStringExtra("padName");
-            String padServer = myIntent.getStringExtra("padServer");
-            String padUrl = myIntent.getStringExtra("padUrl");
-
-            PadData = makePadData(padName, padServer, padUrl);
+            padName = myIntent.getStringExtra("padName");
+            padServer = myIntent.getStringExtra("padServer");
+            padUrl = myIntent.getStringExtra("padUrl");
         }
 
-        return PadData;
+        padData = makePadData(padName, padServer, padUrl);
+
+        return padData;
     }
 
     /**
@@ -354,29 +378,6 @@ public class PadViewActivity extends PadLandDataActivity {
         this._addListenersToView();
         this._addJavascriptOnLoad(webView);
         return webView;
-    }
-
-    private String[] getServerWhiteList() {
-        String[] server_list;
-        // Load the custom servers
-        ServerModel serverModel = new ServerModel(this);
-        ArrayList<Server> custom_servers = serverModel.getEnabledServerList();
-        ArrayList<String> server_names = new ArrayList<>();
-        for(Server server : custom_servers) {
-            try {
-                URL url = new URL(server.getUrl());
-                server_names.add(url.getHost());
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-        }
-
-        Collection<String> collection = new ArrayList<>();
-        collection.addAll(server_names);
-        collection.addAll(Arrays.asList(getResources().getStringArray( R.array.etherpad_servers_whitelist )));
-        server_list = collection.toArray(new String[collection.size()]);
-
-        return server_list;
     }
 
     private void loadJavascriptIfNeeded() {
@@ -635,9 +636,18 @@ public class PadViewActivity extends PadLandDataActivity {
         // runJavascriptOnView(webView, "$('#examplePadBasic').pad({'getContents':'exampleGetContents'});");
     }
 
+    /**
+     * Goes back to the pad list.
+     */
     public void startPadListActivityWithPadId() {
+        long padId = _getPadId();
+        // It can happen that the pad ID is not set
+        // if back is pressed before having it.
+        if( padId == 0 ) {
+            return;
+        }
         Intent intent = new Intent(PadViewActivity.this, PadListActivity.class);
-        intent.putExtra(PadListActivity.INTENT_FOCUS_PAD, _getPadId());
+        intent.putExtra(PadListActivity.INTENT_FOCUS_PAD, padId);
         startActivity(intent);
     }
 
