@@ -114,7 +114,7 @@ public class PadListActivity extends PadLandDataActivity
 
         if (extra_text != null) {
             if( WhiteListMatcher.checkValidUrl(extra_text)
-                && WhiteListMatcher.checkWhitelistUrl(extra_text, getServerWhiteList()) ) {
+                && WhiteListMatcher.isValidHost(extra_text, getServerWhiteList()) ) {
                 Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(extra_text));
                 i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);

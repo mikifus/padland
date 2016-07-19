@@ -302,8 +302,6 @@ public class PadLandDataActivity extends PadLandActivity {
 
         public PadData(Cursor c) {
             if(c != null && c.getCount() > 0) {
-//                c.moveToNext();
-//                Log.d("padData LOADED", DatabaseUtils.dumpCursorToString(c));
                 id = c.getLong(0);
                 name = c.getString(1);
                 server =  c.getString(2);
@@ -778,6 +776,12 @@ public class PadLandDataActivity extends PadLandActivity {
         }
     }
 
+    /**
+     * Retrieves a list of all hosts both from the XML default list
+     * and the database.
+     *
+     * @return
+     */
     protected String[] getServerWhiteList() {
         String[] server_list;
         // Load the custom servers
