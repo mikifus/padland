@@ -78,6 +78,9 @@
     <string name="padlist_group_unclassified_name">Unclassified</string>
     <string name="padlist_group_select_dialog">Select group</string>
 
+    <string name="padview_toast_invalid_url" >The URL seems invalid.</string>
+    <string name="padview_toast_blacklist_url" >The host of your URL is not in the whitelist. Add a new server in Padland\'s settings or choose another app.</string>
+
     <string name="unexpected_error">An unexpected error happened.</string>
     <string name="settings_miscellaneous">Miscellaneous</string>
     <string name="padinfo_times_accessed">Times accessed</string>

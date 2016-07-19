@@ -15,8 +15,15 @@ import android.view.Menu;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.mikifus.padland.Models.Server;
+import com.mikifus.padland.Models.ServerModel;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -769,5 +776,28 @@ public class PadLandDataActivity extends PadLandActivity {
             int result = db.delete(PadContentProvider.RELATION_TABLE_NAME, PadContentProvider._ID_GROUP + "=?", new String[]{String.valueOf(group_id)});
             return result > 0;
         }
+    }
+
+    protected String[] getServerWhiteList() {
+        String[] server_list;
+        // Load the custom servers
+        ServerModel serverModel = new ServerModel(this);
+        ArrayList<Server> custom_servers = serverModel.getEnabledServerList();
+        ArrayList<String> server_names = new ArrayList<>();
+        for(Server server : custom_servers) {
+            try {
+                URL url = new URL(server.getUrl());
+                server_names.add(url.getHost());
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        Collection<String> collection = new ArrayList<>();
+        collection.addAll(server_names);
+        collection.addAll(Arrays.asList(getResources().getStringArray( R.array.etherpad_servers_whitelist )));
+        server_list = collection.toArray(new String[collection.size()]);
+
+        return server_list;
     }
 }
