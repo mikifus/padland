@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mikifus.padland"
-    android:versionCode="5"
-    android:versionName="1.1.3" >
+    android:versionCode="6"
+    android:versionName="1.1.4" >
 
     <uses-sdk
         android:minSdkVersion="7"
@@ -114,6 +114,16 @@
 
                 <data android:scheme="http" />
                 <data android:host="free.primarypad.com" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="https" />
+                <data
+                    android:host="piratenpad.de"
+                    android:pathPrefix="/p/" />
             </intent-filter>
         </activity>
         <activity
