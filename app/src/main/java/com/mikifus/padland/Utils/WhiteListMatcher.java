@@ -10,23 +10,6 @@ import java.net.URL;
  * Created by mikifus on 19/07/16.
  */
 public class WhiteListMatcher {
-
-
-    public static boolean isValidHost(String url, String[] hostsWhitelist){
-        if (!TextUtils.isEmpty(url)) {
-            final String host = Uri.parse(url).getHost();
-            if( host == null ) {
-                return false;
-            }
-            for (String whitelistedHost: hostsWhitelist){
-                if(wildCardMatch(host, whitelistedHost)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     /**
      * Performs a wildcard matching for the text and pattern
      * provided.
@@ -62,7 +45,35 @@ public class WhiteListMatcher {
         return true;
     }
 
+    /**
+     * Checks if the url parameter has a valid host
+     * among a list of hosts.
+     *
+     * @param url
+     * @param hostsWhitelist
+     * @return
+     */
+    public static boolean isValidHost(String url, String[] hostsWhitelist){
+        if (!TextUtils.isEmpty(url)) {
+            final String host = Uri.parse(url).getHost();
+            if( host == null ) {
+                return false;
+            }
+            for (String whitelistedHost: hostsWhitelist){
+                if(wildCardMatch(host, whitelistedHost)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
+    /**
+     * Checks if the URL can be parsed.
+     *
+     * @param padUrl
+     * @return
+     */
     public static boolean checkValidUrl(String padUrl) {
         // Check if it is a valid url
         try {
@@ -72,9 +83,5 @@ public class WhiteListMatcher {
             return false;
         }
         return true;
-    }
-
-    public static boolean checkWhitelistUrl(String padUrl, String[] whitelist) {
-        return isValidHost(padUrl, whitelist);
     }
 }

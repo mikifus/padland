@@ -189,7 +189,7 @@ public class PadViewActivity extends PadLandDataActivity {
             Toast.makeText(this, getString(R.string.padview_toast_invalid_url), Toast.LENGTH_SHORT).show();
             finish();
         }
-        if( ! WhiteListMatcher.checkWhitelistUrl(PadData.getUrl(), getServerWhiteList()) ) {
+        if( ! WhiteListMatcher.isValidHost(PadData.getUrl(), getServerWhiteList()) ) {
             Toast.makeText(this, getString(R.string.padview_toast_blacklist_url), Toast.LENGTH_SHORT).show();
             // My intention was to allow the user choose another app to open the URL
             // with the Intent.createChooser method. It worked really bad, it's bugged
