@@ -7,7 +7,7 @@ Padland is a tool to manage, share, remember and read collaborative documents ba
 - More translations (volunteers?) 
 
 ## Current version
-1.1.3
+1.1.4
 
 ## Changelog
 ### v1.1.4
