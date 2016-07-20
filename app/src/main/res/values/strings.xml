@@ -70,7 +70,7 @@
     <string name="newpad_noname_warning">You must specify a name for the document.</string>
 
     <string name="padlist_empty_createnew">Create a new document</string>
-    <string name="padlist_document_deleted">Document deleted</string>
+    <string name="padlist_document_deleted">The selected documents have been deleted</string>
     <string name="padlist_group_deleted">Group deleted</string>
     <string name="padlist_dialog_new_padgroup_title">New group</string>
     <string name="padlist_dialog_new_padgroup_label">Insert the name of the new group</string>
@@ -111,5 +111,8 @@
 
     <string name="serverlist_dialog_new_server_jquery_title">Supports jQuery</string>
     <string name="serverlist_dialog_new_server_jquery_label">Check this for servers supported by \"etherpad-lite-jquery-plugin\" (Etherpad Lite).</string>
+
+    <string name="serverlist_dialog_delete_sure_to_delete">Are you sure you want to delete the selected servers?</string>
+    <string name="serverlist_dialog_delete_server_deleted">The selected servers have been removed</string>
 
 </resources>

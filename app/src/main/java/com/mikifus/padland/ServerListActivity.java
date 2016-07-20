@@ -1,7 +1,10 @@
 package com.mikifus.padland;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.Menu;
@@ -11,9 +14,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.mikifus.padland.Adapters.ServerListAdapter;
 import com.mikifus.padland.Dialog.NewServerDialog;
+import com.mikifus.padland.Models.ServerModel;
 
 import java.util.ArrayList;
 
@@ -55,6 +60,7 @@ public class ServerListActivity extends PadLandDataActivity
      * This function adds events listeners for a ListView object to provide usage of the ActionBar
      */
     private void _setListViewEvents() {
+        // They look similar but they are different.
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -67,6 +73,20 @@ public class ServerListActivity extends PadLandDataActivity
                 }
                 // Return true as we are handling the event.
                 return true;
+            }
+        });
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                startActionMode();
+                boolean checked = listView.isItemChecked(position);
+                listView.setItemChecked(position, checked);
+                view.setSelected(checked);
+                if (listView.getCheckedItemCount() == 0) {
+                    mActionMode.finish();
+                }
+                // Return true as we are handling the event.
+                return;
             }
         });
     }
@@ -158,7 +178,7 @@ public class ServerListActivity extends PadLandDataActivity
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menuitem_delete:
-//                AskDelete(getCheckedItemIds());
+                AskDelete(getCheckedItemIds());
                 // Action picked, so close the CAB
                 mode.finish();
                 return true;
@@ -199,5 +219,45 @@ public class ServerListActivity extends PadLandDataActivity
     @Override
     public void onDialogSuccess() {
         mAdapter.notifyDataSetChanged();
+    }
+
+
+    /**
+     * Asks the user to confirm deleting a server.
+     * If confirmed the info will be deleted.
+     *
+     * @param selectedItems
+     * @return AlertDialog
+     */
+    @Override
+    public AlertDialog AskDelete(final ArrayList<String> selectedItems)
+    {
+        AlertDialog DeleteDialogBox = new AlertDialog.Builder(this)
+                .setTitle(R.string.delete)
+                .setMessage(getString(R.string.serverlist_dialog_delete_sure_to_delete))
+                .setIcon(android.R.drawable.ic_menu_delete)
+                .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        ServerModel serverModel = new ServerModel(getBaseContext());
+                        for(int i = 0 ; i < selectedItems.size(); i++)
+                        {
+                            Log.d("DELETE_SERVER", "list_get: " + selectedItems.get(i));
+                            boolean result = serverModel.deleteServer(Long.parseLong(selectedItems.get(i)));
+                            if (result) {
+                                Toast.makeText(getBaseContext(), getString(R.string.serverlist_dialog_delete_server_deleted), Toast.LENGTH_LONG).show();
+                                mAdapter.notifyDataSetChanged();
+                            }
+                        }
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+        DeleteDialogBox.show();
+        return DeleteDialogBox;
     }
 }

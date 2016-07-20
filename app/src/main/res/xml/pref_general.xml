@@ -24,9 +24,7 @@
         <ListPreference
             android:title="@string/default_pad_server"
             android:summary="@string/choose_default_pad_server"
-            android:key="padland_default_server"
-            android:entries="@array/etherpad_servers_name"
-            android:entryValues="@array/etherpad_servers_name" />
+            android:key="padland_default_server" />
 
     </PreferenceCategory>
 
