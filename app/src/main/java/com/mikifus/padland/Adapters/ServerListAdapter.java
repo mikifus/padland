@@ -71,4 +71,10 @@ public class ServerListAdapter extends ArrayAdapter {
     public long getItemId(int position) {
         return items.get(position).getId();
     }
+
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+        items = serverModel.getEnabledServerList();
+    }
 }
