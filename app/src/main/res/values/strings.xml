@@ -99,7 +99,7 @@
     <string name="serverlist_dialog_new_server_name_invalid">Invalid server name.</string>
 
     <string name="serverlist_dialog_new_server_url_title">Server url</string>
-    <string name="serverlist_dialog_new_server_url_label">The url where the server is accessible</string>
+    <string name="serverlist_dialog_new_server_url_label">The url where the server is accessible. Add https:// if available.</string>
     <string name="serverlist_dialog_new_server_url_invalid">Invalid server url.</string>
 
     <string name="serverlist_dialog_new_server_lite_title">Runs Etherpad Lite</string>

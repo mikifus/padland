@@ -21,7 +21,7 @@ import java.util.ArrayList;
  * Created by mikifus on 29/05/16.
  */
 public class ServerListActivity extends PadLandDataActivity
-        implements ActionMode.Callback {
+        implements ActionMode.Callback, NewServerDialog.NewServerDialogCallBack {
     /**
      * Multiple choice for all the groups
      */
@@ -73,7 +73,7 @@ public class ServerListActivity extends PadLandDataActivity
 
     public void onNewServerClick(View view) {
         FragmentManager fm = getSupportFragmentManager();
-        NewServerDialog dialog = new NewServerDialog();
+        NewServerDialog dialog = new NewServerDialog(this);
         dialog.show(fm, NEW_SERVER_DIALOG);
     }
 
@@ -189,5 +189,15 @@ public class ServerListActivity extends PadLandDataActivity
 //        Log.d(TAG, "selectedItemsIds: " + selectedItems.toString());
 
         return selectedItems;
+    }
+
+    @Override
+    public void onDialogDismiss() {
+
+    }
+
+    @Override
+    public void onDialogSuccess() {
+        mAdapter.notifyDataSetChanged();
     }
 }

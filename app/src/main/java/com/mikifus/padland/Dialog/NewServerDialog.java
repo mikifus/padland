@@ -36,6 +36,7 @@ public class NewServerDialog extends DialogFragment {
     private CheckBox checkJquery;
     private Button advancedButton;
     private LinearLayout advancedLayout;
+    private NewServerDialogCallBack callbackObject;
 
     public static final Pattern NAME_VALIDATION = Pattern.compile(
             "[a-zA-Z0-9\\+\\.\\_\\%\\-\\@\\ ]{2,256}"
@@ -44,7 +45,10 @@ public class NewServerDialog extends DialogFragment {
     public static final Pattern PADPREFIX_VALIDATION = Pattern.compile(
             "[a-zA-Z0-9\\+\\_\\-\\/\\ \\\\]{1,256}[/]{1}"
     );
-    // TODO: All validations
+
+    public NewServerDialog(NewServerDialogCallBack callback) {
+        callbackObject = callback;
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -75,6 +79,7 @@ public class NewServerDialog extends DialogFragment {
                 .setNegativeButton(R.string.cancel,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
+                                callbackObject.onDialogDismiss();
                                 dialog.dismiss();
                             }
                         }
@@ -101,6 +106,8 @@ public class NewServerDialog extends DialogFragment {
                     if( validateForm() ) {
                         // TODO: Implement save
                         saveNewServer();
+                        callbackObject.onDialogSuccess();
+                        callbackObject.onDialogDismiss();
                         d.dismiss();
                     }
                 }
@@ -201,5 +208,10 @@ public class NewServerDialog extends DialogFragment {
                 checkJquery.setChecked(isChecked);
             }
         });
+    }
+
+    public interface NewServerDialogCallBack {
+        public void onDialogDismiss();
+        public void onDialogSuccess();
     }
 }
