@@ -18,14 +18,14 @@ import java.util.ArrayList;
  */
 public class ServerListAdapter extends ArrayAdapter {
 
-    private ServerListActivity mContext;
+//    private ServerListActivity mContext;
     private int layout_resource;
     private ServerModel serverModel;
     private ArrayList<Server> items;
 
     public ServerListAdapter(ServerListActivity context, int resource) {
         super(context, resource);
-        mContext = context;
+//        mContext = context;
         layout_resource = resource;
         serverModel = new ServerModel(context);
         items = serverModel.getEnabledServerList();
@@ -35,24 +35,15 @@ public class ServerListAdapter extends ArrayAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
         Server server = getItem(position);
+
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(layout_resource, parent, false);
         }
 
-        server = serverModel.getServerAt(position);
-
-//        server.name = "bbbb";
-//        server.url_padprefix = "test@test";
-
         ((TextView) convertView.findViewById(R.id.name)).setText(server.name);
         ((TextView) convertView.findViewById(R.id.url)).setText(server.url);
-        // Lookup view for data population
-//        TextView tvName = (TextView) convertView.findViewById(R.id.tvName);
-//        TextView tvHome = (TextView) convertView.findViewById(R.id.tvHome);
-        // Populate the data into the template view using the data object
-//        tvName.setText(user.name);
-//        tvHome.setText(user.hometown);
+
         // Return the completed view to render on screen
         return convertView;
     }

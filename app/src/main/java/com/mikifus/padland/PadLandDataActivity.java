@@ -101,8 +101,6 @@ public class PadLandDataActivity extends PadLandActivity {
      */
     public AlertDialog AskDelete(final ArrayList<String> selectedItems)
     {
-        final PadLandDataActivity context = this;
-
         AlertDialog DeleteDialogBox = new AlertDialog.Builder(this)
                 //set message, title, and icon
                 .setTitle(R.string.delete)
@@ -114,9 +112,9 @@ public class PadLandDataActivity extends PadLandActivity {
                         Bundle extra = new Bundle();
                         extra.putString("action", "delete");
                         extra.putStringArrayList("pad_id", selectedItems);
-                        Intent intent = new Intent(context, PadListActivity.class);
+                        Intent intent = new Intent(getBaseContext(), PadListActivity.class);
                         intent.putExtras(extra);
-                        context.startActivity(intent);
+                        getBaseContext().startActivity(intent);
                         dialog.dismiss();
                         finish();
                     }

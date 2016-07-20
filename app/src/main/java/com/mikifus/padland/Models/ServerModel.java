@@ -111,13 +111,13 @@ public class ServerModel extends SQLiteOpenHelper {
     /**
      * Saves a new server if server_id=0 or updates an existing one.
      *
-     * @param pad_id
+     * @param server_id
      * @param values
      * @return
      */
-    public boolean saveServerData(long pad_id, ContentValues values) {
-        if (pad_id > 0) {
-            String[] where_value = {String.valueOf(pad_id)};
+    public boolean saveServerData(long server_id, ContentValues values) {
+        if (server_id > 0) {
+            String[] where_value = {String.valueOf(server_id)};
             int result = db.update(ServerModel.TABLE, values, PadContentProvider._ID + "=?", where_value);
             return (result > 0);
         } else {
@@ -216,4 +216,9 @@ public class ServerModel extends SQLiteOpenHelper {
         return servers;
     }
 
+    public boolean deleteServer(long server_id) {
+        String[] where_value = {String.valueOf(server_id)};
+        int result = db.delete(ServerModel.TABLE, PadContentProvider._ID + "=?", where_value);
+        return result > 0;
+    }
 }

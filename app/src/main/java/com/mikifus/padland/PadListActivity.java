@@ -147,6 +147,8 @@ public class PadListActivity extends PadLandDataActivity
     /**
      * If there is an intent with "action", here it is processed
      * For now there is only the delete action.
+     *
+     * TODO: Refactor this, there is no need for it to be an intent if it only deletes
      */
     private void _actionFromIntent() {
         String action = getIntent().getStringExtra("action");
