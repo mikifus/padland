@@ -171,7 +171,12 @@ public class NewServerDialog extends DialogFragment {
         String url = String.valueOf(fieldUrl.getText());
         try {
             URL url_object = new URL(url);
-            url = url_object.getProtocol() + "://" + url_object.getHost();
+//            url = url_object.getProtocol() + "://" + url_object.getHost();
+//            if( url_object.getPort() > -1 && url_object.getPort() != 80 )
+//            {
+//                url += ":" + url_object.getPort();
+//            }
+            url = url_object.toString();
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
