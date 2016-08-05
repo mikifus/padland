@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.mikifus.padland.Models.Server;
 import com.mikifus.padland.Models.ServerModel;
 import com.mikifus.padland.R;
 
@@ -28,6 +29,7 @@ import java.util.regex.Pattern;
  */
 public class NewServerDialog extends DialogFragment {
     public static final String TAG = "NewServerDialog";
+    public static final String DEFAULT_PADPREFIX_VALUE = "p/";
 
     private EditText fieldName;
     private EditText fieldUrl;
@@ -37,6 +39,8 @@ public class NewServerDialog extends DialogFragment {
     private Button advancedButton;
     private LinearLayout advancedLayout;
     private NewServerDialogCallBack callbackObject;
+    private Dialog currentDialog;
+    private long edit_server_id = 0;
 
     public static final Pattern NAME_VALIDATION = Pattern.compile(
             "[a-zA-Z0-9\\+\\.\\_\\%\\-\\@\\ ]{2,256}"
@@ -62,11 +66,17 @@ public class NewServerDialog extends DialogFragment {
         advancedLayout = (LinearLayout) view.findViewById(R.id.advanced_options_layout);
 
         setViewEvents();
+        int dialogTitleReference = R.string.serverlist_dialog_new_server_title;
+        if( edit_server_id > 0 )
+        {
+            dialogTitleReference = R.string.serverlist_dialog_edit_server_title;
+            editServerId(edit_server_id);
+        }
 //        mEditText.requestFocus();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(view);
-        builder.setTitle(R.string.serverlist_dialog_new_server_title);
+        builder.setTitle(dialogTitleReference);
         builder.setPositiveButton(getString(R.string.ok),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
@@ -87,6 +97,7 @@ public class NewServerDialog extends DialogFragment {
         AlertDialog alertDialog = builder.create();
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.setCancelable(false);
+        currentDialog = alertDialog;
         return alertDialog;
     }
 
@@ -104,7 +115,6 @@ public class NewServerDialog extends DialogFragment {
                 {
                     String text = String.valueOf(fieldName.getText());
                     if( validateForm() ) {
-                        // TODO: Implement save
                         saveNewServer();
                         callbackObject.onDialogSuccess();
                         callbackObject.onDialogDismiss();
@@ -117,11 +127,7 @@ public class NewServerDialog extends DialogFragment {
 
     private void saveNewServer() {
         ServerModel serverModel = new ServerModel(getActivity());
-        serverModel.saveServerData(0, getContentValues());
-
-//        PadListActivity activity = (PadListActivity) getActivity();
-//        activity.padlistDb.savePadgroupData(0, values);
-//        activity.notifyDataSetChanged();
+        serverModel.saveServerData(edit_server_id, getContentValues());
     }
 
     private boolean validateForm() {
@@ -191,6 +197,27 @@ public class NewServerDialog extends DialogFragment {
         return values;
     }
 
+    public void editServerId(long id) {
+        edit_server_id = id;
+        if( fieldName != null ) {
+            ServerModel serverModel = new ServerModel(getContext());
+            Server server = serverModel.getServerById(id);
+
+            fieldName.setText(server.getName());
+            fieldUrl.setText(server.getUrl());
+            fieldPadprefix.setText(server.getPadPrefix());
+            checkJquery.setChecked(server.jquery);
+
+            if( server.getPadPrefix().equals(DEFAULT_PADPREFIX_VALUE) && server.jquery )
+            {
+                checkLite.setChecked(true);
+            }
+        }
+        if( currentDialog != null ) {
+            currentDialog.setTitle(R.string.serverlist_dialog_edit_server_title);
+        }
+    }
+
     private void setViewEvents() {
         advancedButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -206,7 +233,7 @@ public class NewServerDialog extends DialogFragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if( isChecked ) {
-                    fieldPadprefix.setText("p/");
+                    fieldPadprefix.setText( DEFAULT_PADPREFIX_VALUE );
                 } else {
                     fieldPadprefix.setText("");
                 }

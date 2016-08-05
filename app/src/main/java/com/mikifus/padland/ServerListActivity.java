@@ -78,12 +78,17 @@ public class ServerListActivity extends PadLandDataActivity
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startActionMode();
-                boolean checked = listView.isItemChecked(position);
-                listView.setItemChecked(position, checked);
-                view.setSelected(checked);
-                if (listView.getCheckedItemCount() == 0) {
-                    mActionMode.finish();
+                if (mActionMode == null) {
+                    editServer( id );
+                    listView.setItemChecked(position, false);
+                    view.setSelected(false);
+                } else {
+                    boolean checked = listView.isItemChecked(position);
+                    listView.setItemChecked(position, checked);
+                    view.setSelected(checked);
+                    if (listView.getCheckedItemCount() == 0) {
+                        mActionMode.finish();
+                    }
                 }
                 // Return true as we are handling the event.
                 return;
@@ -95,6 +100,14 @@ public class ServerListActivity extends PadLandDataActivity
         FragmentManager fm = getSupportFragmentManager();
         NewServerDialog dialog = new NewServerDialog(this);
         dialog.show(fm, NEW_SERVER_DIALOG);
+    }
+
+    public void editServer(long id)  {
+        FragmentManager fm = getSupportFragmentManager();
+        NewServerDialog dialog = new NewServerDialog(this);
+        dialog.show(fm, NEW_SERVER_DIALOG);
+
+        dialog.editServerId(id);
     }
 
     /**
