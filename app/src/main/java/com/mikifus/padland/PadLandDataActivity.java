@@ -3,6 +3,7 @@ package com.mikifus.padland;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -101,6 +102,7 @@ public class PadLandDataActivity extends PadLandActivity {
      */
     public AlertDialog AskDelete(final ArrayList<String> selectedItems)
     {
+        final Context activity = this;
         AlertDialog DeleteDialogBox = new AlertDialog.Builder(this)
                 //set message, title, and icon
                 .setTitle(R.string.delete)
@@ -109,12 +111,13 @@ public class PadLandDataActivity extends PadLandActivity {
                 .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
+                        // TODO: Delete without an intent and call notofydatasetchanged or specify a callback
                         Bundle extra = new Bundle();
                         extra.putString("action", "delete");
                         extra.putStringArrayList("pad_id", selectedItems);
                         Intent intent = new Intent(getBaseContext(), PadListActivity.class);
                         intent.putExtras(extra);
-                        getBaseContext().startActivity(intent);
+                        activity.startActivity(intent);
                         dialog.dismiss();
                         finish();
                     }
