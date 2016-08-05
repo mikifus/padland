@@ -93,6 +93,7 @@
     <string name="no_custom_servers">No servers added.</string>
 
     <string name="serverlist_dialog_new_server_title">New server</string>
+    <string name="serverlist_dialog_edit_server_title">Edit server</string>
 
     <string name="serverlist_dialog_new_server_name_title">Server name</string>
     <string name="serverlist_dialog_new_server_name_label">Insert the name you refer to the server (or none)</string>

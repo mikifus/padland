@@ -186,6 +186,20 @@ public class ServerModel extends SQLiteOpenHelper {
         return server;
     }
 
+    public Server getServerById(long id) {
+        Cursor cursor = _getServerDataById(id);
+        cursor.moveToFirst();
+        Server server = null;
+        while (!cursor.isAfterLast())
+        {
+            server = cursorToServer(cursor);
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+        return server;
+    }
+
     public ArrayList<Server> getEnabledServerList() {
         Server server;
         ArrayList<Server> servers = new ArrayList<>();
@@ -193,27 +207,33 @@ public class ServerModel extends SQLiteOpenHelper {
         cursor.moveToFirst();
         while (!cursor.isAfterLast())
         {
-            int id = cursor.getInt(0);
-            String name = cursor.getString(1);
-            String url = cursor.getString(2);
-            String padprefix = cursor.getString(3);
-            String pos = cursor.getString(4);
-            int jquery = cursor.getInt(5);
-
-            server = new Server();
-            server.id = id;
-            server.name = name;
-            server.url = url;
-            server.url_padprefix = padprefix;
-            server.position = pos;
-            server.jquery = jquery == 1;
-
+            server = cursorToServer(cursor);
             servers.add(server);
             cursor.moveToNext();
         }
         cursor.close();
 
         return servers;
+    }
+
+    private Server cursorToServer( Cursor cursor ){
+        int id = cursor.getInt(0);
+        String name = cursor.getString(1);
+        String url = cursor.getString(2);
+        String padprefix = cursor.getString(3);
+        String pos = cursor.getString(4);
+        int jquery = cursor.getInt(5);
+
+        Server server;
+        server = new Server();
+        server.id = id;
+        server.name = name;
+        server.url = url;
+        server.url_padprefix = padprefix;
+        server.position = pos;
+        server.jquery = jquery == 1;
+
+        return server;
     }
 
     public boolean deleteServer(long server_id) {
