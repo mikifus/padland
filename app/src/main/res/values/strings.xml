@@ -92,21 +92,21 @@
     <string name="serverlist_dialog_new_server_title">New server</string>
 
     <string name="serverlist_dialog_new_server_name_title">Server name</string>
-    <string name="serverlist_dialog_new_server_name_label">Insert the name you refer to the server (or none)</string>
+    <string name="serverlist_dialog_new_server_name_label">The name you want to assign to the server (optional)</string>
     <string name="serverlist_dialog_new_server_name_invalid">Invalid server name.</string>
 
-    <string name="serverlist_dialog_new_server_url_title">Server url</string>
-    <string name="serverlist_dialog_new_server_url_label">The url where the server is accessible</string>
-    <string name="serverlist_dialog_new_server_url_invalid">Invalid server url.</string>
+    <string name="serverlist_dialog_new_server_url_title">Server URL</string>
+    <string name="serverlist_dialog_new_server_url_label">The URL of the server running Etherpad</string>
+    <string name="serverlist_dialog_new_server_url_invalid">Invalid server URL.</string>
 
     <string name="serverlist_dialog_new_server_lite_title">Runs Etherpad Lite</string>
-    <string name="serverlist_dialog_new_server_lite_label">Check this if the server runs on Etherpad Lite (or you can ignore this option).</string>
+    <string name="serverlist_dialog_new_server_lite_label">I know that this Server uses Etherpad Lite.</string>
 
     <string name="serverlist_dialog_new_server_padprefix_title">Url pad prefix</string>
-    <string name="serverlist_dialog_new_server_padprefix_label">In new servers (Etherpad Lite) there is a url segment between the server domain and the pad name. It is by default \"p/\".</string>
+    <string name="serverlist_dialog_new_server_padprefix_label">New servers (Etherpad Lite) have an url segment between the server domain and the pad name. By default it is \"p/\". Change it here if it is different.</string>
     <string name="serverlist_dialog_new_server_padprefix_invalid">Invalid pad prefix.</string>
 
-    <string name="serverlist_dialog_new_server_jquery_title">Supports jQuery</string>
-    <string name="serverlist_dialog_new_server_jquery_label">Check this for servers supported by \"etherpad-lite-jquery-plugin\" (Etherpad Lite).</string>
+    <string name="serverlist_dialog_new_server_jquery_title">Embedding options</string>
+    <string name="serverlist_dialog_new_server_jquery_label">Server is supported by client-side \"etherpad-lite-jquery-plugin\".</string>
 
 </resources>
