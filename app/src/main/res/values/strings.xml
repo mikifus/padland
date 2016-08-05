@@ -100,7 +100,7 @@
     <string name="serverlist_dialog_new_server_url_invalid">Invalid server URL.</string>
 
     <string name="serverlist_dialog_new_server_lite_title">Runs Etherpad Lite</string>
-    <string name="serverlist_dialog_new_server_lite_label">I know that this Server uses Etherpad Lite.</string>
+    <string name="serverlist_dialog_new_server_lite_label">I know that this server uses Etherpad Lite.</string>
 
     <string name="serverlist_dialog_new_server_padprefix_title">Url pad prefix</string>
     <string name="serverlist_dialog_new_server_padprefix_label">New servers (Etherpad Lite) have an url segment between the server domain and the pad name. By default it is \"p/\". Change it here if it is different.</string>
