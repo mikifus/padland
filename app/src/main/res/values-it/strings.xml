@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Padland</string>
+    <string name="pref_header_general">Impostazioni</string>
+    <string name="title_activity_settings">Impostazioni</string>
+    <string name="action_settings">Impostazioni</string>
+    <string name="go_pad">Crea o vai</string>
+    <string name="title_activity_pad_view">Visualizzatore di Padland</string>
+    <string name="write_pad_name">Nome del pad</string>
+    <string name="action_newpad">Aggiungi documento</string>
+    <string name="action_go_to_list">Ritorna all'elenco dei pad</string>
+    <string name="title_activity_new_pad">Crea pad</string>
+    <string name="new_pad_explanation">Inserisci il nome del pad. Se non esiste, ne verrà creato uno nuovo, altrimenti verrai condotto al relativo pad.</string>
+    <string name="save_pad">Salva pad</string>
+    <string name="download_pad">Salva pad</string>
+    <string name="title_activity_about">Informazioni</string>
+    <string name="about">Informazioni</string>
+    <string name="about_text">
+        <p>Pubblicato sotto la <a href="http://www.apache.org/licenses/LICENSE-2.0.html">licenza Apache</a>.</p>
+    </string>
+    <string name="settings_save_new_pads_title">Salva automaticamente i nuovi documenti</string>
+    <string name="settings_save_new_pads_desc">Aggiungi automaticamente gli ultimi documenti visitati al tuo elenco</string>
+    <string name="share">Condividi</string>
+    <string name="delete">Elimina</string>
+    <string name="no_pads">Non ci sono documenti salvati.</string>
+    <string name="sure_to_delete_pad">Sei sicuro di voler eliminare i documenti selezionati?</string>
+    <string name="sure_to_delete_group">Sei sicuro di voler eliminare il gruppo selezionato?</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Annulla</string>
+    <string name="share_document">>Condividi documento</string>
+    <string name="share_auto_text">"Vieni ad unirti a Padland! "</string>
+    <string name="user_preferences">Preferenze utente</string>
+    <string name="settings_default_username">Nome utente predefinito</string>
+    <string name="settings_default_username_explanation">Padland proverà ad impostare il tuo nome utente predefinito in tutti i documenti che apri.</string>
+    <string name="settings_default_color">Colore predefinito</string>
+    <string name="settings_default_color_explanation">Padland proverà ad impostare il tuo colore predefinito in tutti i documenti che apri.</string>
+    <string name="settings_default_color_dialogtitle">Scegli colore</string>
+    <string name="settings_default_color_dialogdesc">Esempio formato (hex): #FF0000</string>
+    <string name="activity_padlist_implicitintent_text_copied">Il testo è stato copiato negli appunti. Incolla i dati degli appunti per usarli.</string>
+    <string name="network_is_unreachable">La rete è assente.</string>
+    <string name="title_activity_padlist">Documenti di Padland</string>
+    <string name="choose_a_server">Scegli un server (facoltativo):</string>
+    <string name="default_pad_server">Server predefinito</string>
+    <string name="choose_default_pad_server">Scegli un server per i pad predefinito in cui aprire i pad nuovi.</string>
+    <string name="about_support_text">
+        <p>Quest'app è in continuo sviluppo. Per dare un feedback o segnalare un bug, contatta lo sviluppatore via email: mikifus@gmail.com.</p>\n
+        \n
+        <p>Se vorresti contribuire ecco il repository:\n
+            <a href='https://github.com/mikifus/padland'>https://github.com/mikifus/padland</a>
+        </p>\n\n
+        <p>Traduzione in tedesco fatta da rugk:\n
+            <a href='https://github.com/rugk'>https://github.com/rugk</a>
+        </p>\n\n
+        <p>Traduzione in giapponese fatta da naofum:\n
+            <a href='https://github.com/naofum'>https://github.com/naofum</a>
+        </p>\n\n
+        <p>Traduzione in malayalam fatta da navi:\n
+            <a href='https://github.com/naviknair'>https://github.com/naviknair</a>
+        </p>\n\n
+    </string>
+    <string name="padinfo_view_pad_button">Visualizza pad</string>
+    <string name="title_activity_pad_info">Informazioni documento</string>
+    <string name="title_activity_pad_land_data">PadLandDataActivity</string>
+
+    <string name="padinfo_pad_info">Informazioni documento</string>
+    <string name="padinfo_pad_url">URL documento</string>
+    <string name="padinfo_createdate">Aggiunto alla lista</string>
+    <string name="padinfo_lastuseddate">Ultima visualizzazione</string>
+
+    <string name="newpad_noname_warning">Devi specificare un nome per il documento.</string>
+
+    <string name="padlist_empty_createnew">Crea un nuovo documento</string>
+    <string name="padlist_document_deleted">Documento eliminato</string>
+    <string name="padlist_group_deleted">Gruppo eliminato</string>
+    <string name="padlist_dialog_new_padgroup_title">Nuovo gruppo</string>
+    <string name="padlist_dialog_new_padgroup_label">Inserisci il nome del nuovo gruppo</string>
+    <string name="padlist_dialog_new_padgroup_invalid">Nome del gruppo non valido.</string>
+    <string name="padlist_group_unclassified_name">Non classificato</string>
+    <string name="padlist_group_select_dialog">Seleziona gruppo</string>
+
+    <string name="unexpected_error">Un errore inaspettato è accaduto.</string>
+    <string name="settings_miscellaneous">Miscellanea</string>
+    <string name="padinfo_times_accessed">Numero di accessi</string>
+    <string name="pref_default_display_name">Anonimo</string>
+    <string name="settings_default_username_dialog_title">Imposta nome utente</string>
+    <string name="serverlist_dialog_new_server_advanced">Opzioni avanzate</string>
+
+    <string name="title_activity_server_list">Lista dei server</string>
+    <string name="pref_server_list_summary">Aggiungi il tuo server di Etherpad</string>
+    <string name="no_custom_servers">Nessun server aggiunto.</string>
+
+    <string name="serverlist_dialog_new_server_title">Nuovo server</string>
+
+    <string name="serverlist_dialog_new_server_name_title">Nome del server</string>
+    <string name="serverlist_dialog_new_server_name_label">Inserisci il nome con cui riferirti al server</string>
+    <string name="serverlist_dialog_new_server_name_invalid">Nome del server non valido.</string>
+
+    <string name="serverlist_dialog_new_server_url_title">URL del server</string>
+    <string name="serverlist_dialog_new_server_url_label">L'URL da dove il server è accessibile</string>
+    <string name="serverlist_dialog_new_server_url_invalid">URL del server non valido.</string>
+
+    <string name="serverlist_dialog_new_server_lite_title">Avvia Etherpad Lite</string>
+    <string name="serverlist_dialog_new_server_lite_label">Controlla se sul server gira Etherpad Lite (puoi ignorare questa opzione).</string>
+
+    <string name="serverlist_dialog_new_server_padprefix_title">Prefisso del URL del pad</string>
+    <string name="serverlist_dialog_new_server_padprefix_label">Nei nuovi server (Etherpad Lite) c'è una parte dell'URL tra il dominio del server e il nome del pad. Il valore predefinito è \"p/\".</string>
+    <string name="serverlist_dialog_new_server_padprefix_invalid">Prefisso del pad non valido.</string>
+
+    <string name="serverlist_dialog_new_server_jquery_title">Supporta jQuery</string>
+    <string name="serverlist_dialog_new_server_jquery_label">Controlla se il server supporta \"etherpad-lite-jquery-plugin\" (Etherpad Lite).</string>
+
+</resources>
