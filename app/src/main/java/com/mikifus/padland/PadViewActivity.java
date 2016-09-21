@@ -1,6 +1,7 @@
 package com.mikifus.padland;
 
 import android.annotation.TargetApi;
+import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -29,6 +30,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mikifus.padland.Dialog.BasicAuthDialog;
@@ -36,6 +38,8 @@ import com.mikifus.padland.SaferWebView.PadLandSaferWebViewClient;
 import com.mikifus.padland.Utils.WhiteListMatcher;
 import com.pnikosis.materialishprogress.ProgressWheel;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -334,7 +338,7 @@ public class PadViewActivity extends PadLandDataActivity {
      * @return
      */
     private WebView _makeWebView() {
-        final String current_padUrl = this.getCurrentPadUrl();
+//        final String current_padUrl = this.getCurrentPadUrl();
         webView = (WebView) findViewById(R.id.activity_main_webview);
 //        webView = new WebView(PadViewActivity.this);
         webView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -383,8 +387,30 @@ public class PadViewActivity extends PadLandDataActivity {
             public void onReceivedHttpAuthRequest(WebView view, final HttpAuthHandler handler, String host, String realm) {
                 FragmentManager fm = getSupportFragmentManager();
                 BasicAuthDialog dialog = new BasicAuthDialog() {
+
+                    @Override
+                    protected void onDialogCreated(Dialog dialog, View view) {
+                        if( done_auth )
+                        {
+                            // Credentials must be invalid
+                            TextView textView = (TextView) view.findViewById(R.id.auth_error_message);
+                            textView.setText(R.string.basic_auth_error);
+                        }
+                        try {
+                            // Warn the user that is not using SSL
+                            URL url = new URL(getCurrentPadUrl());
+                            if( !url.getProtocol().equals("https") ) {
+                                TextView textView = (TextView) view.findViewById(R.id.auth_warning_message);
+                                textView.setText(R.string.basic_auth_warning);
+                            }
+                        } catch (MalformedURLException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
                     @Override
                     protected void onPositiveButtonClick(String username, String password) {
+                        done_auth = true;
                         handler.proceed(username, password);
                     }
                     @Override
@@ -393,11 +419,6 @@ public class PadViewActivity extends PadLandDataActivity {
                     }
                 };
                 dialog.show(fm, "dialog_auth");
-                if( done_auth )
-                {
-                    // Credentials must be invalid
-                }
-                done_auth = true;
             }
         });
         this._makeWebSettings(webView);
