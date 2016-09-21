@@ -415,6 +415,7 @@ public class PadViewActivity extends PadLandDataActivity {
                     }
                     @Override
                     protected void onNegativeButtonClick() {
+                        done_auth = false;
                         handler.cancel();
                     }
                 };
