@@ -13,12 +13,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PersistableBundle;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.CookieManager;
+import android.webkit.HttpAuthHandler;
 import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
@@ -29,6 +31,7 @@ import android.webkit.WebView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.mikifus.padland.Dialog.BasicAuthDialog;
 import com.mikifus.padland.SaferWebView.PadLandSaferWebViewClient;
 import com.mikifus.padland.Utils.WhiteListMatcher;
 import com.pnikosis.materialishprogress.ProgressWheel;
@@ -339,6 +342,8 @@ public class PadViewActivity extends PadLandDataActivity {
         // The WebViewClient requires now a whitelist of urls that can interact with the Java side of the code
         String[] url_whitelist = getServerWhiteList();
         webView.setWebViewClient(new PadLandSaferWebViewClient(url_whitelist) {
+            private boolean done_auth;
+
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
@@ -372,6 +377,27 @@ public class PadViewActivity extends PadLandDataActivity {
                 _hideProgressWheel();
 //                Log.d(TAG, "Removed connection " + webview_http_connections[0]);
                 Log.e(TAG, "WebView Error " + error.toString() +", Request: "+ request.toString());
+            }
+
+            @Override
+            public void onReceivedHttpAuthRequest(WebView view, final HttpAuthHandler handler, String host, String realm) {
+                FragmentManager fm = getSupportFragmentManager();
+                BasicAuthDialog dialog = new BasicAuthDialog() {
+                    @Override
+                    protected void onPositiveButtonClick(String username, String password) {
+                        handler.proceed(username, password);
+                    }
+                    @Override
+                    protected void onNegativeButtonClick() {
+                        handler.cancel();
+                    }
+                };
+                dialog.show(fm, "dialog_auth");
+                if( done_auth )
+                {
+                    // Credentials must be invalid
+                }
+                done_auth = true;
             }
         });
         this._makeWebSettings(webView);
