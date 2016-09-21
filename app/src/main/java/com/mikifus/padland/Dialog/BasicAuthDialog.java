@@ -52,9 +52,13 @@ public abstract class BasicAuthDialog extends DialogFragment {
                 }
         );
         dialog = builder.create();
+        onDialogCreated(dialog, mView);
         return dialog;
     }
 
+    protected void onDialogCreated(Dialog dialog, View view) {
+
+    }
     protected abstract void onPositiveButtonClick(String username, String password);
     protected abstract void onNegativeButtonClick();
 }
