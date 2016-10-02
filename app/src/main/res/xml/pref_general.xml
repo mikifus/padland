@@ -39,12 +39,10 @@
             android:dialogMessage=""
             android:defaultValue="" />
 
-        <EditTextPreference
+        <com.mikifus.padland.Utils.ColorPickerListPreference
             android:key="padland_default_color"
             android:title="@string/settings_default_color"
             android:summary="@string/settings_default_color_explanation"
-            android:dialogTitle="@string/settings_default_color_dialogtitle"
-            android:dialogMessage="@string/settings_default_color_dialogdesc"
             android:defaultValue="#555" />
 
     </PreferenceCategory>

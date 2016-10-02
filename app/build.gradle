@@ -39,8 +39,8 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:23.3.0'
-    compile 'com.android.support:design:23.3.0'
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.android.support:design:24.2.1'
     compile 'com.pnikosis:materialish-progress:1.5'
     //    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
 }
