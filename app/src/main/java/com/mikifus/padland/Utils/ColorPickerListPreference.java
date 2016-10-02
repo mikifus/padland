@@ -12,10 +12,8 @@ import com.mikifus.padland.R;
  */
 
 public class ColorPickerListPreference extends ListPreference {
-    private int mClickedDialogEntryIndex;
 
     private Context mContext;
-    private HSVColorPickerDialog.Builder mBuilder;
 
     public ColorPickerListPreference(Context ctxt, AttributeSet attrs) {
         super(ctxt, attrs);
@@ -28,7 +26,6 @@ public class ColorPickerListPreference extends ListPreference {
             public void colorSelected(Integer color) {
                 // Do something with the selected color
                 String hexColor = String.format("#%06X", (0xFFFFFF & color));
-//                Log.d("COLOR PICKER SELECTED", String.valueOf(hexColor));
                 setValue(hexColor);
             }
         });
@@ -36,7 +33,7 @@ public class ColorPickerListPreference extends ListPreference {
         cpd.show();
     }
 
-    protected int getIntValue() {
+    private int getIntValue() {
         return Integer.parseInt(getValue().substring(1), 16);
     }
 }
