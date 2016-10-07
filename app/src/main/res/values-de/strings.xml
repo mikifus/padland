@@ -43,7 +43,7 @@
     <string name="default_pad_server">Standard-Pad-Server</string>
     <string name="choose_default_pad_server">Wähle einen Standard-Pad-Server für neu erstellte Dokumente.</string>
     <string name="about_support_text">
-        <p>Diese App ist in der Entwicklung. Um Feedback zu geben und Bugs zu reporten, kontaktiere den Entwickler unter mikifus@gmail.com.</p>\n
+        <p>Diese App ist in der Entwicklung. Um Feedback zu geben und Bugs zu reporten, kontaktiere den Entwickler.</p>\n
         \n
         <p>Wenn du zu dem Projekt beitragen willst: Hier ist das Repository:\n
             <a href='https://github.com/mikifus/padland'>https://github.com/mikifus/padland</a>
