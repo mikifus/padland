@@ -11,12 +11,12 @@ android {
         abortOnError false
         disable 'InvalidPackage'
     }
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    compileSdkVersion 24
+    buildToolsVersion "23.0.3"
     defaultConfig {
         applicationId "com.mikifus.padland"
         minSdkVersion 13
-        targetSdkVersion 23
+        targetSdkVersion 24
         versionName '1.1.4'
         multiDexEnabled true
 //        vectorDrawables.useSupportLibrary = true
@@ -43,4 +43,5 @@ dependencies {
     compile 'com.android.support:design:24.2.1'
     compile 'com.pnikosis:materialish-progress:1.5'
     //    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
+    compile 'com.github.paolorotolo:appintro:4.1.0'
 }
