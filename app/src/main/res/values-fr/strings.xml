@@ -43,7 +43,7 @@
 <string name="default_pad_server">Serveur par défaut</string>
 <string name="choose_default_pad_server">Choisissez un serveur par défaut pour la création d\'un nouveau pad.</string>
 <string name="about_support_text">
-<p>Cette application est en développement. Pour envoyer des retours sur l\'application et des rapports de bogues, contactez le développeur (en anglais) à l\'adresse mikifus@gmail.com.</p>\n
+<p>Cette application est en développement. Pour envoyer des retours sur l\'application et des rapports de bogues, contactez le développeur (en anglais).</p>\n
 \n
 <p>Si vous voulez contribuer, voici le dêpôt :\n
 <a href='https://github.com/mikifus/padland'>https://github.com/mikifus/padland</a></p>

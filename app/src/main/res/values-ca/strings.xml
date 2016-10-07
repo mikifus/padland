@@ -18,7 +18,7 @@
         \n\nPrem següent per començar!</string>
 
     <string name="about">Quant a PadLand</string>
-    <string name="about_support_text"><p>Aquesta aplicació es troba en desenvolupament. Per enviar comentaris i informar d\'errors si us plau contacta amb el desenvolupador a mikifus@gmail.com</p>\n         \n         <p>Si vols contribuir aquí tens el repositori:\n             <a href="https://github.com/mikifus/padland">https://github.com/mikifus/padland</a></p></string>
+    <string name="about_support_text"><p>Aquesta aplicació es troba en desenvolupament. Per enviar comentaris i informar d\'errors si us plau obre una qüestió a GitHub.</p>\n         \n         <p>Si vols contribuir aquí tens el repositori:\n             <a href="https://github.com/mikifus/padland">https://github.com/mikifus/padland</a></p></string>
     <string name="about_text"><p>Llicència <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache</a>.</p></string>
     <string name="action_go_to_list">Tornar a la llista</string>
     <string name="action_newpad">Afegir document</string>
