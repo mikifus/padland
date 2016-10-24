@@ -68,25 +68,25 @@
     <string name="settings_miscellaneous">Divers</string>
     <string name="padinfo_times_accessed">Nombre de fois vu</string>
     <string name="pref_default_display_name">Anonyme</string>
-    <string name="settings_default_username_dialog_title">Set username</string>
-    <string name="serverlist_dialog_new_server_advanced">Advanced Options</string>
+    <string name="settings_default_username_dialog_title">Entrer le nom d\'utilisateur</string>
+    <string name="serverlist_dialog_new_server_advanced">Options avancées</string>
 
-    <string name="title_activity_server_list">Server list</string>
-    <string name="pref_server_list_summary">Add your custom etherpad servers</string>
-    <string name="no_custom_servers">No servers added.</string>
+    <string name="title_activity_server_list">Liste des serveurs</string>
+    <string name="pref_server_list_summary">Ajouter votre propre serveur etherpad</string>
+    <string name="no_custom_servers">Aucun serveur ajouté.</string>
 
-    <string name="serverlist_dialog_new_server_title">New server</string>
+    <string name="serverlist_dialog_new_server_title">Nouveau serveur</string>
 
-    <string name="serverlist_dialog_new_server_name_title">Server name</string>
-    <string name="serverlist_dialog_new_server_name_label">The name you want to assign to the server (optional)</string>
-    <string name="serverlist_dialog_new_server_name_invalid">Invalid server name.</string>
+    <string name="serverlist_dialog_new_server_name_title">Nom du serveur</string>
+    <string name="serverlist_dialog_new_server_name_label">Le nom que vous voulez assigner au serveur (optionnel)</string>
+    <string name="serverlist_dialog_new_server_name_invalid">Nom de serveur invalideInvalid server name.</string>
 
-    <string name="serverlist_dialog_new_server_url_title">Server URL</string>
-    <string name="serverlist_dialog_new_server_url_label">The URL of the server running Etherpad</string>
-    <string name="serverlist_dialog_new_server_url_invalid">Invalid server URL.</string>
+    <string name="serverlist_dialog_new_server_url_title">URL du serveur</string>
+    <string name="serverlist_dialog_new_server_url_label">L\'URL du serveur running Etherpad</string>
+    <string name="serverlist_dialog_new_server_url_invalid">URL du serveur invalide.</string>
 
-    <string name="serverlist_dialog_new_server_lite_title">Runs Etherpad Lite</string>
-    <string name="serverlist_dialog_new_server_lite_label">I know that this server uses Etherpad Lite.</string>
+    <string name="serverlist_dialog_new_server_lite_title">Etherpad Lite</string>
+    <string name="serverlist_dialog_new_server_lite_label">Je sais que ce serveur utilise Etherpad Lite.</string>
 
     <string name="serverlist_dialog_new_server_padprefix_title">Url pad prefix</string>
     <string name="serverlist_dialog_new_server_padprefix_label">New servers (Etherpad Lite) have an url segment between the server domain and the pad name. By default it is \"p/\". Change it here if it is different.</string>
