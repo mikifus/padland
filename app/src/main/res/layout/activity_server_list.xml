@@ -1,0 +1,47 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listView"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:id="@android:id/empty">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:adjustViewBounds="true"
+            android:gravity="center"
+            android:layout_marginBottom="5dp"
+            android:text="@string/no_custom_servers" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ly_bar_bottom"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="right"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_add_inverted"
+            android:layout_gravity="bottom|end"
+            android:onClick="onNewServerClick"
+            android:layout_marginBottom="@dimen/action_button_margin"
+            android:layout_marginRight="@dimen/action_button_margin"
+            android:layout_marginEnd="@dimen/action_button_margin"
+            android:elevation="6dp" />
+
+    </LinearLayout>
+
+</RelativeLayout>

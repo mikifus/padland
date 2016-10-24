@@ -19,6 +19,8 @@ import java.util.HashMap;
 /**
  * The content provider allows to store and read database information for the app.
  *
+ * TODO: A demo app that connects here
+ *
  * @author mikifus
  */
 public class PadContentProvider extends ContentProvider {
@@ -34,7 +36,7 @@ public class PadContentProvider extends ContentProvider {
      * Database specific constant declarations
      */
     protected SQLiteDatabase db;
-    static final int DATABASE_VERSION = 7;
+    public static final int DATABASE_VERSION = 7;
 
     public static final String _ID = "_id";
     public static final String NAME = "name"; // Name of the pad, actually it is the last part of the url

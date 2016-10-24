@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="60dp"
+    android:layout_width="match_parent"
+    android:paddingTop="2dp"
+    android:paddingBottom="2dp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:textAppearance="?android:attr/textAppearanceLarge"
+    style="@style/activated">
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:scaleType="centerInside"
+        android:contentDescription="Document"
+        android:src="@drawable/ic_document" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="5dp"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@id/icon"
+            android:singleLine="true"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+        <TextView
+            android:id="@+id/url"
+            android:layout_toRightOf="@id/icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignWithParentIfMissing="true"
+            android:gravity="center_vertical"
+            android:singleLine="true"/>
+    </LinearLayout>
+</LinearLayout>

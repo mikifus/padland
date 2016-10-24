@@ -12,7 +12,7 @@
 
     <TextView
         android:id="@+id/lbl_your_name"
-        android:text="@string/padlist_dialog_new_padgroup_label"
+        android:text="@string/settings_default_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

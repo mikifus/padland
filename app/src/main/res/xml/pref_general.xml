@@ -12,12 +12,19 @@
                 android:defaultValue="true"
                 />
 
+        <PreferenceScreen
+            android:key="padland_server_list"
+            android:title="@string/title_activity_server_list"
+            android:summary="@string/pref_server_list_summary" >
+            <intent
+                android:targetPackage="com.mikifus.padland"
+                android:targetClass="com.mikifus.padland.ServerListActivity"/>
+        </PreferenceScreen>
+
         <ListPreference
             android:title="@string/default_pad_server"
             android:summary="@string/choose_default_pad_server"
-            android:key="padland_default_server"
-            android:entries="@array/etherpad_servers_name"
-            android:entryValues="@array/etherpad_servers_name" />
+            android:key="padland_default_server" />
 
     </PreferenceCategory>
 
