@@ -16,6 +16,7 @@
 package com.mikifus.padland;
 
 import android.app.LoaderManager;
+import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.CursorLoader;
@@ -41,6 +42,7 @@ import android.widget.Toast;
 
 import com.mikifus.padland.Adapters.PadListAdapter;
 import com.mikifus.padland.Dialog.NewPadGroup;
+import com.mikifus.padland.Utils.WhiteListMatcher;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -103,11 +105,32 @@ public class PadListActivity extends PadLandDataActivity
 
     /**
      * If there is a share intent this function gets the extra text
-     * and copies it into clipboard
+     * and copies it into clipboard.
+     * If it is an URL then it can be opened in the PadView as far as
+     * it is in the whitelist.
      */
     private void _textFromIntent() {
         String extra_text = getIntent().getStringExtra(Intent.EXTRA_TEXT);
+
         if (extra_text != null) {
+            if( WhiteListMatcher.checkValidUrl(extra_text)
+                && WhiteListMatcher.isValidHost(extra_text, getServerWhiteList()) ) {
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(extra_text));
+                i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.setPackage("com.mikifus.padland");
+                finish();
+                try {
+                    startActivity(i);
+                } catch (ActivityNotFoundException e) {
+                    i.setPackage(null);
+                    startActivity(i);
+                }
+                return;
+            }
+
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 clipboard.setText(extra_text);
@@ -124,6 +147,8 @@ public class PadListActivity extends PadLandDataActivity
     /**
      * If there is an intent with "action", here it is processed
      * For now there is only the delete action.
+     *
+     * TODO: Refactor this, there is no need for it to be an intent if it only deletes
      */
     private void _actionFromIntent() {
         String action = getIntent().getStringExtra("action");
@@ -135,7 +160,7 @@ public class PadListActivity extends PadLandDataActivity
                     for(int i = 0 ; i < pad_id_list.size(); i++)
                     {
                         Log.d("DELETE_PAD_INTENT", "action: " + action + " list_get: " + pad_id_list.get(i));
-                        boolean result = padlandDb.deletePad(Long.parseLong(pad_id_list.get(i)));
+                        boolean result = padlistDb.deletePad(Long.parseLong(pad_id_list.get(i)));
                         if (result) {
                             Toast.makeText(this, getString(R.string.padlist_document_deleted), Toast.LENGTH_LONG).show();
                         }

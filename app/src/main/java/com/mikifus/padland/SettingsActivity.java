@@ -12,8 +12,15 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+
+import com.mikifus.padland.Models.Server;
+import com.mikifus.padland.Models.ServerModel;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -26,7 +33,7 @@ import android.view.MenuItem;
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
  */
-public class SettingsActivity extends ActionBarActivity {
+public class SettingsActivity extends AppCompatActivity {
     /**
      * Determines whether to always show the simplified settings UI, where
      * settings are presented in a single list. When false, settings are shown
@@ -38,18 +45,6 @@ public class SettingsActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setupActionBar();
-    }
-
-    /**
-     * Set up the {@link android.app.ActionBar}, if the API is available.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private void setupActionBar() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            // Show the Up button in the action bar.
-            getActionBar().setDisplayHomeAsUpEnabled(true);
-        }
     }
 
     @Override
@@ -77,8 +72,12 @@ public class SettingsActivity extends ActionBarActivity {
 
 //        setupSimplePreferencesScreen();
         // Display the fragment as the main content.
+        Bundle arguments = new Bundle();
+        arguments.putStringArray( "server_name_list", getServerNameList() );
+        SettingsFragment settingsFragment = new SettingsFragment();
+        settingsFragment.setArguments(arguments);
         getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, new SettingsFragment())
+                .replace(android.R.id.content, settingsFragment)
                 .commit();
     }
 
@@ -244,6 +243,8 @@ public class SettingsActivity extends ActionBarActivity {
             // updated to reflect the new value, per the Android Design
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("auto_save_new_pads"));
+
+//            setDefaultServerPreferenceValues();
         }
     }
 
@@ -291,6 +292,42 @@ public class SettingsActivity extends ActionBarActivity {
         public void onCreate(Bundle paramBundle) {
             super.onCreate(paramBundle);
             addPreferencesFromResource(R.xml.pref_general);
+
+            setDefaultServerPreferenceValues();
         }
+
+
+        private void setDefaultServerPreferenceValues() {
+            String[] entries = (String[]) getArguments().get("server_name_list");
+            final ListPreference defaultServer = (ListPreference) findPreference("padland_default_server");
+            defaultServer.setEntries(entries);
+            defaultServer.setEntryValues(entries);
+        }
+    }
+
+
+    /**
+     * Returns a string with the server urls and the prefix to see a pad.
+     * Includes custom servers.
+     * @return String[]
+     */
+    public String[] getServerNameList() {
+        String[] server_list;
+        // Load the custom servers
+        ServerModel serverModel = new ServerModel(this);
+        ArrayList<Server> custom_servers = serverModel.getEnabledServerList();
+        ArrayList<String> server_names = new ArrayList<>();
+        for(Server server : custom_servers) {
+            server_names.add(server.getName());
+        }
+
+        // Server list to provide a fallback value
+        Collection<String> collection = new ArrayList<>();
+        collection.addAll(server_names);
+        collection.addAll(Arrays.asList(getResources().getStringArray( R.array.etherpad_servers_name )));
+
+        server_list = collection.toArray(new String[collection.size()]);
+
+        return server_list;
     }
 }
