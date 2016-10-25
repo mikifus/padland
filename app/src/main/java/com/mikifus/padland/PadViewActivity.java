@@ -386,39 +386,7 @@ public class PadViewActivity extends PadLandDataActivity {
             @Override
             public void onReceivedHttpAuthRequest(WebView view, final HttpAuthHandler handler, String host, String realm) {
                 FragmentManager fm = getSupportFragmentManager();
-                BasicAuthDialog dialog = new BasicAuthDialog() {
-
-                    @Override
-                    protected void onDialogCreated(Dialog dialog, View view) {
-                        if( done_auth )
-                        {
-                            // Credentials must be invalid
-                            TextView textView = (TextView) view.findViewById(R.id.auth_error_message);
-                            textView.setText(R.string.basic_auth_error);
-                        }
-                        try {
-                            // Warn the user that is not using SSL
-                            URL url = new URL(getCurrentPadUrl());
-                            if( !url.getProtocol().equals("https") ) {
-                                TextView textView = (TextView) view.findViewById(R.id.auth_warning_message);
-                                textView.setText(R.string.basic_auth_warning);
-                            }
-                        } catch (MalformedURLException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    protected void onPositiveButtonClick(String username, String password) {
-                        done_auth = true;
-                        handler.proceed(username, password);
-                    }
-                    @Override
-                    protected void onNegativeButtonClick() {
-                        done_auth = false;
-                        handler.cancel();
-                    }
-                };
+                BasicAuthDialog dialog = new PadViewAuthDialog(getCurrentPadUrl(), handler);
                 dialog.show(fm, "dialog_auth");
             }
         });
@@ -426,6 +394,48 @@ public class PadViewActivity extends PadLandDataActivity {
         this._addListenersToView();
         this._addJavascriptOnLoad(webView);
         return webView;
+    }
+
+    public static class PadViewAuthDialog extends BasicAuthDialog {
+        public static boolean done_auth = false;
+        public String current_pad_url;
+        public HttpAuthHandler handler;
+
+        public PadViewAuthDialog(String current_pad_url, HttpAuthHandler handler) {
+            this.current_pad_url = current_pad_url;
+            this.handler = handler;
+        }
+
+        @Override
+        protected void onDialogCreated(Dialog dialog, View view) {
+            if( done_auth )
+            {
+                // Credentials must be invalid
+                TextView textView = (TextView) view.findViewById(R.id.auth_error_message);
+                textView.setText(R.string.basic_auth_error);
+            }
+            try {
+                // Warn the user that is not using SSL
+                URL url = new URL(this.current_pad_url);
+                if( !url.getProtocol().equals("https") ) {
+                    TextView textView = (TextView) view.findViewById(R.id.auth_warning_message);
+                    textView.setText(R.string.basic_auth_warning);
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        protected void onPositiveButtonClick(String username, String password) {
+            done_auth = true;
+            handler.proceed(username, password);
+        }
+        @Override
+        protected void onNegativeButtonClick() {
+            done_auth = false;
+            handler.cancel();
+        }
     }
 
     private void loadJavascriptIfNeeded() {
