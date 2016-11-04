@@ -31,9 +31,9 @@
     <string name="share_auto_text">"Come join me on Padland! "</string>
     <string name="user_preferences">User preferences</string>
     <string name="settings_default_username">Default username</string>
-    <string name="settings_default_username_explanation">PadLand will try to set your default username in all documents you open.</string>
+    <string name="settings_default_username_explanation">Padland will try to set your default username in all documents you open.</string>
     <string name="settings_default_color">Default color</string>
-    <string name="settings_default_color_explanation">PadLand will try to set your default color in all documents you open.</string>
+    <string name="settings_default_color_explanation">Padland will try to set your default color in all documents you open.</string>
     <string name="settings_default_color_dialogtitle">Choose color</string>
     <string name="settings_default_color_dialogdesc">Format example (hex): #FF0000</string>
     <string name="activity_padlist_implicitintent_text_copied">The text have been copied into the clipboard. Paste your clipboard data to use it.</string>
@@ -43,7 +43,7 @@
     <string name="default_pad_server">Default pad server</string>
     <string name="choose_default_pad_server">Choose a default pad server when opening a new one.</string>
     <string name="about_support_text">
-        <p>This app is under development. To provide feedback and report bugs please contact with the developer at mikifus@gmail.com.</p>\n
+        <p>This app is under development. To provide feedback and report bugs please contact the developer at mikifus@gmail.com.</p>\n
         \n
         <p>If you\'d like to contribute here is the repository:\n
             <a href='https://github.com/mikifus/padland'>https://github.com/mikifus/padland</a>
@@ -101,7 +101,7 @@
     <string name="serverlist_dialog_edit_server_title">Edit server</string>
 
     <string name="serverlist_dialog_new_server_name_title">Server name</string>
-    <string name="serverlist_dialog_new_server_name_label">Insert the name you refer to the server (or none)</string>
+    <string name="serverlist_dialog_new_server_name_label">The name you want to assign to the server (optional)</string>
     <string name="serverlist_dialog_new_server_name_invalid">Invalid server name.</string>
 
     <string name="serverlist_dialog_new_server_url_title">Server url</string>
@@ -109,14 +109,14 @@
     <string name="serverlist_dialog_new_server_url_invalid">Invalid server url.</string>
 
     <string name="serverlist_dialog_new_server_lite_title">Runs Etherpad Lite</string>
-    <string name="serverlist_dialog_new_server_lite_label">Check this if the server runs on Etherpad Lite (or you can ignore this option).</string>
+    <string name="serverlist_dialog_new_server_lite_label">I know that this server uses Etherpad Lite.</string>
 
     <string name="serverlist_dialog_new_server_padprefix_title">Url pad prefix</string>
-    <string name="serverlist_dialog_new_server_padprefix_label">In new servers (Etherpad Lite) there is a url segment between the server domain and the pad name. It is by default \"p/\".</string>
+    <string name="serverlist_dialog_new_server_padprefix_label">New servers (Etherpad Lite) have an url segment between the server domain and the pad name. By default it is \"p/\". Change it here if it is different.</string>
     <string name="serverlist_dialog_new_server_padprefix_invalid">Invalid pad prefix.</string>
 
-    <string name="serverlist_dialog_new_server_jquery_title">Supports jQuery</string>
-    <string name="serverlist_dialog_new_server_jquery_label">Check this for servers supported by \"etherpad-lite-jquery-plugin\" (Etherpad Lite).</string>
+    <string name="serverlist_dialog_new_server_jquery_title">Embedding options</string>
+    <string name="serverlist_dialog_new_server_jquery_label">Server is supported by client-side \"etherpad-lite-jquery-plugin\".</string>
 
     <string name="serverlist_dialog_delete_sure_to_delete">Are you sure you want to delete the selected servers?</string>
     <string name="serverlist_dialog_delete_server_deleted">The selected servers have been removed</string>
