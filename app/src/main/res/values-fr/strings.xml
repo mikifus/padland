@@ -95,7 +95,7 @@
     <string name="serverlist_dialog_new_server_jquery_title">Options d\'intégration</string>
     <string name="serverlist_dialog_new_server_jquery_label">Le serveur est pris en charge par le client \"etherpad-lite-jquery-plugin\".</string>
 
-    <string name="serverlist_dialog_delete_sure_to_delete">Êtes-vous sûrs de vouloir supprimer le serveur sélectionné?</string>
+    <string name="serverlist_dialog_delete_sure_to_delete">Êtes-vous sûr de vouloir supprimer le serveur sélectionné?</string>
     <string name="serverlist_dialog_delete_server_deleted">Les serveurs sélectionnés ont été supprimés</string>
 
 </resources>
