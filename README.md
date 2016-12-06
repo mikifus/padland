@@ -1,11 +1,13 @@
 # Padland
 Padland is a tool to manage, share, remember and read collaborative documents based on the Etherpad technology in Android.
 
-![Introduction screenshot 1](docs/Screenshot_1.png)
-![Introduction screenshot 2](docs/Screenshot_2.png)
-![Introduction screenshot 3](docs/Screenshot_3.png)
-![Introduction screenshot 4](docs/Screenshot_4.png)
-![Introduction screenshot 5](docs/Screenshot_5.png)
+<p align="center">
+  <img src="docs/Screenshot_1.png" alt="Introduction screenshot 1"/>
+  <img src="docs/Screenshot_2.png" alt="Introduction screenshot 2"/>
+  <img src="docs/Screenshot_3.png" alt="Introduction screenshot 3"/>
+  <img src="docs/Screenshot_4.png" alt="Introduction screenshot 4"/>
+  <img src="docs/Screenshot_5.png" alt="Introduction screenshot 5"/>
+</p>
 
 ## Translations
 Thanks to all the volunteers that already contributed!
