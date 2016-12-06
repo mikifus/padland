@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Padland</string>
-    <string name="about">Acerca de</string>
-    <string name="about_support_text"><p>Esta app sigue bajo desarrollo. Para enviar comentarios y detecciones de bugs por facor contacta con el desarrollador en mikifus@gmail.com</p>\n         \n         <p>Si quieres contribuir, este es el repositorio:\n             <a href="https://github.com/mikifus/padland">https://github.com/mikifus/padland</a></p></string>
+    <string name="about">Acerca de Padland</string>
+    <string name="about_support_text"><p>Esta app sigue bajo desarrollo. Para enviar comentarios y detecciones de bugs por favor abr una questión en GitHub.</p>\n         \n         <p>Si quieres contribuir, este es el repositorio:\n             <a href="https://github.com/mikifus/padland">https://github.com/mikifus/padland</a></p></string>
     <string name="about_text"><p>Licencia <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache</a>.</p></string>
     <string name="action_go_to_list">Volver a la lista</string>
     <string name="action_newpad">Añadir documento</string>
@@ -44,11 +44,11 @@
     <string name="settings_save_new_pads_desc">Añadir automaticamente todos los nuevos documentos accedidos a la lista</string>
     <string name="settings_save_new_pads_title">Guardar automáticamente nuevos documentos</string>
     <string name="share">Compartir</string>
-    <string name="share_auto_text">"¡Únete a mi en Padland! "</string>
+    <string name="share_auto_text">"Compartido desde la aplicación Padland: "</string>
     <string name="share_document">Compartir documento</string>
     <string name="sure_to_delete_group">¿Quieres eliminar el grupo seleccionado?</string>
     <string name="sure_to_delete_pad">¿Seguro que quieres eliminar los documentos seleccionados?</string>
-    <string name="title_activity_about">Acerca de</string>
+    <string name="title_activity_about">Acerca de Padland</string>
     <string name="title_activity_new_pad">Crear documento</string>
     <string name="title_activity_pad_info">Información del documento</string>
     <string name="title_activity_settings">Preferencias</string>
@@ -62,4 +62,46 @@
     <string name="title_activity_pad_land_data">PadLandDataActivity</string>
     <string name="pref_header_general">Preferencias</string>
     <string name="settings_default_username_dialog_title">Introduce el nombre de ususario</string>
+    <string name="basic_auth_error">Fallo de autenticación</string>
+    <string name="basic_auth_warning">Las credenciales se enviarán sin encriptación SSL. Se recomienda evitar esto. Procura utilizar el protocolo HTTPS si está disponible.</string>
+    <string name="padview_dialog_basicatuh_password">Contraseña</string>
+    <string name="padview_dialog_basicatuh_title">Autenticación requerida</string>
+    <string name="padview_dialog_basicatuh_username">Nombre de usuario</string>
+    <string name="no_custom_servers">Sin servidores añadidos.</string>
+    <string name="padview_toast_blacklist_url">La dirección del servidor no se encuentra en la lista blanca. Añade un nuevo servidor en la configuración o utiliza otra aplicación.</string>
+    <string name="padview_toast_invalid_url">La dirección no parece válida.</string>
+    <string name="pref_server_list_summary">Añade tus servidores de etherpad preferidos</string>
+    <string name="title_activity_server_list">Lista de servidores</string>
+    <string name="serverlist_dialog_delete_server_deleted">Los servidores seleccionados han sido eliminados</string>
+    <string name="serverlist_dialog_delete_sure_to_delete">¿Seguro que quieres eliminar los servidores seleccionados?</string>
+    <string name="serverlist_dialog_edit_server_title">Editar servidor</string>
+    <string name="serverlist_dialog_new_server_advanced">Opciones avanzadas</string>
+    <string name="serverlist_dialog_new_server_jquery_label">Marca la casilla para servidores compatibles con \"etherpad-lite-jquery-plugin\" (Etherpad Lite).</string>
+    <string name="serverlist_dialog_new_server_jquery_title">Compatible con jQuery</string>
+    <string name="serverlist_dialog_new_server_lite_label">Marca la casilla si el servidor funciona con Etherpad Lite (recomendado).</string>
+    <string name="serverlist_dialog_new_server_lite_title">Funciona con Etherpad Lite</string>
+    <string name="serverlist_dialog_new_server_name_invalid">Nombre no válido</string>
+    <string name="serverlist_dialog_new_server_name_label">Introduce el nombre deseado para el servidor (o nada)</string>
+    <string name="serverlist_dialog_new_server_name_title">Nombre del servidor</string>
+    <string name="serverlist_dialog_new_server_padprefix_invalid">Prefijo inválido</string>
+    <string name="serverlist_dialog_new_server_padprefix_label">En servidores nuevos (Etherpad Lite) hay un segmento de url entre el dominio y el nombre del documento. Por defecto es \"p/\".</string>
+    <string name="serverlist_dialog_new_server_padprefix_title">Prefijo en la url del pad</string>
+    <string name="serverlist_dialog_new_server_title">Nuevo servidor</string>
+    <string name="serverlist_dialog_new_server_url_invalid">Dirección no válida</string>
+    <string name="serverlist_dialog_new_server_url_label">La dirección para acceder al servidor. Añade https:// si es posible.</string>
+    <string name="serverlist_dialog_new_server_url_title">Dirección del servidor</string>
+    <string name="title_activity_intro">Introducción</string>
+    <string name="launch_intro">Lanza la pantalla de introducción</string>
+    <string name="intro_third_title">Edita documentos ya existentes</string>
+    <string name="intro_third_desc">Comparte una dirección a Padland para abrir y editar.</string>
+    <string name="intro_second_title">Crea nuevos documentos</string>
+    <string name="intro_second_desc">Crea documentos en tu servidor preferido ¡Puedes organizarlos en grupos y añadir a tus amigos!</string>
+    <string name="intro_fourth_title">¿Servidor personalizado?</string>
+    <string name="intro_fourth_desc">¡Sin problema! Puedes añadir tus servidores favoritos ¡Explora la configuración para esta y muchas otras opciones!</string>
+    <string name="intro_first_title">¡Bienvenido/a a Padland!</string>
+    <string name="intro_first_desc">Padland te permite ver, editar, organizar y compartir documentos colaborativos.\n ¡Presiona siguiente para ver como funciona!</string>
+    <string name="intro_fifth_title">¡Todo listo para despegar!</string>
+    <string name="intro_fifth_desc">Recomienda nuevas opciones o informa de errores en el repositorio de github.\n
+        <a href='https://github.com/mikifus/padland'>https://github.com/mikifus/padland</a>
+        \n\n¡Presiona siguiente para empezar!</string>
 </resources>

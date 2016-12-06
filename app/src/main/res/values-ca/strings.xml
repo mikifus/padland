@@ -1,8 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Padland</string>
+
+    <string name="title_activity_intro">Introducció</string>
+    <string name="launch_intro">Inicia la pantalla d\'introducció</string>
+    <string name="intro_first_title">Benvinguda a Padland!</string>
+    <string name="intro_first_desc">Padland et permet veure, editar, organitzar i compartir documents col·laboratius.\n Prem següent per veure com funciona!</string>
+    <string name="intro_second_title">Crea nous documents</string>
+    <string name="intro_second_desc">Crea documents al teu servidor preferit. Els pots organitzar en grups i compartir amb els teus amics!</string>
+    <string name="intro_third_title">Edita documents ja existents</string>
+    <string name="intro_third_desc">Comparteix una adreça a Padland per a obrir i editar.</string>
+    <string name="intro_fourth_title">Servidor personalitzat?</string>
+    <string name="intro_fourth_desc">Cap problema! Pots afegir els teus servidors favorits. Explora la configuració per aquesta opció i moltes altres!</string>
+    <string name="intro_fifth_title">Som-hi doncs!</string>
+    <string name="intro_fifth_desc">Demana noves opcions o informa d\'errors al repositori de github.\n
+        <a href='https://github.com/mikifus/padland'>https://github.com/mikifus/padland</a>
+        \n\nPrem següent per començar!</string>
+
     <string name="about">Quant a PadLand</string>
-    <string name="about_support_text"><p>Aquesta aplicació es troba en desenvolupament. Per enviar comentaris i informar d\'errors si us plau contacta amb el desenvolupador a mikifus@gmail.com</p>\n         \n         <p>Si vols contribuir aquí tens el repositori:\n             <a href="https://github.com/mikifus/padland">https://github.com/mikifus/padland</a></p></string>
+    <string name="about_support_text"><p>Aquesta aplicació es troba en desenvolupament. Per enviar comentaris i informar d\'errors si us plau obre una qüestió a GitHub.</p>\n         \n         <p>Si vols contribuir aquí tens el repositori:\n             <a href="https://github.com/mikifus/padland">https://github.com/mikifus/padland</a></p></string>
     <string name="about_text"><p>Llicència <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache</a>.</p></string>
     <string name="action_go_to_list">Tornar a la llista</string>
     <string name="action_newpad">Afegir document</string>
@@ -46,7 +62,7 @@
     <string name="settings_save_new_pads_desc">Afegir automàticament a la llista tots els nous documents accedits</string>
     <string name="settings_save_new_pads_title">Guardar automàticament els nous documents</string>
     <string name="share">Compartir</string>
-    <string name="share_auto_text">"¡Vine a Padland!"</string>
+    <string name="share_auto_text">"Document compartit amb l'aplicació Padland: "</string>
     <string name="share_document">Compartir document</string>
     <string name="sure_to_delete_group">Vols eliminar el grup seleccionat?</string>
     <string name="sure_to_delete_pad">Segur que vols eliminar els documents seleccionats?</string>
@@ -62,4 +78,32 @@
     <string name="title_activity_pad_land_data">PadLandDataActivity</string>
     <string name="pref_header_general">Preferències</string>
     <string name="settings_default_username_dialog_title">Entra el nom d\'usuari</string>
+    <string name="basic_auth_error">L\'autenticació ha fallat</string>
+    <string name="basic_auth_warning">Les credencials s\'enviaràn sense encriptació SSL. Es recomana evitar això. Procura utilitzar el protocol HTTPS si es troba disponible.</string>
+    <string name="no_custom_servers">No s\'han afegit servidors.</string>
+    <string name="padview_dialog_basicatuh_password">Contrasenya</string>
+    <string name="padview_dialog_basicatuh_title">Autenticació requerida</string>
+    <string name="padview_dialog_basicatuh_username">Nom d\'usuari</string>
+    <string name="padview_toast_blacklist_url">L\'adreça del servidor no es troba a la llista blanca. Afegeix un nou servidor a la configuració o utilitza una altra aplicació.</string>
+    <string name="padview_toast_invalid_url">L\'adreça no sembla vàlida.</string>
+    <string name="pref_server_list_summary">Afegeix els teus servidors d\'etherpad preferits</string>
+    <string name="title_activity_server_list">Llista de servidors</string>
+    <string name="serverlist_dialog_delete_server_deleted">Els servidors seleccionats s\'han eliminat</string>
+    <string name="serverlist_dialog_delete_sure_to_delete">Segur que vols eliminar els servidors seleccionats?</string>
+    <string name="serverlist_dialog_edit_server_title">Editar servidor</string>
+    <string name="serverlist_dialog_new_server_advanced">Opcions avançades</string>
+    <string name="serverlist_dialog_new_server_jquery_label">Marca per a servidors compatibles amb \"etherpad-lite-jquery-plugin\" (Etherpad Lite).</string>
+    <string name="serverlist_dialog_new_server_jquery_title">Compatible amb jQuery</string>
+    <string name="serverlist_dialog_new_server_lite_label">Marca si el servidor funciona amb Etherpad Lite (recomanat).</string>
+    <string name="serverlist_dialog_new_server_lite_title">Funciona amb Etherpad Lite</string>
+    <string name="serverlist_dialog_new_server_name_invalid">El nom no és vàlid</string>
+    <string name="serverlist_dialog_new_server_name_label">Introdueix com vols anomenar el servidor (o res)</string>
+    <string name="serverlist_dialog_new_server_name_title">Nom del servidor</string>
+    <string name="serverlist_dialog_new_server_padprefix_invalid">Prefixe invàlid</string>
+    <string name="serverlist_dialog_new_server_padprefix_label">En servidors nous (Etherpad Lite) hi ha un segment de la url entre el domini i el nom del document. Per defecte és \"p/\".</string>
+    <string name="serverlist_dialog_new_server_padprefix_title">Prefixe a la url del pad</string>
+    <string name="serverlist_dialog_new_server_title">Nou servidor</string>
+    <string name="serverlist_dialog_new_server_url_invalid">Adreça no vàlida</string>
+    <string name="serverlist_dialog_new_server_url_label">L\'adreça on s\'accedeix al servidor. Afegeix https:// si és possible.</string>
+    <string name="serverlist_dialog_new_server_url_title">Adreça del servidor</string>
 </resources>
