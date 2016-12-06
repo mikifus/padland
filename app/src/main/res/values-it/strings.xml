@@ -8,7 +8,7 @@
     <string name="title_activity_pad_view">Visualizzatore di Padland</string>
     <string name="write_pad_name">Nome del pad</string>
     <string name="action_newpad">Aggiungi documento</string>
-    <string name="action_go_to_list">Ritorna all'elenco dei pad</string>
+    <string name="action_go_to_list">Ritorna all\'elenco dei pad</string>
     <string name="title_activity_new_pad">Crea pad</string>
     <string name="new_pad_explanation">Inserisci il nome del pad. Se non esiste, ne verrà creato uno nuovo, altrimenti verrai condotto al relativo pad.</string>
     <string name="save_pad">Salva pad</string>
@@ -43,7 +43,7 @@
     <string name="default_pad_server">Server predefinito</string>
     <string name="choose_default_pad_server">Scegli un server per i pad predefinito in cui aprire i pad nuovi.</string>
     <string name="about_support_text">
-        <p>Quest'app è in continuo sviluppo. Per dare un feedback o segnalare un bug, contatta lo sviluppatore via email: mikifus@gmail.com.</p>\n
+        <p>Quest\'app è in continuo sviluppo. Per dare un feedback o segnalare un bug, contatta lo sviluppatore via email: mikifus@gmail.com.</p>\n
         \n
         <p>Se vorresti contribuire ecco il repository:\n
             <a href='https://github.com/mikifus/padland'>https://github.com/mikifus/padland</a>
@@ -96,14 +96,14 @@
     <string name="serverlist_dialog_new_server_name_invalid">Nome del server non valido.</string>
 
     <string name="serverlist_dialog_new_server_url_title">URL del server</string>
-    <string name="serverlist_dialog_new_server_url_label">L'URL da dove il server è accessibile</string>
+    <string name="serverlist_dialog_new_server_url_label">L\'URL da dove il server è accessibile</string>
     <string name="serverlist_dialog_new_server_url_invalid">URL del server non valido.</string>
 
     <string name="serverlist_dialog_new_server_lite_title">Avvia Etherpad Lite</string>
     <string name="serverlist_dialog_new_server_lite_label">Controlla se sul server gira Etherpad Lite (puoi ignorare questa opzione).</string>
 
     <string name="serverlist_dialog_new_server_padprefix_title">Prefisso del URL del pad</string>
-    <string name="serverlist_dialog_new_server_padprefix_label">Nei nuovi server (Etherpad Lite) c'è una parte dell'URL tra il dominio del server e il nome del pad. Il valore predefinito è \"p/\".</string>
+    <string name="serverlist_dialog_new_server_padprefix_label">Nei nuovi server (Etherpad Lite) c\'è una parte dell\'URL tra il dominio del server e il nome del pad. Il valore predefinito è \"p/\".</string>
     <string name="serverlist_dialog_new_server_padprefix_invalid">Prefisso del pad non valido.</string>
 
     <string name="serverlist_dialog_new_server_jquery_title">Supporta jQuery</string>
