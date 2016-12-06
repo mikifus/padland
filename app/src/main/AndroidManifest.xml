@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mikifus.padland"
     android:versionCode="6"
-    android:versionName="1.1.4" >
+    android:versionName="1.3.2" >
 
     <uses-sdk
         android:minSdkVersion="7"
