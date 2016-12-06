@@ -39,12 +39,10 @@
             android:dialogMessage=""
             android:defaultValue="" />
 
-        <EditTextPreference
+        <com.mikifus.padland.Utils.ColorPickerListPreference
             android:key="padland_default_color"
             android:title="@string/settings_default_color"
             android:summary="@string/settings_default_color_explanation"
-            android:dialogTitle="@string/settings_default_color_dialogtitle"
-            android:dialogMessage="@string/settings_default_color_dialogdesc"
             android:defaultValue="#555" />
 
     </PreferenceCategory>
@@ -58,6 +56,14 @@
             <intent
                 android:targetPackage="com.mikifus.padland"
                 android:targetClass="com.mikifus.padland.About"/>
+        </PreferenceScreen>
+        <PreferenceScreen
+            android:key="padland_intro"
+            android:title="@string/title_activity_intro"
+            android:summary="@string/launch_intro" >
+            <intent
+                android:targetPackage="com.mikifus.padland"
+                android:targetClass="com.mikifus.padland.IntroActivity"/>
         </PreferenceScreen>
     </PreferenceCategory>
 

@@ -405,7 +405,9 @@ public class PadListActivity extends PadLandDataActivity
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         // data is not available anymore, delete reference
-        setAdapter();
+//        setAdapter();
+        adapter = null;
+        expandableListView.setAdapter(adapter);
     }
 
     /**

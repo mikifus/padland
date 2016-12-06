@@ -775,6 +775,12 @@ public class PadLandDataActivity extends PadLandActivity {
             int result = db.delete(PadContentProvider.RELATION_TABLE_NAME, PadContentProvider._ID_GROUP + "=?", new String[]{String.valueOf(group_id)});
             return result > 0;
         }
+
+        public void close() {
+            if( db.isOpen() ) {
+                db.close();
+            }
+        }
     }
 
     /**
@@ -804,5 +810,12 @@ public class PadLandDataActivity extends PadLandActivity {
         server_list = collection.toArray(new String[collection.size()]);
 
         return server_list;
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (padlistDb != null) {
+            padlistDb.close();
+        }
     }
 }

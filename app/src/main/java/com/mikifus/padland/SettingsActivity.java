@@ -82,41 +82,6 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     /**
-     * Shows the simplified settings UI if the device configuration if the
-     * device configuration dictates that a simplified, single-pane UI should be
-     * shown.
-     */
-    private void setupSimplePreferencesScreen() {
-        if (!isSimplePreferences(this)) {
-            return;
-        }
-
-        // In the simplified UI, fragments are not used at all and we instead
-        // use the older PreferenceActivity APIs.
-
-        // Add 'general' pref_general.
-//        addPreferencesFromResource(R.xml.pref_general);
-
-        // Add 'notifications' pref_general, and a corresponding header.
-        //PreferenceCategory fakeHeader = new PreferenceCategory(this);
-        //fakeHeader.setTitle(R.string.pref_header_notifications);
-        //getPreferenceScreen().addPreference(fakeHeader);
-        //addPreferencesFromResource(R.xml.pref_notification);
-
-        // Add 'data and sync' pref_general, and a corresponding header.
-        //fakeHeader = new PreferenceCategory(this);
-        //fakeHeader.setTitle(R.string.pref_header_data_sync);
-        //getPreferenceScreen().addPreference(fakeHeader);
-        //addPreferencesFromResource(R.xml.pref_data_sync);
-    }
-
-    /** {@inheritDoc} */
-//    @Override
-//    public boolean onIsMultiPane() {
-//        return isXLargeTablet(this) && !isSimplePreferences(this);
-//    }
-
-    /**
      * Helper method to determine if the device has an extra-large screen. For
      * example, 10" tablets are extra-large.
      */
@@ -137,15 +102,6 @@ public class SettingsActivity extends AppCompatActivity {
                 || Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB
                 || !isXLargeTablet(context);
     }
-
-    /** {@inheritDoc} */
-//    @Override
-//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-//    public void onBuildHeaders(List<Header> target) {
-//        if (!isSimplePreferences(this)) {
-//            loadHeadersFromResource(R.xml.pref_headers, target);
-//        }
-//    }
 
     /**
      * A preference value change listener that updates the preference's summary
@@ -247,45 +203,6 @@ public class SettingsActivity extends AppCompatActivity {
 //            setDefaultServerPreferenceValues();
         }
     }
-
-    /**
-     * This fragment shows notification pref_general only. It is used when the
-     * activity is showing a two-pane settings UI.
-     */
-    /*@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class NotificationPreferenceFragment extends PreferenceFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_notification);
-
-            // Bind the summaries of EditText/List/Dialog/Ringtone pref_general
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
-        }
-    }*/
-
-    /**
-     * This fragment shows data and sync pref_general only. It is used when the
-     * activity is showing a two-pane settings UI.
-     */
-    /*@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class DataSyncPreferenceFragment extends PreferenceFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_data_sync);
-
-            // Bind the summaries of EditText/List/Dialog/Ringtone pref_general
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            bindPreferenceSummaryToValue(findPreference("sync_frequency"));
-        }
-    }*/
-
 
     public static class SettingsFragment extends PreferenceFragment {
         @Override

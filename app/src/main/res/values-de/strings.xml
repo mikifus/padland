@@ -43,7 +43,7 @@
     <string name="default_pad_server">Standard-Pad-Server</string>
     <string name="choose_default_pad_server">Wähle einen Standard-Pad-Server für neu erstellte Dokumente.</string>
     <string name="about_support_text">
-        <p>Diese App ist in der Entwicklung. Um Feedback zu geben und Bugs zu reporten, kontaktiere den Entwickler unter mikifus@gmail.com.</p>\n
+        <p>Diese App ist in der Entwicklung. Um Feedback zu geben und Bugs zu reporten, kontaktiere den Entwickler.</p>\n
         \n
         <p>Wenn du zu dem Projekt beitragen willst: Hier ist das Repository:\n
             <a href='https://github.com/mikifus/padland'>https://github.com/mikifus/padland</a>
@@ -76,5 +76,14 @@
     <string name="settings_miscellaneous">Verschiedenes</string>
     <string name="padinfo_times_accessed">Anzahl der Aufrufe</string>
     <string name="pref_default_display_name">Anonymous</string>
+    <string name="basic_auth_warning"></string>
+    <string name="padview_dialog_basicatuh_password"></string>
+    <string name="padview_dialog_basicatuh_title"></string>
+    <string name="padview_dialog_basicatuh_username"></string>
+    <string name="no_custom_servers"></string>
+    <string name="padview_toast_blacklist_url"></string>
+    <string name="padview_toast_invalid_url"></string>
+    <string name="pref_server_list_summary"></string>
+    <string name="title_activity_intro"></string>
 
 </resources>

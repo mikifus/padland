@@ -10,13 +10,15 @@
             res/values-vXX/styles.xml, while customizations related to
             backward-compatibility can go here.
         -->
+        <item name="colorPrimaryDark">@color/actionbar_primary_dark</item>
+        <item name="colorPrimary">@color/actionbar_primary</item>
     </style>
 
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
-        <item name="colorAccent">@android:color/holo_orange_light</item>
-        <item name="android:colorBackground">@color/dim_foreground_material_dark</item>
+        <!--<item name="colorAccent">@android:color/holo_orange_light</item>-->
+        <item name="android:colorBackground">@color/app_theme_color_background</item>
     </style>
 
     <style name="activated" parent="AppBaseTheme">
