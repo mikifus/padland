@@ -61,11 +61,7 @@
     <string name="default_pad_server">Default pad server</string>
     <string name="choose_default_pad_server">Choose a default pad server when opening a new one.</string>
     <string name="about_support_text">
-<<<<<<< HEAD
-        <p>This app is under development. To provide feedback and report bugs please contact the developer at mikifus@gmail.com.</p>\n
-=======
         <p>This app is under development. To provide feedback and report bugs please open a new issue on GitHub.</p>\n
->>>>>>> custom_servers
         \n
         <p>If you\'d like to contribute here is the repository:\n
             <a href='https://github.com/mikifus/padland'>https://github.com/mikifus/padland</a>
@@ -131,11 +127,7 @@
     <string name="serverlist_dialog_new_server_url_invalid">Invalid server url</string>
 
     <string name="serverlist_dialog_new_server_lite_title">Runs Etherpad Lite</string>
-<<<<<<< HEAD
     <string name="serverlist_dialog_new_server_lite_label">I know that this server uses Etherpad Lite.</string>
-=======
-    <string name="serverlist_dialog_new_server_lite_label">Check this if the server runs on Etherpad Lite (recommended).</string>
->>>>>>> custom_servers
 
     <string name="serverlist_dialog_new_server_padprefix_title">Url pad prefix</string>
     <string name="serverlist_dialog_new_server_padprefix_label">New servers (Etherpad Lite) have an url segment between the server domain and the pad name. By default it is \"p/\". Change it here if it is different.</string>
