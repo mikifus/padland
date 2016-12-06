@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -15,6 +16,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.PersistableBundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -115,6 +117,8 @@ public class PadViewActivity extends PadLandDataActivity {
 //        this.setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_PORTRAIT );
         handler = new Handler();
 
+        titanPadCheck();
+
         // If no network...
         if (!isNetworkAvailable()) {
             Toast.makeText(this, getString(R.string.network_is_unreachable), Toast.LENGTH_LONG).show();
@@ -138,6 +142,30 @@ public class PadViewActivity extends PadLandDataActivity {
         // Load it!
         loadUrl(current_padUrl);
     }
+
+    /**
+     * This class must be removed in the future (2018) along with
+     * titanpad.com support.
+     */
+    private void titanPadCheck() {
+        PadData PadData = this._getPadData();
+        if( ! PadData.getServer().equals("https://titanpad.com") ) {
+            return;
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(PadViewActivity.this);
+        builder.setTitle(R.string.titanpad_deprecated_title);
+        builder.setMessage(R.string.titanpad_deprecated_text);
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        Dialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(true);
+        alertDialog.show();
+
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
@@ -190,7 +218,6 @@ public class PadViewActivity extends PadLandDataActivity {
      */
     private void _makePadUrl() {
         PadData PadData = this._getPadData();
-
 
         if( ! WhiteListMatcher.checkValidUrl(PadData.getUrl()) ) {
             Toast.makeText(this, getString(R.string.padview_toast_invalid_url), Toast.LENGTH_SHORT).show();

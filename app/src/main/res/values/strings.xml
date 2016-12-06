@@ -121,4 +121,8 @@
     <string name="serverlist_dialog_delete_sure_to_delete">Are you sure you want to delete the selected servers?</string>
     <string name="serverlist_dialog_delete_server_deleted">The selected servers have been removed</string>
 
+    <!-- Titanpad notice -->
+    <string name="titanpad_deprecated_title">Warning: Titanpad.com is deprecated</string>
+    <string name="titanpad_deprecated_text">On 1st May 2017 all documents will become read-only. On 31st Dec 2017 Titanpad.com will shut down. Make sure you backup your documents and avoid creating new ones.</string>
+
 </resources>
