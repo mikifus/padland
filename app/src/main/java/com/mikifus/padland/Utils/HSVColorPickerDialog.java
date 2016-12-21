@@ -10,13 +10,18 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.FloatMath;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+
+import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 
 
 public class HSVColorPickerDialog extends AlertDialog {
@@ -30,6 +35,7 @@ public class HSVColorPickerDialog extends AlertDialog {
 
     private final OnColorSelectedListener listener;
     private int selectedColor;
+    private Context context;
 
     public interface OnColorSelectedListener {
         /**
@@ -40,15 +46,27 @@ public class HSVColorPickerDialog extends AlertDialog {
         public void colorSelected( Integer color );
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+    }
+
     public HSVColorPickerDialog(Context context, int initialColor, final OnColorSelectedListener listener) {
         super(context);
         this.selectedColor = initialColor;
         this.listener = listener;
+        this.context = context;
+        makeView();
+    }
+
+    void makeView() {
 
         colorWheel = new HSVColorWheel( context );
         valueSlider = new HSVValueSlider( context );
         int padding = (int) (context.getResources().getDisplayMetrics().density * PADDING_DP);
         int borderSize = (int) (context.getResources().getDisplayMetrics().density * BORDER_DP);
+        int orientationRule = context.getResources().getConfiguration().orientation == ORIENTATION_PORTRAIT ? RelativeLayout.BELOW : RelativeLayout.RIGHT_OF;
         RelativeLayout layout = new RelativeLayout( context );
 
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT );
@@ -58,7 +76,7 @@ public class HSVColorPickerDialog extends AlertDialog {
                 valueSlider.setColor( color, true );
             }
         } );
-        colorWheel.setColor( initialColor );
+        colorWheel.setColor( selectedColor );
         colorWheel.setId( 1 );
         layout.addView( colorWheel, lp );
 
@@ -70,10 +88,10 @@ public class HSVColorPickerDialog extends AlertDialog {
         valueSliderBorder.setId( 2 );
         lp = new RelativeLayout.LayoutParams( LayoutParams.MATCH_PARENT, selectedColorHeight + 2 * borderSize );
         lp.bottomMargin = (int) (context.getResources().getDisplayMetrics().density * CONTROL_SPACING_DP);
-        lp.addRule( RelativeLayout.BELOW, 1 );
+        lp.addRule( orientationRule, 1 );
         layout.addView( valueSliderBorder, lp );
 
-        valueSlider.setColor( initialColor, false );
+        valueSlider.setColor( selectedColor, false );
         valueSlider.setListener( new OnColorSelectedListener() {
             @Override
             public void colorSelected(Integer color) {
@@ -87,6 +105,7 @@ public class HSVColorPickerDialog extends AlertDialog {
         selectedColorborder.setBackgroundColor( BORDER_COLOR );
         lp = new RelativeLayout.LayoutParams( LayoutParams.MATCH_PARENT, selectedColorHeight + 2 * borderSize );
         selectedColorborder.setPadding( borderSize, borderSize, borderSize, borderSize );
+        lp.addRule( orientationRule, 1 );
         lp.addRule( RelativeLayout.BELOW, 2 );
         layout.addView( selectedColorborder, lp );
 
@@ -370,6 +389,10 @@ public class HSVColorPickerDialog extends AlertDialog {
         protected void onSizeChanged(int w, int h, int oldw, int oldh) {
             super.onSizeChanged(w, h, oldw, oldh);
 
+            if( w == 0) {
+                w = oldh;
+            }
+
             srcRect = new Rect( 0, 0, w, 1 );
             dstRect = new Rect( 0, 0, w, h );
             bitmap = Bitmap.createBitmap( w, 1, Config.ARGB_8888 );
@@ -429,5 +452,4 @@ public class HSVColorPickerDialog extends AlertDialog {
         }
 
     }
-
 }

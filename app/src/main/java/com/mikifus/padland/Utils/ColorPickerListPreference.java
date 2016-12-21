@@ -1,7 +1,9 @@
 package com.mikifus.padland.Utils;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.ListPreference;
 import android.util.AttributeSet;
 
@@ -14,6 +16,8 @@ import com.mikifus.padland.R;
 public class ColorPickerListPreference extends ListPreference {
 
     private Context mContext;
+    private HSVColorPickerDialog dialog;
+    private boolean showing = false;
 
     public ColorPickerListPreference(Context ctxt, AttributeSet attrs) {
         super(ctxt, attrs);
@@ -21,7 +25,7 @@ public class ColorPickerListPreference extends ListPreference {
     }
     @Override
     protected void showDialog(Bundle state) {
-        HSVColorPickerDialog cpd = new HSVColorPickerDialog( mContext, getIntValue(), new HSVColorPickerDialog.OnColorSelectedListener() {
+        dialog = new HSVColorPickerDialog( mContext, getIntValue(), new HSVColorPickerDialog.OnColorSelectedListener() {
             @Override
             public void colorSelected(Integer color) {
                 // Do something with the selected color
@@ -29,8 +33,28 @@ public class ColorPickerListPreference extends ListPreference {
                 setValue(hexColor);
             }
         });
-        cpd.setTitle( R.string.settings_default_color_dialogtitle );
-        cpd.show();
+        dialog.setTitle( R.string.settings_default_color_dialogtitle );
+        dialog.show();
+        showing = true;
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                showing = false;
+            }
+        });
+    }
+
+    public void reload() {
+        if( dialog != null && showing ) {
+            dialog.dismiss();
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    showDialog(null);
+                }
+            }, 300);
+        }
     }
 
     private int getIntValue() {
