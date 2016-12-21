@@ -33,7 +33,8 @@
             android:theme="@style/splashScreenTheme" />
         <activity
             android:name=".PadListActivity"
-            android:label="@string/title_activity_padlist" >
+            android:label="@string/title_activity_padlist"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <!-- To put shared data into a pad -->
@@ -151,7 +152,8 @@
         </activity>
         <activity
             android:name=".NewPadActivity"
-            android:label="@string/title_activity_new_pad" >
+            android:label="@string/title_activity_new_pad"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
@@ -169,25 +171,29 @@
         </activity>
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings" >
+            android:label="@string/title_activity_settings"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".PadListActivity" />
         </activity>
         <activity
             android:name=".PadInfoActivity"
-            android:label="@string/title_activity_pad_info" >
+            android:label="@string/title_activity_pad_info"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mikifus.padland.PadInfoActivity" />
         </activity>
         <activity
             android:name=".PadLandDataActivity"
-            android:label="@string/title_activity_pad_land_data" >
+            android:label="@string/title_activity_pad_land_data"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
         </activity>
         <activity
             android:name=".ServerListActivity"
-            android:label="@string/title_activity_server_list" >
+            android:label="@string/title_activity_server_list"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data

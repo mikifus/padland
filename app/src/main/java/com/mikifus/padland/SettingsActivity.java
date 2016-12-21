@@ -17,6 +17,7 @@ import android.view.MenuItem;
 
 import com.mikifus.padland.Models.Server;
 import com.mikifus.padland.Models.ServerModel;
+import com.mikifus.padland.Utils.ColorPickerListPreference;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,6 +42,8 @@ public class SettingsActivity extends AppCompatActivity {
      * shown on tablets.
      */
     private static final boolean ALWAYS_SIMPLE_PREFS = false;
+
+    SettingsFragment settingsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +77,7 @@ public class SettingsActivity extends AppCompatActivity {
         // Display the fragment as the main content.
         Bundle arguments = new Bundle();
         arguments.putStringArray( "server_name_list", getServerNameList() );
-        SettingsFragment settingsFragment = new SettingsFragment();
+        settingsFragment = new SettingsFragment();
         settingsFragment.setArguments(arguments);
         getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, settingsFragment)
@@ -246,5 +249,11 @@ public class SettingsActivity extends AppCompatActivity {
         server_list = collection.toArray(new String[collection.size()]);
 
         return server_list;
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        ((ColorPickerListPreference) settingsFragment.findPreference("padland_default_color")).reload();
     }
 }
