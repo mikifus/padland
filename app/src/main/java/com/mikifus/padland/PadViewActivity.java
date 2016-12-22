@@ -416,6 +416,18 @@ public class PadViewActivity extends PadLandDataActivity {
                 BasicAuthDialog dialog = new PadViewAuthDialog(getCurrentPadUrl(), handler);
                 dialog.show(fm, "dialog_auth");
             }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                if (url != null && (url.startsWith("http://") || url.startsWith("https://"))) {
+                    //TODO: Open whitelisted URLs with Padland too
+                    view.getContext().startActivity(
+                            new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                    return true;
+                } else {
+                    return super.shouldOverrideUrlLoading(view, url);
+                }
+            }
         });
         this._makeWebSettings(webView);
         this._addListenersToView();
