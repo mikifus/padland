@@ -11,6 +11,7 @@ import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,6 +26,7 @@ import android.view.ViewGroup;
 import android.webkit.CookieManager;
 import android.webkit.HttpAuthHandler;
 import android.webkit.JavascriptInterface;
+import android.webkit.SslErrorHandler;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
@@ -427,6 +429,48 @@ public class PadViewActivity extends PadLandDataActivity {
                 } else {
                     return super.shouldOverrideUrlLoading(view, url);
                 }
+            }
+
+            @Override
+            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                super.onReceivedSslError(view, handler, error);
+
+                String message = null;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
+                    int errorCode = error.getPrimaryError();
+                    switch (errorCode) {
+                        case SslError.SSL_EXPIRED:
+                            message = getString(R.string.error_ssl_expired);
+                            break;
+                        case SslError.SSL_IDMISMATCH:
+                            message = getString(R.string.error_ssl_id_mismatch);
+                            break;
+                        case SslError.SSL_NOTYETVALID:
+                            message = getString(R.string.error_ssl_not_yet_valid);
+                            break;
+                        case SslError.SSL_UNTRUSTED:
+                            message = getString(R.string.error_ssl_untrusted);
+                            break;
+                    }
+
+                    if (message == null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH
+                            && errorCode == SslError.SSL_DATE_INVALID) {
+                        message = getString(R.string.error_ssl_date_invalid);
+                    }
+                }
+                Log.e(TAG, "SSL Error received: "+ error.getPrimaryError() + " - " + message);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(PadViewActivity.this);
+                builder.setTitle(R.string.ssl_error);
+                builder.setMessage( message );
+                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                Dialog alertDialog = builder.create();
+                alertDialog.setCanceledOnTouchOutside(true);
+                alertDialog.show();
             }
         });
         this._makeWebSettings(webView);
