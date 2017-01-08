@@ -103,6 +103,7 @@
     <string name="padview_dialog_basicatuh_password" >Password</string>
     <string name="basic_auth_error" >Authentication failed</string>
     <string name="basic_auth_warning" >The credentials will be sent without SSL encryption. This is highly discouraged. Try to use HTTPS protocol when available.</string>
+    <string name="ssl_error" >SSL Error</string>
 
     <string name="unexpected_error">An unexpected error happened.</string>
     <string name="settings_miscellaneous">Miscellaneous</string>
@@ -142,5 +143,10 @@
     <!-- Titanpad notice -->
     <string name="titanpad_deprecated_title">Warning: Titanpad.com is deprecated</string>
     <string name="titanpad_deprecated_text">On 1st May 2017 all documents will become read-only. On 31st Dec 2017 Titanpad.com will shut down. Make sure you backup your documents and avoid creating new ones.</string>
+    <string name="error_ssl_expired">SSL certificate expired</string>
+    <string name="error_ssl_id_mismatch">SSL certificate ID mismatch</string>
+    <string name="error_ssl_not_yet_valid">SSL certificate is not valid yet</string>
+    <string name="error_ssl_untrusted">SSL certificate is untrusted</string>
+    <string name="error_ssl_date_invalid">SSL certificate date is invalid</string>
 
 </resources>
