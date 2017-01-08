@@ -27,9 +27,15 @@ To try your new server create a new pad and choose it. You can make it the defau
 The user can now share an URL to the app in order to open it. Keep in mind that the host server must be previously added, otherwise the URL will be considered unsafe. 
 
 ## Current version
-1.3.2
+1.3.3
 
 ## Changelog
+### v1.3.3
+- Screen rotation bug fixed
+- External links are now opened in default browser
+- Added SSL error management
+- Minor bug fixes
+
 ### v1.3.2
 - Added a fancy introduction to understand the app
 - Color picker on the preferences option
