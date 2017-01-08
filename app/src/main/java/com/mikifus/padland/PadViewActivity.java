@@ -466,6 +466,7 @@ public class PadViewActivity extends PadLandDataActivity {
                 builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
+                        finish();
                     }
                 });
                 Dialog alertDialog = builder.create();
@@ -792,10 +793,10 @@ public class PadViewActivity extends PadLandDataActivity {
         startActivity(intent);
     }
 
-    @Override
-    public void onBackPressed() {
+//    @Override
+//    public void onBackPressed() {
 //        super.onBackPressed();
-        startPadListActivityWithPadId();
-        finish();
-    }
+//        startPadListActivityWithPadId();
+//        finish();
+//    }
 }
