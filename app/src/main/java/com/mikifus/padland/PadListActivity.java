@@ -113,19 +113,23 @@ public class PadListActivity extends PadLandDataActivity
         String extra_text = getIntent().getStringExtra(Intent.EXTRA_TEXT);
 
         if (extra_text != null) {
+            extra_text = extra_text.trim();
             if( WhiteListMatcher.checkValidUrl(extra_text)
                 && WhiteListMatcher.isValidHost(extra_text, getServerWhiteList()) ) {
-                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(extra_text));
+                Intent i = new Intent(PadListActivity.this, PadViewActivity.class);
+                i.setAction(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(extra_text));
+//                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(extra_text));
                 i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//                i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 i.setPackage("com.mikifus.padland");
-                finish();
+//                finish();
                 try {
                     startActivity(i);
                 } catch (ActivityNotFoundException e) {
-                    i.setPackage(null);
+//                    i.setPackage(null);
                     startActivity(i);
                 }
                 return;
