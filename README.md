@@ -1,6 +1,9 @@
 # Padland
 Padland is a tool to manage, share, remember and read collaborative documents based on the Etherpad technology in Android.
 
+<a href="https://f-droid.org/repository/browse/?fdid=com.mikifus.padland" target="_blank">
+<img src="https://f-droid.org/badge/get-it-on.png" height="90"/></a>
+
 ![Introduction screenshot 1](docs/Screenshot_1.png)
 ![Introduction screenshot 2](docs/Screenshot_2.png)
 ![Introduction screenshot 4](docs/Screenshot_4.png)
