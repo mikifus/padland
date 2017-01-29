@@ -106,4 +106,11 @@
     <string name="serverlist_dialog_new_server_url_invalid">Adreça no vàlida</string>
     <string name="serverlist_dialog_new_server_url_label">L\'adreça on s\'accedeix al servidor. Afegeix https:// si és possible.</string>
     <string name="serverlist_dialog_new_server_url_title">Adreça del servidor</string>
+    <string name="error_ssl_date_invalid">La data del certificat SSL és invàlida</string>
+    <string name="error_ssl_expired">El certificat SSL ha caducat</string>
+    <string name="error_ssl_id_mismatch">ID del certificat SSL no coincideix</string>
+    <string name="error_ssl_not_yet_valid">El certificat SSL no és vàlid encara</string>
+    <string name="error_ssl_untrusted">El certificat SSL no és de confiança</string>
+    <string name="ssl_error">Error SSL</string>
+    <string name="ssl_learn_more">Més informació</string>
 </resources>
