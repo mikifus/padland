@@ -104,4 +104,11 @@
     <string name="intro_fifth_desc">Recomienda nuevas opciones o informa de errores en el repositorio de github.\n
         <a href='https://github.com/mikifus/padland'>https://github.com/mikifus/padland</a>
         \n\n¡Presiona siguiente para empezar!</string>
+    <string name="error_ssl_date_invalid">La fecha del certificado SSL no es válida</string>
+    <string name="error_ssl_expired">El certificado SSL ha caducado</string>
+    <string name="error_ssl_id_mismatch">ID del certificado SSL no coincide</string>
+    <string name="error_ssl_not_yet_valid">El certificado SSL no es válido todavía</string>
+    <string name="error_ssl_untrusted">El certificado SSL no es de confianza</string>
+    <string name="ssl_error">Error SSL</string>
+    <string name="ssl_learn_more">Mas información</string>
 </resources>
