@@ -421,8 +421,8 @@ public class PadViewActivity extends PadLandDataActivity {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if (url != null && (url.startsWith("http://") || url.startsWith("https://"))) {
-                    //TODO: Open whitelisted URLs with Padland too
+                if (url != null && (url.startsWith("http://") || url.startsWith("https://"))
+                    && !WhiteListMatcher.isValidHost(url, hostsWhitelist)) {
                     view.getContext().startActivity(
                             new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
                     return true;
@@ -467,6 +467,12 @@ public class PadViewActivity extends PadLandDataActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
                         finish();
+                    }
+                });
+                builder.setNegativeButton(R.string.ssl_learn_more, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse( getString(R.string.ssl_learn_more_link) ));
+                        startActivity(browserIntent);
                     }
                 });
                 Dialog alertDialog = builder.create();
