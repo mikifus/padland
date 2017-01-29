@@ -109,6 +109,8 @@
     <string name="error_ssl_not_yet_valid">SSL certificate is not valid yet</string>
     <string name="error_ssl_untrusted">SSL certificate is untrusted</string>
     <string name="error_ssl_date_invalid">SSL certificate date is invalid</string>
+    <string name="ssl_learn_more">Learn more</string>
+    <string name="ssl_learn_more_link">https://support.google.com/nexus/answer/2844832</string>
 
     <string name="unexpected_error">An unexpected error happened.</string>
     <string name="settings_miscellaneous">Miscellaneous</string>
