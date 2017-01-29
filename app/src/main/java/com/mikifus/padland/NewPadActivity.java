@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.webkit.URLUtil;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -18,8 +19,6 @@ import com.mikifus.padland.Models.ServerModel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Allows the user to create a new pad, choosing a name and the host.
@@ -184,15 +183,14 @@ public class NewPadActivity extends PadLandActivity {
             Toast.makeText(this, (getString(R.string.newpad_noname_warning)), Toast.LENGTH_LONG).show();
             return;
         }
-        Pattern p = Pattern.compile( "[a-zA-Z0-9-_]+" );
-        Matcher m = p.matcher( padName );
-        if( !m.matches() )
+
+        String padUrl = padPrefix + padName;
+
+        if( !URLUtil.isValidUrl(padUrl) )
         {
             Toast.makeText(this, "The pad name contains invalid characters.", Toast.LENGTH_LONG).show();
             return;
         }
-
-        String padUrl = padPrefix + padName;
 
         Intent padViewIntent =
                 new Intent( NewPadActivity.this, PadViewActivity.class );
