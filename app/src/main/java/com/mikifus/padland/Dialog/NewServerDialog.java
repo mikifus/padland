@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
  */
 public class NewServerDialog extends DialogFragment {
     public static final String TAG = "NewServerDialog";
-    public static final String DEFAULT_PADPREFIX_VALUE = "p/";
+    public static final String DEFAULT_PADPREFIX_VALUE = "/p/";
 
     private EditText fieldName;
     private EditText fieldUrl;
@@ -174,15 +174,11 @@ public class NewServerDialog extends DialogFragment {
         String name = String.valueOf(fieldName.getText());
         values.put(ServerModel.NAME, name);
 
-        String url = String.valueOf(fieldUrl.getText());
+        String url = String.valueOf(fieldUrl.getText()).trim();
         try {
             URL url_object = new URL(url);
-//            url = url_object.getProtocol() + "://" + url_object.getHost();
-//            if( url_object.getPort() > -1 && url_object.getPort() != 80 )
-//            {
-//                url += ":" + url_object.getPort();
-//            }
             url = url_object.toString();
+            url = url.replaceAll("/$", ""); // Remove trailing slash
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
