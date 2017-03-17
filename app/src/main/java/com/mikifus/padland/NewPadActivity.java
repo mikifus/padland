@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.mikifus.padland.Models.Server;
 import com.mikifus.padland.Models.ServerModel;
+import com.mikifus.padland.Utils.PadUrl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -104,7 +105,7 @@ public class NewPadActivity extends PadLandActivity {
         ArrayList<Server> custom_servers = serverModel.getEnabledServerList();
         ArrayList<String> server_names = new ArrayList<>();
         for(Server server : custom_servers) {
-            server_names.add(server.getUrl() + "/" + server.getPadPrefix());
+            server_names.add(server.getPadPrefix());
         }
 
         // Server list to provide a fallback value
@@ -184,9 +185,14 @@ public class NewPadActivity extends PadLandActivity {
             return;
         }
 
-        String padUrl = padPrefix + padName;
+        PadUrl padUrl = new PadUrl.Builder()
+                .padName(padName)
+                .padServer(padServer)
+                .padPrefix(padPrefix)
+                .build();
+//        String padUrl = padPrefix + padName;
 
-        if( !URLUtil.isValidUrl(padUrl) )
+        if( !URLUtil.isValidUrl(padUrl.getString()) )
         {
             Toast.makeText(this, "The pad name contains invalid characters.", Toast.LENGTH_LONG).show();
             return;
@@ -194,9 +200,9 @@ public class NewPadActivity extends PadLandActivity {
 
         Intent padViewIntent =
                 new Intent( NewPadActivity.this, PadViewActivity.class );
-        padViewIntent.putExtra( "padName", padName );
-        padViewIntent.putExtra( "padServer", padServer );
-        padViewIntent.putExtra( "padUrl", padUrl );
+        padViewIntent.putExtra( "padName", padUrl.getPadName() );
+        padViewIntent.putExtra( "padServer", padUrl.getPadServer() );
+        padViewIntent.putExtra( "padUrl", padUrl.getString() );
 
         startActivity(padViewIntent);
         finish();
@@ -208,7 +214,7 @@ public class NewPadActivity extends PadLandActivity {
      * @return
      */
     private String getPadNameFromInput( TextView input ){
-        String padName = (String) input.getText().toString();
+        String padName = (String) input.getText().toString().trim();
         return padName;
     }
 
