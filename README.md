@@ -30,9 +30,12 @@ To try your new server create a new pad and choose it. You can make it the defau
 The user can now share an URL to the app in order to open it. Keep in mind that the host server must be previously added, otherwise the URL will be considered unsafe. 
 
 ## Current version
-1.3.4
+1.3.5
 
 ## Changelog
+### v1.3.5
+- Removed a bug when adding custom servers if a trailing slash was set by the user
+
 ### v1.3.4
 - SSL error message includes a link to learn how to manage certificates
 - Now pad names can be any valid URL
