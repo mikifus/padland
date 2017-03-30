@@ -4,6 +4,9 @@ Padland is a tool to manage, share, remember and read collaborative documents ba
 <a href="https://f-droid.org/repository/browse/?fdid=com.mikifus.padland" target="_blank">
 <img src="https://f-droid.org/badge/get-it-on.png" height="90"/></a>
 
+<a href='https://play.google.com/store/apps/details?id=com.mikifus.padland'>
+<img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'  height="90" /></a>
+
 ![Introduction screenshot 1](docs/Screenshot_1.png)
 ![Introduction screenshot 2](docs/Screenshot_2.png)
 ![Introduction screenshot 4](docs/Screenshot_4.png)
