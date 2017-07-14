@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Padland</string>
+    
+    <string name="title_activity_intro">Introduction</string>
+    <string name="launch_intro">Lancer les écrans d\introduction</string>
+    <string name="intro_first_title">Bienvenue sur Padland!</string>
+    <string name="intro_first_desc">Padland vous permet de lire, éditer, organiser et partager des documents collaboratifs.\n Press next to see how it works!</string>
+    <string name="intro_second_title">Créer des nouveaux documents</string>
+    <string name="intro_second_desc">Créez des documents sur vos serveurs favoris. Vous pouvez ensuite les organiser par groupe et dire à vos amis de les rejoindre!</string>
+    <string name="intro_third_title">Editer des documents existants</string>
+    <string name="intro_third_desc">Partager l\'URL d\'un document vers Padland pour l\'ouvrir et l\'éditer.</string>
+    <string name="intro_fourth_title">Serveur personnalisé?</string>
+    <string name="intro_fourth_desc">Pas de problème! Vous pouvez ajouter vos serveurs favoris. Veuillez consulter pour cela les réglages, avec plein d\'autres options!</string>
+    <string name="intro_fifth_title">Ready to go!</string>
+    <string name="intro_fifth_desc">Demandez de nouvelles fonctionnalités ou signalez des bugs sur le dépôt github.\n
+        <a href='https://github.com/mikifus/padland'>https://github.com/mikifus/padland</a>
+\n\nCliquez sur Ok pour commencer!</string>
+    
     <string name="pref_header_general">Réglages</string>
     <string name="title_activity_settings">Réglages</string>
     <string name="action_settings">Réglages</string>
@@ -97,5 +113,9 @@
 
     <string name="serverlist_dialog_delete_sure_to_delete">Êtes-vous sûr de vouloir supprimer le serveur sélectionné?</string>
     <string name="serverlist_dialog_delete_server_deleted">Les serveurs sélectionnés ont été supprimés</string>
+
+    <!-- Titanpad notice -->
+    <string name="titanpad_deprecated_title">Attention : Titanpad.com est obsolète</string>
+    <string name="titanpad_deprecated_text">Les documents sont en lecture seule depuis mai 2017. Le 31 décembre 2017, Titanpad.com sera fermé. Prévoyez de sauvegarder vos documents ailleurs, et n\'en créez pas de nouveaux.</string>  
 
 </resources>
