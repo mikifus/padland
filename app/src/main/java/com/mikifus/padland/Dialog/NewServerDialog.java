@@ -72,7 +72,7 @@ public class NewServerDialog extends DialogFragment {
             dialogTitleReference = R.string.serverlist_dialog_edit_server_title;
             editServerId(edit_server_id);
         }
-//        mEditText.requestFocus();
+        fieldPadprefix.setText(DEFAULT_PADPREFIX_VALUE);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(view);
@@ -127,7 +127,15 @@ public class NewServerDialog extends DialogFragment {
 
     private void saveNewServer() {
         ServerModel serverModel = new ServerModel(getActivity());
-        serverModel.saveServerData(edit_server_id, getContentValues());
+        ContentValues contentValues = getContentValues();
+        String url = contentValues.getAsString(ServerModel.URL);
+        String prefix = contentValues.getAsString(ServerModel.PADPREFIX);
+        String final_prefix = url;
+        if( !final_prefix.endsWith(prefix) ) {
+            final_prefix = final_prefix + prefix;
+        }
+        contentValues.put(ServerModel.PADPREFIX, final_prefix);
+        serverModel.saveServerData(edit_server_id, contentValues);
     }
 
     private boolean validateForm() {

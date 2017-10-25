@@ -42,15 +42,9 @@ public class PadUrl {
     private String makeBaseUrl() {
         String local_prefix = prefix;
         if( local_prefix.isEmpty() ) {
-            local_prefix = "/";
+            throw new RuntimeException("The pad url was not correctly built. Check the fconfiguration for this server ("+server+").");
         }
-        if( !local_prefix.startsWith("/") ) {
-            local_prefix = "/" + local_prefix;
-        }
-        if( !local_prefix.endsWith("/") ) {
-            local_prefix += "/";
-        }
-        return server + local_prefix;
+        return local_prefix;
     }
 
     @Override
