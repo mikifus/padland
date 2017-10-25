@@ -67,6 +67,7 @@
                 android:id="@+id/chk_lite"
                 android:layout_width="wrap_content"
                 android:layout_height="100dp"
+                android:checked="true"
                 android:text="@string/serverlist_dialog_new_server_lite_label"  />
         </LinearLayout>
 

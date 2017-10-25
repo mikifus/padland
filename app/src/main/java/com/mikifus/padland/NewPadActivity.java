@@ -190,7 +190,6 @@ public class NewPadActivity extends PadLandActivity {
                 .padServer(padServer)
                 .padPrefix(padPrefix)
                 .build();
-//        String padUrl = padPrefix + padName;
 
         if( !URLUtil.isValidUrl(padUrl.getString()) )
         {
