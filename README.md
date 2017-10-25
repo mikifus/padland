@@ -33,9 +33,16 @@ To try your new server create a new pad and choose it. You can make it the defau
 The user can now share an URL to the app in order to open it. Keep in mind that the host server must be previously added, otherwise the URL will be considered unsafe. 
 
 ## Current version
-1.3.6
+1.3.7
 
 ## Changelog
+### v1.3.7
+- Fixed a major bug that didn't allow to create new pads
+- Fixed a bug that didn't allow to select a recently created server as default
+- CompileSdkVersion is now 26
+- MinSdkVersion is now 14
+- Now Etherpad Lite usage is selected by default
+
 ### v1.3.6
 - Updated french translation.
 

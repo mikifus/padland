@@ -73,7 +73,6 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-//        setupSimplePreferencesScreen();
         // Display the fragment as the main content.
         Bundle arguments = new Bundle();
         arguments.putStringArray( "server_name_list", getServerNameList() );
@@ -82,6 +81,16 @@ public class SettingsActivity extends AppCompatActivity {
         getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, settingsFragment)
                 .commit();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // If a new pad is added, the list to choose default must be refreshed
+        if( settingsFragment != null ) {
+            settingsFragment.getArguments().putStringArray("server_name_list", getServerNameList());
+            settingsFragment.setDefaultServerPreferenceValues();
+        }
     }
 
     /**
