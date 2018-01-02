@@ -33,7 +33,7 @@
     <string name="download_pad">Sauvegarder le pad</string>
     <string name="title_activity_about">À Propos</string>
     <string name="about">À propos</string>
-    <string name="about_text"><p >Publié sous <a href=\"http://www.apache.org/licenses/LICENSE-2.0.html\" >licence Apache</a>.</p></string>
+    <string name="about_text"><p>Publié sous <a href=\"http://www.apache.org/licenses/LICENSE-2.0.html\" >licence Apache</a>.</p></string>
     <string name="settings_save_new_pads_title">Sauvegarde automatique des nouveaux documents</string>
     <string name="settings_save_new_pads_desc">Ajout automatique à votre liste des documents nouvellement visionnés</string>
     <string name="share">Partager</string>
@@ -44,7 +44,7 @@
     <string name="ok">OK</string>
     <string name="cancel">Annuler</string>
     <string name="share_document">Partager le document</string>
-    <string name="share_auto_text">Document partagé via l\'application Padland :</string>
+    <string name="share_auto_text">Document partagé via l\'application Padland : </string>
 
     <string name="user_preferences">Vos préférences</string>
     <string name="settings_default_username">Nom d\'utilisateur par défaut</string>
