@@ -61,6 +61,7 @@
     <string name="settings_miscellaneous">Miscel·lània</string>
     <string name="settings_save_new_pads_desc">Afegir automàticament a la llista tots els nous documents accedits</string>
     <string name="settings_save_new_pads_title">Guardar automàticament els nous documents</string>
+    <string name="group">Afegir al grup</string>
     <string name="share">Compartir</string>
     <string name="share_auto_text">"Document compartit amb l'aplicació Padland: "</string>
     <string name="share_document">Compartir document</string>

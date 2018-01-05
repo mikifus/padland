@@ -36,6 +36,7 @@
     </string>
     <string name="settings_save_new_pads_title">Auto-save new documents</string>
     <string name="settings_save_new_pads_desc">Automatically add your newly visited documents to your list</string>
+    <string name="group">Add to group</string>
     <string name="share">Share</string>
     <string name="delete">Delete</string>
     <string name="no_pads">There are no saved documents.</string>
