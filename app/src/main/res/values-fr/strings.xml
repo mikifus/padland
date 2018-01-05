@@ -15,7 +15,7 @@
     <string name="intro_fourth_desc">Pas de problème ! Vous pouvez ajouter vos serveurs favoris. Veuillez consulter pour cela les réglages, avec plein d\'autres options!</string>
     <string name="intro_fifth_title">C\'est parti !</string>
     <string name="intro_fifth_desc">Demandez de nouvelles fonctionnalités ou signalez des bugs sur le dépôt github.\n
-              <a href=\"https://github.com/mikifus/padland\" >https://github.com/mikifus/padland</a> \n
+              <a href="https://github.com/mikifus/padland">https://github.com/mikifus/padland</a> \n
  \n
  Cliquez sur OK pour commencer!</string>
 
@@ -33,7 +33,7 @@
     <string name="download_pad">Sauvegarder le pad</string>
     <string name="title_activity_about">À Propos</string>
     <string name="about">À propos</string>
-    <string name="about_text"><p>Publié sous <a href=\"http://www.apache.org/licenses/LICENSE-2.0.html\" >licence Apache</a>.</p></string>
+    <string name="about_text"><p>Publié sous <a href="http://www.apache.org/licenses/LICENSE-2.0.html" >licence Apache</a>.</p></string>
     <string name="settings_save_new_pads_title">Sauvegarde automatique des nouveaux documents</string>
     <string name="settings_save_new_pads_desc">Ajout automatique à votre liste des documents nouvellement visionnés</string>
     <string name="share">Partager</string>
@@ -63,7 +63,7 @@
     <string name="about_support_text"><p >Cette application est en cours de développement. Pour envoyer des retours sur l\'application et des rapports de bugs, contactez le développeur (en anglais) à l\'adresse mikifus@gmail.com.</p>\n
             \n
             <p >Si vous voulez contribuer, voici le lien vers le dépôt du code source :\n
-            <a href=\"https://github.com/mikifus/padland\" >https://github.com/mikifus/padland</a></p></string>
+            <a href="https://github.com/mikifus/padland">https://github.com/mikifus/padland</a></p></string>
     <string name="padinfo_view_pad_button">Voir le pad</string>
     <string name="title_activity_pad_info">Infos</string>
     <string name="title_activity_pad_land_data">PadLandDataActivity</string>
