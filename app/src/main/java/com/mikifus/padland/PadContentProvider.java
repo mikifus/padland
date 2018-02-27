@@ -36,10 +36,11 @@ public class PadContentProvider extends ContentProvider {
      * Database specific constant declarations
      */
     protected SQLiteDatabase db;
-    public static final int DATABASE_VERSION = 7;
+    public static final int DATABASE_VERSION = 8;
 
     public static final String _ID = "_id";
     public static final String NAME = "name"; // Name of the pad, actually it is the last part of the url
+    public static final String LOCAL_NAME = "local_name"; // Alias of the pad
     public static final String SERVER = "server"; // server, might contain the suffix
     public static final String URL = "url"; // the full address including server and name
     public static final String LAST_USED_DATE = "last_used_date"; // Date the pad was accessed last time
@@ -74,6 +75,7 @@ public class PadContentProvider extends ContentProvider {
             " CREATE TABLE " + PAD_TABLE_NAME +
                     " ("+ _ID+" INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     " "+ NAME+" TEXT NOT NULL, " +
+                    " "+ LOCAL_NAME+" TEXT, " +
                     " "+ SERVER+" TEXT NOT NULL, " +
                     " "+ URL+" TEXT NOT NULL, " +
                     " "+ LAST_USED_DATE+ " INTEGER NOT NULL DEFAULT (strftime('%s','now')), " +
@@ -300,6 +302,7 @@ public class PadContentProvider extends ContentProvider {
         return new String[] {
                 _ID,
                 NAME,
+                LOCAL_NAME,
                 SERVER,
                 URL,
                 LAST_USED_DATE,

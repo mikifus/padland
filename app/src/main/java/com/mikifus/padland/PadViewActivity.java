@@ -279,6 +279,7 @@ public class PadViewActivity extends PadLandDataActivity {
         String action = myIntent.getAction();
         PadData padData;
         String padName = null;
+        String padLocalName = null;
         String padServer = null;
         String padUrl;
 
@@ -286,11 +287,12 @@ public class PadViewActivity extends PadLandDataActivity {
             padUrl = String.valueOf(myIntent.getData());
         } else {
             padName = myIntent.getStringExtra("padName");
+            padLocalName = myIntent.getStringExtra("padLocalName");
             padServer = myIntent.getStringExtra("padServer");
             padUrl = myIntent.getStringExtra("padUrl");
         }
 
-        padData = makePadData(padName, padServer, padUrl);
+        padData = makePadData(padName, padLocalName, padServer, padUrl);
 
         return padData;
     }
@@ -336,6 +338,7 @@ public class PadViewActivity extends PadLandDataActivity {
             PadData intentData = this._getPadDataFromIntent();
 
             values.put(PadContentProvider.NAME, intentData.getName());
+            values.put(PadContentProvider.LOCAL_NAME, intentData.getLocalName());
             values.put(PadContentProvider.SERVER, intentData.getServer());
             values.put(PadContentProvider.URL, intentData.getUrl());
 
@@ -597,10 +600,13 @@ public class PadViewActivity extends PadLandDataActivity {
      * @param padUrl
      * @return
      */
-    public PadData makePadData(String padName, String padServer, String padUrl) {
+    public PadData makePadData(String padName, String padLocalName, String padServer, String padUrl) {
         if (padUrl == null || padUrl.isEmpty()) {
             if (padName == null || padName.isEmpty()) {
                 return null;
+            }
+            if (padLocalName == null || padLocalName.isEmpty()) {
+                padLocalName = padName;
             }
             if (padUrl == null || padUrl.isEmpty()) {
                 padUrl = padServer + padName;
@@ -622,7 +628,7 @@ public class PadViewActivity extends PadLandDataActivity {
         // This creates a fake cursor
         MatrixCursor matrixCursor = new MatrixCursor(columns);
         startManagingCursor(matrixCursor);
-        matrixCursor.addRow(new Object[]{0, padName, padServer, padUrl, 0, 0, 0});
+        matrixCursor.addRow(new Object[]{0, padName, padLocalName, padServer, padUrl, 0, 0, 0});
 
         matrixCursor.moveToFirst();
         PadData PadData = new PadData(matrixCursor);

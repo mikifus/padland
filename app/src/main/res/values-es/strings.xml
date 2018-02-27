@@ -57,7 +57,7 @@
     <string name="title_activity_padlist">Padland: Documentos</string>
     <string name="unexpected_error">Ha ocurrido un error inesperado.</string>
     <string name="user_preferences">Preferencias del usuario</string>
-    <string name="write_pad_name">Nombre del documento</string>
+    <string name="write_pad_name">Nombre del documento (URL)</string>
     <string name="settings_miscellaneous">Miscelánea</string>
     <string name="padinfo_times_accessed">Veces accedido</string>
     <string name="title_activity_pad_land_data">PadLandDataActivity</string>

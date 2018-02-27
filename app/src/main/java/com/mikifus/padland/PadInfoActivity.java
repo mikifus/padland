@@ -46,7 +46,7 @@ public class PadInfoActivity extends PadLandDataActivity {
         PadData pad_data = this._getPadData( pad_id );
 
         // Action bar title
-        getSupportActionBar().setTitle( pad_data.getName() );
+        getSupportActionBar().setTitle( pad_data.getLocalName() );
 
         SeparatedListAdapter adapter = this._doInfoList( pad_data );
 

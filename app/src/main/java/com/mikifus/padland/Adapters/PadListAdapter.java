@@ -178,7 +178,7 @@ public class PadListAdapter extends BaseExpandableListAdapter {
         position_bundle.putInt("childPosition", childPosition);
         items_positions.put(child.getId(), position_bundle);
 
-        holder.name.setText(child.getName());
+        holder.name.setText(child.getLocalName());
         holder.url.setText( child.getUrl() );
 
         if (checkedPositions.get(groupPosition) != null) {
