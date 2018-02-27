@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.mikifus.padland.Adapters.ServerListAdapter;
+import com.mikifus.padland.Dialog.FormDialog;
 import com.mikifus.padland.Dialog.NewServerDialog;
 import com.mikifus.padland.Models.ServerModel;
 
@@ -26,7 +27,7 @@ import java.util.ArrayList;
  * Created by mikifus on 29/05/16.
  */
 public class ServerListActivity extends PadLandDataActivity
-        implements ActionMode.Callback, NewServerDialog.NewServerDialogCallBack {
+        implements ActionMode.Callback, FormDialog.FormDialogCallBack {
     /**
      * Multiple choice for all the groups
      */
@@ -98,16 +99,15 @@ public class ServerListActivity extends PadLandDataActivity
 
     public void onNewServerClick(View view) {
         FragmentManager fm = getSupportFragmentManager();
-        NewServerDialog dialog = new NewServerDialog(this);
+        NewServerDialog dialog = new NewServerDialog(getString(R.string.serverlist_dialog_new_server_title), this);
         dialog.show(fm, NEW_SERVER_DIALOG);
     }
 
     public void editServer(long id)  {
         FragmentManager fm = getSupportFragmentManager();
-        NewServerDialog dialog = new NewServerDialog(this);
-        dialog.show(fm, NEW_SERVER_DIALOG);
-
+        NewServerDialog dialog = new NewServerDialog(getString(R.string.serverlist_dialog_edit_server_title), this);
         dialog.editServerId(id);
+        dialog.show(fm, NEW_SERVER_DIALOG);
     }
 
     /**

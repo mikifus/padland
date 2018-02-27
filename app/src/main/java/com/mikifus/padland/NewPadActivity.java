@@ -194,7 +194,7 @@ public class NewPadActivity extends PadLandActivity {
 
         if( !URLUtil.isValidUrl(padUrl.getString()) )
         {
-            Toast.makeText(this, "The pad name contains invalid characters.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.new_pad_name_invalid), Toast.LENGTH_LONG).show();
             return;
         }
 

@@ -38,6 +38,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mikifus.padland.Dialog.BasicAuthDialog;
+import com.mikifus.padland.Models.Pad;
 import com.mikifus.padland.SaferWebView.PadLandSaferWebViewClient;
 import com.mikifus.padland.Utils.WhiteListMatcher;
 import com.pnikosis.materialishprogress.ProgressWheel;
@@ -150,7 +151,7 @@ public class PadViewActivity extends PadLandDataActivity {
      * titanpad.com support.
      */
     private void titanPadCheck() {
-        PadData PadData = this._getPadData();
+        Pad PadData = this._getPadData();
         if( ! PadData.getServer().equals("https://titanpad.com") ) {
             return;
         }
@@ -219,7 +220,7 @@ public class PadViewActivity extends PadLandDataActivity {
      * If the URL is not valid then the activity can't continue.
      */
     private void _makePadUrl() {
-        PadData PadData = this._getPadData();
+        Pad PadData = this._getPadData();
 
         if( ! WhiteListMatcher.checkValidUrl(PadData.getUrl()) ) {
             Toast.makeText(this, getString(R.string.padview_toast_invalid_url), Toast.LENGTH_SHORT).show();
@@ -251,15 +252,15 @@ public class PadViewActivity extends PadLandDataActivity {
      *
      * @return padData
      */
-    private PadData _getPadData() {
+    private Pad _getPadData() {
         long pad_id = this._getPadId();
-        PadData PadData;
+        Pad PadData;
 
         if (pad_id > 0) {
-            // TODO: Use a method that returns directly a PadData instance
-            Cursor c = padlistDb._getPadDataById(pad_id);
+            // TODO: Use a method that returns directly a Pad instance
+            Cursor c = padlistDb._getPadById(pad_id);
             c.moveToFirst();
-            PadData = new PadData(c);
+            PadData = new Pad(c);
             c.close();
         } else {
             PadData = this._getPadDataFromIntent();
@@ -274,10 +275,10 @@ public class PadViewActivity extends PadLandDataActivity {
      *
      * @return
      */
-    private PadData _getPadDataFromIntent() {
+    private Pad _getPadDataFromIntent() {
         Intent myIntent = getIntent();
         String action = myIntent.getAction();
-        PadData padData;
+        Pad padData;
         String padName = null;
         String padLocalName = null;
         String padServer = null;
@@ -311,8 +312,8 @@ public class PadViewActivity extends PadLandDataActivity {
             return pad_id;
         }
 
-        PadData PadData = this._getPadDataFromIntent();
-        Cursor c = padlistDb._getPadDataByUrl(PadData.getUrl());
+        Pad PadData = this._getPadDataFromIntent();
+        Cursor c = padlistDb._getPadByUrl(PadData.getUrl());
 
         if (c != null && c.getCount() > 0) {
             c.moveToFirst();
@@ -335,14 +336,14 @@ public class PadViewActivity extends PadLandDataActivity {
         if (userDetails.getBoolean("auto_save_new_pads", true) && this._getPadId() == 0) {
             // Add a new record
             ContentValues values = new ContentValues();
-            PadData intentData = this._getPadDataFromIntent();
+            Pad intentData = this._getPadDataFromIntent();
 
             values.put(PadContentProvider.NAME, intentData.getName());
             values.put(PadContentProvider.LOCAL_NAME, intentData.getLocalName());
             values.put(PadContentProvider.SERVER, intentData.getServer());
             values.put(PadContentProvider.URL, intentData.getUrl());
 
-            result = padlistDb.savePadData(0, values);
+            result = padlistDb.savePad(0, values);
         }
         return result;
     }
@@ -600,7 +601,7 @@ public class PadViewActivity extends PadLandDataActivity {
      * @param padUrl
      * @return
      */
-    public PadData makePadData(String padName, String padLocalName, String padServer, String padUrl) {
+    public Pad makePadData(String padName, String padLocalName, String padServer, String padUrl) {
         if (padUrl == null || padUrl.isEmpty()) {
             if (padName == null || padName.isEmpty()) {
                 return null;
@@ -631,7 +632,7 @@ public class PadViewActivity extends PadLandDataActivity {
         matrixCursor.addRow(new Object[]{0, padName, padLocalName, padServer, padUrl, 0, 0, 0});
 
         matrixCursor.moveToFirst();
-        PadData PadData = new PadData(matrixCursor);
+        Pad PadData = new Pad(matrixCursor);
         matrixCursor.close();
 
         return PadData;

@@ -13,6 +13,7 @@ import android.widget.AbsListView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
+import com.mikifus.padland.Models.Pad;
 import com.mikifus.padland.PadContentProvider;
 import com.mikifus.padland.PadLandDataActivity;
 import com.mikifus.padland.R;
@@ -56,7 +57,7 @@ public class PadListAdapter extends BaseExpandableListAdapter {
 
     private SparseArray<SparseBooleanArray> checkedPositions;
     private HashMap<Long, Bundle> items_positions = new HashMap<>();
-    private HashMap<Long, PadLandDataActivity.PadData> padDatas;
+    private HashMap<Long, Pad> padDatas;
     private ArrayList<HashMap<String, String>> groupDatas;
 
     // The default choice is the multiple one
@@ -68,7 +69,7 @@ public class PadListAdapter extends BaseExpandableListAdapter {
         layoutInflater = (LayoutInflater) this.context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         checkedPositions = new SparseArray<>();
-        padDatas = context._getPadDatas();
+        padDatas = context._getPads();
         groupDatas = context.padlistDb.getAllPadgroups();
     }
 
@@ -99,7 +100,7 @@ public class PadListAdapter extends BaseExpandableListAdapter {
 
 
     @Override
-    public PadLandDataActivity.PadData getChild(int groupPosition, int childPosition) {
+    public Pad getChild(int groupPosition, int childPosition) {
         long id = getChildId(groupPosition, childPosition);
         return padDatas.get(id);
     }
@@ -171,7 +172,7 @@ public class PadListAdapter extends BaseExpandableListAdapter {
             holder = (ChildViewHolder) convertView.getTag();
         }
 
-        PadLandDataActivity.PadData child = getChild(groupPosition, childPosition);
+        Pad child = getChild(groupPosition, childPosition);
 
         Bundle position_bundle = new Bundle();
         position_bundle.putInt("groupPosition", groupPosition);
