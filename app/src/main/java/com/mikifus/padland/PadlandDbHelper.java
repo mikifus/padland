@@ -41,5 +41,9 @@ public class PadlandDbHelper extends SQLiteOpenHelper {
 //            Log.w(TAG, "Upgrading database. Existing contents will be migrated. [" + oldVersion + "]->[" + newVersion + "]");
             db.execSQL("ALTER TABLE " + PadContentProvider.PADGROUP_TABLE_NAME + " ADD COLUMN " + PadContentProvider.POSITION + " INTEGER NOT NULL DEFAULT 0;");
         }
+        if( oldVersion < 8 && newVersion == 8 ) {
+//            Log.w(TAG, "Upgrading database. Existing contents will be migrated. [" + oldVersion + "]->[" + newVersion + "]");
+            db.execSQL("ALTER TABLE " + PadContentProvider.PAD_TABLE_NAME + " ADD COLUMN " + PadContentProvider.LOCAL_NAME + " TEXT;");
+        }
     }
 }

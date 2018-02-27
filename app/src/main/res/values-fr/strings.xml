@@ -24,7 +24,7 @@
     <string name="action_settings">Paramètres</string>
     <string name="go_pad">Créer ou accéder</string>
     <string name="title_activity_pad_view">Visualisation de pad</string>
-    <string name="write_pad_name">Nom du pad</string>
+    <string name="write_pad_name">Nom du pad (URL)</string>
     <string name="action_newpad">Ajouter un document</string>
     <string name="action_go_to_list">Retour à la liste de pads</string>
     <string name="title_activity_new_pad">Créer un pad</string>

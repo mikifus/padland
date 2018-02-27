@@ -176,6 +176,7 @@ public class NewPadActivity extends PadLandActivity {
      */
     public void onCreateButtonClick( View w ){
         String padName = this.getPadNameFromInput((TextView) findViewById(R.id.editText));
+        String padLocalName = this.getPadNameFromInput((TextView) findViewById(R.id.editTextLocalName));
         String padPrefix = this.getPadPrefixFromSpinner((Spinner) findViewById(R.id.spinner));
         String padServer = this.getPadServerFromSpinner( (Spinner) findViewById(R.id.spinner) );
 
@@ -200,6 +201,7 @@ public class NewPadActivity extends PadLandActivity {
         Intent padViewIntent =
                 new Intent( NewPadActivity.this, PadViewActivity.class );
         padViewIntent.putExtra( "padName", padUrl.getPadName() );
+        padViewIntent.putExtra( "padLocalName", padLocalName );
         padViewIntent.putExtra( "padServer", padUrl.getPadServer() );
         padViewIntent.putExtra( "padUrl", padUrl.getString() );
 

@@ -9,35 +9,59 @@
     tools:context=".NewPad"
     android:id="@+id/settings_layout">
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/new_pad_explanation"
-            android:id="@+id/textView"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"/>
+    <LinearLayout
+        android:id="@+id/formLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <EditText
+        <TextView
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/new_pad_explanation" />
+
+        <EditText
             android:id="@+id/editText"
-            android:hint="@string/write_pad_name"
-            android:layout_marginTop="11dp"
-            android:layout_below="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/textView"
-            android:layout_alignParentRight="true"/>
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/textView"
+            android:layout_marginTop="11dp"
+            android:hint="@string/write_pad_name" />
+
+        <TextView
+            android:id="@+id/textViewLocalName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:text="@string/new_pad_local_name" />
+
+        <EditText
+            android:id="@+id/editTextLocalName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/textViewLocalName"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/textView"
+            android:layout_marginTop="11dp"
+            android:hint="@string/write_pad_local_name" />
+    </LinearLayout>
 
     <Button
-            style="@android:style/Widget.Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/go_pad"
-            android:id="@+id/button"
-            android:onClick="onCreateButtonClick"
-            android:layout_below="@+id/editText"
-            android:layout_alignLeft="@+id/editText"
-            android:layout_alignRight="@+id/editText"/>
+        android:id="@+id/button"
+        style="@android:style/Widget.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/formLayout"
+        android:onClick="onCreateButtonClick"
+        android:text="@string/go_pad"
+        android:textAlignment="center" />
 
     <TextView
         android:layout_width="wrap_content"

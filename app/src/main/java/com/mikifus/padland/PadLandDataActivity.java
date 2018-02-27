@@ -295,6 +295,7 @@ public class PadLandDataActivity extends PadLandActivity {
     {
         private long id;
         private String name;
+        private String local_name;
         private String server;
         private String url;
         private long last_used_date;
@@ -305,11 +306,12 @@ public class PadLandDataActivity extends PadLandActivity {
             if(c != null && c.getCount() > 0) {
                 id = c.getLong(0);
                 name = c.getString(1);
-                server =  c.getString(2);
-                url = c.getString(3);
-                last_used_date = c.getLong(4);
-                create_date = c.getLong(5);
-                access_count = c.getLong(6);
+                local_name = c.getString(2);
+                server =  c.getString(3);
+                url = c.getString(4);
+                last_used_date = c.getLong(5);
+                create_date = c.getLong(6);
+                access_count = c.getLong(7);
             }
         }
         public long getId() {
@@ -317,6 +319,12 @@ public class PadLandDataActivity extends PadLandActivity {
         }
         public String getName() {
             return name;
+        }
+        public String getLocalName() {
+            if(local_name == null || local_name.isEmpty()) {
+                return name;
+            }
+            return local_name;
         }
         public String getServer() {
             return server;

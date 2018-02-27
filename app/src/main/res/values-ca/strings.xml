@@ -75,7 +75,7 @@
     <string name="title_activity_settings">Preferències</string>
     <string name="unexpected_error">Ha ocurregut un error inesperat</string>
     <string name="user_preferences">Preferències de l\'usuari</string>
-    <string name="write_pad_name">Nom del document</string>
+    <string name="write_pad_name">Nom del document (URL)</string>
     <string name="title_activity_pad_land_data">PadLandDataActivity</string>
     <string name="pref_header_general">Preferències</string>
     <string name="settings_default_username_dialog_title">Entra el nom d\'usuari</string>

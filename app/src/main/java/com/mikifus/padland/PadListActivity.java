@@ -45,7 +45,6 @@ import com.mikifus.padland.Dialog.NewPadGroup;
 import com.mikifus.padland.Utils.WhiteListMatcher;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * This activity displays a list of previously checked documents.
@@ -323,7 +322,7 @@ public class PadListActivity extends PadLandDataActivity
     private void setAdapter()
     {
 //        ArrayList<HashMap<String, ArrayList>> group_data = getGroupsForAdapter();
-        HashMap<Long, ArrayList<String>> padlist_data = _getPadListData();
+//        HashMap<Long, ArrayList<String>> padlist_data = _getPadListData();
 
         adapter = new PadListAdapter(this);
 
@@ -336,44 +335,46 @@ public class PadListActivity extends PadLandDataActivity
         }
     }
 
-    private HashMap<Long, ArrayList<String>> _getPadListData()
-    {
-        Uri padlist_uri = Uri.parse(getString(R.string.request_padlist));
-        Cursor cursor = getContentResolver()
-                .query(padlist_uri,
-                        new String[]{PadContentProvider._ID, PadContentProvider.NAME, PadContentProvider.URL},
-                        null,
-                        null,
-                        PadContentProvider.LAST_USED_DATE + " ASC");
-
-        HashMap<Long, ArrayList<String>> result = new HashMap<>();
-
-        if (cursor == null || cursor.getCount() == 0) {
-            return result;
-        }
-
-        HashMap<Long, ArrayList<String>> pad_data = new HashMap<>();
-
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast())
-        {
-            long id = cursor.getLong(0);
-            String name = cursor.getString(1);
-            String url = cursor.getString(2);
-
-            ArrayList<String> pad_strings = new ArrayList<String>();
-            pad_strings.add(name);
-            pad_strings.add(url);
-
-            pad_data.put(id, pad_strings);
-
-            // do something
-            cursor.moveToNext();
-        }
-        cursor.close();
-
-        return pad_data;
-    }
+//    private HashMap<Long, ArrayList<String>> _getPadListData()
+//    {
+//        Uri padlist_uri = Uri.parse(getString(R.string.request_padlist));
+//        Cursor cursor = getContentResolver()
+//                .query(padlist_uri,
+//                        new String[]{PadContentProvider._ID, PadContentProvider.NAME, PadContentProvider.LOCAL_NAME, PadContentProvider.URL},
+//                        null,
+//                        null,
+//                        PadContentProvider.LAST_USED_DATE + " ASC");
+//
+//        HashMap<Long, ArrayList<String>> result = new HashMap<>();
+//
+//        if (cursor == null || cursor.getCount() == 0) {
+//            return result;
+//        }
+//
+//        HashMap<Long, ArrayList<String>> pad_data = new HashMap<>();
+//
+//        cursor.moveToFirst();
+//        while (!cursor.isAfterLast())
+//        {
+//            long id = cursor.getLong(0);
+//            String name = cursor.getString(1);
+//            String local_name = cursor.getString(2);
+//            String url = cursor.getString(3);
+//
+//            ArrayList<String> pad_strings = new ArrayList<String>();
+//            pad_strings.add(name);
+//            pad_strings.add(local_name);
+//            pad_strings.add(url);
+//
+//            pad_data.put(id, pad_strings);
+//
+//            // do something
+//            cursor.moveToNext();
+//        }
+//        cursor.close();
+//
+//        return pad_data;
+//    }
 
 
     /**
@@ -478,7 +479,7 @@ public class PadListActivity extends PadLandDataActivity
     private ArrayList<String> getCheckedItemIds()
     {
         ArrayList<String> selectedItems = new ArrayList<>();
-        HashMap<Long, ArrayList<String>> padlist_data = _getPadListData();
+//        HashMap<Long, ArrayList<String>> padlist_data = _getPadListData();
 
         SparseBooleanArray positions = expandableListView.getCheckedItemPositions();
         Log.d(TAG, "selectedItemsPositions: " + positions);

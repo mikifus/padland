@@ -6,7 +6,7 @@
     <string name="action_settings">Einstellungen</string>
     <string name="go_pad">Erstellen oder anzeigen</string>
     <string name="title_activity_pad_view">Padland-Anzeige</string>
-    <string name="write_pad_name">Pad-Name</string>
+    <string name="write_pad_name">Pad-Name (URL)</string>
     <string name="action_newpad">Dokument hinzufügen</string>
     <string name="action_go_to_list">Zurück zur Pad-Liste</string>
     <string name="title_activity_new_pad">Pad erstellen</string>
