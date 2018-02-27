@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.mikifus.padland.PadContentProvider;
@@ -14,13 +13,11 @@ import java.util.ArrayList;
 /**
  * Created by mikifus on 8/07/16.
  */
-public class ServerModel extends SQLiteOpenHelper {
+public class ServerModel extends BaseModel {
 
     public static final String TAG = "ServerModel";
 
     public static final String TABLE = "padland_servers";
-//    public static final String COLUMN_ID = "_id";
-//    public static final String COLUMN_COMMENT = "comment";
 
     public static final String _ID = "_id";
     public static final String NAME = "name"; // Name of the server
@@ -29,9 +26,6 @@ public class ServerModel extends SQLiteOpenHelper {
     public static final String JQUERY = "jquery"; // the full address including server and name
     public static final String POSITION = "position"; // Position inside a sortable data set
     public static final String ENABLED = "enabled"; // Position inside a sortable data set
-
-    private static final String DATABASE_NAME = "commments.db";
-    private static final int DATABASE_VERSION = 1;
 
     // Database creation sql statement
     private static final String SERVERS_TABLE_CREATE_QUERY =
@@ -45,11 +39,9 @@ public class ServerModel extends SQLiteOpenHelper {
             " "+ ENABLED+ " INTEGER NOT NULL DEFAULT 1 "+ // Actually boolean
             ");";
 
-    SQLiteDatabase db;
 
     public ServerModel(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        this.db = getWritableDatabase();
+        super(context);
     }
 
     @Override

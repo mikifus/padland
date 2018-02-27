@@ -10,6 +10,8 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import com.mikifus.padland.Models.Pad;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -43,7 +45,7 @@ public class PadInfoActivity extends PadLandDataActivity {
             return;
         }
 
-        PadData pad_data = this._getPadData( pad_id );
+        Pad pad_data = this._getPad( pad_id );
 
         // Action bar title
         getSupportActionBar().setTitle( pad_data.getLocalName() );
@@ -60,13 +62,13 @@ public class PadInfoActivity extends PadLandDataActivity {
      * @param pad_data
      * @return
      */
-    private SeparatedListAdapter _doInfoList( PadData pad_data )
+    private SeparatedListAdapter _doInfoList( Pad pad_data )
     {
         List<Map<String,?>> datalist = new LinkedList<>();
 
         datalist.add( this._doListItem( pad_data.getUrl(), getString(R.string.padinfo_pad_url) ) );
-        datalist.add( this._doListItem( pad_data.getCreateDate(), getString(R.string.padinfo_createdate) ) );
-        datalist.add( this._doListItem( pad_data.getLastUsedDate(), getString(R.string.padinfo_lastuseddate) ) );
+        datalist.add( this._doListItem( pad_data.getCreateDate(this), getString(R.string.padinfo_createdate) ) );
+        datalist.add( this._doListItem( pad_data.getLastUsedDate(this), getString(R.string.padinfo_lastuseddate) ) );
         datalist.add( this._doListItem( String.valueOf(pad_data.getAccessCount() ), getString(R.string.padinfo_times_accessed) ) );
 
         SeparatedListAdapter adapter = new SeparatedListAdapter(this);

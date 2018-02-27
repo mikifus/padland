@@ -10,22 +10,22 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.Menu;
-import android.widget.ListView;
 import android.widget.Toast;
 
+import com.mikifus.padland.Dialog.EditPadDialog;
+import com.mikifus.padland.Dialog.FormDialog;
+import com.mikifus.padland.Models.Pad;
 import com.mikifus.padland.Models.Server;
 import com.mikifus.padland.Models.ServerModel;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -34,9 +34,10 @@ import java.util.HashMap;
  * deals with data must either inherit from this or make an intent
  * to another activity which does.
  */
-public class PadLandDataActivity extends PadLandActivity {
+public class PadLandDataActivity extends PadLandActivity implements FormDialog.FormDialogCallBack {
 
     private static final String TAG = "PadLandDataActivity";
+    private static final String EDIT_PAD_DIALOG = "EditPadDialog";
 
     public PadlistDb padlistDb;
 
@@ -68,29 +69,29 @@ public class PadLandDataActivity extends PadLandActivity {
     }
 
     /**
-     * Gets back a padData object.
+     * Gets back a Pad object.
      * @param pad_id
      * @return
      */
-    public PadData _getPadData(long pad_id ){
-        Cursor cursor = padlistDb._getPadDataById(pad_id);
+    public Pad _getPad(long pad_id ){
+        Cursor cursor = padlistDb._getPadById(pad_id);
         cursor.moveToFirst();
-        PadData pad_data = new PadData( cursor );
+        Pad pad_data = new Pad( cursor );
         cursor.close();
         return pad_data;
     }
 
     /**
-     * Gets back a padData array object.
+     * Gets back a Pad array object.
      * @return
      */
-    public HashMap<Long, PadData> _getPadDatas(){
-        HashMap<Long, PadData> padDataHashMap = new HashMap<>();
-        ArrayList<PadData> padDatas = padlistDb._getAllPadData();
-        for(PadData padData : padDatas) {
-            padDataHashMap.put(padData.getId(), padData);
+    public HashMap<Long, Pad> _getPads(){
+        HashMap<Long, Pad> PadHashMap = new HashMap<>();
+        ArrayList<Pad> Pads = padlistDb._getAllPad();
+        for(Pad Pad : Pads) {
+            PadHashMap.put(Pad.getId(), Pad);
         }
-        return padDataHashMap;
+        return PadHashMap;
     }
 
     /**
@@ -158,8 +159,14 @@ public class PadLandDataActivity extends PadLandActivity {
         return name;
     }
 
-    public AlertDialog menu_group(final ArrayList<String> selectedItems)
+    public FormDialog menu_group(final ArrayList<String> selectedItems)
     {
+        FragmentManager fm = getSupportFragmentManager();
+        EditPadDialog dialog = new EditPadDialog(getString(R.string.padlist_dialog_edit_pad_title), this);
+        dialog.editPadId(_getPadId());
+        dialog.show(fm, EDIT_PAD_DIALOG);
+        return dialog;
+        /*
         final PadLandDataActivity context = this;
         final ArrayList<Long> selectedGroups = new ArrayList<>();
         int group_count = padlistDb.getPadgroupsCount();
@@ -183,10 +190,10 @@ public class PadLandDataActivity extends PadLandActivity {
                         public void onClick(DialogInterface dialog, int which,
                                             boolean isChecked) {
                             if (isChecked) {
-                                
+
                                 // Noew clean and set the view
                                 ListView listView = ((AlertDialog) dialog).getListView();
-                                SparseBooleanArray checked = listView.getCheckedItemPositions();
+//                                SparseBooleanArray checked = listView.getCheckedItemPositions();
                                 for( int i = 0; i < checkboxStatusArray.length; ++i ) {
                                     if ( checkboxStatusArray[i] && i != which ) {
                                         checkboxStatusArray[ i ] = false;
@@ -230,6 +237,7 @@ public class PadLandDataActivity extends PadLandActivity {
                 .create();
         DeleteDialogBox.show();
         return DeleteDialogBox;
+        */
     }
 
     public AlertDialog menu_delete_group(final long group_id)
@@ -271,8 +279,8 @@ public class PadLandDataActivity extends PadLandActivity {
         Log.d("PadLandDataActivity", selectedItems.get(0).toString());
         // Only the first one
         final String selectedItem_id = selectedItems.get(0);
-        PadData PadData = _getPadData( Long.parseLong(selectedItem_id) );
-        String padUrl = PadData.getUrl();
+        Pad Pad = _getPad( Long.parseLong(selectedItem_id) );
+        String padUrl = Pad.getUrl();
         Log.d("SHARING_PAD", selectedItem_id + " - " + padUrl);
 
         Intent sendIntent = new Intent();
@@ -286,66 +294,14 @@ public class PadLandDataActivity extends PadLandActivity {
         return super.onCreateOptionsMenu(menu, id_menu);
     }
 
-    /**
-     * The padData subclass is the summary of information the App needs
-     * to deal with the documents. It has the info and returns it
-     * in the right format.
-     */
-    public class PadData
-    {
-        private long id;
-        private String name;
-        private String local_name;
-        private String server;
-        private String url;
-        private long last_used_date;
-        private long create_date;
-        private long access_count;
+    @Override
+    public void onDialogDismiss() {
 
-        public PadData(Cursor c) {
-            if(c != null && c.getCount() > 0) {
-                id = c.getLong(0);
-                name = c.getString(1);
-                local_name = c.getString(2);
-                server =  c.getString(3);
-                url = c.getString(4);
-                last_used_date = c.getLong(5);
-                create_date = c.getLong(6);
-                access_count = c.getLong(7);
-            }
-        }
-        public long getId() {
-            return id;
-        }
-        public String getName() {
-            return name;
-        }
-        public String getLocalName() {
-            if(local_name == null || local_name.isEmpty()) {
-                return name;
-            }
-            return local_name;
-        }
-        public String getServer() {
-            return server;
-        }
-        public String getUrl() {
-            return url;
-        }
-        public String getLastUsedDate() {
-            return lon_to_date( last_used_date );
-        }
-        public long getAccessCount() {
-            return access_count;
-        }
-        public String getCreateDate() {
-            return lon_to_date( create_date );
-        }
-        public String lon_to_date( long TimeinMilliSeccond ){
-            DateFormat formatter = android.text.format.DateFormat.getDateFormat( getApplicationContext() );
-            Date dateObj = new Date( TimeinMilliSeccond * 1000 );
-            return formatter.format( dateObj );
-        }
+    }
+
+    @Override
+    public void onDialogSuccess() {
+
     }
 
     public class PadlistDb {
@@ -364,7 +320,7 @@ public class PadLandDataActivity extends PadLandActivity {
          * @param comparation
          * @return
          */
-        private Cursor _getPadDataFromDatabase( String field, String comparation ){
+        private Cursor _getPadFromDatabase( String field, String comparation ){
             Cursor c = null;
             String[] comparation_set = new String[]{ comparation };
 
@@ -382,7 +338,7 @@ public class PadLandDataActivity extends PadLandActivity {
          * Just get all.
          * @return
          */
-        private Cursor _getPadDataFromDatabase(){
+        private Cursor _getPadFromDatabase(){
             Cursor c;
             c = contentResolver.query(
                     PadContentProvider.PADLIST_CONTENT_URI,
@@ -398,30 +354,30 @@ public class PadLandDataActivity extends PadLandActivity {
          * Queries the database and returns all pads
          * @return
          */
-        public ArrayList<PadData> _getAllPadData(){
-            Cursor cursor = this._getPadDataFromDatabase();
-            ArrayList<PadData> PadDatas = new ArrayList<>();
+        public ArrayList<Pad> _getAllPad(){
+            Cursor cursor = this._getPadFromDatabase();
+            ArrayList<Pad> Pads = new ArrayList<>();
 
             if (cursor == null ) {
-                return PadDatas;
+                return Pads;
             }
             if( cursor.getCount() == 0 ) {
                 cursor.close();
-                return PadDatas;
+                return Pads;
             }
 
-            PadData PadData;
+            Pad Pad;
             cursor.moveToFirst();
             while (!cursor.isAfterLast())
             {
                 // Goes to next by itself
-                PadData = new PadData(cursor);
-                PadDatas.add(PadData);
+                Pad = new Pad(cursor);
+                Pads.add(Pad);
                 cursor.moveToNext();
             }
             cursor.close();
 
-            return PadDatas;
+            return Pads;
         }
 
         /**
@@ -429,8 +385,8 @@ public class PadLandDataActivity extends PadLandActivity {
          * @param pad_id
          * @return
          */
-        public Cursor _getPadDataById( long pad_id ){
-            return this._getPadDataFromDatabase( PadContentProvider._ID, String.valueOf( pad_id ) );
+        public Cursor _getPadById( long pad_id ){
+            return this._getPadFromDatabase( PadContentProvider._ID, String.valueOf( pad_id ) );
         }
 
         /**
@@ -438,8 +394,8 @@ public class PadLandDataActivity extends PadLandActivity {
          * @param padUrl
          * @return
          */
-        public Cursor _getPadDataByUrl(String padUrl){
-            return this._getPadDataFromDatabase(PadContentProvider.URL, padUrl);
+        public Cursor _getPadByUrl(String padUrl){
+            return this._getPadFromDatabase(PadContentProvider.URL, padUrl);
         }
 
         public long getNowDate() {
@@ -448,13 +404,13 @@ public class PadLandDataActivity extends PadLandActivity {
 
         /**
          * Gets current pad data and saves the modified values (LAST_USED_DATE and ACCESS_COUNT).
-         * I tried to optimize it in such way that there's no need to use _getPadData, but it didn't work.
+         * I tried to optimize it in such way that there's no need to use _getPad, but it didn't work.
          * @param pad_id
          * @return
          */
         public void accessUpdate( long pad_id ){
             if( pad_id > 0 ) {
-                PadData data = _getPadData( pad_id );
+                Pad data = _getPad( pad_id );
                 ContentValues values = new ContentValues();
                 values.put( PadContentProvider.LAST_USED_DATE, getNowDate() );
                 values.put( PadContentProvider.ACCESS_COUNT, (data.getAccessCount() + 1));
@@ -678,7 +634,7 @@ public class PadLandDataActivity extends PadLandActivity {
          * @param values
          * @return
          */
-        public boolean savePadData( long pad_id, ContentValues values ){
+        public boolean savePad( long pad_id, ContentValues values ){
             if( pad_id > 0 ) {
                 String[] where_value = { String.valueOf(pad_id) };
                 int result = contentResolver.update(PadContentProvider.PADLIST_CONTENT_URI, values, PadContentProvider._ID + "=?", where_value);
