@@ -53,6 +53,18 @@
             android:inputType="textUri"
             android:imeOptions="actionDone" />
 
+        <TextView
+            android:text="@string/edit_pad_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Base.TextAppearance.AppCompat.Subhead" />
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/group_spinner"
+            android:spinnerMode="dropdown" />
+
     </LinearLayout>
 
 </ScrollView>

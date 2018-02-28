@@ -128,7 +128,7 @@ public class NewPadActivity extends PadLandActivity {
         Spinner spinner = (Spinner) findViewById( R.id.spinner );
         if (spinner != null) {
             //selected item will look like a spinner set from XML
-            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, server_list);
+            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, server_list);
             spinner.setAdapter(spinnerArrayAdapter);
         }
     }

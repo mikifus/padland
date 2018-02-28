@@ -13,6 +13,8 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.mikifus.padland.Models.PadGroupModel;
+
 import java.util.Date;
 import java.util.HashMap;
 
@@ -47,8 +49,6 @@ public class PadContentProvider extends ContentProvider {
     public static final String CREATE_DATE = "create_date"; // Date when the pad was added into the app
     public static final String ACCESS_COUNT = "access_count"; // How many times the document has been accessed in the app
 
-    public static final String POSITION = "position"; // Position inside a sortable data set
-
     public static final String _ID_GROUP = "_id_group";
     public static final String _ID_PAD = "_id_pad";
 
@@ -70,7 +70,7 @@ public class PadContentProvider extends ContentProvider {
         uriMatcher.addURI(PROVIDER_NAME, "padlist_padgroup_id/#", PADLIST_PADGROUP_ID);
     }
 
-    static final String PAD_TABLE_NAME = "padlist";
+    public static final String PAD_TABLE_NAME = "padlist";
     static final String PAD_TABLE_CREATE_QUERY =
             " CREATE TABLE " + PAD_TABLE_NAME +
                     " ("+ _ID+" INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -88,12 +88,12 @@ public class PadContentProvider extends ContentProvider {
             " CREATE TABLE " + PADGROUP_TABLE_NAME +
                     " ("+ _ID+" INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     " "+ NAME+" TEXT NOT NULL, " +
-                    " "+ POSITION + " INTEGER DEFAULT 0, " +
+                    " "+ PadGroupModel.POSITION + " INTEGER DEFAULT 0, " +
                     " "+ LAST_USED_DATE+ " INTEGER NOT NULL DEFAULT (strftime('%s','now')), " +
                     " "+ CREATE_DATE+ " INTEGER NOT NULL DEFAULT (strftime('%s','now'))," +
                     " "+ ACCESS_COUNT+ " INTEGER NOT NULL DEFAULT 0 "+
                     ");";
-    static final String RELATION_TABLE_NAME = "padlist_padgroups";
+    public static final String RELATION_TABLE_NAME = "padlist_padgroups";
     static final String RELATION_TABLE_CREATE_QUERY =
             " CREATE TABLE " + RELATION_TABLE_NAME +
                     " ("+ _ID_GROUP +" INTEGER NOT NULL, " +
