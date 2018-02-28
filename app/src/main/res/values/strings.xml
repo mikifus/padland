@@ -158,5 +158,6 @@
     <string name="edit_pad_local_name">Pad Alias</string>
     <string name="edit_pad_name">Pad Name (URL)</string>
     <string name="padlist_dialog_edit_pad_title">Edit Pad</string>
+    <string name="edit_pad_group">Select group</string>
 
 </resources>

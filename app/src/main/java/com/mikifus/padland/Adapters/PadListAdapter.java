@@ -14,7 +14,8 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 import com.mikifus.padland.Models.Pad;
-import com.mikifus.padland.PadContentProvider;
+import com.mikifus.padland.Models.PadGroup;
+import com.mikifus.padland.Models.PadGroupModel;
 import com.mikifus.padland.PadLandDataActivity;
 import com.mikifus.padland.R;
 
@@ -58,7 +59,8 @@ public class PadListAdapter extends BaseExpandableListAdapter {
     private SparseArray<SparseBooleanArray> checkedPositions;
     private HashMap<Long, Bundle> items_positions = new HashMap<>();
     private HashMap<Long, Pad> padDatas;
-    private ArrayList<HashMap<String, String>> groupDatas;
+    private ArrayList<PadGroup> groupDatas;
+    private PadGroupModel padGroupModel;
 
     // The default choice is the multiple one
     private int choiceMode = CHOICE_MODE_MULTIPLE;
@@ -70,7 +72,8 @@ public class PadListAdapter extends BaseExpandableListAdapter {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         checkedPositions = new SparseArray<>();
         padDatas = context._getPads();
-        groupDatas = context.padlistDb.getAllPadgroups();
+        padGroupModel = new PadGroupModel(context);
+        groupDatas = padGroupModel.getAllPadgroups();
     }
 
     @Override
@@ -82,15 +85,14 @@ public class PadListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        HashMap<String, String> group = getGroup(groupPosition);
-        String id_string = group.get(PadContentProvider._ID);
-        long id = Long.parseLong(id_string);
-        int count = context.padlistDb.getPadgroupChildrenCount(id);
+        PadGroup group = getGroup(groupPosition);
+        long id = group.getId();
+        int count = padGroupModel.getPadgroupChildrenCount(id);
         return count;
     }
 
     @Override
-    public HashMap<String, String> getGroup(int groupPosition) {
+    public PadGroup getGroup(int groupPosition) {
 //        HashMap<String, String> group = context.padlistDb.getPadgroupAt(groupPosition);
         if( groupDatas.size() <= groupPosition || groupDatas.get(groupPosition) == null ) {
             return getUnclassifiedGroup();
@@ -107,23 +109,23 @@ public class PadListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public long getGroupId(int groupPosition) {
-        HashMap<String, String> group = getGroup(groupPosition);
-        if( group.size() == 0 ) {
+        PadGroup group = getGroup(groupPosition);
+        if( group.getId() == 0 ) {
             return getUnclassifiedGroupId(groupPosition);
         }
-        return Long.parseLong(group.get(PadContentProvider._ID));
+        return group.getId();
     }
 
     @Override
     public long getChildId(int groupPosition, int childPosition) {
-        HashMap<String, String> group = getGroup(groupPosition);
-        String id = group.get(PadContentProvider._ID);
+        PadGroup group = getGroup(groupPosition);
+        long id = group.getId();
         ArrayList padlist;
-        if( id == null ) {
+        if( id == 0 ) {
 //            padlist = getUnclassifiedGroupChildList(groupPosition);
-            padlist = context.padlistDb.getPadgroupChildrenIds(0);
+            padlist = padGroupModel.getPadgroupChildrenIds(0);
         } else {
-            padlist = context.padlistDb.getPadgroupChildrenIds(Long.parseLong(id));
+            padlist = padGroupModel.getPadgroupChildrenIds(id);
         }
         if( padlist.size() == 0 )
         {
@@ -139,7 +141,7 @@ public class PadListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        HashMap<String, String> group = getGroup(groupPosition);
+        PadGroup group = getGroup(groupPosition);
         GroupViewHolder holder;
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) context
@@ -153,7 +155,7 @@ public class PadListAdapter extends BaseExpandableListAdapter {
             holder = (GroupViewHolder) convertView.getTag();
         }
 
-        holder.name.setText(group.get(PadContentProvider.NAME));
+        holder.name.setText(group.getName());
 
         return convertView;
     }
@@ -282,11 +284,12 @@ public class PadListAdapter extends BaseExpandableListAdapter {
         Log.v(TAG, "The choice mode has been changed. Now it is " + this.choiceMode);
     }
 
-    private HashMap<String, String> getUnclassifiedGroup() {
-        HashMap<String, String> group_deal = new HashMap<>();
-        group_deal.put(PadContentProvider._ID, "0");
-        group_deal.put(PadContentProvider.NAME, context.getString(R.string.padlist_group_unclassified_name));
-        return group_deal;
+    private PadGroup getUnclassifiedGroup() {
+        return new PadGroup(context);
+//        HashMap<String, String> group_deal = new HashMap<>();
+//        group_deal.put(PadContentProvider._ID, "0");
+//        group_deal.put(PadContentProvider.NAME, context.getString(R.string.padlist_group_unclassified_name));
+//        return group_deal;
     }
 
     private long getUnclassifiedGroupId(int groupPosition) {

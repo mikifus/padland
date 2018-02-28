@@ -3,10 +3,10 @@ package com.mikifus.padland.Models;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.mikifus.padland.PadContentProvider;
+import com.mikifus.padland.PadlandDbHelper;
 
 import java.util.ArrayList;
 
@@ -16,6 +16,11 @@ import java.util.ArrayList;
 public class ServerModel extends BaseModel {
 
     public static final String TAG = "ServerModel";
+    protected static final String OLD_DATABASE_NAME = "commments.db";
+    protected static final String DATABASE_NAME = PadlandDbHelper.DATABASE_NAME;
+    protected static final int DATABASE_VERSION = BaseModel.DATABASE_VERSION;
+
+    private Context context;
 
     public static final String TABLE = "padland_servers";
 
@@ -28,7 +33,7 @@ public class ServerModel extends BaseModel {
     public static final String ENABLED = "enabled"; // Position inside a sortable data set
 
     // Database creation sql statement
-    private static final String SERVERS_TABLE_CREATE_QUERY =
+    public static final String SERVERS_TABLE_CREATE_QUERY =
             "CREATE TABLE "+ TABLE + "( " +
             " "+ _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             " "+ NAME + " text not null," +
@@ -39,27 +44,9 @@ public class ServerModel extends BaseModel {
             " "+ ENABLED+ " INTEGER NOT NULL DEFAULT 1 "+ // Actually boolean
             ");";
 
-
     public ServerModel(Context context) {
         super(context);
     }
-
-    @Override
-    public void onCreate(SQLiteDatabase database) {
-        database.execSQL(SERVERS_TABLE_CREATE_QUERY);
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if( newVersion > 1 ) {
-            Log.w(TAG,
-                    "Upgrading database from version " + oldVersion + " to "
-                            + newVersion + ", which will destroy all old data");
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE);
-            onCreate(db);
-        }
-    }
-
 
     /**
      * Self explanatory name.

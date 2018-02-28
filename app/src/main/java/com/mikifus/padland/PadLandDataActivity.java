@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.mikifus.padland.Dialog.EditPadDialog;
 import com.mikifus.padland.Dialog.FormDialog;
 import com.mikifus.padland.Models.Pad;
+import com.mikifus.padland.Models.PadGroupModel;
 import com.mikifus.padland.Models.Server;
 import com.mikifus.padland.Models.ServerModel;
 
@@ -53,7 +54,7 @@ public class PadLandDataActivity extends PadLandActivity implements FormDialog.F
 
         unclassified_group.put(PadContentProvider._ID, "0");
         unclassified_group.put(PadContentProvider.NAME, "Unclassified");
-        unclassified_group.put(PadContentProvider.POSITION, "999999");
+        unclassified_group.put(PadGroupModel.POSITION, "999999");
 
         meta_groups.add(unclassified_group);
     }
@@ -142,7 +143,8 @@ public class PadLandDataActivity extends PadLandActivity implements FormDialog.F
      */
 
     protected Long getGroupIdFromAdapterData(int groupPosition) {
-        HashMap<String, String> padgroups_data = padlistDb.getPadgroupAt(groupPosition);
+        PadGroupModel model = new PadGroupModel(this);
+        HashMap<String, String> padgroups_data = model.getPadgroupAt(groupPosition);
         long id = 0L;
         if( padgroups_data.size() > 0 ) {
             id = Long.parseLong(padgroups_data.get(PadContentProvider._ID));
@@ -151,7 +153,8 @@ public class PadLandDataActivity extends PadLandActivity implements FormDialog.F
     }
 
     protected String getGroupNameFromAdapterData(int groupPosition) {
-        HashMap<String, String> padgroups_data = padlistDb.getPadgroupAt(groupPosition);
+        PadGroupModel model = new PadGroupModel(this);
+        HashMap<String, String> padgroups_data = model.getPadgroupAt(groupPosition);
         String name = "";
         if( padgroups_data.size() > 0 ) {
             name = padgroups_data.get(PadContentProvider.NAME);
@@ -417,199 +420,6 @@ public class PadLandDataActivity extends PadLandActivity implements FormDialog.F
                 String[] where_value = { String.valueOf(pad_id) };
                 contentResolver.update(PadContentProvider.PADLIST_CONTENT_URI, values, PadContentProvider._ID + "=?", where_value);
             }
-        }
-
-        /**
-         * Self explanatory name.
-         * Field to compare must be specified by its identifier. Accepts only one comparation value.
-         * @param field
-         * @param comparation
-         * @return
-         */
-        public Cursor _getPadgroupsDataFromDatabase( String field, String comparation ){
-            Cursor c = null;
-            String[] comparation_set = new String[]{ comparation };
-
-            c = contentResolver.query(
-                    PadContentProvider.PADGROUPS_CONTENT_URI,
-                    PadContentProvider.getPadFieldsList(),
-                    field + "=?",
-                    comparation_set, // AKA id
-                    null
-            );
-            return c;
-        }
-
-        protected HashMap<Long, ArrayList<String>> _getPadgroupsData()
-        {
-            Uri padlist_uri = Uri.parse(getString(R.string.request_padgroups));
-            Cursor cursor = contentResolver.query(padlist_uri,
-                    new String[]{PadContentProvider._ID, PadContentProvider.NAME},
-                    null,
-                    null,
-                    PadContentProvider.CREATE_DATE + " DESC");
-
-            HashMap<Long, ArrayList<String>> result = new HashMap<>();
-
-            if (cursor == null || cursor.getCount() == 0) {
-                return result;
-            }
-
-            HashMap<Long, ArrayList<String>> pad_data = new HashMap<>();
-
-            cursor.moveToFirst();
-            while (!cursor.isAfterLast())
-            {
-                long id = cursor.getLong(0);
-                String name = cursor.getString(1);
-
-                ArrayList<String> pad_strings = new ArrayList<String>();
-                pad_strings.add(name);
-
-                pad_data.put(id, pad_strings);
-
-                // do something
-                cursor.moveToNext();
-            }
-            cursor.close();
-
-            return pad_data;
-        }
-
-        public int getPadgroupsCount() {
-            Uri padlist_uri = Uri.parse(getString(R.string.request_padgroups));
-            Cursor cursor = contentResolver.query(padlist_uri,
-                    new String[]{PadContentProvider._ID, PadContentProvider.NAME},
-                    null,
-                    null,
-                    PadContentProvider.CREATE_DATE + " DESC");
-
-            int count = cursor.getCount();
-            cursor.close();
-            return count;
-        }
-
-        public HashMap<String, String> getPadgroupAt(int position) {
-            Uri padlist_uri = Uri.parse(getString(R.string.request_padgroups));
-            Cursor cursor = contentResolver.query(padlist_uri,
-                    new String[]{PadContentProvider._ID, PadContentProvider.NAME, PadContentProvider.POSITION},
-                    "",
-                    null,
-                    PadContentProvider.CREATE_DATE + " DESC LIMIT " + position + ", 1");
-
-            HashMap<String, String> group = new HashMap<>();
-            cursor.moveToFirst();
-            while (!cursor.isAfterLast())
-            {
-                String id = cursor.getString(0);
-                String name = cursor.getString(1);
-                String pos = cursor.getString(2);
-
-                group.put(PadContentProvider._ID, id);
-                group.put(PadContentProvider.NAME, name);
-                group.put(PadContentProvider.POSITION, pos);
-
-                break;
-            }
-            cursor.close();
-
-            return group;
-        }
-
-        public ArrayList<HashMap<String, String>> getAllPadgroups() {
-            Uri padlist_uri = Uri.parse(getString(R.string.request_padgroups));
-            Cursor cursor = contentResolver.query(padlist_uri,
-                    new String[]{PadContentProvider._ID, PadContentProvider.NAME, PadContentProvider.POSITION},
-                    null,
-                    null,
-                    PadContentProvider.CREATE_DATE + " DESC");
-
-            ArrayList<HashMap<String, String>> groups = new ArrayList<>();
-            HashMap<String, String> group;
-            if( cursor == null ) {
-                return groups;
-            }
-            if( cursor.getCount() == 0 ) {
-                cursor.close();
-                return groups;
-            }
-            cursor.moveToFirst();
-            while (!cursor.isAfterLast())
-            {
-                String id = cursor.getString(0);
-                String name = cursor.getString(1);
-                String pos = cursor.getString(2);
-
-                group = new HashMap<>();
-                group.put(PadContentProvider._ID, id);
-                group.put(PadContentProvider.NAME, name);
-                group.put(PadContentProvider.POSITION, pos);
-                groups.add(group);
-
-                cursor.moveToNext();
-            }
-            cursor.close();
-
-            return groups;
-        }
-
-        public ArrayList<Long> getPadgroupChildrenIds(long id) {
-            String QUERY;
-            String[] values;
-            if( id == 0 ) {
-                QUERY =
-                        "SELECT " + PadContentProvider._ID + " " +
-                            "FROM " + PadContentProvider.PAD_TABLE_NAME + " " +
-                            "WHERE " + PadContentProvider._ID + " NOT IN (" +
-                                "SELECT DISTINCT " + PadContentProvider._ID_PAD + " FROM " + PadContentProvider.RELATION_TABLE_NAME +
-                                ") ";
-                values = new String[]{};
-            } else {
-                QUERY =
-                        "SELECT DISTINCT " + PadContentProvider._ID_PAD + " " +
-                                "FROM " + PadContentProvider.RELATION_TABLE_NAME + " " +
-                                "WHERE " + PadContentProvider._ID_GROUP + "=? ";
-                values = new String[]{String.valueOf(id)};
-            }
-            Cursor cursor = db.rawQuery(QUERY, values);
-
-
-            ArrayList<Long> pad_ids = new ArrayList<>();
-
-            cursor.moveToFirst();
-            while (!cursor.isAfterLast())
-            {
-                long id_pad = cursor.getLong(0);
-                pad_ids.add(id_pad);
-                cursor.moveToNext();
-            }
-            cursor.close();
-
-            return pad_ids;
-        }
-
-        public int getPadgroupChildrenCount(long id) {
-            String QUERY;
-            String[] values;
-            if( id == 0 ) {
-                QUERY =
-                        "SELECT " + PadContentProvider._ID + " " +
-                                "FROM " + PadContentProvider.PAD_TABLE_NAME + " " +
-                                "WHERE " + PadContentProvider._ID + " NOT IN (" +
-                                "SELECT " + PadContentProvider._ID_PAD + " FROM " + PadContentProvider.RELATION_TABLE_NAME +
-                                ") ";
-                values = new String[]{};
-            } else {
-                QUERY =
-                    "SELECT * FROM " + PadContentProvider.RELATION_TABLE_NAME + " " +
-                            "WHERE " + PadContentProvider._ID_GROUP + "=? ";
-                values = new String[]{String.valueOf(id)};
-            }
-
-            Cursor cursor = db.rawQuery(QUERY, values);
-            int count = cursor.getCount();
-            cursor.close();
-            return count;
         }
 
         public void _debug_relations() {
