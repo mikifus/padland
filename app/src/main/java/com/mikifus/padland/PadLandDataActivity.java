@@ -13,12 +13,14 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.Menu;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.mikifus.padland.Dialog.EditPadDialog;
 import com.mikifus.padland.Dialog.FormDialog;
 import com.mikifus.padland.Models.Pad;
 import com.mikifus.padland.Models.PadGroupModel;
+import com.mikifus.padland.Models.PadModel;
 import com.mikifus.padland.Models.Server;
 import com.mikifus.padland.Models.ServerModel;
 
@@ -162,17 +164,20 @@ public class PadLandDataActivity extends PadLandActivity implements FormDialog.F
         return name;
     }
 
-    public FormDialog menu_group(final ArrayList<String> selectedItems)
-    {
+    public FormDialog menu_edit(final ArrayList<String> selectedItems) {
         FragmentManager fm = getSupportFragmentManager();
         EditPadDialog dialog = new EditPadDialog(getString(R.string.padlist_dialog_edit_pad_title), this);
-        dialog.editPadId(_getPadId());
+        dialog.editPadId(Long.parseLong(selectedItems.get(0)));
         dialog.show(fm, EDIT_PAD_DIALOG);
         return dialog;
-        /*
+    }
+
+    public AlertDialog menu_group(final ArrayList<String> selectedItems)
+    {
         final PadLandDataActivity context = this;
         final ArrayList<Long> selectedGroups = new ArrayList<>();
-        int group_count = padlistDb.getPadgroupsCount();
+        PadGroupModel padGroupModel = new PadGroupModel(this);
+        int group_count = padGroupModel.getPadgroupsCount();
         String[] group_names = new String[ group_count + 1 ];
         for( int i = 0; i < group_count; ++i ) {
             group_names[ i ] = getGroupNameFromAdapterData(i);
@@ -240,7 +245,6 @@ public class PadLandDataActivity extends PadLandActivity implements FormDialog.F
                 .create();
         DeleteDialogBox.show();
         return DeleteDialogBox;
-        */
     }
 
     public AlertDialog menu_delete_group(final long group_id)
@@ -324,13 +328,14 @@ public class PadLandDataActivity extends PadLandActivity implements FormDialog.F
          * @return
          */
         private Cursor _getPadFromDatabase( String field, String comparation ){
-            Cursor c = null;
-            String[] comparation_set = new String[]{ comparation };
+            Cursor c;
+            String[] comparation_set = { comparation };
 
+            // I have to use LIKE in order to query by ID. A mistery.
             c = contentResolver.query(
                     PadContentProvider.PADLIST_CONTENT_URI,
                     PadContentProvider.getPadFieldsList(),
-                    field + "=?",
+                    field + " LIKE ?",
                     comparation_set, // AKA id
                     null
             );
@@ -389,7 +394,7 @@ public class PadLandDataActivity extends PadLandActivity implements FormDialog.F
          * @return
          */
         public Cursor _getPadById( long pad_id ){
-            return this._getPadFromDatabase( PadContentProvider._ID, String.valueOf( pad_id ) );
+            return this._getPadFromDatabase( PadModel._ID, String.valueOf( pad_id ) );
         }
 
         /**

@@ -268,18 +268,21 @@ public class PadGroupModel extends BaseModel {
         values = new String[]{String.valueOf(padId)};
 
         Cursor cursor = db.rawQuery(QUERY, values);
-        cursor.moveToFirst();
-        long groupid = cursor.getLong(0);
+        long groupid = 0;
+        if(cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            groupid = cursor.getLong(0);
+        }
         cursor.close();
 
         return groupid;
     }
 
     public PadGroup getPadGroup(long padId) {
-        PadGroup padGroup = getPadGroupById(getGroupId(padId));
-
-        return padGroup;
+        return getPadGroupById(getGroupId(padId));
     }
 
-
+    public PadGroup getUnclassifiedPadGroup() {
+        return new PadGroup(context);
+    }
 }

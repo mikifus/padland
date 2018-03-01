@@ -51,6 +51,12 @@ public class Pad
         }
         return local_name;
     }
+    public String getRawLocalName() {
+        if(local_name == null || local_name.isEmpty()) {
+            return "";
+        }
+        return local_name;
+    }
     public String getServer() {
         return server;
     }
