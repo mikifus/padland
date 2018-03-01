@@ -1,10 +1,18 @@
 package com.mikifus.padland.Dialog;
 
 import android.content.ContentValues;
+import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.URLUtil;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mikifus.padland.Models.Pad;
@@ -15,6 +23,7 @@ import com.mikifus.padland.R;
 import com.mikifus.padland.Utils.PadUrl;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by mikifus on 27/02/18.
@@ -25,7 +34,7 @@ public class EditPadDialog extends FormDialog {
     private EditText fieldName;
     private EditText fieldLocalName;
     private Spinner fieldGroup;
-    private ArrayAdapter spinnerAdapter;
+    private SpinnerGroupAdapter<PadGroup> spinnerAdapter;
     private long edit_pad_id = 0;
 
     public EditPadDialog(String title, FormDialogCallBack callback) {
@@ -59,15 +68,23 @@ public class EditPadDialog extends FormDialog {
         PadGroupModel padGroupModel = new PadGroupModel(getContext());
         ArrayList<PadGroup> allPadGroups = padGroupModel.getAllPadgroups();
         allPadGroups.add(new PadGroup(getContext()));
-        spinnerAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, allPadGroups);
+        spinnerAdapter = new SpinnerGroupAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, allPadGroups);
+
+        fieldGroup.setAdapter(spinnerAdapter);
 
         if (edit_pad_id > 0) {
             PadModel model = new PadModel(getContext());
             Pad pad = model.getPadById(edit_pad_id);
 
             fieldName.setText(pad.getName());
-            fieldLocalName.setText(pad.getLocalName());
-//            fieldGroup.setSelection(spinnerAdapter.getPosition(padGroupModel.getPadGroup(pad.getId())));
+            fieldLocalName.setText(pad.getRawLocalName());
+
+            PadGroup padGroup = padGroupModel.getPadGroup(pad.getId());
+            if( padGroup == null ) {
+                padGroup = padGroupModel.getUnclassifiedPadGroup();
+            }
+            Log.d(TAG, String.valueOf(spinnerAdapter.getPosition(padGroup)));
+            fieldGroup.setSelection(spinnerAdapter.getPosition(padGroup));
         }
     }
 
@@ -93,7 +110,6 @@ public class EditPadDialog extends FormDialog {
     }
 
     protected ContentValues getContentValues() {
-//        Toast.makeText(getContext(), "Server saved", Toast.LENGTH_LONG).show();
         ContentValues values = super.getContentValues();
         String localName = String.valueOf(fieldLocalName.getText());
         values.put(PadModel.LOCAL_NAME, localName);
@@ -102,5 +118,43 @@ public class EditPadDialog extends FormDialog {
         values.put(PadModel.NAME, padName);
 
         return values;
+    }
+
+    class SpinnerGroupAdapter<P> extends ArrayAdapter<PadGroup> {
+
+        private final LayoutInflater mInflater;
+        private final Context mContext;
+        private final List<PadGroup> items;
+        private final int mResource;
+
+        public SpinnerGroupAdapter(@NonNull Context context, int resource, @NonNull List<PadGroup> objects) {
+            super(context, resource, objects);
+            mContext = context;
+            mInflater = LayoutInflater.from(context);
+            mResource = resource;
+            items = objects;
+        }
+        @Override
+        public View getDropDownView(int position, @Nullable View convertView,
+                                    @NonNull ViewGroup parent) {
+            return createItemView(position, convertView, parent);
+        }
+
+        @Override
+        public @NonNull View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            return createItemView(position, convertView, parent);
+        }
+
+        private View createItemView(int position, View convertView, ViewGroup parent){
+            final View view = mInflater.inflate(mResource, parent, false);
+
+            TextView text = view.findViewById(android.R.id.text1);
+
+            PadGroup padGroup = items.get(position);
+
+            text.setText(padGroup.getName());
+
+            return view;
+        }
     }
 }

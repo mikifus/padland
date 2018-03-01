@@ -35,4 +35,9 @@ public class PadGroup {
     public int getPosition() {
         return position;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return ((PadGroup) obj).id == id;
+    }
 }

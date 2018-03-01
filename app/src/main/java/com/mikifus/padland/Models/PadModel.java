@@ -32,13 +32,14 @@ public class PadModel extends BaseModel {
      * @return
      */
     private Cursor _getPadDataFromDatabase(String field, String comparation ){
-        Cursor c = null;
-        String[] comparation_set = new String[]{ comparation };
+        Cursor c;
+        String[] comparation_set = { comparation };
 
+        // I have to use LIKE in order to query by ID. A mistery.
         c = contentResolver.query(
                 PadContentProvider.PADLIST_CONTENT_URI,
                 PadContentProvider.getPadFieldsList(),
-                field + "=?",
+                field + " LIKE ?",
                 comparation_set, // AKA id
                 null
         );
@@ -114,7 +115,9 @@ public class PadModel extends BaseModel {
     }
 
     public Pad getPadById(long id) {
-        return new Pad(_getPadDataById(id));
+        Cursor c = _getPadDataById(id);
+        c.moveToFirst();
+        return new Pad(c);
     }
 
     /**
