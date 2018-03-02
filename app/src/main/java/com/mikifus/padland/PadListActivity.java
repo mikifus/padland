@@ -562,4 +562,10 @@ public class PadListActivity extends PadLandDataActivity
 //            ((BaseExpandableListAdapter) expandableListView.getExpandableListAdapter()).notifyDataSetChanged();
         }
     }
+
+    @Override
+    public void onDialogDismiss() {
+        super.onDialogDismiss();
+        notifyDataSetChanged();
+    }
 }

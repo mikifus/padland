@@ -1,6 +1,7 @@
 package com.mikifus.padland.Models;
 
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -276,6 +277,38 @@ public class PadGroupModel extends BaseModel {
         cursor.close();
 
         return groupid;
+    }
+
+
+    /**
+     * Saves a new group if padgroup_id=0 or updates an existing one.
+     * @param padgroup_id
+     * @param pad_id
+     * @return
+     */
+    public boolean savePadgroupRelation( long padgroup_id, long pad_id ){
+        removePadFromAllGroups(pad_id);
+
+        if( padgroup_id == 0 ) {
+            return false;
+        }
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(PadContentProvider._ID_PAD, pad_id);
+        contentValues.put(PadContentProvider._ID_GROUP, padgroup_id);
+
+        boolean result = db.insert(PadContentProvider.RELATION_TABLE_NAME, null, contentValues) > 0;
+//            _debug_relations();
+        return result;
+    }
+
+    /**
+     * Destroys all possible relation between a pad and any group
+     * @param pad_id
+     * @return
+     */
+    public boolean removePadFromAllGroups(long pad_id) {
+        int deleted = db.delete(PadContentProvider.RELATION_TABLE_NAME, PadContentProvider._ID_PAD + "=? ", new String[]{String.valueOf(pad_id)});
+        return deleted > 0;
     }
 
     public PadGroup getPadGroup(long padId) {

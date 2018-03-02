@@ -39,6 +39,7 @@ import android.widget.Toast;
 
 import com.mikifus.padland.Dialog.BasicAuthDialog;
 import com.mikifus.padland.Models.Pad;
+import com.mikifus.padland.Models.PadModel;
 import com.mikifus.padland.SaferWebView.PadLandSaferWebViewClient;
 import com.mikifus.padland.Utils.WhiteListMatcher;
 import com.pnikosis.materialishprogress.ProgressWheel;
@@ -343,7 +344,8 @@ public class PadViewActivity extends PadLandDataActivity {
             values.put(PadContentProvider.SERVER, intentData.getServer());
             values.put(PadContentProvider.URL, intentData.getUrl());
 
-            result = padlistDb.savePad(0, values);
+            PadModel padModel = new PadModel(this);
+            result = padModel.savePad(0, values);
         }
         return result;
     }
