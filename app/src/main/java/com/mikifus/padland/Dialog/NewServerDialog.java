@@ -49,18 +49,6 @@ public class NewServerDialog extends FormDialog {
         view = R.layout.dialog_new_server;
     }
 
-//    @Override
-//    public Dialog onCreateDialog(Bundle savedInstanceState) {
-////        if( edit_server_id > 0 )
-////        {
-////            editServerId(edit_server_id);
-////        }
-//
-//        Dialog d = super.onCreateDialog(savedInstanceState);
-//
-//        return d;
-//    }
-
     protected void saveData() {
         ServerModel serverModel = new ServerModel(getActivity());
         ContentValues contentValues = getContentValues();

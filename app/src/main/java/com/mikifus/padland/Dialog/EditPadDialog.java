@@ -19,6 +19,8 @@ import com.mikifus.padland.Models.Pad;
 import com.mikifus.padland.Models.PadGroup;
 import com.mikifus.padland.Models.PadGroupModel;
 import com.mikifus.padland.Models.PadModel;
+import com.mikifus.padland.Models.ServerModel;
+import com.mikifus.padland.PadContentProvider;
 import com.mikifus.padland.R;
 import com.mikifus.padland.Utils.PadUrl;
 
@@ -44,21 +46,6 @@ public class EditPadDialog extends FormDialog {
 
     public void editPadId(long id) {
         edit_pad_id = id;
-//        if( fieldName != null ) {
-//            PadModel model = new PadModel(getContext());
-//            Pad pad = model.getPadById(id);
-//
-//            fieldName.setText(pad.getName());
-//            fieldLocalName.setText(pad.getLocalName());
-
-//            if( server.getPadPrefix().equals(DEFAULT_PADPREFIX_VALUE) && server.jquery )
-//            {
-//                checkLite.setChecked(true);
-//            }
-//        }
-//        if( currentDialog != null ) {
-//            currentDialog.setTitle(R.string.serverlist_dialog_edit_server_title);
-//        }
     }
     protected void setViewEvents() {
         fieldName = (EditText) main_view.findViewById(R.id.txt_pad_name);
@@ -94,10 +81,18 @@ public class EditPadDialog extends FormDialog {
         PadModel model = new PadModel(getContext());
         Pad pad = model.getPadById(edit_pad_id);
 
+        ServerModel serverModel = new ServerModel(getContext());
+        String prefix = serverModel.getServerPrefixFromUrl(getContext(), pad.getServer());
+         // Multiple can be returned. TODO: Connect pads with servers by ID.
+//        if(prefix == null) {
+//            Server server = serverModel.getServerByUrl(pad.getServer());
+//            prefix = server.getPadPrefix();
+//        }
+
         PadUrl padUrl = new PadUrl.Builder()
                 .padName(contentValues.getAsString(PadModel.NAME))
                 .padServer(pad.getServer())
-//                .padPrefix(pad.)
+                .padPrefix(prefix)
                 .build();
 
         if( !URLUtil.isValidUrl(padUrl.getString()) )
@@ -109,6 +104,16 @@ public class EditPadDialog extends FormDialog {
         return true;
     }
 
+    protected void saveData() {
+        PadModel model = new PadModel(getContext());
+        PadGroupModel padGroupModel = new PadGroupModel(getContext());
+        ContentValues contentValues = getContentValues();
+        ContentValues groupContentValues = getGroupContentValues();
+
+        model.savePad(edit_pad_id, contentValues);
+        padGroupModel.savePadgroupRelation(groupContentValues.getAsLong(PadContentProvider._ID_GROUP), edit_pad_id);
+    }
+
     protected ContentValues getContentValues() {
         ContentValues values = super.getContentValues();
         String localName = String.valueOf(fieldLocalName.getText());
@@ -116,6 +121,18 @@ public class EditPadDialog extends FormDialog {
 
         String padName = String.valueOf(fieldName.getText()).trim();
         values.put(PadModel.NAME, padName);
+
+//        long group = spinnerAdapter.getItem( fieldGroup.getSelectedItemPosition() ).getId();
+//        values.put(PadContentProvider._ID_GROUP, group);
+
+        return values;
+    }
+
+    protected ContentValues getGroupContentValues() {
+        ContentValues values = super.getContentValues();
+
+        long group = spinnerAdapter.getItem( fieldGroup.getSelectedItemPosition() ).getId();
+        values.put(PadContentProvider._ID_GROUP, group);
 
         return values;
     }
@@ -134,6 +151,12 @@ public class EditPadDialog extends FormDialog {
             mResource = resource;
             items = objects;
         }
+
+        @Override
+        public PadGroup getItem(int position) {
+            return items.get(position);
+        }
+
         @Override
         public View getDropDownView(int position, @Nullable View convertView,
                                     @NonNull ViewGroup parent) {
@@ -150,7 +173,7 @@ public class EditPadDialog extends FormDialog {
 
             TextView text = view.findViewById(android.R.id.text1);
 
-            PadGroup padGroup = items.get(position);
+            PadGroup padGroup = getItem(position);
 
             text.setText(padGroup.getName());
 

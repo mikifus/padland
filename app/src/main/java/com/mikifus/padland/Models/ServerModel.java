@@ -7,8 +7,11 @@ import android.util.Log;
 
 import com.mikifus.padland.PadContentProvider;
 import com.mikifus.padland.PadlandDbHelper;
+import com.mikifus.padland.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * Created by mikifus on 8/07/16.
@@ -48,6 +51,18 @@ public class ServerModel extends BaseModel {
         super(context);
     }
 
+    public static String[] getServerFieldsList() {
+        return new String[] {
+                _ID,
+                NAME,
+                URL,
+                PADPREFIX,
+                POSITION,
+                JQUERY,
+                ENABLED
+        };
+    }
+
     /**
      * Self explanatory name.
      * Field to compare must be specified by its identifier. Accepts only one comparation value.
@@ -60,13 +75,21 @@ public class ServerModel extends BaseModel {
         Cursor c = null;
         String[] comparation_set = new String[]{ comparation };
 
-        QUERY =
-                "SELECT * " +
-                        "FROM " + ServerModel.TABLE + " " +
-                        "WHERE " + field + "=?" +
-                " ORDER BY " + POSITION + " ASC,"+ _ID +" DESC ";
-
-        c = db.rawQuery(QUERY, comparation_set);
+        c = db.query(TABLE,
+                getServerFieldsList(),
+                field + " LIKE ?",
+                comparation_set, // AKA id
+                null,
+                null,
+                POSITION +" ASC, " + _ID + " DESC"
+        );
+//        QUERY =
+//                "SELECT * " +
+//                        "FROM " + ServerModel.TABLE + " " +
+//                        "WHERE " + field + " LIKE ?" +
+//                " ORDER BY " + POSITION + " ASC,"+ _ID +" DESC ";
+//
+//        c = db.rawQuery(QUERY, comparation_set);
         return c;
     }
 
@@ -179,6 +202,20 @@ public class ServerModel extends BaseModel {
         return server;
     }
 
+    public Server getServerByUrl(String url) {
+        Cursor cursor = _getServerDataByUrl(url);
+        cursor.moveToFirst();
+        Server server = null;
+        while (!cursor.isAfterLast())
+        {
+            server = cursorToServer(cursor);
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+        return server;
+    }
+
     public ArrayList<Server> getEnabledServerList() {
         Server server;
         ArrayList<Server> servers = new ArrayList<>();
@@ -195,6 +232,11 @@ public class ServerModel extends BaseModel {
         return servers;
     }
 
+    /**
+     * TODO: Put cursor loading to Server class constructor
+     * @param cursor
+     * @return
+     */
     private Server cursorToServer( Cursor cursor ){
         int id = cursor.getInt(0);
         String name = cursor.getString(1);
@@ -219,5 +261,71 @@ public class ServerModel extends BaseModel {
         String[] where_value = {String.valueOf(server_id)};
         int result = db.delete(ServerModel.TABLE, PadContentProvider._ID + "=?", where_value);
         return result > 0;
+    }
+
+    /**
+     * Returns a string with the server urls.
+     * Includes custom servers.
+     * @return String[]
+     */
+    public String[] getServerUrlList(Context context) {
+        String[] server_list;
+
+        // Load the custom servers
+        ArrayList<Server> custom_servers = getEnabledServerList();
+        ArrayList<String> server_names = new ArrayList<>();
+        for(Server server : custom_servers) {
+            server_names.add(server.getUrl());
+        }
+
+        // Server list to provide a fallback value
+        Collection<String> collection = new ArrayList<>();
+        collection.addAll(server_names);
+        collection.addAll(Arrays.asList(context.getResources().getStringArray( R.array.etherpad_servers_url_home )));
+
+        server_list = collection.toArray(new String[collection.size()]);
+
+        return server_list;
+    }
+
+    /**
+     * Returns a string with the server urls and the prefix to see a pad.
+     * Includes custom servers.
+     * @return String[]
+     */
+    public String[] getServerUrlPrefixList(Context context) {
+        String[] server_list;
+        // Load the custom servers
+        ArrayList<Server> custom_servers = getEnabledServerList();
+        ArrayList<String> server_names = new ArrayList<>();
+        for(Server server : custom_servers) {
+            server_names.add(server.getPadPrefix());
+        }
+
+        // Server list to provide a fallback value
+//        server_list.getResources().getStringArray( R.array.etherpad_servers_name );
+        Collection<String> collection = new ArrayList<>();
+        collection.addAll(server_names);
+        collection.addAll(Arrays.asList(context.getResources().getStringArray( R.array.etherpad_servers_url_padprefix )));
+
+        server_list = collection.toArray(new String[collection.size()]);
+
+        return server_list;
+    }
+
+    public String getServerPrefixFromUrl(Context context, String server) {
+        int c = 0;
+        String[] serverUrlList = getServerUrlList(context);
+        String[] serverUrlPrefixList = getServerUrlPrefixList(context);
+        for (String s : serverUrlList) {
+            if(s.equals(server)) {
+                break;
+            }
+            c++;
+        }
+        if( serverUrlPrefixList[ c ] != null ) {
+            return serverUrlPrefixList[ c ];
+        }
+        return null;
     }
 }

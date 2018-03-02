@@ -68,58 +68,6 @@ public class NewPadActivity extends PadLandActivity {
     }
 
     /**
-     * Returns a string with the server urls.
-     * Includes custom servers.
-     * @return String[]
-     */
-    private String[] getServerUrlList() {
-        String[] server_list;
-        // Load the custom servers
-        ServerModel serverModel = new ServerModel(this);
-        ArrayList<Server> custom_servers = serverModel.getEnabledServerList();
-        ArrayList<String> server_names = new ArrayList<>();
-        for(Server server : custom_servers) {
-            server_names.add(server.getUrl());
-        }
-
-        // Server list to provide a fallback value
-//        server_list.getResources().getStringArray( R.array.etherpad_servers_name );
-        Collection<String> collection = new ArrayList<>();
-        collection.addAll(server_names);
-        collection.addAll(Arrays.asList(getResources().getStringArray( R.array.etherpad_servers_url_home )));
-
-        server_list = collection.toArray(new String[collection.size()]);
-
-        return server_list;
-    }
-
-    /**
-     * Returns a string with the server urls and the prefix to see a pad.
-     * Includes custom servers.
-     * @return String[]
-     */
-    private String[] getServerUrlPrefixList() {
-        String[] server_list;
-        // Load the custom servers
-        ServerModel serverModel = new ServerModel(this);
-        ArrayList<Server> custom_servers = serverModel.getEnabledServerList();
-        ArrayList<String> server_names = new ArrayList<>();
-        for(Server server : custom_servers) {
-            server_names.add(server.getPadPrefix());
-        }
-
-        // Server list to provide a fallback value
-//        server_list.getResources().getStringArray( R.array.etherpad_servers_name );
-        Collection<String> collection = new ArrayList<>();
-        collection.addAll(server_names);
-        collection.addAll(Arrays.asList(getResources().getStringArray( R.array.etherpad_servers_url_padprefix )));
-
-        server_list = collection.toArray(new String[collection.size()]);
-
-        return server_list;
-    }
-
-    /**
      * Loads the values on the Spinner which is by deafult empty.
      */
     private void _setSpinnerValues() {
@@ -225,10 +173,9 @@ public class NewPadActivity extends PadLandActivity {
      * @return
      */
     private String getPadPrefixFromSpinner( Spinner spinner ){
-        String[] padUrls = getServerUrlPrefixList();
-//        String padPrefix = getResources().getStringArray( R.array.etherpad_servers_url_padprefix )[spinner.getSelectedItemPosition()];
-        String padPrefix = padUrls[ spinner.getSelectedItemPosition() ];
-        return padPrefix;
+        ServerModel serverModel = new ServerModel(this);
+        String[] padUrls = serverModel.getServerUrlPrefixList(this);
+        return padUrls[ spinner.getSelectedItemPosition() ];
     }
 
     /**
@@ -237,9 +184,8 @@ public class NewPadActivity extends PadLandActivity {
      * @return
      */
     private String getPadServerFromSpinner( Spinner spinner ){
-        String[] padUrls = getServerUrlList();
-//        String padServer = getResources().getStringArray( R.array.etherpad_servers_url_home )[spinner.getSelectedItemPosition()];
-        String padServer = padUrls[ spinner.getSelectedItemPosition() ];
-        return padServer;
+        ServerModel serverModel = new ServerModel(this);
+        String[] padUrls = serverModel.getServerUrlList(this);
+        return padUrls[ spinner.getSelectedItemPosition() ];
     }
 }

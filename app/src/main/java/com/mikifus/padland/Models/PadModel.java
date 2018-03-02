@@ -1,8 +1,11 @@
 package com.mikifus.padland.Models;
 
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
+import android.util.Log;
 
 import com.mikifus.padland.PadContentProvider;
 
@@ -118,6 +121,26 @@ public class PadModel extends BaseModel {
         Cursor c = _getPadDataById(id);
         c.moveToFirst();
         return new Pad(c);
+    }
+
+    /**
+     * Saves a new pad if pad_id=0 or updates an existing one.
+     * @param pad_id
+     * @param values
+     * @return
+     */
+    public boolean savePad( long pad_id, ContentValues values ){
+        if( pad_id > 0 ) {
+            String[] where_value = { String.valueOf(pad_id) };
+            // Again, I have to use LIKE instead of equals
+            int result = contentResolver.update(PadContentProvider.PADLIST_CONTENT_URI, values, PadContentProvider._ID + " LIKE ?", where_value);
+            return (result > 0);
+        }
+        else {
+            Log.d("INSERT", "Contents = " + values.toString());
+            Uri result = contentResolver.insert(PadContentProvider.PADLIST_CONTENT_URI, values);
+            return ( result != null );
+        }
     }
 
     /**

@@ -225,6 +225,7 @@ public class PadLandDataActivity extends PadLandActivity implements FormDialog.F
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         long save_pad_id;
+                        PadGroupModel padGroupModel = new PadGroupModel(context);
                         for(String pad_id_string : selectedItems) {
                             save_pad_id = Long.parseLong(pad_id_string);
                             for(Long save_padgroup_id : selectedGroups) {
@@ -441,25 +442,6 @@ public class PadLandDataActivity extends PadLandActivity implements FormDialog.F
             }
             cursor.close();
             Log.d(TAG, hashMap.toString());
-        }
-
-        /**
-         * Saves a new pad if pad_id=0 or updates an existing one.
-         * @param pad_id
-         * @param values
-         * @return
-         */
-        public boolean savePad( long pad_id, ContentValues values ){
-            if( pad_id > 0 ) {
-                String[] where_value = { String.valueOf(pad_id) };
-                int result = contentResolver.update(PadContentProvider.PADLIST_CONTENT_URI, values, PadContentProvider._ID + "=?", where_value);
-                return (result > 0);
-            }
-            else {
-                Log.d("INSERT", "Contents = " + values.toString());
-                Uri result = contentResolver.insert(PadContentProvider.PADLIST_CONTENT_URI, values);
-                return ( result != null );
-            }
         }
 
         /**
