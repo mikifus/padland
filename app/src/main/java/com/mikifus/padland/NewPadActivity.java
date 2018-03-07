@@ -33,6 +33,8 @@ import java.util.Collection;
 public class NewPadActivity extends PadLandActivity {
 
     protected String[] server_list;
+    protected String[] server_url_list;
+    protected String[] server_url_prefixed_list;
     protected ServerModel serverModel;
 
     /**
@@ -46,6 +48,8 @@ public class NewPadActivity extends PadLandActivity {
 
         server_list = getSpinnerValueList();
         serverModel = new ServerModel(this);
+        server_url_list = serverModel.getServerUrlList(NewPadActivity.this);
+        server_url_prefixed_list = serverModel.getServerUrlPrefixList(this);
 
         _setViewEvents();
         _setSpinnerValues();
@@ -72,10 +76,9 @@ public class NewPadActivity extends PadLandActivity {
                     Uri uri = Uri.parse(name);
                     String padServer = uri.getScheme() + "://" + uri.getHost();
                     String padName = uri.getLastPathSegment();
-                    String[] padUrls = serverModel.getServerUrlList(NewPadActivity.this);
 
                     int c = 0;
-                    for (String serverUrl : padUrls) {
+                    for (String serverUrl : server_url_list) {
                         if(serverUrl.equals(padServer)) {
                             nameInput.setText(padName);
 
@@ -221,9 +224,7 @@ public class NewPadActivity extends PadLandActivity {
      * @return
      */
     private String getPadPrefixFromSpinner( Spinner spinner ){
-        ServerModel serverModel = new ServerModel(this);
-        String[] padUrls = serverModel.getServerUrlPrefixList(this);
-        return padUrls[ spinner.getSelectedItemPosition() ];
+        return server_url_prefixed_list[ spinner.getSelectedItemPosition() ];
     }
 
     /**
@@ -232,7 +233,6 @@ public class NewPadActivity extends PadLandActivity {
      * @return
      */
     private String getPadServerFromSpinner( Spinner spinner ){
-        String[] padUrls = serverModel.getServerUrlList(this);
-        return padUrls[ spinner.getSelectedItemPosition() ];
+        return server_url_list[ spinner.getSelectedItemPosition() ];
     }
 }
