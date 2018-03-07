@@ -139,7 +139,7 @@
     <string name="serverlist_dialog_new_server_lite_label">I know that this server uses Etherpad Lite.</string>
 
     <string name="serverlist_dialog_new_server_padprefix_title">Url pad prefix</string>
-    <string name="serverlist_dialog_new_server_padprefix_label">New servers (Etherpad Lite) have an url segment between the server domain and the pad name. By default it is \"p/\". Change it here if it is different.</string>
+    <string name="serverlist_dialog_new_server_padprefix_label">New servers (Etherpad Lite) have an url segment between the server domain and the pad name. By default it is \"/p/\". Change it here if it is different.</string>
     <string name="serverlist_dialog_new_server_padprefix_invalid">Invalid pad prefix.</string>
 
     <string name="serverlist_dialog_new_server_jquery_title">Embedding options</string>
@@ -151,6 +151,7 @@
     <string name="new_pad_local_name">Optionally set a pad Alias</string>
     <string name="write_pad_local_name">Pad Alias (optional)</string>
     <string name="new_pad_name_invalid">The pad name contains invalid characters.</string>
+    <string name="new_pad_wrong_server">The server is not allowed. The operation cannot continue. Check your server settings and try again.</string>
 
     <!-- Titanpad notice -->
     <string name="titanpad_deprecated_title">Warning: Titanpad.com is deprecated</string>

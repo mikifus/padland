@@ -299,7 +299,7 @@ public class ServerModel extends BaseModel {
         ArrayList<Server> custom_servers = getEnabledServerList();
         ArrayList<String> server_names = new ArrayList<>();
         for(Server server : custom_servers) {
-            server_names.add(server.getPadPrefix());
+            server_names.add(server.getPadPrefixWithUrl());
         }
 
         // Server list to provide a fallback value
@@ -323,7 +323,7 @@ public class ServerModel extends BaseModel {
             }
             c++;
         }
-        if( serverUrlPrefixList[ c ] != null ) {
+        if(c < serverUrlPrefixList.length && serverUrlPrefixList[ c ] != null ) {
             return serverUrlPrefixList[ c ];
         }
         return null;
