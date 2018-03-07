@@ -20,6 +20,13 @@ public class Server {
     }
 
     public String getPadPrefix() {
+        return url_padprefix.replace(url, "");
+    }
+
+    public String getPadPrefixWithUrl() {
+        if(!url_padprefix.startsWith("http")) {
+            return url + url_padprefix;
+        }
         return url_padprefix;
     }
 

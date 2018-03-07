@@ -88,6 +88,10 @@ public class EditPadDialog extends FormDialog {
 //            Server server = serverModel.getServerByUrl(pad.getServer());
 //            prefix = server.getPadPrefix();
 //        }
+        if( prefix == null ) {
+            Toast.makeText(getContext(), getString(R.string.new_pad_wrong_server), Toast.LENGTH_LONG).show();
+            return false;
+        }
 
         PadUrl padUrl = new PadUrl.Builder()
                 .padName(contentValues.getAsString(PadModel.NAME))

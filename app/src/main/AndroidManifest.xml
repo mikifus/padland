@@ -195,7 +195,7 @@
                 android:value=".SettingsActivity" />
         </activity>
         <provider
-            android:name=".PadContentProvider"
+            android:name="com.mikifus.padland.PadContentProvider"
             android:authorities="com.mikifus.padland.padlandcontentprovider"
             android:enabled="true"
             android:exported="true" >

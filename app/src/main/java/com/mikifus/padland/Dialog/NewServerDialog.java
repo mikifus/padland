@@ -103,7 +103,7 @@ public class NewServerDialog extends FormDialog {
     protected ContentValues getContentValues() {
 //        Toast.makeText(getContext(), "Server saved", Toast.LENGTH_LONG).show();
         ContentValues values = super.getContentValues();
-        String name = String.valueOf(fieldName.getText());
+        String name = String.valueOf(fieldName.getText()).trim();
         values.put(ServerModel.NAME, name);
 
         String url = String.valueOf(fieldUrl.getText()).trim();
@@ -117,6 +117,15 @@ public class NewServerDialog extends FormDialog {
         values.put(ServerModel.URL, url);
 
         String padprefix = String.valueOf(fieldPadprefix.getText());
+        if(!padprefix.isEmpty()) {
+            // Must start and end with /
+            if(!padprefix.startsWith("/")) {
+                padprefix = "/" + padprefix;
+            }
+            if(!padprefix.endsWith("/")) {
+                padprefix = padprefix + "/";
+            }
+        }
         values.put(ServerModel.PADPREFIX, padprefix);
 
         int jquery = String.valueOf(checkJquery.isChecked()) == "true" ? 1 : 0;

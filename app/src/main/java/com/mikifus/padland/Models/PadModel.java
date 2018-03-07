@@ -38,11 +38,10 @@ public class PadModel extends BaseModel {
         Cursor c;
         String[] comparation_set = { comparation };
 
-        // I have to use LIKE in order to query by ID. A mistery.
         c = contentResolver.query(
                 PadContentProvider.PADLIST_CONTENT_URI,
                 PadContentProvider.getPadFieldsList(),
-                field + " LIKE ?",
+                field + " = ?",
                 comparation_set, // AKA id
                 null
         );
@@ -132,8 +131,7 @@ public class PadModel extends BaseModel {
     public boolean savePad( long pad_id, ContentValues values ){
         if( pad_id > 0 ) {
             String[] where_value = { String.valueOf(pad_id) };
-            // Again, I have to use LIKE instead of equals
-            int result = contentResolver.update(PadContentProvider.PADLIST_CONTENT_URI, values, PadContentProvider._ID + " LIKE ?", where_value);
+            int result = contentResolver.update(PadContentProvider.PADLIST_CONTENT_URI, values, PadContentProvider._ID + " = ?", where_value);
             return (result > 0);
         }
         else {
