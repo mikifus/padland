@@ -18,8 +18,9 @@ import java.util.ArrayList;
 public class PadModel extends BaseModel {
     public static final String TAG = "PadModel";
     public static final String _ID = "_id";
-    public static final String NAME = "name"; // Name of the pad
     public static final String LOCAL_NAME = "local_name"; // Alias of the pad
+    public static final String NAME = "name"; // Name of the pad, actually it is the last part of the url
+    public static final String URL = "url"; // the full address including server and name
 
     private ContentResolver contentResolver;
 
@@ -109,7 +110,7 @@ public class PadModel extends BaseModel {
      * @return
      */
     public Cursor _getPadDataByUrl(String padUrl){
-        return this._getPadDataFromDatabase(PadContentProvider.URL, padUrl);
+        return this._getPadDataFromDatabase(URL, padUrl);
     }
 
     public long getNowDate() {

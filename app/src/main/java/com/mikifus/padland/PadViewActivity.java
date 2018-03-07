@@ -339,10 +339,10 @@ public class PadViewActivity extends PadLandDataActivity {
             ContentValues values = new ContentValues();
             Pad intentData = this._getPadDataFromIntent();
 
-            values.put(PadContentProvider.NAME, intentData.getName());
+            values.put(PadModel.NAME, intentData.getName());
             values.put(PadContentProvider.LOCAL_NAME, intentData.getLocalName());
             values.put(PadContentProvider.SERVER, intentData.getServer());
-            values.put(PadContentProvider.URL, intentData.getUrl());
+            values.put(PadModel.URL, intentData.getUrl());
 
             PadModel padModel = new PadModel(this);
             result = padModel.savePad(0, values);

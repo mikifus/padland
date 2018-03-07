@@ -56,7 +56,7 @@ public class PadGroupModel extends BaseModel {
     {
         Uri padlist_uri = Uri.parse(context.getString(R.string.request_padgroups));
         Cursor cursor = contentResolver.query(padlist_uri,
-                new String[]{PadContentProvider._ID, PadContentProvider.NAME},
+                new String[]{PadContentProvider._ID, PadModel.NAME},
                 null,
                 null,
                 PadContentProvider.CREATE_DATE + " DESC");
@@ -91,7 +91,7 @@ public class PadGroupModel extends BaseModel {
     public int getPadgroupsCount() {
         Uri padlist_uri = Uri.parse(context.getString(R.string.request_padgroups));
         Cursor cursor = contentResolver.query(padlist_uri,
-                new String[]{PadContentProvider._ID, PadContentProvider.NAME},
+                new String[]{PadContentProvider._ID, PadModel.NAME},
                 null,
                 null,
                 PadContentProvider.CREATE_DATE + " DESC");
@@ -104,7 +104,7 @@ public class PadGroupModel extends BaseModel {
     public HashMap<String, String> getPadgroupAt(int position) {
         Uri padlist_uri = Uri.parse(context.getString(R.string.request_padgroups));
         Cursor cursor = contentResolver.query(padlist_uri,
-                new String[]{PadContentProvider._ID, PadContentProvider.NAME, PadGroupModel.POSITION},
+                new String[]{PadContentProvider._ID, PadModel.NAME, PadGroupModel.POSITION},
                 "",
                 null,
                 PadContentProvider.CREATE_DATE + " DESC LIMIT " + position + ", 1");
@@ -118,7 +118,7 @@ public class PadGroupModel extends BaseModel {
             String pos = cursor.getString(2);
 
             group.put(PadContentProvider._ID, id);
-            group.put(PadContentProvider.NAME, name);
+            group.put(PadModel.NAME, name);
             group.put(PadGroupModel.POSITION, pos);
 
             break;
@@ -131,7 +131,7 @@ public class PadGroupModel extends BaseModel {
     public PadGroup getPadGroupById(long padGroupId) {
         Uri padlist_uri = Uri.parse(context.getString(R.string.request_padgroups));
         Cursor cursor = contentResolver.query(padlist_uri,
-                new String[]{PadContentProvider._ID, PadContentProvider.NAME, PadGroupModel.POSITION},
+                new String[]{PadContentProvider._ID, PadModel.NAME, PadGroupModel.POSITION},
                 PadContentProvider._ID + "=?",
                 new String[]{Long.toString(padGroupId)},
                 "");
@@ -164,7 +164,7 @@ public class PadGroupModel extends BaseModel {
     public ArrayList<PadGroup> getAllPadgroups() {
         Uri padlist_uri = Uri.parse(context.getString(R.string.request_padgroups));
         Cursor cursor = contentResolver.query(padlist_uri,
-                new String[]{PadContentProvider._ID, PadContentProvider.NAME, PadGroupModel.POSITION},
+                new String[]{PadContentProvider._ID, PadModel.NAME, PadGroupModel.POSITION},
                 null,
                 null,
                 PadContentProvider.CREATE_DATE + " DESC");

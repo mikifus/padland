@@ -55,7 +55,7 @@ public class PadLandDataActivity extends PadLandActivity implements FormDialog.F
         HashMap<String, String> unclassified_group = new HashMap<>();
 
         unclassified_group.put(PadContentProvider._ID, "0");
-        unclassified_group.put(PadContentProvider.NAME, "Unclassified");
+        unclassified_group.put(PadModel.NAME, "Unclassified");
         unclassified_group.put(PadGroupModel.POSITION, "999999");
 
         meta_groups.add(unclassified_group);
@@ -159,7 +159,7 @@ public class PadLandDataActivity extends PadLandActivity implements FormDialog.F
         HashMap<String, String> padgroups_data = model.getPadgroupAt(groupPosition);
         String name = "";
         if( padgroups_data.size() > 0 ) {
-            name = padgroups_data.get(PadContentProvider.NAME);
+            name = padgroups_data.get(PadModel.NAME);
         }
         return name;
     }
@@ -404,7 +404,7 @@ public class PadLandDataActivity extends PadLandActivity implements FormDialog.F
          * @return
          */
         public Cursor _getPadByUrl(String padUrl){
-            return this._getPadFromDatabase(PadContentProvider.URL, padUrl);
+            return this._getPadFromDatabase(PadModel.URL, padUrl);
         }
 
         public long getNowDate() {
