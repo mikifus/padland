@@ -42,6 +42,7 @@ import android.widget.Toast;
 
 import com.mikifus.padland.Adapters.PadListAdapter;
 import com.mikifus.padland.Dialog.NewPadGroup;
+import com.mikifus.padland.Models.PadModel;
 import com.mikifus.padland.Utils.WhiteListMatcher;
 
 import java.util.ArrayList;
@@ -386,7 +387,7 @@ public class PadListActivity extends PadLandDataActivity
      */
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String[] projection = {PadContentProvider._ID, PadContentProvider.NAME, PadContentProvider.URL};
+        String[] projection = {PadContentProvider._ID, PadModel.NAME, PadModel.URL};
         CursorLoader cursorLoader = new CursorLoader(this, PadContentProvider.PADLIST_CONTENT_URI, projection, null, null, null);
         return cursorLoader;
     }

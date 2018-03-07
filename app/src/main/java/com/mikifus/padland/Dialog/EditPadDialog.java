@@ -84,10 +84,7 @@ public class EditPadDialog extends FormDialog {
         ServerModel serverModel = new ServerModel(getContext());
         String prefix = serverModel.getServerPrefixFromUrl(getContext(), pad.getServer());
          // Multiple can be returned. TODO: Connect pads with servers by ID.
-//        if(prefix == null) {
-//            Server server = serverModel.getServerByUrl(pad.getServer());
-//            prefix = server.getPadPrefix();
-//        }
+
         if( prefix == null ) {
             Toast.makeText(getContext(), getString(R.string.new_pad_wrong_server), Toast.LENGTH_LONG).show();
             return false;
@@ -126,8 +123,19 @@ public class EditPadDialog extends FormDialog {
         String padName = String.valueOf(fieldName.getText()).trim();
         values.put(PadModel.NAME, padName);
 
-//        long group = spinnerAdapter.getItem( fieldGroup.getSelectedItemPosition() ).getId();
-//        values.put(PadContentProvider._ID_GROUP, group);
+        PadModel model = new PadModel(getContext());
+        Pad pad = model.getPadById(edit_pad_id);
+
+        ServerModel serverModel = new ServerModel(getContext());
+        String prefix = serverModel.getServerPrefixFromUrl(getContext(), pad.getServer());
+        // Multiple can be returned. TODO: Connect pads with servers by ID.
+        PadUrl padUrl = new PadUrl.Builder()
+                .padName(padName)
+                .padServer(pad.getServer())
+                .padPrefix(prefix)
+                .build();
+
+        values.put(PadModel.URL, padUrl.getString());
 
         return values;
     }

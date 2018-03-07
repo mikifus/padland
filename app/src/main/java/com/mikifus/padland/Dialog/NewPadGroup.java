@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.mikifus.padland.PadContentProvider;
+import com.mikifus.padland.Models.PadModel;
 import com.mikifus.padland.PadListActivity;
 import com.mikifus.padland.R;
 
@@ -79,7 +79,7 @@ public class NewPadGroup extends DialogFragment {
     private void saveNewPadGroup( String title ) {
 //        Toast.makeText(getContext(), "It should save it", Toast.LENGTH_LONG).show();
         ContentValues values = new ContentValues();
-        values.put(PadContentProvider.NAME, title);
+        values.put(PadModel.NAME, title);
         PadListActivity activity = (PadListActivity) getActivity();
         activity.padlistDb.savePadgroupData(0, values);
         activity.notifyDataSetChanged();
