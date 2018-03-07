@@ -3,12 +3,16 @@ package com.mikifus.padland;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.webkit.URLUtil;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +32,9 @@ import java.util.Collection;
  */
 public class NewPadActivity extends PadLandActivity {
 
+    protected String[] server_list;
+    protected ServerModel serverModel;
+
     /**
      * onCreate override
      * @param savedInstanceState
@@ -37,8 +44,53 @@ public class NewPadActivity extends PadLandActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_newpad);
 
-        this._setSpinnerValues();
-        this._setSpinnerDefaultValue();
+        server_list = getSpinnerValueList();
+        serverModel = new ServerModel(this);
+
+        _setViewEvents();
+        _setSpinnerValues();
+        _setSpinnerDefaultValue();
+    }
+
+    private void _setViewEvents() {
+        final EditText nameInput = findViewById( R.id.editText );
+        nameInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String name = s.toString();
+                if(URLUtil.isValidUrl(name)) {
+                    Uri uri = Uri.parse(name);
+                    String padServer = uri.getScheme() + "://" + uri.getHost();
+                    String padName = uri.getLastPathSegment();
+                    String[] padUrls = serverModel.getServerUrlList(NewPadActivity.this);
+
+                    int c = 0;
+                    for (String serverUrl : padUrls) {
+                        if(serverUrl.equals(padServer)) {
+                            nameInput.setText(padName);
+
+                            Spinner spinner = findViewById( R.id.spinner );https://etherpad.wikimedia.org/p/anabelle
+                            spinner.setSelection(c);
+
+                            Toast.makeText(NewPadActivity.this, getString(R.string.newpad_url_name_success), Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                        c++;
+                    }
+                    Toast.makeText(NewPadActivity.this, getString(R.string.newpad_url_name_warning), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     /**
@@ -71,8 +123,6 @@ public class NewPadActivity extends PadLandActivity {
      * Loads the values on the Spinner which is by deafult empty.
      */
     private void _setSpinnerValues() {
-        String[] server_list = getSpinnerValueList();
-
         Spinner spinner = (Spinner) findViewById( R.id.spinner );
         if (spinner != null) {
             //selected item will look like a spinner set from XML
@@ -89,7 +139,7 @@ public class NewPadActivity extends PadLandActivity {
         String default_server = this._getDefaultSpinnerValue();
 
         // We get position and set it as default
-        Spinner spinner = (Spinner) findViewById( R.id.spinner );
+        Spinner spinner = findViewById( R.id.spinner );
         ArrayAdapter adapter = (ArrayAdapter) spinner.getAdapter();
         spinner.setSelection( adapter.getPosition( default_server ) );
     }
@@ -100,8 +150,6 @@ public class NewPadActivity extends PadLandActivity {
      * @return
      */
     private String _getDefaultSpinnerValue(){
-        String[] server_list = getSpinnerValueList();
-
         // Getting user preferences
         Context context = getApplicationContext();
         SharedPreferences userDetails = context.getSharedPreferences( getPackageName() + "_preferences", context.MODE_PRIVATE );
@@ -184,7 +232,6 @@ public class NewPadActivity extends PadLandActivity {
      * @return
      */
     private String getPadServerFromSpinner( Spinner spinner ){
-        ServerModel serverModel = new ServerModel(this);
         String[] padUrls = serverModel.getServerUrlList(this);
         return padUrls[ spinner.getSelectedItemPosition() ];
     }
