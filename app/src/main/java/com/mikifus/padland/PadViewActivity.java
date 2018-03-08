@@ -409,6 +409,13 @@ public class PadViewActivity extends PadLandDataActivity {
                 }, 1200);
             }
 
+            /**
+             * API >= 22
+             *
+             * @param view
+             * @param request
+             * @param error
+             */
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 super.onReceivedError(view, request, error);
@@ -416,6 +423,23 @@ public class PadViewActivity extends PadLandDataActivity {
                 _hideProgressWheel();
 //                Log.d(TAG, "Removed connection " + webview_http_connections[0]);
                 Log.e(TAG, "WebView Error " + error.toString() +", Request: "+ request.toString());
+            }
+
+            /**
+             * API < 22
+             *
+             * @param view
+             * @param errorCode
+             * @param description
+             * @param failingUrl
+             */
+            @Override
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                super.onReceivedError(view, errorCode, description, failingUrl);
+                --webview_http_connections[0];
+                _hideProgressWheel();
+//                Log.d(TAG, "Removed connection " + webview_http_connections[0]);
+                Log.e(TAG, "WebView Error ("+errorCode+") " + description +", Request: "+ failingUrl);
             }
 
             @Override
