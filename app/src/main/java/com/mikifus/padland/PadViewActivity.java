@@ -117,8 +117,6 @@ public class PadViewActivity extends PadLandDataActivity {
         // Checks if the url is a valid pad
         this._makePadUrl();
 
-        // Forces landscape view
-//        this.setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_PORTRAIT );
         handler = new Handler();
 
         titanPadCheck();
@@ -180,7 +178,7 @@ public class PadViewActivity extends PadLandDataActivity {
      * Loads the fancy ProgressWheel to show it's loading.
      */
     private void _loadProgressWheel() {
-        pwheel = (ProgressWheel) findViewById(R.id.progress_wheel);
+        pwheel = findViewById(R.id.progress_wheel);
         pwheel.spin();
     }
 
@@ -193,10 +191,6 @@ public class PadViewActivity extends PadLandDataActivity {
 
         Log.d("LOAD_PROGRESS_LOG", String.valueOf(progress));
         pwheel.setProgress(p);
-
-//        if (progress > 99) {
-//            _hideProgressWheel();
-//        }
     }
 
     public void _showProgressWheel() {
@@ -374,14 +368,13 @@ public class PadViewActivity extends PadLandDataActivity {
      */
     private WebView _makeWebView() {
 //        final String current_padUrl = this.getCurrentPadUrl();
-        webView = (WebView) findViewById(R.id.activity_main_webview);
-//        webView = new WebView(PadViewActivity.this);
+        webView = findViewById(R.id.activity_main_webview);
         webView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
         // The WebViewClient requires now a whitelist of urls that can interact with the Java side of the code
         String[] url_whitelist = getServerWhiteList();
         webView.setWebViewClient(new PadLandSaferWebViewClient(url_whitelist) {
-            private boolean done_auth;
+//            private boolean done_auth;
 
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -424,7 +417,6 @@ public class PadViewActivity extends PadLandDataActivity {
                 super.onReceivedError(view, request, error);
                 --webview_http_connections[0];
                 _hideProgressWheel();
-//                Log.d(TAG, "Removed connection " + webview_http_connections[0]);
                 Log.e(TAG, "WebView Error " + error.toString() +", Request: "+ request.toString());
             }
 
@@ -441,7 +433,6 @@ public class PadViewActivity extends PadLandDataActivity {
                 super.onReceivedError(view, errorCode, description, failingUrl);
                 --webview_http_connections[0];
                 _hideProgressWheel();
-//                Log.d(TAG, "Removed connection " + webview_http_connections[0]);
                 Log.e(TAG, "WebView Error ("+errorCode+") " + description +", Request: "+ failingUrl);
             }
 
