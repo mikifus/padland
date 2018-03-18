@@ -87,6 +87,8 @@
     <string name="padinfo_lastuseddate">Last viewed</string>
 
     <string name="newpad_noname_warning">You must specify a name for the document.</string>
+    <string name="newpad_url_name_success">Detected url for known server.</string>
+    <string name="newpad_url_name_warning">Warning: Pad name is a URL but no compatible server has been found.</string>
 
     <string name="padlist_empty_createnew">Create a new document</string>
     <string name="padlist_document_deleted">The selected documents have been deleted</string>
