@@ -1,8 +1,11 @@
 package com.mikifus.padland.SaferWebView;
 
 import android.net.Uri;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.util.Log;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -19,6 +22,17 @@ public class SaferWebViewClient extends WebViewClient {
     public SaferWebViewClient(String[] hostsWhitelist){
         super();
         this.hostsWhitelist = hostsWhitelist;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+        boolean isvalid = isValidHost(request.getUrl().toString());
+        if (isvalid) {
+            return super.shouldInterceptRequest(view, request);
+        } else {
+            return getWebResourceResponseFromString();
+        }
     }
 
     @Override
