@@ -48,4 +48,7 @@ dependencies {
     compile 'com.pnikosis:materialish-progress:1.5'
     //    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
     compile 'com.github.paolorotolo:appintro:4.1.0'
+    // https://mvnrepository.com/artifact/com.unboundid/unboundid-ldapsdk
+//    testCompile group: 'com.unboundid', name: 'unboundid-ldapsdk', version: '4.0.4'
+    compile 'com.unboundid:unboundid-ldapsdk:4.0.4'
 }
