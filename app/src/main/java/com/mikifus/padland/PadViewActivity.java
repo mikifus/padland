@@ -394,20 +394,23 @@ public class PadViewActivity extends PadLandDataActivity {
             @Override
             public void onPageFinished(WebView view, final String url) {
                 super.onPageFinished(view, url);
-                handler.postDelayed(new Runnable() {
-                    public void run() {
-                        --webview_http_connections[0];
-                        Log.d(TAG, "Removed connection " + webview_http_connections[0]);
-
-                        if( webview_http_connections[0] > 0 ) {
-                            // Wait for all of them to end.
-                            return;
-                        }
-                        _hideProgressWheel();
-                        loadJavascriptIfNeeded();
-                    }
-                }, 1200);
+                handler.postDelayed(postAfterFinish, 1200);
             }
+
+            final Runnable postAfterFinish = new Runnable() {
+                public void run() {
+                    --webview_http_connections[0];
+                    Log.d(TAG, "Removed connection " + webview_http_connections[0]);
+
+                    if( webview_http_connections[0] > 0 ) {
+                        // Wait for all of them to end.
+                        handler.postDelayed(postAfterFinish, 1200);
+                        return;
+                    }
+                    _hideProgressWheel();
+                    loadJavascriptIfNeeded();
+                }
+            };
 
             /**
              * API >= 22
@@ -592,6 +595,7 @@ public class PadViewActivity extends PadLandDataActivity {
         webSettings.setBuiltInZoomControls(true);
         webSettings.setDisplayZoomControls(false);
         webSettings.setLoadWithOverviewMode(true);
+        webSettings.setDomStorageEnabled(true); // Required for some NodeJS based code
     }
 
     private void runJavascriptOnView(WebView view, String js_string) {
