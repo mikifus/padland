@@ -44,6 +44,10 @@ public class PadUrl {
         if( local_prefix.isEmpty() ) {
             throw new RuntimeException("The pad url was not correctly built. Check the fconfiguration for this server ("+server+").");
         }
+        // Must end with /
+        if(!local_prefix.endsWith("/")) {
+            local_prefix = local_prefix + "/";
+        }
         return local_prefix;
     }
 
