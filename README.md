@@ -36,6 +36,13 @@ The user can now share an URL to the app in order to open it. Keep in mind that 
 1.3.7
 
 ## Changelog
+### v1.4
+- Fixed a bug for API < 23
+- Full url can be now pasted for pad name and gets automatically parsed
+- Added option to edit pads
+- Allows to assign a local name for pads
+- Allows better NodeJS interaction for compatibility with MyPads
+
 ### v1.3.7
 - Fixed a major bug that didn't allow to create new pads
 - Fixed a bug that didn't allow to select a recently created server as default
