@@ -17,7 +17,7 @@ android {
         applicationId "com.mikifus.padland"
         minSdkVersion 14
         targetSdkVersion 27
-        versionName '1.4'
+        versionName '1.4.1'
         versionCode 17
         multiDexEnabled true
 //        vectorDrawables.useSupportLibrary = true
