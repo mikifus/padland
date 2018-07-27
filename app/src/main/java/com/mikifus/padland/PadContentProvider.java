@@ -132,7 +132,7 @@ public class PadContentProvider extends ContentProvider {
                 Log.d("DELETE_PAD_ID", selection + " - " + selectionArgs.toString() );
                 id = uri.getPathSegments().get(1);
                 db.delete(RELATION_TABLE_NAME, _ID_PAD + " = " + id, new String[0]);
-                count = db.delete(PAD_TABLE_NAME, _ID + " = " + id + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ')' : ""), selectionArgs);
+                count = db.delete(PAD_TABLE_NAME, _ID + " = " + id + (!TextUtils.isEmpty(selection) ? " AND (?)" : ""), selectionArgs);
                 break;
             case PADGROUP_LIST:
                 Log.d(TAG, "delete_padgroup_list: " + selection + " - " + selectionArgs.toString());
@@ -143,7 +143,7 @@ public class PadContentProvider extends ContentProvider {
                 Log.d(TAG, "delete_padgroup_id: " + selection + " - " + selectionArgs.toString());
                 id = uri.getPathSegments().get(1);
                 db.delete(RELATION_TABLE_NAME, _ID_GROUP + " = " + id, new String[0]);
-                count = db.delete(PADGROUP_TABLE_NAME, _ID + " = " + id + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ')' : ""), selectionArgs);
+                count = db.delete(PADGROUP_TABLE_NAME, _ID + " = " + id + (!TextUtils.isEmpty(selection) ? " AND (?)" : ""), selectionArgs);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
@@ -174,7 +174,7 @@ public class PadContentProvider extends ContentProvider {
                 id = uri.getPathSegments().get(1);
                 count = db.update(PAD_TABLE_NAME,
                         values,
-                        _ID +  " = " + id + ( !TextUtils.isEmpty(selection) ? " AND (" + selection + ')' : "" ),
+                        _ID +  " = " + id + ( !TextUtils.isEmpty(selection) ? " AND (?)" : "" ),
                         selectionArgs);
                 break;
             default:
