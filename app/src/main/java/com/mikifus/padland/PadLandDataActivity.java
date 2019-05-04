@@ -164,6 +164,21 @@ public class PadLandDataActivity extends PadLandActivity implements FormDialog.F
         return name;
     }
 
+    public void menu_copy(final ArrayList<String> selectedItems) {
+        StringBuilder copy_string = new StringBuilder();
+        for(String pad_id_string : selectedItems) {
+            Pad Pad = _getPad( Long.parseLong(pad_id_string) );
+            if(copy_string.length() > 0){
+                copy_string.append("\n");
+            }
+            copy_string.append(Pad.getUrl());
+        }
+        android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getBaseContext().getSystemService(Context.CLIPBOARD_SERVICE);
+        android.content.ClipData clip = android.content.ClipData.newPlainText("Pad urls", copy_string);
+        clipboard.setPrimaryClip(clip);
+        Toast.makeText(PadLandDataActivity.this, getString(R.string.copy_copied), Toast.LENGTH_LONG).show();
+    }
+
     public FormDialog menu_edit(final ArrayList<String> selectedItems) {
         FragmentManager fm = getSupportFragmentManager();
         EditPadDialog dialog = new EditPadDialog(getString(R.string.padlist_dialog_edit_pad_title), this);

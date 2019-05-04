@@ -37,6 +37,7 @@
     <string name="settings_save_new_pads_title">Auto-save new documents</string>
     <string name="settings_save_new_pads_desc">Automatically add your newly visited documents to your list</string>
     <string name="group">Add to group</string>
+    <string name="copy">Copy</string>
     <string name="share">Share</string>
     <string name="delete">Delete</string>
     <string name="no_pads">There are no saved documents.</string>
@@ -163,5 +164,6 @@
     <string name="padlist_dialog_edit_pad_title">Edit Pad</string>
     <string name="edit_pad_group">Select group</string>
     <string name="edit">Edit</string>
+    <string name="copy_copied">Copied to clipboard</string>
 
 </resources>
