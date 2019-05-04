@@ -112,4 +112,10 @@
     <string name="error_ssl_untrusted">El certificado SSL no es de confianza</string>
     <string name="ssl_error">Error SSL</string>
     <string name="ssl_learn_more">Mas información</string>
+    <string name="copy">Copiar</string>
+    <string name="copy_copied">Copiado al portapapeles</string>
+    <string name="edit">Editar</string>
+    <string name="edit_pad_group">Seleccionar grupo</string>
+    <string name="edit_pad_local_name">Alias del pad</string>
+    <string name="edit_pad_name">Nombre del pad (URL)</string>
 </resources>

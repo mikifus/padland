@@ -33,9 +33,14 @@ To try your new server create a new pad and choose it. You can make it the defau
 The user can now share an URL to the app in order to open it. Keep in mind that the host server must be previously added, otherwise the URL will be considered unsafe. 
 
 ## Current version
-1.4.1
+1.5
 
 ## Changelog
+### v1.5
+- More SQL injection fixes.
+- Added pad URL copy function
+- Dropped support for piratepad.net
+
 ### v1.4.1
 - Fixed an unnoticed SQL injection security issue 
 
