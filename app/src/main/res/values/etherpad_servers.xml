@@ -5,7 +5,7 @@
         <item>Etherpad.net</item>
         <item>Titanpad.com</item>
         <item>Meeting Words</item>
-        <item>Piratepad</item>
+        <!--<item>Piratepad</item>-->
         <item>Mozilla Etherpad</item>
         <item>Framapad.org</item>
         <item>Primarypad</item>
@@ -17,7 +17,7 @@
         <item>https://etherpad.net/</item>
         <item>https://titanpad.com</item>
         <item>http://meetingwords.com</item>
-        <item>http://piratepad.net</item>
+        <!--<item>http://piratepad.net</item>-->
         <item>http://public.etherpad-mozilla.org</item>
         <item>https://mensuel.framapad.org</item>
         <item>http://free.primarypad.com</item>
@@ -29,7 +29,7 @@
         <item>https://etherpad.net/p/</item>
         <item>https://titanpad.com/</item>
         <item>http://meetingwords.com/</item>
-        <item>http://piratepad.net/</item>
+        <!--<item>http://piratepad.net/</item>-->
         <item>http://public.etherpad-mozilla.org/p/</item>
         <item>https://mensuel.framapad.org/p/</item>
         <item>http://free.primarypad.com/p/</item>
@@ -41,7 +41,7 @@
         <item>etherpad.net</item>
         <item>titanpad.com</item>
         <item>meetingwords.com</item>
-        <item>piratepad.net</item>
+        <!--<item>piratepad.net</item>-->
         <item>public.etherpad-mozilla.org</item>
 
         <item>quotidien.framapad.org</item>
@@ -61,6 +61,6 @@
         <item>public.etherpad-mozilla.org</item>
         <item>mensuel.framapad.org</item>
         <item>free.primarypad.com</item>
-        <item>piratenpad.de</item>
+        <!--<item>piratenpad.de</item>-->
     </string-array>
 </resources>
