@@ -6,16 +6,20 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.mikifus.padland.Models.PadGroupModel;
 import com.mikifus.padland.Models.PadModel;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -121,6 +125,7 @@ public class PadContentProvider extends ContentProvider {
         Log.d("DELETE_QUERY", selection + " - " + selectionArgs.toString());
 
         String id;
+        ArrayList<String> query;
 
         switch (uriMatcher.match(uri)){
             case PADLIST:
@@ -129,21 +134,25 @@ public class PadContentProvider extends ContentProvider {
                 count = db.delete(PAD_TABLE_NAME, selection, selectionArgs);
                 break;
             case PAD_ID:
-                Log.d("DELETE_PAD_ID", selection + " - " + selectionArgs.toString() );
+                Log.d("DELETE_PAD_ID", selection + " - " + Arrays.toString(selectionArgs));
                 id = uri.getPathSegments().get(1);
-                db.delete(RELATION_TABLE_NAME, _ID_PAD + " = " + id, new String[0]);
-                count = db.delete(PAD_TABLE_NAME, _ID + " = " + id + (!TextUtils.isEmpty(selection) ? " AND (?)" : ""), selectionArgs);
+                query = new ArrayList<>(Arrays.asList(selectionArgs));
+                query.add(0, id);
+                db.delete(RELATION_TABLE_NAME, _ID_PAD + " = ?", new String[0]);
+                count = db.delete(PAD_TABLE_NAME, _ID + " = ?" + (!TextUtils.isEmpty(selection) ? " AND (?)" : ""), (String[]) query.toArray());
                 break;
             case PADGROUP_LIST:
-                Log.d(TAG, "delete_padgroup_list: " + selection + " - " + selectionArgs.toString());
+                Log.d(TAG, "delete_padgroup_list: " + selection + " - " + Arrays.toString(selectionArgs));
                 db.delete(RELATION_TABLE_NAME, _ID_GROUP + " =?", selectionArgs);
                 count = db.delete(PADGROUP_TABLE_NAME, selection, selectionArgs);
                 break;
             case PADGROUP_ID:
-                Log.d(TAG, "delete_padgroup_id: " + selection + " - " + selectionArgs.toString());
+                Log.d(TAG, "delete_padgroup_id: " + selection + " - " + Arrays.toString(selectionArgs));
                 id = uri.getPathSegments().get(1);
-                db.delete(RELATION_TABLE_NAME, _ID_GROUP + " = " + id, new String[0]);
-                count = db.delete(PADGROUP_TABLE_NAME, _ID + " = " + id + (!TextUtils.isEmpty(selection) ? " AND (?)" : ""), selectionArgs);
+                query = new ArrayList<>(Arrays.asList(selectionArgs));
+                query.add(0, id);
+                db.delete(RELATION_TABLE_NAME, _ID_GROUP + " = ?", new String[0]);
+                count = db.delete(PADGROUP_TABLE_NAME, _ID + " = ?" + (!TextUtils.isEmpty(selection) ? " AND (?)" : ""), (String[]) query.toArray());
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
@@ -164,18 +173,21 @@ public class PadContentProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         Log.d("PAD_UPDATE", uri.toString() );
-        int count = 0;
+        int count;
         String id;
+        ArrayList<String> query;
         switch ( uriMatcher.match(uri) ){
             case PADLIST:
                 count = db.update(PAD_TABLE_NAME, values, selection, selectionArgs);
                 break;
             case PAD_ID:
                 id = uri.getPathSegments().get(1);
+                query = new ArrayList<>(Arrays.asList(selectionArgs));
+                query.add(0, id);
                 count = db.update(PAD_TABLE_NAME,
                         values,
-                        _ID +  " = " + id + ( !TextUtils.isEmpty(selection) ? " AND (?)" : "" ),
-                        selectionArgs);
+                        _ID +  " = ?" + ( !TextUtils.isEmpty(selection) ? " AND (?)" : "" ),
+                        (String[]) query.toArray());
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri );
@@ -245,7 +257,7 @@ public class PadContentProvider extends ContentProvider {
      * @return
      */
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+    public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 
@@ -256,7 +268,7 @@ public class PadContentProvider extends ContentProvider {
                 break;
             case PAD_ID:
                 qb.setTables(PAD_TABLE_NAME);
-                qb.appendWhere(_ID + "=" + uri.getPathSegments().get(1));
+                qb.appendWhere(_ID + "=" + DatabaseUtils.sqlEscapeString(uri.getPathSegments().get(1)));
                 break;
             case PADGROUP_LIST:
                 qb.setTables(PADGROUP_TABLE_NAME);
