@@ -121,6 +121,10 @@ public class PadInfoActivity extends PadLandDataActivity {
                 Log.d("MENU_SHARE", String.valueOf(pad_id) );
                 menu_share( pad_list );
                 break;
+            case R.id.menuitem_copy:
+                Log.d("MENU_SHARE", String.valueOf(pad_id) );
+                menu_copy( pad_list );
+                break;
             case R.id.menuitem_delete:
                 Log.d("MENU_DELETE", String.valueOf(pad_id) );
                 AskDelete( pad_list );

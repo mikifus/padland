@@ -462,6 +462,11 @@ public class PadListActivity extends PadLandDataActivity
                 // Action picked, so close the CAB
                 mode.finish();
                 return true;
+            case R.id.menuitem_copy:
+                menu_copy(getCheckedItemIds());
+                // Action picked, so close the CAB
+                mode.finish();
+                return true;
             case R.id.menuitem_edit:
                 menu_edit(getCheckedItemIds());
                 // Action picked, so close the CAB

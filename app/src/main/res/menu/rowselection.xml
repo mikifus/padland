@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <item android:id="@+id/menuitem_group"
-        android:title="@string/share"
+        android:title="@string/group"
         android:icon="@drawable/ic_group_add_inverted" />
+    <item android:id="@+id/menuitem_copy"
+        android:title="@string/copy"
+        android:icon="@drawable/ic_content_copy_inverted" />
     <item android:id="@+id/menuitem_edit"
         android:title="@string/edit"
         android:icon="@drawable/ic_edit_inverted" />
