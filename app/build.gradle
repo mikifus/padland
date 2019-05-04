@@ -11,12 +11,12 @@ android {
         abortOnError false
         disable 'InvalidPackage'
     }
-    compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
     defaultConfig {
         applicationId "com.mikifus.padland"
         minSdkVersion 14
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionName '1.4.1'
         versionCode 18
         multiDexEnabled true
@@ -43,8 +43,8 @@ android {
 }
 
 dependencies {
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:design:27.1.1'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:design:28.0.0'
     implementation 'com.pnikosis:materialish-progress:1.5'
     //    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
     implementation 'com.github.paolorotolo:appintro:4.1.0'
