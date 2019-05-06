@@ -198,7 +198,7 @@
             android:name="com.mikifus.padland.PadContentProvider"
             android:authorities="com.mikifus.padland.padlandcontentprovider"
             android:enabled="true"
-            android:exported="true" >
+            android:exported="false" >
         </provider>
     </application>
 
