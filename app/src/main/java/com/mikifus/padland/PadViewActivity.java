@@ -114,6 +114,12 @@ public class PadViewActivity extends PadLandDataActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Intent myIntent = getIntent();
+        if (myIntent.getExtras() == null) {
+            finish();
+            return;
+        }
+
         // Checks if the url is a valid pad
         this._makePadUrl();
 
