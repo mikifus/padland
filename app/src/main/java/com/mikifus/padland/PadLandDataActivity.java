@@ -422,7 +422,7 @@ public class PadLandDataActivity extends PadLandActivity implements FormDialog.F
             return this._getPadFromDatabase(PadModel.URL, padUrl);
         }
 
-        public long getNowDate() {
+        public static long getNowDate() {
             return PadContentProvider.getNowDate();
         }
 
