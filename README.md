@@ -33,15 +33,15 @@ To try your new server create a new pad and choose it. You can make it the defau
 The user can now share an URL to the app in order to open it. Keep in mind that the host server must be previously added, otherwise the URL will be considered unsafe. 
 
 ## Current version
-1.5
+1.6
 
 ## Changelog
 ### v1.6
 - Dropped support for the following server (you can add them manually):
--- Etherpad.net
--- Titanpad.com
--- Meetingwords.com
--- Piratenpad.de
+  - Etherpad.net
+  - Titanpad.com
+  - Meetingwords.com
+  - Piratenpad.de
 
 ### v1.5
 - More SQL injection fixes.
