@@ -36,6 +36,13 @@ The user can now share an URL to the app in order to open it. Keep in mind that 
 1.5
 
 ## Changelog
+### v1.6
+- Dropped support for the following server (you can add them manually):
+-- Etherpad.net
+-- Titanpad.com
+-- Meetingwords.com
+-- Piratenpad.de
+
 ### v1.5
 - More SQL injection fixes.
 - Added pad URL copy function
