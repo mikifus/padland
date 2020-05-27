@@ -125,8 +125,6 @@ public class PadViewActivity extends PadLandDataActivity {
 
         handler = new Handler();
 
-        titanPadCheck();
-
         // If no network...
         if (!isNetworkAvailable()) {
             Toast.makeText(this, getString(R.string.network_is_unreachable), Toast.LENGTH_LONG).show();
@@ -149,29 +147,6 @@ public class PadViewActivity extends PadLandDataActivity {
 
         // Load it!
         loadUrl(current_padUrl);
-    }
-
-    /**
-     * This class must be removed in the future (2018) along with
-     * titanpad.com support.
-     */
-    private void titanPadCheck() {
-        Pad PadData = this._getPadData();
-        if( ! PadData.getServer().equals("https://titanpad.com") ) {
-            return;
-        }
-        AlertDialog.Builder builder = new AlertDialog.Builder(PadViewActivity.this);
-        builder.setTitle(R.string.titanpad_deprecated_title);
-        builder.setMessage(R.string.titanpad_deprecated_text);
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
-        Dialog alertDialog = builder.create();
-        alertDialog.setCanceledOnTouchOutside(true);
-        alertDialog.show();
-
     }
 
     @Override
@@ -571,7 +546,7 @@ public class PadViewActivity extends PadLandDataActivity {
 
         // If using jQuery, here is called the pad load
         runJavascriptOnView(webView, "start('" + current_padUrl + "', '" + default_username + "', '" + default_color + "' );");
-        javascript_padViewResize();
+//        javascript_padViewResize();
     }
 
     /**
@@ -745,9 +720,9 @@ public class PadViewActivity extends PadLandDataActivity {
                     return;
                 }
 
-                if(supportsJquery(current_padUrl)) {
-                    javascript_padViewResize();
-                }
+//                if(supportsJquery(current_padUrl)) {
+//                    javascript_padViewResize();
+//                }
             }
         });
         webView.setWebChromeClient(new WebChromeClient() {
