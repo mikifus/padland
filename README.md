@@ -18,11 +18,10 @@ More translations are still needed as well as spell checking and keeping the cur
 
 ## Custom servers
 
-This features allows the user to add a custom server like "something.titanpad.com" or "pad.myserver.com". It doesn't replace the default servers, it adds customization.
+This features allows the user to add a custom server like "pad.myserver.com". It doesn't replace the default servers, it adds customization.
 
 The feature is found in the settings menu as "Server list". The New server dialog will promp when the button is pressed. The server name is just an arbitrary name for the user.
 The url must be something like "https://examplehost.com". No more and no less info than the protocol and the host.
-The user will be requested to choose whether the server runs Etherpad Lite or not. Most servers do, but titanpad.com doesn't, for example. Use the Advanced Options combined with the Etherpad Lite checkbox to understand them.
 
 To try your new server create a new pad and choose it. You can make it the default option in the settings menu.
 
@@ -33,9 +32,13 @@ To try your new server create a new pad and choose it. You can make it the defau
 The user can now share an URL to the app in order to open it. Keep in mind that the host server must be previously added, otherwise the URL will be considered unsafe. 
 
 ## Current version
-1.6
+1.7
 
 ## Changelog
+### v1.7
+- Dropped support for PrimaryPad:
+- Removed old workarounds and hacks to correctly display Etherpad-based documents.
+
 ### v1.6
 - Dropped support for the following server (you can add them manually):
   - Etherpad.net
