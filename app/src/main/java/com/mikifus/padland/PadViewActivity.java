@@ -1,6 +1,5 @@
 package com.mikifus.padland;
 
-import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
@@ -25,10 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.CookieManager;
 import android.webkit.HttpAuthHandler;
-import android.webkit.JavascriptInterface;
 import android.webkit.SslErrorHandler;
-import android.webkit.ValueCallback;
-import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
@@ -70,40 +66,6 @@ public class PadViewActivity extends PadLandDataActivity {
     Progress wheel is a fancy alternative to the ProgressBar, that wasn't working at all.
      */
     private ProgressWheel pwheel;
-
-    /*
-    Let me know when it is ready, please, I need it.
-     */
-    private boolean javascriptIsReady = false;
-
-    /*
-    Maximum size for the webView, it is quite complicated
-     */
-    private int max_viewport_size = 400;
-
-    /**
-     * Local class to handle the Javascript onLoad callback
-     */
-    final class JavascriptCallbackHandler {
-        /**
-         * Gets called from Javascript
-         */
-        @JavascriptInterface
-        public void onLoad() {
-        }
-
-        @JavascriptInterface
-        public void onIframeLoaded() {
-            // Must run on ui thread (async)
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Log.d(TAG, "onIframeLoaded");
-//                    _hideProgressWheel();
-                }
-            });
-        }
-    }
 
     /**
      * onCreate override
@@ -161,17 +123,6 @@ public class PadViewActivity extends PadLandDataActivity {
     private void _loadProgressWheel() {
         pwheel = findViewById(R.id.progress_wheel);
         pwheel.spin();
-    }
-
-    private void _setProgressWheelProgress(int progress) {
-        float p = progress / 100;
-
-        if( webview_http_connections[0] > 0 ) {
-            p = p / webview_http_connections[0];
-        }
-
-        Log.d("LOAD_PROGRESS_LOG", String.valueOf(progress));
-        pwheel.setProgress(p);
     }
 
     public void _showProgressWheel() {
@@ -382,7 +333,7 @@ public class PadViewActivity extends PadLandDataActivity {
                         return;
                     }
                     _hideProgressWheel();
-                    loadJavascriptIfNeeded();
+//                    loadJavascriptIfNeeded();
                 }
             };
 
@@ -486,8 +437,6 @@ public class PadViewActivity extends PadLandDataActivity {
             }
         });
         this._makeWebSettings(webView);
-        this._addListenersToView();
-        this._addJavascriptOnLoad(webView);
         return webView;
     }
 
@@ -533,22 +482,6 @@ public class PadViewActivity extends PadLandDataActivity {
         }
     }
 
-    private void loadJavascriptIfNeeded() {
-        if( ! supportsJquery(current_padUrl) ){
-            return;
-        }
-        javascriptIsReady = true;
-
-        Context context = getApplicationContext();
-        SharedPreferences userDetails = context.getSharedPreferences(getPackageName() + "_preferences", context.MODE_PRIVATE);
-        String default_username = userDetails.getString("padland_default_username", "PadLand Viewer User");
-        String default_color = userDetails.getString("padland_default_color", "#555");
-
-        // If using jQuery, here is called the pad load
-        runJavascriptOnView(webView, "start('" + current_padUrl + "', '" + default_username + "', '" + default_color + "' );");
-//        javascript_padViewResize();
-    }
-
     /**
      * Enables the required settings and features for the webview
      *
@@ -568,30 +501,6 @@ public class PadViewActivity extends PadLandDataActivity {
         webSettings.setDisplayZoomControls(false);
         webSettings.setLoadWithOverviewMode(true);
         webSettings.setDomStorageEnabled(true); // Required for some NodeJS based code
-    }
-
-    private void runJavascriptOnView(WebView view, String js_string) {
-        runJavascriptOnView(view, js_string, false);
-    }
-
-    private void runJavascriptOnView(WebView view, String js_string, Boolean force) {
-        if (!force && !javascriptIsReady) {
-            // If javascript is not ready better not to break anything
-//            Log.d("LOAD_PROGRESS_LOG", "JS call has been interrupted: " + js_string);
-            return;
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            // In KitKat+ you should use the evaluateJavascript method
-            view.evaluateJavascript(js_string, new ValueCallback<String>() {
-                @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-                @Override
-                public void onReceiveValue(String s) {
-                    //Log.d("onLoadCompleted", "Feedback test.");
-                }
-            });
-        } else {
-            view.loadUrl("javascript:" + js_string);
-        }
     }
 
     /**
@@ -646,28 +555,7 @@ public class PadViewActivity extends PadLandDataActivity {
      * @param url
      */
     public void loadUrl(String url) {
-        if( supportsJquery(url) ) {
-            current_padUrl = url;
-            webView.loadUrl("file:///android_asset/PadView.html");
-        }
         webView.loadUrl(url);
-    }
-
-    /**
-     * Etherpad Lite can be loaded wit jQuery.
-     *
-     * @param url
-     * @return
-     */
-    private boolean supportsJquery(String url) {
-        String[] support_jquery = getResources().getStringArray(R.array.etherpad_servers_supports_jquery);
-        final String host = Uri.parse(url).getHost();
-        for (String supported_host : support_jquery){
-            if ( supported_host.equalsIgnoreCase(host) ){
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
@@ -706,91 +594,6 @@ public class PadViewActivity extends PadLandDataActivity {
 
     private String getCurrentPadUrl() {
         return current_padUrl;
-    }
-
-    private void _addListenersToView() {
-        webView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-
-            @Override
-            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight,
-                                       int oldBottom) {
-                // its possible that the layout is not complete in which case
-                // we will get all zero values for the positions, so ignore the event
-                if (left == 0 && top == 0 && right == 0 && bottom == 0) {
-                    return;
-                }
-
-//                if(supportsJquery(current_padUrl)) {
-//                    javascript_padViewResize();
-//                }
-            }
-        });
-        webView.setWebChromeClient(new WebChromeClient() {
-            public void onProgressChanged(WebView view, int progress) {
-                _setProgressWheelProgress(progress);
-            }
-        });
-    }
-
-    /**
-     * With a JavsascriptInterface I manage to call functions when the page loads
-     *
-     * @param webView
-     */
-    private void _addJavascriptOnLoad(WebView webView) {
-        webView.addJavascriptInterface(new JavascriptCallbackHandler(), "webviewScriptAPI");
-        /*
-        String fulljs = "(\n    function() { \n";
-        fulljs += "        window.onload = function() {\n";
-        fulljs += "            webviewScriptAPI.onLoad();\n";
-        fulljs += "        };\n";
-        fulljs += "    })()\n";
-        runJavascriptOnView(webView, fulljs, true); // Forced
-        */
-    }
-
-    private void javascript_padViewResize() {
-
-
-        //runJavascriptOnView(webView, "PadViewResize(" + getResources().getDisplayMetrics().widthPixels + ", " + getResources().getDisplayMetrics().heightPixels + ")");
-        int local_max_viewport_size = max_viewport_size;
-        int w;
-        int h;
-        //int current_w = getResources().getDisplayMetrics().widthPixels;
-        //int current_h = getResources().getDisplayMetrics().heightPixels;
-        int current_w = webView.getMeasuredWidth();
-        int current_h = webView.getMeasuredHeight();
-
-        if( getResources().getDisplayMetrics().widthPixels < max_viewport_size )
-        {
-            local_max_viewport_size = 300; // Fallback for small screens
-        }
-        double ratio = current_h / (double) current_w;
-
-        if( current_h > current_w ) // vertical
-        {
-            w = local_max_viewport_size;
-            h = (int) Math.floor(local_max_viewport_size * ratio);
-        }
-        else // horizontal
-        {
-            h = local_max_viewport_size;
-            w = (int) Math.floor(local_max_viewport_size / ratio);
-        }
-
-        Log.d("RESIZE", "old w: " + current_w + ", h: " + current_h + " ratio: " + ratio);
-        Log.d("RESIZE", "new w: " + w + ", h: " + h);
-
-
-        runJavascriptOnView(webView, "PadViewResize("+w+","+h+")");
-    }
-
-    private void downloadPadWithJavascriptIfPossible() {
-        if( ! supportsJquery(current_padUrl) ){
-            return;
-        }
-        // TODO: Implement this:
-        // runJavascriptOnView(webView, "$('#examplePadBasic').pad({'getContents':'exampleGetContents'});");
     }
 
     /**
