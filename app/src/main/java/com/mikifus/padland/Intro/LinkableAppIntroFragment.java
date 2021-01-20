@@ -1,8 +1,7 @@
 package com.mikifus.padland.Intro;
 
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
