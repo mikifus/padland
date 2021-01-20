@@ -31,7 +31,7 @@
         android:gravity="right"
         android:orientation="horizontal">
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_group_add_inverted"
@@ -42,7 +42,7 @@
             android:layout_marginEnd="@dimen/action_button_margin"
             android:elevation="6dp" />
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_document_add_inverted"

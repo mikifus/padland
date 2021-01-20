@@ -2,7 +2,7 @@ package com.mikifus.padland.SaferWebView;
 
 import android.net.Uri;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.WebResourceRequest;

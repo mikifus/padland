@@ -2,7 +2,7 @@ package com.mikifus.padland.Adapters;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.util.SparseArray;
 import android.util.SparseBooleanArray;
