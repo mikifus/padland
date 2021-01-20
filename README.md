@@ -7,10 +7,11 @@ Padland is a tool to manage, share, remember and read collaborative documents ba
 <a href='https://play.google.com/store/apps/details?id=com.mikifus.padland'>
 <img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'  height="90" /></a>
 
-![Introduction screenshot 1](docs/Screenshot_1.png)
-![Introduction screenshot 2](docs/Screenshot_2.png)
-![Introduction screenshot 4](docs/Screenshot_4.png)
-![Introduction screenshot 5](docs/Screenshot_5.png)
+![Introduction screenshot 1](fastlane/metadata/android/en-US/images/phoneScreenshots/1.png)
+![Introduction screenshot 2](fastlane/metadata/android/en-US/images/phoneScreenshots/2.png)
+![Introduction screenshot 3](fastlane/metadata/android/en-US/images/phoneScreenshots/3.png)
+![Introduction screenshot 4](fastlane/metadata/android/en-US/images/phoneScreenshots/4.png)
+![Introduction screenshot 5](fastlane/metadata/android/en-US/images/phoneScreenshots/5.png)
 
 ## Translations
 Thanks to all the volunteers that already contributed!
