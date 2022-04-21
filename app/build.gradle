@@ -9,7 +9,7 @@ android {
     defaultConfig {
         applicationId "com.mikifus.padland"
         minSdkVersion 14
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionName '1.9'
         versionCode 24
         multiDexEnabled true
