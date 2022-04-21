@@ -5,14 +5,7 @@ android {
         release {
         }
     }
-    lintOptions {
-        // F-droid build requires this
-        checkReleaseBuilds false
-        abortOnError false
-        disable 'InvalidPackage'
-    }
-    compileSdkVersion 29
-    buildToolsVersion '29.0.3'
+    compileSdkVersion 31
     defaultConfig {
         applicationId "com.mikifus.padland"
         minSdkVersion 14
@@ -35,7 +28,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    productFlavors {
+    lint {
+        abortOnError false
+        checkReleaseBuilds false
+        disable 'InvalidPackage'
     }
     defaultConfig {
         vectorDrawables.useSupportLibrary = true
@@ -45,6 +41,6 @@ android {
 dependencies {
     implementation 'com.pnikosis:materialish-progress:1.5'
     implementation 'com.github.paolorotolo:appintro:4.1.0'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation 'com.google.android.material:material:1.5.0'
 }

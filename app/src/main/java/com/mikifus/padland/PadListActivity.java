@@ -26,7 +26,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.fragment.app.FragmentManager;
 import android.text.ClipboardManager;
 import android.util.Log;
 import android.util.SparseBooleanArray;
@@ -39,6 +38,8 @@ import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import androidx.fragment.app.FragmentManager;
 
 import com.mikifus.padland.Adapters.PadListAdapter;
 import com.mikifus.padland.Dialog.NewPadGroup;
@@ -148,33 +149,20 @@ public class PadListActivity extends PadLandDataActivity
         }
     }
 
-    /**
-     * If there is an intent with "action", here it is processed
-     * For now there is only the delete action.
-     *
-     * TODO: Refactor this, there is no need for it to be an intent if it only deletes
-     */
     private void _actionFromIntent() {
-        String action = getIntent().getStringExtra("action");
-        ArrayList<String> pad_id_list = getIntent().getStringArrayListExtra("pad_id");
-        if (action != null && pad_id_list.size() > 0) {
-            Log.d("DELETE_PAD_INTENT", "list: " + pad_id_list.toString());
-            switch (action) {
-                case "delete":
-                    for(int i = 0 ; i < pad_id_list.size(); i++)
-                    {
-                        Log.d("DELETE_PAD_INTENT", "action: " + action + " list_get: " + pad_id_list.get(i));
-                        boolean result = padlistDb.deletePad(Long.parseLong(pad_id_list.get(i)));
-                        if (result) {
-                            Toast.makeText(this, getString(R.string.padlist_document_deleted), Toast.LENGTH_LONG).show();
-                        }
-                    }
-                    break;
-            }
+    }
+
+    /**
+     * Override _deletePad() to let the adapter know about the
+     * changes.
+     *
+     * @param pad_id_list
+     */
+    public void _deletePad(ArrayList<String> pad_id_list) {
+        super._deletePad(pad_id_list);
+        if( adapter != null ) {
+            adapter.notifyDataSetChanged();
         }
-//        if( adapter != null ) {
-//            adapter.notifyDataSetChanged();
-//        }
     }
 
     private void _detectItemFocus() {
