@@ -33,11 +33,14 @@ To try your new server create a new pad and choose it. You can make it the defau
 The user can now share an URL to the app in order to open it. Keep in mind that the host server must be previously added, otherwise the URL will be considered unsafe. 
 
 ## Current version
-1.7
+1.9
 
 ## Changelog
+### v1.9
+- Fixed a vulnerability.
+
 ### v1.7
-- Dropped support for PrimaryPad:
+- Dropped support for PrimaryPad.
 - Removed old workarounds and hacks to correctly display Etherpad-based documents.
 
 ### v1.6
