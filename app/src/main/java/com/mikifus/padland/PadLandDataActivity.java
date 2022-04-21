@@ -116,15 +116,8 @@ public class PadLandDataActivity extends PadLandActivity implements FormDialog.F
                 .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        // TODO: Delete without an intent and call notofydatasetchanged or specify a callback
-                        Bundle extra = new Bundle();
-                        extra.putString("action", "delete");
-                        extra.putStringArrayList("pad_id", selectedItems);
-                        Intent intent = new Intent(getBaseContext(), PadListActivity.class);
-                        intent.putExtras(extra);
-                        activity.startActivity(intent);
+                        _deletePad(selectedItems);
                         dialog.dismiss();
-                        finish();
                     }
 
                 })
@@ -136,6 +129,24 @@ public class PadLandDataActivity extends PadLandActivity implements FormDialog.F
                 .create();
         DeleteDialogBox.show();
         return DeleteDialogBox;
+    }
+
+    /**
+     * Delete a pad list when selected.
+     *
+     * @param pad_id_list
+     */
+    public void _deletePad(ArrayList<String> pad_id_list) {
+        if (pad_id_list.size() > 0) {
+            for(int i = 0 ; i < pad_id_list.size(); i++)
+            {
+                Log.d("DELETE_PAD", "list_get: " + pad_id_list.get(i));
+                boolean result = padlistDb.deletePad(Long.parseLong(pad_id_list.get(i)));
+                if (result) {
+                    Toast.makeText(this, getString(R.string.padlist_document_deleted), Toast.LENGTH_LONG).show();
+                }
+            }
+        }
     }
 
     /**
