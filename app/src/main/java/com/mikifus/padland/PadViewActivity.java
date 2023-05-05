@@ -83,7 +83,10 @@ public class PadViewActivity extends PadLandDataActivity {
         }
 
         // Checks if the url is a valid pad
-        this._makePadUrl();
+        if (!this._makePadUrl()) {
+            finish();
+            return;
+        }
 
         handler = new Handler();
 
@@ -146,12 +149,12 @@ public class PadViewActivity extends PadLandDataActivity {
      * Gets the pad data from the environment.
      * If the URL is not valid then the activity can't continue.
      */
-    private void _makePadUrl() {
+    private boolean _makePadUrl() {
         Pad PadData = this._getPadData();
 
-        if( ! WhiteListMatcher.checkValidUrl(PadData.getUrl()) ) {
+        if (PadData == null || !WhiteListMatcher.checkValidUrl(PadData.getUrl()) ) {
             Toast.makeText(this, getString(R.string.padview_toast_invalid_url), Toast.LENGTH_SHORT).show();
-            finish();
+            return false;
         }
         if( ! WhiteListMatcher.isValidHost(PadData.getUrl(), getServerWhiteList()) ) {
             Toast.makeText(this, getString(R.string.padview_toast_blacklist_url), Toast.LENGTH_SHORT).show();
@@ -165,13 +168,11 @@ public class PadViewActivity extends PadLandDataActivity {
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             i.setData(Uri.parse(PadData.getUrl()));
-            finish();
             startActivity(Intent.createChooser(i, getString(R.string.padview_toast_blacklist_url)));
-            return;
+            return false;
         }
-
-
         current_padUrl = PadData.getUrl();
+        return true;
     }
 
     /**
@@ -240,8 +241,11 @@ public class PadViewActivity extends PadLandDataActivity {
         }
 
         Pad PadData = this._getPadDataFromIntent();
-        Cursor c = padlistDb._getPadByUrl(PadData.getUrl());
+        if (PadData == null) {
+            return 0;
+        }
 
+        Cursor c = padlistDb._getPadByUrl(PadData.getUrl());
         if (c != null && c.getCount() > 0) {
             c.moveToFirst();
             long id = c.getLong(0);
@@ -513,26 +517,36 @@ public class PadViewActivity extends PadLandDataActivity {
      * @return
      */
     public Pad makePadData(String padName, String padLocalName, String padServer, String padUrl) {
-        if (padUrl == null || padUrl.isEmpty()) {
-            if (padName == null || padName.isEmpty()) {
-                return null;
-            }
-            if (padLocalName == null || padLocalName.isEmpty()) {
-                padLocalName = padName;
-            }
+        // Since the format of parameter is uncontrollable, use try-catch block to avoid exception
+        try {
             if (padUrl == null || padUrl.isEmpty()) {
+                if (padName == null || padName.isEmpty()) {
+                    return null;
+                }
+                if (padLocalName == null || padLocalName.isEmpty()) {
+                    padLocalName = padName;
+                }
+                // Condition "padUrl == null || padUrl.isEmpty()" is always true
+                // if (padUrl == null || padUrl.isEmpty()) {
                 padUrl = padServer + padName;
-            }
-            if (padServer == null || padServer.isEmpty()) {
+                // }
+                if (padServer == null || padServer.isEmpty()) {
+                    padServer = padUrl.replace(padName, "");
+                }
+            } else if (padName == null && padServer == null) {
+                // Since the format of padUrl is uncontrollable, the following code
+                // may produce StringIndexOutOfBoundsException
+                padName = padUrl.substring(padUrl.lastIndexOf("/") + 1);
+                padServer = padUrl.substring(0, padUrl.lastIndexOf("/"));
+            } else if (padName.isEmpty()) {
+                padName = padUrl.replace(padServer, "");
+            } else if (padServer.isEmpty()) {
                 padServer = padUrl.replace(padName, "");
             }
-        } else if (padName == null && padServer == null) {
-            padName = padUrl.substring(padUrl.lastIndexOf("/") + 1);
-            padServer = padUrl.substring(0, padUrl.lastIndexOf("/"));
-        } else if (padName.isEmpty()) {
-            padName = padUrl.replace(padServer, "");
-        } else if (padServer.isEmpty()) {
-            padServer = padUrl.replace(padName, "");
+        } catch (Exception e) {
+            // Any exception is related to the format error of parameters
+            e.printStackTrace();
+            return null;
         }
 
         String[] columns = PadContentProvider.getPadFieldsList();
