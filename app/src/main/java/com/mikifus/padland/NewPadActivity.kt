@@ -1,5 +1,6 @@
 package com.mikifus.padland
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -23,11 +24,11 @@ import java.util.Arrays
  *
  * @author mikifus
  */
-class NewPadActivity : PadLandActivity() {
-    protected var server_list: Array<String?>
-    protected var server_url_list: Array<String?>?
-    protected var server_url_prefixed_list: Array<String?>?
-    protected var serverModel: ServerModel? = null
+open class NewPadActivity : PadLandActivity() {
+    private var serverList: Array<String?> = spinnerValueList
+    protected var serverUrlList: Array<String?>? = null
+    private var serverUrlPrefixedList: Array<String?>? = null
+    private var serverModel: ServerModel? = null
 
     /**
      * onCreate override
@@ -36,10 +37,9 @@ class NewPadActivity : PadLandActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_newpad)
-        server_list = spinnerValueList
         serverModel = ServerModel(this)
-        server_url_list = serverModel!!.getServerUrlList(this@NewPadActivity)
-        server_url_prefixed_list = serverModel!!.getServerUrlPrefixList(this)
+        serverUrlList = serverModel!!.getServerUrlList(this@NewPadActivity)
+        serverUrlPrefixedList = serverModel!!.getServerUrlPrefixList(this)
         _setViewEvents()
         _setSpinnerValues()
         _setSpinnerDefaultValue()
@@ -56,17 +56,14 @@ class NewPadActivity : PadLandActivity() {
                     val uri = Uri.parse(name)
                     val padServer = uri.scheme + "://" + uri.host
                     val padName = uri.lastPathSegment
-                    var c = 0
-                    for (serverUrl in server_url_list!!) {
+                    for ((c, serverUrl) in serverUrlList!!.withIndex()) {
                         if (serverUrl == padServer) {
                             nameInput.setText(padName)
                             val spinner = findViewById<Spinner>(R.id.spinner)
-                            https@ //etherpad.wikimedia.org/p/anabelle
                             spinner.setSelection(c)
                             Toast.makeText(this@NewPadActivity, getString(R.string.newpad_url_name_success), Toast.LENGTH_LONG).show()
                             return
                         }
-                        c++
                     }
                     Toast.makeText(this@NewPadActivity, getString(R.string.newpad_url_name_warning), Toast.LENGTH_LONG).show()
                 }
@@ -82,23 +79,23 @@ class NewPadActivity : PadLandActivity() {
      * @return String[]
      */
     private val spinnerValueList: Array<String?>
-        private get() {
-            val server_list: Array<String?>
+        get() {
+            val serverList: Array<String?>
             // Load the custom servers
             val serverModel = ServerModel(this)
-            val custom_servers = serverModel.enabledServerList
-            val server_names = ArrayList<String?>()
-            for (server in custom_servers!!) {
-                server_names.add(server.getName())
+            val customServers = serverModel.enabledServerList
+            val serverNames = ArrayList<String?>()
+            for (server in customServers) {
+                serverNames.add(server.name)
             }
 
             // Server list to provide a fallback value
 //        server_list.getResources().getStringArray( R.array.etherpad_servers_name );
             val collection: MutableCollection<String?> = ArrayList()
-            collection.addAll(server_names)
-            collection.addAll(Arrays.asList(*resources.getStringArray(R.array.etherpad_servers_name)))
-            server_list = collection.toTypedArray()
-            return server_list
+            collection.addAll(serverNames)
+            collection.addAll(listOf(*resources.getStringArray(R.array.etherpad_servers_name)))
+            serverList = collection.toTypedArray()
+            return serverList
         }
 
     /**
@@ -106,11 +103,9 @@ class NewPadActivity : PadLandActivity() {
      */
     private fun _setSpinnerValues() {
         val spinner = findViewById<View>(R.id.spinner) as Spinner
-        if (spinner != null) {
-            //selected item will look like a spinner set from XML
-            val spinnerArrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, server_list)
-            spinner.adapter = spinnerArrayAdapter
-        }
+        //selected item will look like a spinner set from XML
+        val spinnerArrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, serverList)
+        spinner.adapter = spinnerArrayAdapter
     }
 
     /**
@@ -118,12 +113,12 @@ class NewPadActivity : PadLandActivity() {
      * spinner. This value can be changed in the settings activity.
      */
     private fun _setSpinnerDefaultValue() {
-        val default_server = _getDefaultSpinnerValue()
+        val defaultServer = _getDefaultSpinnerValue()
 
         // We get position and set it as default
         val spinner = findViewById<Spinner>(R.id.spinner)
         val adapter = spinner.adapter as ArrayAdapter<*>
-        spinner.setSelection(adapter.getPosition(default_server))
+        spinner.setSelection(adapter.getPosition(defaultServer as Nothing?))
     }
 
     /**
@@ -135,7 +130,7 @@ class NewPadActivity : PadLandActivity() {
         // Getting user preferences
         val context = applicationContext
         val userDetails = context.getSharedPreferences(packageName + "_preferences", MODE_PRIVATE)
-        return userDetails.getString("padland_default_server", server_list[0])
+        return userDetails.getString("padland_default_server", serverList[0])
     }
 
     /**
@@ -149,9 +144,9 @@ class NewPadActivity : PadLandActivity() {
 
     /**
      * Form submit
-     * @param w
      */
-    fun onCreateButtonClick(w: View?) {
+    @SuppressLint("CutPasteId")
+    fun onCreateButtonClick() {
         val padName = getPadNameFromInput(findViewById<View>(R.id.editText) as TextView)
         val padLocalName = getPadNameFromInput(findViewById<View>(R.id.editTextLocalName) as TextView)
         val padPrefix = getPadPrefixFromSpinner(findViewById<View>(R.id.spinner) as Spinner)
@@ -194,7 +189,7 @@ class NewPadActivity : PadLandActivity() {
      * @return
      */
     private fun getPadPrefixFromSpinner(spinner: Spinner): String? {
-        return server_url_prefixed_list!![spinner.selectedItemPosition]
+        return serverUrlPrefixedList!![spinner.selectedItemPosition]
     }
 
     /**
@@ -203,6 +198,6 @@ class NewPadActivity : PadLandActivity() {
      * @return
      */
     private fun getPadServerFromSpinner(spinner: Spinner): String? {
-        return server_url_list!![spinner.selectedItemPosition]
+        return serverUrlList!![spinner.selectedItemPosition]
     }
 }

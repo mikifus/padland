@@ -11,12 +11,12 @@ import com.mikifus.padland.R
 /**
  * Created by mikifus on 28/02/18.
  */
-class PadGroupModel(context: Context?) : BaseModel(context) {
+class PadGroupModel(context: Context) : BaseModel(context) {
     private val contentResolver: ContentResolver
-    private override val context: Context
+    override var context: Context? = null
 
     init {
-        this.context = context!!
+        this.context = context
         contentResolver = context.contentResolver
     }
 
@@ -28,70 +28,70 @@ class PadGroupModel(context: Context?) : BaseModel(context) {
      * @return
      */
     fun _getPadgroupsDataFromDatabase(field: String, comparation: String): Cursor? {
-        var c: Cursor? = null
-        val comparation_set = arrayOf(comparation)
+        var c: Cursor?
+        val comparationSet = arrayOf(comparation)
         c = contentResolver.query(
-                PadContentProvider.Companion.PADGROUPS_CONTENT_URI,
-                PadContentProvider.Companion.getPadFieldsList(),
+                PadContentProvider.PADGROUPS_CONTENT_URI,
+                PadContentProvider.padFieldsList,
                 "$field=?",
-                comparation_set,  // AKA id
+                comparationSet,  // AKA id
                 null
         )
         return c
     }
 
     protected fun _getPadgroupsData(): HashMap<Long, ArrayList<String>> {
-        val padlist_uri = Uri.parse(context.getString(R.string.request_padgroups))
-        val cursor = contentResolver.query(padlist_uri, arrayOf<String>(PadContentProvider.Companion._ID, PadModel.Companion.NAME),
+        val padlistUri = Uri.parse(context!!.getString(R.string.request_padgroups))
+        val cursor = contentResolver.query(padlistUri, arrayOf(PadContentProvider._ID, PadModel.NAME),
                 null,
                 null,
-                PadContentProvider.Companion.CREATE_DATE + " DESC")
+                PadContentProvider.CREATE_DATE + " DESC")
         val result = HashMap<Long, ArrayList<String>>()
         if (cursor == null || cursor.count == 0) {
             return result
         }
-        val pad_data = HashMap<Long, ArrayList<String>>()
+        val padData = HashMap<Long, ArrayList<String>>()
         cursor.moveToFirst()
         while (!cursor.isAfterLast) {
             val id = cursor.getLong(0)
             val name = cursor.getString(1)
-            val pad_strings = ArrayList<String>()
-            pad_strings.add(name)
-            pad_data[id] = pad_strings
+            val padStrings = ArrayList<String>()
+            padStrings.add(name)
+            padData[id] = padStrings
 
             // do something
             cursor.moveToNext()
         }
         cursor.close()
-        return pad_data
+        return padData
     }
 
     val padgroupsCount: Int
         get() {
-            val padlist_uri = Uri.parse(context.getString(R.string.request_padgroups))
-            val cursor = contentResolver.query(padlist_uri, arrayOf<String>(PadContentProvider.Companion._ID, PadModel.Companion.NAME),
+            val padlistUri = Uri.parse(context!!.getString(R.string.request_padgroups))
+            val cursor = contentResolver.query(padlistUri, arrayOf(PadContentProvider._ID, PadModel.NAME),
                     null,
                     null,
-                    PadContentProvider.Companion.CREATE_DATE + " DESC")
+                    PadContentProvider.CREATE_DATE + " DESC")
             val count = cursor!!.count
             cursor.close()
             return count
         }
 
     fun getPadgroupAt(position: Int): HashMap<String, String> {
-        val padlist_uri = Uri.parse(context.getString(R.string.request_padgroups))
-        val cursor = contentResolver.query(padlist_uri, arrayOf<String>(PadContentProvider.Companion._ID, PadModel.Companion.NAME, POSITION),
+        val padlistUri = Uri.parse(context!!.getString(R.string.request_padgroups))
+        val cursor = contentResolver.query(padlistUri, arrayOf(PadContentProvider._ID, PadModel.NAME, POSITION),
                 "",
                 null,
-                PadContentProvider.Companion.CREATE_DATE + " DESC LIMIT " + position + ", 1")
+                PadContentProvider.CREATE_DATE + " DESC LIMIT " + position + ", 1")
         val group = HashMap<String, String>()
         cursor!!.moveToFirst()
         while (!cursor.isAfterLast) {
             val id = cursor.getString(0)
             val name = cursor.getString(1)
             val pos = cursor.getString(2)
-            group[PadContentProvider.Companion._ID] = id
-            group[PadModel.Companion.NAME] = name
+            group[PadContentProvider._ID] = id
+            group[PadModel.NAME] = name
             group[POSITION] = pos
             break
         }
@@ -99,15 +99,15 @@ class PadGroupModel(context: Context?) : BaseModel(context) {
         return group
     }
 
-    fun getPadGroupById(padGroupId: Long): PadGroup? {
-        val padlist_uri = Uri.parse(context.getString(R.string.request_padgroups))
-        val cursor = contentResolver.query(padlist_uri, arrayOf<String>(PadContentProvider.Companion._ID, PadModel.Companion.NAME, POSITION),
-                PadContentProvider.Companion._ID + "=?", arrayOf<String>(java.lang.Long.toString(padGroupId)),
+    private fun getPadGroupById(padGroupId: Long): PadGroup? {
+        val padlistUri = Uri.parse(context!!.getString(R.string.request_padgroups))
+        val cursor = contentResolver.query(padlistUri, arrayOf(PadContentProvider._ID, PadModel.NAME, POSITION),
+                PadContentProvider._ID + "=?", arrayOf(padGroupId.toString()),
                 "")
 
 //        HashMap<String, String> group = new HashMap<>();
-        val group: PadGroup?
-        group = if (cursor != null && cursor.count > 0) {
+
+        val group: PadGroup? = if (cursor != null && cursor.count > 0) {
             cursor.moveToFirst()
             PadGroup(cursor)
         } else {
@@ -139,11 +139,11 @@ class PadGroupModel(context: Context?) : BaseModel(context) {
 //            groups.add(group);
     val allPadgroups: ArrayList<PadGroup>
         get() {
-            val padlist_uri = Uri.parse(context.getString(R.string.request_padgroups))
-            val cursor = contentResolver.query(padlist_uri, arrayOf<String>(PadContentProvider.Companion._ID, PadModel.Companion.NAME, POSITION),
+            val padlistUri = Uri.parse(context!!.getString(R.string.request_padgroups))
+            val cursor = contentResolver.query(padlistUri, arrayOf(PadContentProvider._ID, PadModel.NAME, POSITION),
                     null,
                     null,
-                    PadContentProvider.Companion.CREATE_DATE + " DESC")
+                    PadContentProvider.CREATE_DATE + " DESC")
             val groups = ArrayList<PadGroup>()
             var group: PadGroup
             if (cursor == null) {
@@ -174,84 +174,82 @@ class PadGroupModel(context: Context?) : BaseModel(context) {
         }
 
     fun getPadgroupChildrenIds(id: Long): ArrayList<Long> {
-        val QUERY: String
+        val query: String
         val values: Array<String>
         if (id == 0L) {
-            QUERY = "SELECT " + PadContentProvider.Companion._ID + " " +
-                    "FROM " + PadContentProvider.Companion.PAD_TABLE_NAME + " " +
-                    "WHERE " + PadContentProvider.Companion._ID + " NOT IN (" +
-                    "SELECT DISTINCT " + PadContentProvider.Companion._ID_PAD + " FROM " + PadContentProvider.Companion.RELATION_TABLE_NAME + ") "
+            query = "SELECT " + PadContentProvider._ID + " " +
+                    "FROM " + PadContentProvider.PAD_TABLE_NAME + " " +
+                    "WHERE " + PadContentProvider._ID + " NOT IN (" +
+                    "SELECT DISTINCT " + PadContentProvider._ID_PAD + " FROM " + PadContentProvider.RELATION_TABLE_NAME + ") "
             values = arrayOf()
         } else {
-            QUERY = "SELECT DISTINCT " + PadContentProvider.Companion._ID_PAD + " " +
-                    "FROM " + PadContentProvider.Companion.RELATION_TABLE_NAME + " " +
-                    "WHERE " + PadContentProvider.Companion._ID_GROUP + "=? "
+            query = "SELECT DISTINCT " + PadContentProvider._ID_PAD + " " +
+                    "FROM " + PadContentProvider.RELATION_TABLE_NAME + " " +
+                    "WHERE " + PadContentProvider._ID_GROUP + "=? "
             values = arrayOf(id.toString())
         }
-        val cursor = db.rawQuery(QUERY, values)
-        val pad_ids = ArrayList<Long>()
+        val cursor = db.rawQuery(query, values)
+        val padIds = ArrayList<Long>()
         cursor.moveToFirst()
         while (!cursor.isAfterLast) {
-            val id_pad = cursor.getLong(0)
-            pad_ids.add(id_pad)
+            val idPad = cursor.getLong(0)
+            padIds.add(idPad)
             cursor.moveToNext()
         }
         cursor.close()
-        return pad_ids
+        return padIds
     }
 
     fun getPadgroupChildrenCount(id: Long): Int {
-        val QUERY: String
+        val query: String
         val values: Array<String>
         if (id == 0L) {
-            QUERY = "SELECT " + PadContentProvider.Companion._ID + " " +
-                    "FROM " + PadContentProvider.Companion.PAD_TABLE_NAME + " " +
-                    "WHERE " + PadContentProvider.Companion._ID + " NOT IN (" +
-                    "SELECT " + PadContentProvider.Companion._ID_PAD + " FROM " + PadContentProvider.Companion.RELATION_TABLE_NAME + ") "
+            query = "SELECT " + PadContentProvider._ID + " " +
+                    "FROM " + PadContentProvider.PAD_TABLE_NAME + " " +
+                    "WHERE " + PadContentProvider._ID + " NOT IN (" +
+                    "SELECT " + PadContentProvider._ID_PAD + " FROM " + PadContentProvider.RELATION_TABLE_NAME + ") "
             values = arrayOf()
         } else {
-            QUERY = "SELECT * FROM " + PadContentProvider.Companion.RELATION_TABLE_NAME + " " +
-                    "WHERE " + PadContentProvider.Companion._ID_GROUP + "=? "
+            query = "SELECT * FROM " + PadContentProvider.RELATION_TABLE_NAME + " " +
+                    "WHERE " + PadContentProvider._ID_GROUP + "=? "
             values = arrayOf(id.toString())
         }
-        val cursor = db.rawQuery(QUERY, values)
+        val cursor = db.rawQuery(query, values)
         val count = cursor.count
         cursor.close()
         return count
     }
 
-    fun getGroupId(padId: Long): Long {
-        val QUERY: String
-        val values: Array<String>
-        QUERY = "SELECT " + PadContentProvider.Companion._ID_GROUP + " FROM " + PadContentProvider.Companion.RELATION_TABLE_NAME + " " +
+    private fun getGroupId(padId: Long): Long {
+        val query: String = "SELECT " + PadContentProvider.Companion._ID_GROUP + " FROM " + PadContentProvider.Companion.RELATION_TABLE_NAME + " " +
                 "WHERE " + PadContentProvider.Companion._ID_PAD + "=? "
-        values = arrayOf(padId.toString())
-        val cursor = db.rawQuery(QUERY, values)
-        var groupid: Long = 0
+        val values: Array<String> = arrayOf(padId.toString())
+        val cursor = db.rawQuery(query, values)
+        var groupId: Long = 0
         if (cursor.count > 0) {
             cursor.moveToFirst()
-            groupid = cursor.getLong(0)
+            groupId = cursor.getLong(0)
         }
         cursor.close()
-        return groupid
+        return groupId
     }
 
     /**
      * Saves a new group if padgroup_id=0 or updates an existing one.
-     * @param padgroup_id
+     * @param padgroupId
      * @param pad_id
      * @return
      */
-    fun savePadgroupRelation(padgroup_id: Long, pad_id: Long): Boolean {
+    fun savePadgroupRelation(padgroupId: Long, pad_id: Long): Boolean {
         removePadFromAllGroups(pad_id)
-        if (padgroup_id == 0L) {
+        if (padgroupId == 0L) {
             return false
         }
         val contentValues = ContentValues()
-        contentValues.put(PadContentProvider.Companion._ID_PAD, pad_id)
-        contentValues.put(PadContentProvider.Companion._ID_GROUP, padgroup_id)
+        contentValues.put(PadContentProvider._ID_PAD, pad_id)
+        contentValues.put(PadContentProvider._ID_GROUP, padgroupId)
         //            _debug_relations();
-        return db.insert(PadContentProvider.Companion.RELATION_TABLE_NAME, null, contentValues) > 0
+        return db.insert(PadContentProvider.RELATION_TABLE_NAME, null, contentValues) > 0
     }
 
     /**
@@ -259,8 +257,8 @@ class PadGroupModel(context: Context?) : BaseModel(context) {
      * @param pad_id
      * @return
      */
-    fun removePadFromAllGroups(pad_id: Long): Boolean {
-        val deleted = db.delete(PadContentProvider.Companion.RELATION_TABLE_NAME, PadContentProvider.Companion._ID_PAD + "=? ", arrayOf<String>(pad_id.toString()))
+    private fun removePadFromAllGroups(pad_id: Long): Boolean {
+        val deleted = db.delete(PadContentProvider.RELATION_TABLE_NAME, PadContentProvider._ID_PAD + "=? ", arrayOf(pad_id.toString()))
         return deleted > 0
     }
 

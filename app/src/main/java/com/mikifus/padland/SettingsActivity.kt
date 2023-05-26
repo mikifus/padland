@@ -1,9 +1,7 @@
 package com.mikifus.padland
 
-import android.annotation.TargetApi
 import android.content.Context
 import android.content.res.Configuration
-import android.os.Build
 import android.os.Bundle
 import android.preference.CheckBoxPreference
 import android.preference.ListPreference
@@ -30,7 +28,7 @@ import java.util.Arrays
  * API Guide](http://developer.android.com/guide/topics/ui/settings.html) for more information on developing a Settings UI.
  */
 class SettingsActivity : AppCompatActivity() {
-    var settingsFragment: SettingsFragment? = null
+    private var settingsFragment: SettingsFragment? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -80,8 +78,8 @@ class SettingsActivity : AppCompatActivity() {
      * This fragment shows general pref_general only. It is used when the
      * activity is showing a two-pane settings UI.
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     class GeneralPreferenceFragment : PreferenceFragment() {
+        @Deprecated("Deprecated in Java")
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
             addPreferencesFromResource(R.xml.pref_general)
@@ -97,6 +95,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     class SettingsFragment : PreferenceFragment() {
+        @Deprecated("Deprecated in Java")
         override fun onCreate(paramBundle: Bundle?) {
             super.onCreate(paramBundle)
             addPreferencesFromResource(R.xml.pref_general)
@@ -117,23 +116,23 @@ class SettingsActivity : AppCompatActivity() {
      * Includes custom servers.
      * @return String[]
      */
-    val serverNameList: Array<String?>
+    private val serverNameList: Array<String?>
         get() {
-            val server_list: Array<String?>
+            val serverList: Array<String?>
             // Load the custom servers
             val serverModel = ServerModel(this)
-            val custom_servers = serverModel.enabledServerList
-            val server_names = ArrayList<String?>()
-            for (server in custom_servers!!) {
-                server_names.add(server.getName())
+            val customServers = serverModel.enabledServerList
+            val serverNames = ArrayList<String?>()
+            for (server in customServers) {
+                serverNames.add(server.name)
             }
 
             // Server list to provide a fallback value
             val collection: MutableCollection<String?> = ArrayList()
-            collection.addAll(server_names)
+            collection.addAll(serverNames)
             collection.addAll(Arrays.asList(*resources.getStringArray(R.array.etherpad_servers_name)))
-            server_list = collection.toTypedArray()
-            return server_list
+            serverList = collection.toTypedArray()
+            return serverList
         }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -167,7 +166,7 @@ class SettingsActivity : AppCompatActivity() {
          * "simplified" settings UI should be shown.
          */
         private fun isSimplePreferences(context: Context): Boolean {
-            return ALWAYS_SIMPLE_PREFS || Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB || !isXLargeTablet(context)
+            return ALWAYS_SIMPLE_PREFS || !isXLargeTablet(context)
         }
 
         /**
@@ -179,12 +178,11 @@ class SettingsActivity : AppCompatActivity() {
             if (preference is ListPreference) {
                 // For list pref_general, look up the correct display value in
                 // the preference's 'entries' list.
-                val listPreference = preference
-                val index = listPreference.findIndexOfValue(stringValue)
+                val index = preference.findIndexOfValue(stringValue)
 
                 // Set the summary to reflect the new value.
                 preference.setSummary(
-                        if (index >= 0) listPreference.entries[index] else null)
+                        if (index >= 0) preference.entries[index] else null)
             } else {
                 // For all other pref_general, set the summary to the value's
                 // simple string representation.

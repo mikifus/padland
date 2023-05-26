@@ -20,7 +20,7 @@ import com.mikifus.padland.Models.ServerModel
 /**
  * Created by mikifus on 29/05/16.
  */
-class ServerListActivity : PadLandDataActivity(), ActionMode.Callback, FormDialogCallBack {
+open class ServerListActivity : PadLandDataActivity(), ActionMode.Callback, FormDialogCallBack {
     /**
      * Multiple choice for all the groups
      */
@@ -29,9 +29,9 @@ class ServerListActivity : PadLandDataActivity(), ActionMode.Callback, FormDialo
     /**
      * mActionMode defines behaviour of the action-bar
      */
-    protected var mActionMode: ActionMode? = null
-    var mAdapter: ArrayAdapter<*>? = null
-    var listView: ListView? = null
+    private var mActionMode: ActionMode? = null
+    private var mAdapter: ArrayAdapter<*>? = null
+    private var listView: ListView? = null
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_server_list)
@@ -85,7 +85,7 @@ class ServerListActivity : PadLandDataActivity(), ActionMode.Callback, FormDialo
         dialog.show(fm, NEW_SERVER_DIALOG)
     }
 
-    fun editServer(id: Long) {
+    private fun editServer(id: Long) {
         val fm = supportFragmentManager
         val dialog = NewServerDialog(getString(R.string.serverlist_dialog_edit_server_title), this)
         dialog.editServerId(id)
@@ -96,7 +96,7 @@ class ServerListActivity : PadLandDataActivity(), ActionMode.Callback, FormDialo
      * Check an item and set is as selected.
      *
      */
-    fun startActionMode() {
+    private fun startActionMode() {
 //        Log.d(TAG, "SELECTION NEW: pos:" + String.valueOf(position) + " id:" + String.valueOf(id));
 //
         if (mActionMode == null) {
@@ -167,7 +167,7 @@ class ServerListActivity : PadLandDataActivity(), ActionMode.Callback, FormDialo
     override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menuitem_delete -> {
-                AskDelete(checkedItemIds)
+                askDelete(checkedItemIds)
                 // Action picked, so close the CAB
                 mode.finish()
                 true
@@ -178,9 +178,9 @@ class ServerListActivity : PadLandDataActivity(), ActionMode.Callback, FormDialo
     }
 
     //        HashMap<Long, ArrayList<String>> padlist_data = _getPadListData();
-    private val checkedItemIds: ArrayList<String>
-        private get() {
-            val selectedItems = ArrayList<String>()
+    private val checkedItemIds: ArrayList<String?>
+        get() {
+            val selectedItems = ArrayList<String?>()
             //        HashMap<Long, ArrayList<String>> padlist_data = _getPadListData();
             val positions = listView!!.checkedItemPositions
             //        Log.d(TAG, "selectedItemsPositions: " + positions);
@@ -206,8 +206,8 @@ class ServerListActivity : PadLandDataActivity(), ActionMode.Callback, FormDialo
      * @param selectedItems
      * @return AlertDialog
      */
-    override fun AskDelete(selectedItems: ArrayList<String>): AlertDialog {
-        val DeleteDialogBox = AlertDialog.Builder(this)
+    override fun askDelete(selectedItems: ArrayList<String?>): AlertDialog {
+        val deleteDialogBox = AlertDialog.Builder(this)
                 .setTitle(R.string.delete)
                 .setMessage(getString(R.string.serverlist_dialog_delete_sure_to_delete))
                 .setIcon(android.R.drawable.ic_menu_delete)
@@ -215,8 +215,8 @@ class ServerListActivity : PadLandDataActivity(), ActionMode.Callback, FormDialo
                     val serverModel = ServerModel(baseContext)
                     for (i in selectedItems.indices) {
                         Log.d("DELETE_SERVER", "list_get: " + selectedItems[i])
-                        val result = serverModel.deleteServer(selectedItems[i].toLong())
-                        if (result) {
+                        val result = selectedItems[i]?.let { serverModel.deleteServer(it.toLong()) }
+                        if (result == true) {
                             Toast.makeText(baseContext, getString(R.string.serverlist_dialog_delete_server_deleted), Toast.LENGTH_LONG).show()
                             mAdapter!!.notifyDataSetChanged()
                         }
@@ -225,8 +225,8 @@ class ServerListActivity : PadLandDataActivity(), ActionMode.Callback, FormDialo
                 }
                 .setNegativeButton(getString(R.string.cancel)) { dialog, which -> dialog.dismiss() }
                 .create()
-        DeleteDialogBox.show()
-        return DeleteDialogBox
+        deleteDialogBox.show()
+        return deleteDialogBox
     }
 
     companion object {

@@ -23,11 +23,11 @@ import com.mikifus.padland.Utils.PadUrl
 /**
  * Created by mikifus on 27/02/18.
  */
-class EditPadDialog(title: String, callback: FormDialogCallBack) : FormDialog(title, callback) {
+open class EditPadDialog(title: String, callback: FormDialogCallBack) : FormDialog(title, callback) {
     private var fieldName: EditText? = null
     private var fieldLocalName: EditText? = null
     private var fieldGroup: Spinner? = null
-    private var spinnerAdapter: SpinnerGroupAdapter<PadGroup?>? = null
+    private var spinnerAdapter: SpinnerGroupAdapter? = null
     private var edit_pad_id: Long = 0
 
     init {
@@ -39,25 +39,25 @@ class EditPadDialog(title: String, callback: FormDialogCallBack) : FormDialog(ti
     }
 
     override fun setViewEvents() {
-        fieldName = main_view!!.findViewById<View>(R.id.txt_pad_name) as EditText
-        fieldLocalName = main_view!!.findViewById<View>(R.id.txt_pad_local_name) as EditText
-        fieldGroup = main_view!!.findViewById<View>(R.id.group_spinner) as Spinner
-        val padGroupModel = PadGroupModel(context)
+        fieldName = mainView!!.findViewById<View>(R.id.txt_pad_name) as EditText
+        fieldLocalName = mainView!!.findViewById<View>(R.id.txt_pad_local_name) as EditText
+        fieldGroup = mainView!!.findViewById<View>(R.id.group_spinner) as Spinner
+        val padGroupModel = PadGroupModel(requireContext())
         val allPadGroups = padGroupModel.allPadgroups
-        allPadGroups!!.add(PadGroup(context))
-        spinnerAdapter = SpinnerGroupAdapter<PadGroup>(context, android.R.layout.simple_spinner_dropdown_item, allPadGroups)
+        allPadGroups.add(PadGroup(context))
+        spinnerAdapter = SpinnerGroupAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, allPadGroups)
         fieldGroup!!.adapter = spinnerAdapter
         if (edit_pad_id > 0) {
             val model = PadModel(context)
             val pad = model.getPadById(edit_pad_id)
-            fieldName.setText(pad.name)
-            fieldLocalName.setText(pad.rawLocalName)
+            fieldName!!.setText(pad.name)
+            fieldLocalName!!.setText(pad.rawLocalName)
             var padGroup = padGroupModel.getPadGroup(pad.id)
             if (padGroup == null) {
                 padGroup = padGroupModel.unclassifiedPadGroup
             }
-            Log.d(TAG, spinnerAdapter.getPosition(padGroup).toString())
-            fieldGroup!!.setSelection(spinnerAdapter.getPosition(padGroup))
+            Log.d(TAG, spinnerAdapter!!.getPosition(padGroup).toString())
+            fieldGroup!!.setSelection(spinnerAdapter!!.getPosition(padGroup))
         }
     }
 
@@ -73,7 +73,7 @@ class EditPadDialog(title: String, callback: FormDialogCallBack) : FormDialog(ti
             return false
         }
         val padUrl = PadUrl.Builder()
-                .padName(contentValues!!.getAsString(PadModel.Companion.NAME))
+                .padName(contentValues!!.getAsString(PadModel.NAME))
                 .padServer(pad.server)
                 .padPrefix(prefix)
                 .build()
@@ -86,21 +86,21 @@ class EditPadDialog(title: String, callback: FormDialogCallBack) : FormDialog(ti
 
     override fun saveData() {
         val model = PadModel(context)
-        val padGroupModel = PadGroupModel(context)
+        val padGroupModel = PadGroupModel(requireContext())
         val contentValues = contentValues
         val groupContentValues = groupContentValues
         model.savePad(edit_pad_id, contentValues)
-        padGroupModel.savePadgroupRelation(groupContentValues!!.getAsLong(PadContentProvider.Companion._ID_GROUP), edit_pad_id)
+        padGroupModel.savePadgroupRelation(groupContentValues!!.getAsLong(PadContentProvider._ID_GROUP), edit_pad_id)
     }
 
     // Multiple can be returned. TODO: Connect pads with servers by ID.
-    protected override val contentValues: ContentValues?
-        protected get() {
-            val values = super.getContentValues()
+    override val contentValues: ContentValues?
+        get() {
+            val values = super.contentValues
             val localName = fieldLocalName!!.text.toString()
-            values!!.put(PadModel.Companion.LOCAL_NAME, localName)
+            values!!.put(PadModel.LOCAL_NAME, localName)
             val padName = fieldName!!.text.toString().trim { it <= ' ' }
-            values!!.put(PadModel.Companion.NAME, padName)
+            values!!.put(PadModel.NAME, padName)
             val model = PadModel(context)
             val pad = model.getPadById(edit_pad_id)
             val serverModel = ServerModel(context)
@@ -111,18 +111,18 @@ class EditPadDialog(title: String, callback: FormDialogCallBack) : FormDialog(ti
                     .padServer(pad.server)
                     .padPrefix(prefix)
                     .build()
-            values.put(PadModel.Companion.URL, padUrl.string)
+            values.put(PadModel.URL, padUrl.string)
             return values
         }
-    protected val groupContentValues: ContentValues?
-        protected get() {
-            val values = super.getContentValues()
-            val group = spinnerAdapter!!.getItem(fieldGroup!!.selectedItemPosition).getId()
-            values!!.put(PadContentProvider.Companion._ID_GROUP, group)
+    private val groupContentValues: ContentValues
+        get() {
+            val values = super.contentValues
+            val group = spinnerAdapter!!.getItem(fieldGroup!!.selectedItemPosition)!!.id
+            values!!.put(PadContentProvider._ID_GROUP, group)
             return values
         }
 
-    internal inner class SpinnerGroupAdapter<P>(private val mContext: Context, resource: Int, objects: List<PadGroup?>) : ArrayAdapter<PadGroup?>(mContext, resource, objects) {
+    internal inner class SpinnerGroupAdapter(mContext: Context, resource: Int, objects: List<PadGroup?>) : ArrayAdapter<PadGroup?>(mContext, resource, objects) {
         private val mInflater: LayoutInflater
         private val items: List<PadGroup?>
         private val mResource: Int
@@ -139,18 +139,18 @@ class EditPadDialog(title: String, callback: FormDialogCallBack) : FormDialog(ti
 
         override fun getDropDownView(position: Int, convertView: View?,
                                      parent: ViewGroup): View {
-            return createItemView(position, convertView, parent)
+            return createItemView(position, parent)
         }
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            return createItemView(position, convertView, parent)
+            return createItemView(position, parent)
         }
 
-        private fun createItemView(position: Int, convertView: View?, parent: ViewGroup): View {
+        private fun createItemView(position: Int, parent: ViewGroup): View {
             val view = mInflater.inflate(mResource, parent, false)
             val text = view.findViewById<TextView>(android.R.id.text1)
             val padGroup = getItem(position)
-            text.text = padGroup.getName()
+            text.text = padGroup!!.name
             return view
         }
     }

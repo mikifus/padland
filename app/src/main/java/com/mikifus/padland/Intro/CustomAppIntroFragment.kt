@@ -14,7 +14,7 @@ import com.mikifus.padland.R
  * Created by mikifus on 7/10/16.
  */
 open class CustomAppIntroFragment : AppIntroBaseFragment(), ISlideBackgroundColorHolder {
-    protected var mView: View? = null
+    private var mView: View? = null
     override fun getLayoutId(): Int {
         return R.layout.fragment_intro
     }
@@ -27,7 +27,7 @@ open class CustomAppIntroFragment : AppIntroBaseFragment(), ISlideBackgroundColo
 
     override fun getDefaultBackgroundColor(): Int {
         // Return the default background color of the slide.
-        return arguments!!.getInt(ARG_BG_COLOR)
+        return requireArguments().getInt(ARG_BG_COLOR)
     }
 
     override fun setBackgroundColor(@ColorInt backgroundColor: Int) {

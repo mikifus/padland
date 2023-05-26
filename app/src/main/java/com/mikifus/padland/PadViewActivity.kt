@@ -49,7 +49,7 @@ class PadViewActivity : PadLandDataActivity() {
     // It happens that many connections are stablished. We count them so we can track them.
     // They must be handled asyncronously as Android calls the events for each connection,
     // and not
-    val webview_http_connections = IntArray(1)
+    val webviewHttpConnections = IntArray(1)
     private var handler: Handler? = null
 
     /*
@@ -109,14 +109,14 @@ class PadViewActivity : PadLandDataActivity() {
      */
     private fun _loadProgressWheel() {
         pwheel = findViewById(R.id.progress_wheel)
-        pwheel.spin()
+        pwheel!!.spin()
     }
 
     fun _showProgressWheel() {
         pwheel!!.visibility = View.VISIBLE
         Log.d("LOAD_PROGRESS_LOG", "PWheel must be gone by now...")
         handler!!.postDelayed({
-            if (webview_http_connections[0] > 0 && pwheel!!.visibility == View.VISIBLE) {
+            if (webviewHttpConnections[0] > 0 && pwheel!!.visibility == View.VISIBLE) {
                 _hideProgressWheel()
             }
         }, 7000)
@@ -210,12 +210,12 @@ class PadViewActivity : PadLandDataActivity() {
      */
     override fun _getPadId(): Long {
         val myIntent = intent
-        val pad_id = myIntent.getLongExtra("pad_id", 0)
-        if (pad_id > 0) {
-            return pad_id
+        val padId = myIntent.getLongExtra("pad_id", 0)
+        if (padId > 0) {
+            return padId
         }
-        val PadData = _getPadDataFromIntent() ?: return 0
-        val c = padlistDb!!._getPadByUrl(PadData.url)
+        val padData = _getPadDataFromIntent() ?: return 0
+        val c = padlistDb!!._getPadByUrl(padData.url)
         if (c != null && c.count > 0) {
             c.moveToFirst()
             val id = c.getLong(0)
@@ -236,10 +236,10 @@ class PadViewActivity : PadLandDataActivity() {
             // Add a new record
             val values = ContentValues()
             val intentData = _getPadDataFromIntent()
-            values.put(PadModel.Companion.NAME, intentData.getName())
-            values.put(PadContentProvider.Companion.LOCAL_NAME, intentData.getLocalName())
-            values.put(PadContentProvider.Companion.SERVER, intentData.getServer())
-            values.put(PadModel.Companion.URL, intentData.getUrl())
+            values.put(PadModel.Companion.NAME, intentData!!.name)
+            values.put(PadContentProvider.Companion.LOCAL_NAME, intentData.localName)
+            values.put(PadContentProvider.Companion.SERVER, intentData.server)
+            values.put(PadModel.Companion.URL, intentData.url)
             val padModel = PadModel(this)
             result = padModel.savePad(0, values)
         }
@@ -255,9 +255,9 @@ class PadViewActivity : PadLandDataActivity() {
      */
     private fun _updateViewedPad(): Boolean {
         var result = false
-        val pad_id = _getPadId()
-        if (pad_id != 0L) {
-            padlistDb!!.accessUpdate(pad_id)
+        val padId = _getPadId()
+        if (padId != 0L) {
+            padlistDb!!.accessUpdate(padId)
             result = true
         }
         return result
@@ -271,18 +271,20 @@ class PadViewActivity : PadLandDataActivity() {
      */
     private fun _makeWebView(): WebView? {
 //        final String current_padUrl = this.getCurrentPadUrl();
-        webView = findViewById(R.id.activity_main_webview)
-        webView.setLayoutParams(RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+        val view = findViewById<WebView>(R.id.activity_main_webview)
+        webView = view
+        view.layoutParams =
+            RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
 
         // The WebViewClient requires now a whitelist of urls that can interact with the Java side of the code
-        val url_whitelist = serverWhiteList
-        webView.setWebViewClient(object : PadLandSaferWebViewClient(url_whitelist) {
+        val urlWhitelist = serverWhiteList
+        view.webViewClient = object : PadLandSaferWebViewClient(urlWhitelist) {
             //            private boolean done_auth;
             override fun onPageStarted(view: WebView, url: String, favicon: Bitmap) {
                 super.onPageStarted(view, url, favicon)
-                ++webview_http_connections[0]
+                ++webviewHttpConnections[0]
                 _showProgressWheel()
-                Log.d(TAG, "Added connection " + webview_http_connections[0])
+                Log.d(TAG, "Added connection " + webviewHttpConnections[0])
             }
 
             override fun onPageFinished(view: WebView, url: String) {
@@ -292,9 +294,9 @@ class PadViewActivity : PadLandDataActivity() {
 
             val postAfterFinish: Runnable = object : Runnable {
                 override fun run() {
-                    --webview_http_connections[0]
-                    Log.d(TAG, "Removed connection " + webview_http_connections[0])
-                    if (webview_http_connections[0] > 0) {
+                    --webviewHttpConnections[0]
+                    Log.d(TAG, "Removed connection " + webviewHttpConnections[0])
+                    if (webviewHttpConnections[0] > 0) {
                         // Wait for all of them to end.
                         handler!!.postDelayed(this, 1200)
                         return
@@ -313,7 +315,7 @@ class PadViewActivity : PadLandDataActivity() {
              */
             override fun onReceivedError(view: WebView, request: WebResourceRequest, error: WebResourceError) {
                 super.onReceivedError(view, request, error)
-                --webview_http_connections[0]
+                --webviewHttpConnections[0]
                 _hideProgressWheel()
                 Log.e(TAG, "WebView Error $error, Request: $request")
             }
@@ -328,7 +330,7 @@ class PadViewActivity : PadLandDataActivity() {
              */
             override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
                 super.onReceivedError(view, errorCode, description, failingUrl)
-                --webview_http_connections[0]
+                --webviewHttpConnections[0]
                 _hideProgressWheel()
                 Log.e(TAG, "WebView Error ($errorCode) $description, Request: $failingUrl")
             }
@@ -340,10 +342,9 @@ class PadViewActivity : PadLandDataActivity() {
             }
 
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-                return if (url != null && (url.startsWith("http://") || url.startsWith("https://"))
-                        && !WhiteListMatcher.isValidHost(url, hostsWhitelist)) {
+                return if ((url.startsWith("http://") || url.startsWith("https://")) && !WhiteListMatcher.isValidHost(url, hostsWhitelist)) {
                     view.context.startActivity(
-                            Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                        Intent(Intent.ACTION_VIEW, Uri.parse(url)))
                     true
                 } else {
                     super.shouldOverrideUrlLoading(view, url)
@@ -353,17 +354,15 @@ class PadViewActivity : PadLandDataActivity() {
             override fun onReceivedSslError(view: WebView, handler: SslErrorHandler, error: SslError) {
                 super.onReceivedSslError(view, handler, error)
                 var message: String? = null
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
-                    val errorCode = error.primaryError
-                    when (errorCode) {
-                        SslError.SSL_EXPIRED -> message = getString(R.string.error_ssl_expired)
-                        SslError.SSL_IDMISMATCH -> message = getString(R.string.error_ssl_id_mismatch)
-                        SslError.SSL_NOTYETVALID -> message = getString(R.string.error_ssl_not_yet_valid)
-                        SslError.SSL_UNTRUSTED -> message = getString(R.string.error_ssl_untrusted)
-                    }
-                    if (message == null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH && errorCode == SslError.SSL_DATE_INVALID) {
-                        message = getString(R.string.error_ssl_date_invalid)
-                    }
+                val errorCode = error.primaryError
+                when (errorCode) {
+                    SslError.SSL_EXPIRED -> message = getString(R.string.error_ssl_expired)
+                    SslError.SSL_IDMISMATCH -> message = getString(R.string.error_ssl_id_mismatch)
+                    SslError.SSL_NOTYETVALID -> message = getString(R.string.error_ssl_not_yet_valid)
+                    SslError.SSL_UNTRUSTED -> message = getString(R.string.error_ssl_untrusted)
+                }
+                if (message == null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH && errorCode == SslError.SSL_DATE_INVALID) {
+                    message = getString(R.string.error_ssl_date_invalid)
                 }
                 Log.e(TAG, "SSL Error received: " + error.primaryError + " - " + message)
                 val builder = AlertDialog.Builder(this@PadViewActivity)
@@ -381,23 +380,23 @@ class PadViewActivity : PadLandDataActivity() {
                 alertDialog.setCanceledOnTouchOutside(true)
                 alertDialog.show()
             }
-        })
+        }
         _makeWebSettings(webView)
         return webView
     }
 
-    class PadViewAuthDialog(var current_pad_url: String?, var handler: HttpAuthHandler) : BasicAuthDialog() {
+    class PadViewAuthDialog(private var currentPadUrl: String?, private var handler: HttpAuthHandler) : BasicAuthDialog() {
         override fun onDialogCreated(dialog: Dialog?, view: View?) {
             if (done_auth) {
                 // Credentials must be invalid
-                val textView = view!!.findViewById<View>(R.id.auth_error_message) as TextView
+                val textView = requireView().findViewById<View>(R.id.auth_error_message) as TextView
                 textView.setText(R.string.basic_auth_error)
             }
             try {
                 // Warn the user that is not using SSL
-                val url = URL(current_pad_url)
+                val url = URL(currentPadUrl)
                 if (url.protocol != "https") {
-                    val textView = view!!.findViewById<View>(R.id.auth_warning_message) as TextView
+                    val textView = requireView().findViewById<View>(R.id.auth_warning_message) as TextView
                     textView.setText(R.string.basic_auth_warning)
                 }
             } catch (e: MalformedURLException) {
@@ -456,18 +455,18 @@ class PadViewActivity : PadLandDataActivity() {
         var padServer = padServer
         var padUrl = padUrl
         try {
-            if (padUrl == null || padUrl.isEmpty()) {
-                if (padName == null || padName.isEmpty()) {
+            if (padUrl.isNullOrEmpty()) {
+                if (padName.isNullOrEmpty()) {
                     return null
                 }
-                if (padLocalName == null || padLocalName.isEmpty()) {
+                if (padLocalName.isNullOrEmpty()) {
                     padLocalName = padName
                 }
                 // Condition "padUrl == null || padUrl.isEmpty()" is always true
                 // if (padUrl == null || padUrl.isEmpty()) {
                 padUrl = padServer + padName
                 // }
-                if (padServer == null || padServer.isEmpty()) {
+                if (padServer.isNullOrEmpty()) {
                     padServer = padUrl.replace(padName, "")
                 }
             } else if (padName == null && padServer == null) {
@@ -485,16 +484,16 @@ class PadViewActivity : PadLandDataActivity() {
             e.printStackTrace()
             return null
         }
-        val columns: Array<String> = PadContentProvider.Companion.getPadFieldsList()
+        val columns: Array<String> = PadContentProvider.padFieldsList
 
         // This creates a fake cursor
         val matrixCursor = MatrixCursor(columns)
         startManagingCursor(matrixCursor)
         matrixCursor.addRow(arrayOf<Any?>(0, padName, padLocalName, padServer, padUrl, 0, 0, 0))
         matrixCursor.moveToFirst()
-        val PadData = Pad(matrixCursor)
+        val padData = Pad(matrixCursor)
         matrixCursor.close()
-        return PadData
+        return padData
     }
 
     /**
@@ -502,7 +501,7 @@ class PadViewActivity : PadLandDataActivity() {
      *
      * @param url
      */
-    fun loadUrl(url: String?) {
+    private fun loadUrl(url: String?) {
         webView!!.loadUrl(url!!)
     }
 
@@ -518,10 +517,10 @@ class PadViewActivity : PadLandDataActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val pad_list = ArrayList<String?>()
-        pad_list.add(_getPadId().toString())
+        val padList = ArrayList<String?>()
+        padList.add(_getPadId().toString())
         when (item.itemId) {
-            R.id.menuitem_share -> menu_share(pad_list)
+            R.id.menuitem_share -> menuShare(padList)
             R.id.menuitem_padlist -> startPadListActivityWithPadId()
             else -> return super.onOptionsItemSelected(item)
         }
@@ -531,7 +530,7 @@ class PadViewActivity : PadLandDataActivity() {
     /**
      * Goes back to the pad list.
      */
-    fun startPadListActivityWithPadId() {
+    private fun startPadListActivityWithPadId() {
         val padId = _getPadId()
         // It can happen that the pad ID is not set
         // if back is pressed before having it.

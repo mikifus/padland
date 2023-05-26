@@ -17,8 +17,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.RelativeLayout
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.sin
+import kotlin.math.sqrt
 
-class HSVColorPickerDialog(private val context: Context, private var selectedColor: Int, private val listener: OnColorSelectedListener) : AlertDialog(context) {
+class HSVColorPickerDialog(private val context: Context, private var selectedColor: Int, private val listener: (Any) -> Unit) : AlertDialog(context) {
     interface OnColorSelectedListener {
         /**
          * @param color The color code selected, or null if no color. No color is only
@@ -33,7 +39,7 @@ class HSVColorPickerDialog(private val context: Context, private var selectedCol
         window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
     }
 
-    fun makeView() {
+    private fun makeView() {
         colorWheel = HSVColorWheel(context)
         valueSlider = HSVValueSlider(context)
         val padding = (context.resources.displayMetrics.density * PADDING_DP).toInt()
@@ -87,10 +93,10 @@ class HSVColorPickerDialog(private val context: Context, private var selectedCol
             BUTTON_NEGATIVE -> dialog.dismiss()
             BUTTON_NEUTRAL -> {
                 dialog.dismiss()
-                listener.colorSelected(-1)
+                listener(-1)
             }
 
-            BUTTON_POSITIVE -> listener.colorSelected(selectedColor)
+            BUTTON_POSITIVE -> listener(selectedColor)
         }
     }
     private var colorWheel: HSVColorWheel? = null
@@ -156,8 +162,8 @@ class HSVColorPickerDialog(private val context: Context, private var selectedCol
             if (bitmap != null) {
                 canvas.drawBitmap(bitmap!!, null, rect!!, null)
                 val hueInPiInterval = colorHsv[0] / 180f * Math.PI.toFloat()
-                selectedPoint.x = rect!!.left + (-Math.cos(hueInPiInterval.toDouble()) * colorHsv[1] * innerCircleRadius + fullCircleRadius).toInt()
-                selectedPoint.y = rect!!.top + (-Math.sin(hueInPiInterval.toDouble()) * colorHsv[1] * innerCircleRadius + fullCircleRadius).toInt()
+                selectedPoint.x = rect!!.left + (-cos(hueInPiInterval.toDouble()) * colorHsv[1] * innerCircleRadius + fullCircleRadius).toInt()
+                selectedPoint.y = rect!!.top + (-sin(hueInPiInterval.toDouble()) * colorHsv[1] * innerCircleRadius + fullCircleRadius).toInt()
                 canvas.drawLine((selectedPoint.x - pointerLength).toFloat(), selectedPoint.y.toFloat(), (selectedPoint.x + pointerLength).toFloat(), selectedPoint.y.toFloat(), pointerPaint)
                 canvas.drawLine(selectedPoint.x.toFloat(), (selectedPoint.y - pointerLength).toFloat(), selectedPoint.x.toFloat(), (selectedPoint.y + pointerLength).toFloat(), pointerPaint)
             }
@@ -165,12 +171,12 @@ class HSVColorPickerDialog(private val context: Context, private var selectedCol
 
         private var rect: Rect? = null
         private var bitmap: Bitmap? = null
-        private var pixels: IntArray
+        private lateinit var pixels: IntArray
         private var innerCircleRadius = 0f
         private var fullCircleRadius = 0f
         private var scaledWidth = 0
         private var scaledHeight = 0
-        private var scaledPixels: IntArray
+        private lateinit var scaledPixels: IntArray
         private var scaledInnerCircleRadius = 0f
         private var scaledFullCircleRadius = 0f
         private var scaledFadeOutSize = 0f
@@ -179,11 +185,11 @@ class HSVColorPickerDialog(private val context: Context, private var selectedCol
             super.onSizeChanged(w, h, oldw, oldh)
             rect = Rect(innerPadding, innerPadding, w - innerPadding, h - innerPadding)
             bitmap = Bitmap.createBitmap(w - 2 * innerPadding, h - 2 * innerPadding, Bitmap.Config.ARGB_8888)
-            fullCircleRadius = (Math.min(rect!!.width(), rect!!.height()) / 2).toFloat()
+            fullCircleRadius = (min(rect!!.width(), rect!!.height()) / 2).toFloat()
             innerCircleRadius = fullCircleRadius * (1 - FADE_OUT_FRACTION)
             scaledWidth = rect!!.width() / scale
             scaledHeight = rect!!.height() / scale
-            scaledFullCircleRadius = (Math.min(scaledWidth, scaledHeight) / 2).toFloat()
+            scaledFullCircleRadius = (min(scaledWidth, scaledHeight) / 2).toFloat()
             scaledInnerCircleRadius = scaledFullCircleRadius * (1 - FADE_OUT_FRACTION)
             scaledFadeOutSize = scaledFullCircleRadius - scaledInnerCircleRadius
             scaledPixels = IntArray(scaledWidth * scaledHeight)
@@ -195,7 +201,7 @@ class HSVColorPickerDialog(private val context: Context, private var selectedCol
             val w = rect!!.width()
             val h = rect!!.height()
             val hsv = floatArrayOf(0f, 0f, 1f)
-            var alpha = 255
+            var alpha: Int
             var x = -scaledFullCircleRadius.toInt()
             var y = -scaledFullCircleRadius.toInt()
             for (i in scaledPixels.indices) {
@@ -205,9 +211,9 @@ class HSVColorPickerDialog(private val context: Context, private var selectedCol
                 } else {
                     x++
                 }
-                val centerDist = Math.sqrt((x * x + y * y).toDouble())
+                val centerDist = sqrt((x * x + y * y).toDouble())
                 if (centerDist <= scaledFullCircleRadius) {
-                    hsv[0] = (Math.atan2(y.toDouble(), x.toDouble()) / Math.PI * 180f).toFloat() + 180
+                    hsv[0] = (atan2(y.toDouble(), x.toDouble()) / Math.PI * 180f).toFloat() + 180
                     hsv[1] = (centerDist / scaledInnerCircleRadius).toFloat()
                     alpha = if (centerDist <= scaledInnerCircleRadius) {
                         255
@@ -242,10 +248,10 @@ class HSVColorPickerDialog(private val context: Context, private var selectedCol
             val maxWidth = MeasureSpec.getSize(widthMeasureSpec)
             val maxHeight = MeasureSpec.getSize(heightMeasureSpec)
             val width: Int
-            val height: Int
             /*
 			 * Make the view quadratic, with height and width equal and as large as possible
-			 */height = Math.min(maxWidth, maxHeight)
+			 */
+            val height: Int = min(maxWidth, maxHeight)
             width = height
             setMeasuredDimension(width, height)
         }
@@ -255,15 +261,14 @@ class HSVColorPickerDialog(private val context: Context, private var selectedCol
             var y = y
             x -= fullCircleRadius.toInt()
             y -= fullCircleRadius.toInt()
-            val centerDist = Math.sqrt((x * x + y * y).toDouble())
-            hsv[0] = (Math.atan2(y.toDouble(), x.toDouble()) / Math.PI * 180f).toFloat() + 180
-            hsv[1] = Math.max(0f, Math.min(1f, (centerDist / innerCircleRadius).toFloat()))
+            val centerDist = sqrt((x * x + y * y).toDouble())
+            hsv[0] = (atan2(y.toDouble(), x.toDouble()) / Math.PI * 180f).toFloat() + 180
+            hsv[1] = max(0f, min(1f, (centerDist / innerCircleRadius).toFloat()))
             return Color.HSVToColor(hsv)
         }
 
         override fun onTouchEvent(event: MotionEvent): Boolean {
-            val action = event.actionMasked
-            when (action) {
+            when (event.actionMasked) {
                 MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
                     if (listener != null) {
                         listener!!.colorSelected(getColorForPoint(event.x.toInt(), event.y.toInt(), colorHsv))
@@ -284,9 +289,9 @@ class HSVColorPickerDialog(private val context: Context, private var selectedCol
     }
 
     private class HSVValueSlider : View {
-        constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle) {}
-        constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {}
-        constructor(context: Context?) : super(context) {}
+        constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle)
+        constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
+        constructor(context: Context?) : super(context)
 
         private var listener: OnColorSelectedListener? = null
         fun setListener(listener: OnColorSelectedListener?) {
@@ -315,7 +320,7 @@ class HSVColorPickerDialog(private val context: Context, private var selectedCol
         private var srcRect: Rect? = null
         private var dstRect: Rect? = null
         private var bitmap: Bitmap? = null
-        private var pixels: IntArray
+        private lateinit var pixels: IntArray
         override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
             var w = w
             super.onSizeChanged(w, h, oldw, oldh)
@@ -354,10 +359,9 @@ class HSVColorPickerDialog(private val context: Context, private var selectedCol
         }
 
         override fun onTouchEvent(event: MotionEvent): Boolean {
-            val action = event.actionMasked
-            when (action) {
+            when (event.actionMasked) {
                 MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
-                    val x = Math.max(0, Math.min(bitmap!!.width - 1, event.x.toInt()))
+                    val x = max(0, min(bitmap!!.width - 1, event.x.toInt()))
                     val value = x / bitmap!!.width.toFloat()
                     if (colorHsv[2] != value) {
                         colorHsv[2] = value

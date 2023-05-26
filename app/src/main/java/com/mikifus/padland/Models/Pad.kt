@@ -16,46 +16,46 @@ import java.util.Date
 class Pad(c: Cursor?) {
     var id: Long = 0
     var name: String? = null
-    private var local_name: String? = null
+    private var initLocalName: String? = null
     var server: String? = null
     var url: String? = null
-    private var last_used_date: Long = 0
-    private var create_date: Long = 0
+    private var lastUsedDate: Long = 0
+    private var createDate: Long = 0
     var accessCount: Long = 0
 
     init {
         if (c != null && c.count > 0) {
             id = c.getLong(0)
             name = c.getString(1)
-            local_name = c.getString(2)
+            initLocalName = c.getString(2)
             server = c.getString(3)
             url = c.getString(4)
-            last_used_date = c.getLong(5)
-            create_date = c.getLong(6)
+            lastUsedDate = c.getLong(5)
+            createDate = c.getLong(6)
             accessCount = c.getLong(7)
         }
     }
 
     val localName: String?
-        get() = if (local_name == null || local_name.isEmpty()) {
+        get() = if (initLocalName == null || initLocalName!!.isEmpty()) {
             name
-        } else local_name
+        } else initLocalName
     val rawLocalName: String
-        get() = if (local_name == null || local_name.isEmpty()) {
+        get() = if (initLocalName == null || initLocalName!!.isEmpty()) {
             ""
-        } else local_name
+        } else initLocalName!!
 
     fun getLastUsedDate(context: Context): String {
-        return lon_to_date(last_used_date, context)
+        return lonToDate(lastUsedDate, context)
     }
 
     fun getCreateDate(context: Context): String {
-        return lon_to_date(create_date, context)
+        return lonToDate(createDate, context)
     }
 
-    fun lon_to_date(TimeinMilliSeccond: Long, context: Context): String {
+    fun lonToDate(timeInMilliSeconds: Long, context: Context): String {
         val formatter = DateFormat.getDateFormat(context.applicationContext)
-        val dateObj = Date(TimeinMilliSeccond * 1000)
+        val dateObj = Date(timeInMilliSeconds * 1000)
         return formatter.format(dateObj)
     }
 }

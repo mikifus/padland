@@ -17,12 +17,13 @@ abstract class BasicAuthDialog : DialogFragment() {
     private var mView: View? = null
     private var dialog: Dialog? = null
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        mView = activity!!.layoutInflater.inflate(R.layout.dialog_auth, null)
-        mUsername = mView.findViewById<View>(R.id.txt_username) as EditText
-        mPassword = mView.findViewById<View>(R.id.txt_password) as EditText
+        val view = requireActivity().layoutInflater.inflate(R.layout.dialog_auth, null)
+        mView = view
+        mUsername = view.findViewById<View>(R.id.txt_username) as EditText
+        mPassword = view.findViewById<View>(R.id.txt_password) as EditText
         mUsername!!.requestFocus()
-        val builder = AlertDialog.Builder(activity!!)
-        builder.setView(mView)
+        val builder = AlertDialog.Builder(requireActivity())
+        builder.setView(view)
         builder.setTitle(R.string.padview_dialog_basicatuh_title)
         builder.setPositiveButton(getString(R.string.ok)
         ) { dialog, whichButton ->
@@ -36,8 +37,8 @@ abstract class BasicAuthDialog : DialogFragment() {
             onNegativeButtonClick()
         }
         dialog = builder.create()
-        onDialogCreated(dialog, mView)
-        return dialog
+        onDialogCreated(dialog, view)
+        return dialog as AlertDialog
     }
 
     protected open fun onDialogCreated(dialog: Dialog?, view: View?) {}

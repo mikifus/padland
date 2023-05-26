@@ -8,11 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper
  * Created by mikifus on 28/02/18.
  */
 class OldDatabaseHelper(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
-    var db: SQLiteDatabase
-
-    init {
-        db = writableDatabase
-    }
+    var db: SQLiteDatabase = writableDatabase
 
     override fun onCreate(db: SQLiteDatabase) {}
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}

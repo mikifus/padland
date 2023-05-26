@@ -16,7 +16,7 @@ import com.mikifus.padland.ServerListActivity
 class ServerListAdapter(context: ServerListActivity?, //    private ServerListActivity mContext;
                         private val layout_resource: Int) : ArrayAdapter<Any?>(context!!, layout_resource) {
     private val serverModel: ServerModel
-    private var items: ArrayList<Server?>?
+    private var items: ArrayList<Server>
 
     init {
         //        mContext = context;
@@ -33,7 +33,7 @@ class ServerListAdapter(context: ServerListActivity?, //    private ServerListAc
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(layout_resource, parent, false)
         }
-        (convertView!!.findViewById<View>(R.id.name) as TextView).text = server!!.name
+        (convertView!!.findViewById<View>(R.id.name) as TextView).text = server.name
         (convertView.findViewById<View>(R.id.url) as TextView).text = server.url
 
         // Return the completed view to render on screen
@@ -44,12 +44,12 @@ class ServerListAdapter(context: ServerListActivity?, //    private ServerListAc
         return serverModel.serverCount
     }
 
-    override fun getItem(position: Int): Server? {
-        return items!![position]
+    override fun getItem(position: Int): Server {
+        return items[position]
     }
 
     override fun getItemId(position: Int): Long {
-        return items!![position].getId()
+        return items[position].id
     }
 
     override fun notifyDataSetChanged() {
