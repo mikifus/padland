@@ -23,7 +23,7 @@ object WhiteListMatcher {
      *
      * @url http://www.adarshr.com/simple-implementation-of-wildcard-text-matching-using-java
      */
-    fun wildCardMatch(text: String, pattern: String?): Boolean {
+    private fun wildCardMatch(text: String, pattern: String?): Boolean {
         // Create the cards by splitting using a RegEx. If more speed
         // is desired, a simpler character based splitting can be done.
         var text = text
@@ -52,7 +52,7 @@ object WhiteListMatcher {
      * @param hostsWhitelist
      * @return
      */
-    fun isValidHost(url: String?, hostsWhitelist: Array<String?>?): Boolean {
+    fun isValidHost(url: String?, hostsWhitelist: Array<String?>): Boolean {
         if (!TextUtils.isEmpty(url)) {
             val host = Uri.parse(url).host ?: return false
             for (whitelistedHost in hostsWhitelist!!) {

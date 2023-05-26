@@ -33,10 +33,10 @@ class NewPadGroup : DialogFragment() {
     //        return view;
     //    }
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val view = activity!!.layoutInflater.inflate(R.layout.dialog_new_padgroup, null)
+        val view = requireActivity().layoutInflater.inflate(R.layout.dialog_new_padgroup, null)
         mEditText = view.findViewById<View>(R.id.txt_padgroup_name) as EditText
         //        mEditText.requestFocus();
-        val builder = AlertDialog.Builder(activity!!)
+        val builder = AlertDialog.Builder(requireActivity())
         builder.setView(view)
         builder.setTitle(R.string.padlist_dialog_new_padgroup_title)
         builder.setPositiveButton(getString(R.string.ok)
@@ -57,7 +57,7 @@ class NewPadGroup : DialogFragment() {
     private fun saveNewPadGroup(title: String) {
 //        Toast.makeText(getContext(), "It should save it", Toast.LENGTH_LONG).show();
         val values = ContentValues()
-        values.put(PadModel.Companion.NAME, title)
+        values.put(PadModel.NAME, title)
         val activity = activity as PadListActivity?
         activity!!.padlistDb!!.savePadgroupData(0, values)
         activity.notifyDataSetChanged()

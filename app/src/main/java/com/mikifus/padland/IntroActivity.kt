@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.github.paolorotolo.appintro.AppIntro2
 import com.github.paolorotolo.appintro.AppIntroFragment
+import com.mikifus.padland.Intro.CustomAppIntroFragment
 import com.mikifus.padland.Intro.LinkableAppIntroFragment
 
 /**
@@ -35,7 +36,8 @@ class IntroActivity : AppIntro2() {
                 getString(R.string.intro_fourth_desc),
                 R.drawable.intro_image4,
                 ContextCompat.getColor(this, R.color.intro_fourth_background)))
-        addSlide(LinkableAppIntroFragment.newInstance(getString(R.string.intro_fifth_title),
+        addSlide(
+            CustomAppIntroFragment.newInstance(getString(R.string.intro_fifth_title),
                 getString(R.string.intro_fifth_desc),
                 R.drawable.intro_image5,
                 ContextCompat.getColor(this, R.color.intro_fifth_background)))

@@ -15,7 +15,7 @@ class ColorPickerListPreference(private val mContext: Context, attrs: AttributeS
     private var showing = false
     override fun showDialog(state: Bundle) {
         dialog = HSVColorPickerDialog(mContext, intValue) { color -> // Do something with the selected color
-            val hexColor = String.format("#%06X", 0xFFFFFF and color)
+            val hexColor = String.format("#%06X", 0xFFFFFF and color as Int)
             value = hexColor
         }
         dialog!!.setTitle(R.string.settings_default_color_dialogtitle)
@@ -28,10 +28,10 @@ class ColorPickerListPreference(private val mContext: Context, attrs: AttributeS
         if (dialog != null && showing) {
             dialog!!.dismiss()
             val handler = Handler()
-            handler.postDelayed({ showDialog(null) }, 300)
+            handler.postDelayed({ showDialog(Bundle()) }, 300)
         }
     }
 
     private val intValue: Int
-        private get() = value.substring(1).toInt(16)
+        get() = value.substring(1).toInt(16)
 }

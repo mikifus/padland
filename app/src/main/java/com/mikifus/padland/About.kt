@@ -19,12 +19,8 @@ class About : PadLandActivity() {
         // respond to user input.  To make them active, you need to
         // call setMovementMethod() on the TextView object.
         val t = findViewById<View>(R.id.textView) as TextView
-        if (t != null) {
-            t.movementMethod = LinkMovementMethod.getInstance()
-        }
+        t.movementMethod = LinkMovementMethod.getInstance()
         val t2 = findViewById<View>(R.id.textView2) as TextView
-        if (t2 != null) {
-            t2.movementMethod = LinkMovementMethod.getInstance()
-        }
+        t2.movementMethod = LinkMovementMethod.getInstance()
     }
 }

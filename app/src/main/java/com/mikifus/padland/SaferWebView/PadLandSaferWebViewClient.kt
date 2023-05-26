@@ -10,9 +10,9 @@ import java.io.ByteArrayInputStream
  * Extended class, I
  * Created by mikifus on 23/04/16.
  */
-open class PadLandSaferWebViewClient(hostsWhitelist: Array<String?>?) : SaferWebViewClient(hostsWhitelist) {
-    protected override val webResourceResponseFromString: WebResourceResponse?
-        protected get() {
+open class PadLandSaferWebViewClient(hostsWhitelist: Array<String?>) : SaferWebViewClient(hostsWhitelist) {
+    override val webResourceResponseFromString: WebResourceResponse?
+        get() {
             Log.w("SaferWebViewClient", "Blocked a JS request to an external domains.")
             return getUtf8EncodedWebResourceResponse(ByteArrayInputStream("".toByteArray()))
         }

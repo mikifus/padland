@@ -26,12 +26,12 @@ class PadModel(context: Context?) : BaseModel(context) {
      */
     private fun _getPadDataFromDatabase(field: String, comparation: String): Cursor? {
         val c: Cursor?
-        val comparation_set = arrayOf(comparation)
+        val comparationSet = arrayOf(comparation)
         c = contentResolver.query(
-                PadContentProvider.Companion.PADLIST_CONTENT_URI,
-                PadContentProvider.Companion.getPadFieldsList(),
+                PadContentProvider.PADLIST_CONTENT_URI,
+                PadContentProvider.padFieldsList,
                 "$field = ?",
-                comparation_set,  // AKA id
+                comparationSet,  // AKA id
                 null
         )
         return c
@@ -43,10 +43,9 @@ class PadModel(context: Context?) : BaseModel(context) {
      * @return
      */
     private fun _getPadDataFromDatabase(): Cursor? {
-        val c: Cursor?
-        c = contentResolver.query(
-                PadContentProvider.Companion.PADLIST_CONTENT_URI,
-                PadContentProvider.Companion.getPadFieldsList(),
+        val c: Cursor? = contentResolver.query(
+                PadContentProvider.PADLIST_CONTENT_URI,
+                PadContentProvider.padFieldsList,
                 null,
                 null,  // AKA id
                 null
@@ -60,24 +59,24 @@ class PadModel(context: Context?) : BaseModel(context) {
      */
     fun _getAllPadData(): ArrayList<Pad> {
         val cursor = this._getPadDataFromDatabase()
-        val PadDatas = ArrayList<Pad>()
+        val padDatas = ArrayList<Pad>()
         if (cursor == null) {
-            return PadDatas
+            return padDatas
         }
         if (cursor.count == 0) {
             cursor.close()
-            return PadDatas
+            return padDatas
         }
-        var PadData: Pad
+        var padData: Pad
         cursor.moveToFirst()
         while (!cursor.isAfterLast) {
             // Goes to next by itself
-            PadData = Pad(cursor)
-            PadDatas.add(PadData)
+            padData = Pad(cursor)
+            padDatas.add(padData)
             cursor.moveToNext()
         }
         cursor.close()
-        return PadDatas
+        return padDatas
     }
 
     /**
@@ -85,8 +84,8 @@ class PadModel(context: Context?) : BaseModel(context) {
      * @param pad_id
      * @return
      */
-    fun _getPadDataById(pad_id: Long): Cursor? {
-        return this._getPadDataFromDatabase(PadContentProvider.Companion._ID, pad_id.toString())
+    private fun _getPadDataById(pad_id: Long): Cursor? {
+        return this._getPadDataFromDatabase(PadContentProvider._ID, pad_id.toString())
     }
 
     /**
@@ -97,9 +96,6 @@ class PadModel(context: Context?) : BaseModel(context) {
     fun _getPadDataByUrl(padUrl: String): Cursor? {
         return this._getPadDataFromDatabase(URL, padUrl)
     }
-
-    val nowDate: Long
-        get() = PadContentProvider.Companion.getNowDate()
 
     fun getPadById(id: Long): Pad {
         val c = _getPadDataById(id)
@@ -115,32 +111,16 @@ class PadModel(context: Context?) : BaseModel(context) {
      */
     fun savePad(pad_id: Long, values: ContentValues?): Boolean {
         return if (pad_id > 0) {
-            val where_value = arrayOf(pad_id.toString())
-            val result = contentResolver.update(PadContentProvider.Companion.PADLIST_CONTENT_URI, values, PadContentProvider.Companion._ID + " = ?", where_value)
+            val whereValue = arrayOf(pad_id.toString())
+            val result = contentResolver.update(PadContentProvider.PADLIST_CONTENT_URI, values, PadContentProvider._ID + " = ?", whereValue)
             result > 0
         } else {
             Log.d("INSERT", "Contents = " + values.toString())
-            val result = contentResolver.insert(PadContentProvider.Companion.PADLIST_CONTENT_URI, values)
+            val result = contentResolver.insert(PadContentProvider.PADLIST_CONTENT_URI, values)
             result != null
         }
     }
 
-    /**
-     * Gets current pad data and saves the modified values (LAST_USED_DATE and ACCESS_COUNT).
-     * I tried to optimize it in such way that there's no need to use _getPadData, but it didn't work.
-     * @param pad_id
-     * @return
-     */
-    //    public void accessUpdate( long pad_id ){
-    //        if( pad_id > 0 ) {
-    //            Pad data = _getPadData( pad_id );
-    //            ContentValues values = new ContentValues();
-    //            values.put( PadContentProvider.LAST_USED_DATE, getNowDate() );
-    //            values.put( PadContentProvider.ACCESS_COUNT, (data.getAccessCount() + 1));
-    //            String[] where_value = { String.valueOf(pad_id) };
-    //            contentResolver.update(PadContentProvider.PADLIST_CONTENT_URI, values, PadContentProvider._ID + "=?", where_value);
-    //        }
-    //    }
     companion object {
         const val TAG = "PadModel"
         const val _ID = "_id"

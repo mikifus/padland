@@ -12,8 +12,8 @@ import java.util.Arrays
 /**
  * Created by mikifus on 8/07/16.
  */
-class ServerModel(context: Context?) : BaseModel(context) {
-    private override val context: Context? = null
+open class ServerModel(context: Context?) : BaseModel(context) {
+    override var context: Context? = null
 
     /**
      * Self explanatory name.
@@ -23,13 +23,12 @@ class ServerModel(context: Context?) : BaseModel(context) {
      * @return
      */
     private fun _getServerDataFromDatabase(field: String, comparation: String): Cursor? {
-        var QUERY: String
-        var c: Cursor? = null
-        val comparation_set = arrayOf(comparation)
+        val c: Cursor?
+        val comparationSet = arrayOf(comparation)
         c = db.query(TABLE,
                 serverFieldsList,
                 "$field LIKE ?",
-                comparation_set,  // AKA id
+                comparationSet,  // AKA id
                 null,
                 null,
                 POSITION + " ASC, " + _ID + " DESC"
@@ -49,7 +48,7 @@ class ServerModel(context: Context?) : BaseModel(context) {
      * @param pad_id
      * @return
      */
-    fun _getServerDataById(pad_id: Long): Cursor? {
+    private fun _getServerDataById(pad_id: Long): Cursor? {
         return _getServerDataFromDatabase(_ID, pad_id.toString())
     }
 
@@ -58,7 +57,7 @@ class ServerModel(context: Context?) : BaseModel(context) {
      * @param padUrl
      * @return
      */
-    fun _getServerDataByUrl(padUrl: String): Cursor? {
+    private fun _getServerDataByUrl(padUrl: String): Cursor? {
         return _getServerDataFromDatabase(URL, padUrl)
     }
 
@@ -71,8 +70,8 @@ class ServerModel(context: Context?) : BaseModel(context) {
      */
     fun saveServerData(server_id: Long, values: ContentValues?): Boolean {
         return if (server_id > 0) {
-            val where_value = arrayOf(server_id.toString())
-            val result = db.update(TABLE, values, PadContentProvider.Companion._ID + "=?", where_value)
+            val whereValue = arrayOf(server_id.toString())
+            val result = db.update(TABLE, values, PadContentProvider._ID + "=?", whereValue)
             result > 0
         } else {
             Log.d("INSERT", "Contents = " + values.toString())
@@ -83,26 +82,24 @@ class ServerModel(context: Context?) : BaseModel(context) {
 
     val serverCount: Int
         get() {
-            val QUERY: String
             val c: Cursor? = null
             val comparation_set = arrayOf<String>()
-            QUERY = "SELECT " + _ID + " " +
+            val query: String = "SELECT " + _ID + " " +
                     "FROM " + TABLE + " "
-            val cursor = db.rawQuery(QUERY, comparation_set)
+            val cursor = db.rawQuery(query, comparation_set)
             val count = cursor.count
             cursor.close()
             return count
         }
 
-    fun _getServerDataByPosition(position: Int): Cursor? {
-        val QUERY: String
+    private fun _getServerDataByPosition(position: Int): Cursor? {
         var c: Cursor? = null
-        val comparation_set = arrayOf<String>()
-        QUERY = "SELECT * " +
+        val comparationSet = arrayOf<String>()
+        val query: String = "SELECT * " +
                 "FROM " + TABLE + " " +  //                            "WHERE " + field + "=?" +
                 " ORDER BY " + POSITION + " ASC," + _ID + " DESC " +
                 " LIMIT " + position + ", 1"
-        c = db.rawQuery(QUERY, comparation_set)
+        c = db.rawQuery(query, comparationSet)
         return c
     }
 
@@ -111,7 +108,7 @@ class ServerModel(context: Context?) : BaseModel(context) {
         val cursor = _getServerDataByPosition(position)
         cursor!!.moveToFirst()
         while (!cursor.isAfterLast) {
-            val id = cursor.getInt(0)
+            val id = cursor.getLong(0)
             val name = cursor.getString(1)
             val url = cursor.getString(2)
             val padprefix = cursor.getString(3)
@@ -120,7 +117,7 @@ class ServerModel(context: Context?) : BaseModel(context) {
             server.id = id
             server.name = name
             server.url = url
-            server.url_padprefix = padprefix
+            server.urlPadprefix = padprefix
             server.position = pos
             server.jquery = jquery == 1
             break
@@ -174,26 +171,25 @@ class ServerModel(context: Context?) : BaseModel(context) {
      * @return
      */
     private fun cursorToServer(cursor: Cursor?): Server {
-        val id = cursor!!.getInt(0)
+        val id = cursor!!.getLong(0)
         val name = cursor.getString(1)
         val url = cursor.getString(2)
         val padprefix = cursor.getString(3)
         val pos = cursor.getString(4)
         val jquery = cursor.getInt(5)
-        val server: Server
-        server = Server()
+        val server: Server = Server()
         server.id = id
         server.name = name
         server.url = url
-        server.url_padprefix = padprefix
+        server.urlPadprefix = padprefix
         server.position = pos
         server.jquery = jquery == 1
         return server
     }
 
     fun deleteServer(server_id: Long): Boolean {
-        val where_value = arrayOf(server_id.toString())
-        val result = db.delete(TABLE, PadContentProvider.Companion._ID + "=?", where_value)
+        val whereValue = arrayOf(server_id.toString())
+        val result = db.delete(TABLE, PadContentProvider._ID + "=?", whereValue)
         return result > 0
     }
 
@@ -203,21 +199,21 @@ class ServerModel(context: Context?) : BaseModel(context) {
      * @return String[]
      */
     fun getServerUrlList(context: Context?): Array<String?> {
-        val server_list: Array<String?>
+        val serverList: Array<String?>
 
         // Load the custom servers
-        val custom_servers = enabledServerList
-        val server_names = ArrayList<String?>()
-        for (server in custom_servers) {
-            server_names.add(server.getUrl())
+        val customServers = enabledServerList
+        val serverNames = ArrayList<String?>()
+        for (server in customServers) {
+            serverNames.add(server.url)
         }
 
         // Server list to provide a fallback value
         val collection: MutableCollection<String?> = ArrayList()
-        collection.addAll(server_names)
-        collection.addAll(Arrays.asList(*context!!.resources.getStringArray(R.array.etherpad_servers_url_home)))
-        server_list = collection.toTypedArray()
-        return server_list
+        collection.addAll(serverNames)
+        collection.addAll(listOf(*context!!.resources.getStringArray(R.array.etherpad_servers_url_home)))
+        serverList = collection.toTypedArray()
+        return serverList
     }
 
     /**
@@ -226,21 +222,21 @@ class ServerModel(context: Context?) : BaseModel(context) {
      * @return String[]
      */
     fun getServerUrlPrefixList(context: Context?): Array<String?> {
-        val server_list: Array<String?>
+        val serverList: Array<String?>
         // Load the custom servers
-        val custom_servers = enabledServerList
-        val server_names = ArrayList<String?>()
-        for (server in custom_servers) {
-            server_names.add(server.padPrefixWithUrl)
+        val customServers = enabledServerList
+        val serverNames = ArrayList<String?>()
+        for (server in customServers) {
+            serverNames.add(server.padPrefixWithUrl)
         }
 
         // Server list to provide a fallback value
 //        server_list.getResources().getStringArray( R.array.etherpad_servers_name );
         val collection: MutableCollection<String?> = ArrayList()
-        collection.addAll(server_names)
-        collection.addAll(Arrays.asList(*context!!.resources.getStringArray(R.array.etherpad_servers_url_padprefix)))
-        server_list = collection.toTypedArray()
-        return server_list
+        collection.addAll(serverNames)
+        collection.addAll(listOf(*context!!.resources.getStringArray(R.array.etherpad_servers_url_padprefix)))
+        serverList = collection.toTypedArray()
+        return serverList
     }
 
     fun getServerPrefixFromUrl(context: Context?, server: String?): String? {
@@ -261,8 +257,8 @@ class ServerModel(context: Context?) : BaseModel(context) {
     companion object {
         const val TAG = "ServerModel"
         protected const val OLD_DATABASE_NAME = "commments.db"
-        protected val DATABASE_NAME: String = PadlandDbHelper.Companion.DATABASE_NAME
-        protected val DATABASE_VERSION: Int = BaseModel.Companion.DATABASE_VERSION
+        protected val DATABASE_NAME: String = PadlandDbHelper.DATABASE_NAME
+        protected val DATABASE_VERSION: Int = BaseModel.DATABASE_VERSION
         const val TABLE = "padland_servers"
         const val _ID = "_id"
         const val NAME = "name" // Name of the server

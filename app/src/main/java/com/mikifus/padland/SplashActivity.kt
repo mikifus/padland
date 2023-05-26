@@ -9,7 +9,7 @@ import android.preference.PreferenceManager
  * It does only one thing: show a fullscreen splash image during the
  * specified time.
  */
-class SplashActivity : PadLandActivity() {
+open class SplashActivity : PadLandActivity() {
     /** Duration of wait  */
     private val SPLASH_DISPLAY_LENGTH = 1500
 
@@ -25,7 +25,7 @@ class SplashActivity : PadLandActivity() {
          * and close this Splash-Screen after some seconds.*/Handler().postDelayed({ launchNext() }, SPLASH_DISPLAY_LENGTH.toLong())
     }
 
-    protected fun launchNext() {
+    private fun launchNext() {
         //  Declare a new thread to do a preference check
         val t = Thread {
             //  Initialize SharedPreferences

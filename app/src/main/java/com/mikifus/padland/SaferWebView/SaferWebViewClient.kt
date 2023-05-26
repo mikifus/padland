@@ -14,11 +14,11 @@ import java.io.ByteArrayInputStream
 /**
  * Implements whitelisting on host name
  */
-open class SaferWebViewClient(protected var hostsWhitelist: Array<String?>?) : WebViewClient() {
+open class SaferWebViewClient(protected var hostsWhitelist: Array<String?>) : WebViewClient() {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? {
-        val isvalid = isValidHost(request.url.toString())
-        return if (isvalid) {
+        val isValid = isValidHost(request.url.toString())
+        return if (isValid) {
             super.shouldInterceptRequest(view, request)
         } else {
             webResourceResponseFromString
@@ -26,8 +26,8 @@ open class SaferWebViewClient(protected var hostsWhitelist: Array<String?>?) : W
     }
 
     override fun shouldInterceptRequest(view: WebView, url: String): WebResourceResponse? {
-        val isvalid = isValidHost(url)
-        return if (isvalid) {
+        val isValid = isValidHost(url)
+        return if (isValid) {
             super.shouldInterceptRequest(view, url)
         } else {
             webResourceResponseFromString
@@ -35,7 +35,7 @@ open class SaferWebViewClient(protected var hostsWhitelist: Array<String?>?) : W
     }
 
     protected open val webResourceResponseFromString: WebResourceResponse?
-        protected get() {
+        get() {
             Log.w("SaferWebViewClient", "Blocked a JS request to an external domains.")
             return getUtf8EncodedWebResourceResponse(ByteArrayInputStream("alert('!NO!')".toByteArray()))
         }

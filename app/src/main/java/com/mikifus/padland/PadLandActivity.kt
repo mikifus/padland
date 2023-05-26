@@ -1,6 +1,7 @@
 package com.mikifus.padland
 
 import android.app.LoaderManager
+import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.os.Bundle
@@ -24,13 +25,13 @@ open class PadLandActivity : AppCompatActivity() {
      * @return
      */
     open fun onCreateOptionsMenu(menu: Menu?, menu_id: Int): Boolean {
-        var menu_id = menu_id
-        if (menu_id == 0) {
+        var menuId = menu_id
+        if (menuId == 0) {
             //Default value
-            menu_id = R.menu.pad_list
+            menuId = R.menu.pad_list
         }
         // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(menu_id, menu)
+        menuInflater.inflate(menuId, menu)
         return true
     }
 
@@ -58,7 +59,7 @@ open class PadLandActivity : AppCompatActivity() {
      */
     val isNetworkAvailable: Boolean
         get() {
-            val cm = getSystemService(this.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val netInfo = cm.activeNetworkInfo
             return netInfo != null && netInfo.isConnectedOrConnecting
         }
@@ -70,6 +71,5 @@ open class PadLandActivity : AppCompatActivity() {
      * @return
      */
     protected fun initLoader(callbacks_container: LoaderManager.LoaderCallbacks<*>?) {
-        loaderManager.initLoader<Any>(0, null, callbacks_container)
-    }
+        loaderManager.initLoader(0, null, callbacks_container)    }
 }

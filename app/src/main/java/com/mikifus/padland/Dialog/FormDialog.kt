@@ -11,14 +11,14 @@ import com.mikifus.padland.R
 /**
  * Created by mikifus on 27/02/18.
  */
-open class FormDialog    /*R.layout.dialog_new_server*/(protected var title: String, protected var callbackObject: FormDialogCallBack) : DialogFragment() {
+open class FormDialog    /*R.layout.dialog_new_server*/(protected var title: String, private var callbackObject: FormDialogCallBack) : DialogFragment() {
     protected var view = 0
-    protected var currentDialog: Dialog? = null
-    protected var main_view: View? = null
+    private var currentDialog: Dialog? = null
+    protected var mainView: View? = null
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        main_view = activity!!.layoutInflater.inflate(view, null)
-        val builder = AlertDialog.Builder(activity!!)
-        builder.setView(main_view)
+        mainView = requireActivity().layoutInflater.inflate(view, null)
+        val builder = AlertDialog.Builder(requireActivity())
+        builder.setView(mainView)
         builder.setTitle(title)
         builder.setPositiveButton(getString(R.string.ok)
         ) { dialog, whichButton ->
@@ -61,7 +61,7 @@ open class FormDialog    /*R.layout.dialog_new_server*/(protected var title: Str
     }
 
     protected open val contentValues: ContentValues?
-        protected get() = ContentValues()
+        get() = ContentValues()
 
     protected open fun setViewEvents() {}
     interface FormDialogCallBack {

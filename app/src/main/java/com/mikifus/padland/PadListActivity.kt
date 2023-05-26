@@ -23,9 +23,7 @@ import android.content.Intent
 import android.content.Loader
 import android.database.Cursor
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.text.ClipboardManager
 import android.util.Log
 import android.view.ActionMode
 import android.view.Menu
@@ -95,14 +93,14 @@ class PadListActivity : PadLandDataActivity(), ActionMode.Callback, LoaderManage
      * it is in the whitelist.
      */
     private fun _textFromIntent() {
-        var extra_text = intent.getStringExtra(Intent.EXTRA_TEXT)
-        if (extra_text != null) {
-            extra_text = extra_text.trim { it <= ' ' }
-            if (WhiteListMatcher.checkValidUrl(extra_text)
-                    && WhiteListMatcher.isValidHost(extra_text, serverWhiteList)) {
+        var extraText = intent.getStringExtra(Intent.EXTRA_TEXT)
+        if (extraText != null) {
+            extraText = extraText.trim { it <= ' ' }
+            if (WhiteListMatcher.checkValidUrl(extraText)
+                    && WhiteListMatcher.isValidHost(extraText, serverWhiteList)) {
                 val i = Intent(this@PadListActivity, PadViewActivity::class.java)
                 i.action = Intent.ACTION_VIEW
-                i.data = Uri.parse(extra_text)
+                i.data = Uri.parse(extraText)
                 //                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(extra_text));
                 i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
                 //                i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
@@ -118,14 +116,9 @@ class PadListActivity : PadLandDataActivity(), ActionMode.Callback, LoaderManage
                 }
                 return
             }
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-                val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-                clipboard.text = extra_text
-            } else {
-                val clipboard = getSystemService(CLIPBOARD_SERVICE) as android.content.ClipboardManager
-                val clip = ClipData.newPlainText("Copied Text", extra_text)
-                clipboard.setPrimaryClip(clip)
-            }
+            val clipboard = getSystemService(CLIPBOARD_SERVICE) as android.content.ClipboardManager
+            val clip = ClipData.newPlainText("Copied Text", extraText)
+            clipboard.setPrimaryClip(clip)
             Toast.makeText(this, getString(R.string.activity_padlist_implicitintent_text_copied), Toast.LENGTH_LONG).show()
         }
     }
@@ -138,7 +131,7 @@ class PadListActivity : PadLandDataActivity(), ActionMode.Callback, LoaderManage
      *
      * @param pad_id_list
      */
-    override fun _deletePad(pad_id_list: ArrayList<String>) {
+    override fun _deletePad(pad_id_list: ArrayList<String?>) {
         super._deletePad(pad_id_list)
         if (adapter != null) {
             adapter!!.notifyDataSetChanged()
@@ -225,7 +218,7 @@ class PadListActivity : PadLandDataActivity(), ActionMode.Callback, LoaderManage
             if (itemType == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
                 val groupId = adapter!!.getGroupId(groupPosition)
                 if (groupId > 0) {
-                    menu_delete_group(groupId)
+                    menuDeleteGroup(groupId)
                     return@OnItemLongClickListener true
                 }
             } else if (itemType == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
@@ -327,9 +320,9 @@ class PadListActivity : PadLandDataActivity(), ActionMode.Callback, LoaderManage
      * @param args
      * @return
      */
-    override fun onCreateLoader(id: Int, args: Bundle): Loader<Cursor> {
-        val projection = arrayOf<String>(PadContentProvider.Companion._ID, PadModel.Companion.NAME, PadModel.Companion.URL)
-        return CursorLoader(this, PadContentProvider.Companion.PADLIST_CONTENT_URI, projection, null, null, null)
+    override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
+        val projection = arrayOf<String>(PadContentProvider._ID, PadModel.NAME, PadModel.URL)
+        return CursorLoader(this, PadContentProvider.PADLIST_CONTENT_URI, projection, null, null, null)
     }
 
     /**
@@ -347,11 +340,12 @@ class PadListActivity : PadLandDataActivity(), ActionMode.Callback, LoaderManage
      *
      * @param loader
      */
+    @Deprecated("Deprecated in Java")
     override fun onLoaderReset(loader: Loader<Cursor>) {
         // data is not available anymore, delete reference
 //        setAdapter();
         adapter = null
-        expandableListView.setAdapter(adapter)
+        expandableListView!!.adapter = adapter
     }
 
     /**
@@ -391,35 +385,35 @@ class PadListActivity : PadLandDataActivity(), ActionMode.Callback, LoaderManage
     override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menuitem_group -> {
-                menu_group(checkedItemIds)
+                menuGroup(checkedItemIds)
                 // Action picked, so close the CAB
                 mode.finish()
                 true
             }
 
             R.id.menuitem_copy -> {
-                menu_copy(checkedItemIds)
+                menuCopy(checkedItemIds)
                 // Action picked, so close the CAB
                 mode.finish()
                 true
             }
 
             R.id.menuitem_edit -> {
-                menu_edit(checkedItemIds)
+                menuEdit(checkedItemIds)
                 // Action picked, so close the CAB
                 mode.finish()
                 true
             }
 
             R.id.menuitem_delete -> {
-                AskDelete(checkedItemIds)
+                askDelete(checkedItemIds)
                 // Action picked, so close the CAB
                 mode.finish()
                 true
             }
 
             R.id.menuitem_share -> {
-                menu_share(checkedItemIds)
+                menuShare(checkedItemIds)
                 // Action picked, so close the CAB
                 mode.finish()
                 true
@@ -431,7 +425,7 @@ class PadListActivity : PadLandDataActivity(), ActionMode.Callback, LoaderManage
 
     //        HashMap<Long, ArrayList<String>> padlist_data = _getPadListData();
     private val checkedItemIds: ArrayList<String?>
-        private get() {
+        get() {
             val selectedItems = ArrayList<String?>()
             //        HashMap<Long, ArrayList<String>> padlist_data = _getPadListData();
             val positions = expandableListView!!.checkedItemPositions

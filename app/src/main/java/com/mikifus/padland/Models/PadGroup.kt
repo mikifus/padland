@@ -29,7 +29,14 @@ class PadGroup {
         }
     }
 
-    override fun equals(obj: Any?): Boolean {
-        return (obj as PadGroup?)!!.id == id
+    override fun equals(other: Any?): Boolean {
+        return (other as PadGroup?)!!.id == id
+    }
+
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + (name?.hashCode() ?: 0)
+        result = 31 * result + position
+        return result
     }
 }

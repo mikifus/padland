@@ -24,11 +24,11 @@ import java.util.Date
  *
  * @author mikifus
  */
-class PadContentProvider : ContentProvider() {
+open class PadContentProvider : ContentProvider() {
     /**
      * Database specific constant declarations
      */
-    protected var db: SQLiteDatabase? = null
+    private var db: SQLiteDatabase? = null
 
     /**
      * Deletes a document from the db
@@ -38,21 +38,21 @@ class PadContentProvider : ContentProvider() {
      * @return
      */
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?): Int {
-        var count = 0
+        val count: Int
         Log.d("DELETE_QUERY", selection + " - " + selectionArgs.toString())
         val id: String
         val query: ArrayList<String?>
         when (uriMatcher!!.match(uri)) {
             PADLIST -> {
                 Log.d("DELETE_PADLIST", selection + " - " + selectionArgs.toString())
-                db!!.delete(RELATION_TABLE_NAME, _ID_PAD + " =?", selectionArgs)
+                db!!.delete(RELATION_TABLE_NAME, "$_ID_PAD =?", selectionArgs)
                 count = db!!.delete(PAD_TABLE_NAME, selection, selectionArgs)
             }
 
             PAD_ID -> {
                 Log.d("DELETE_PAD_ID", selection + " - " + Arrays.toString(selectionArgs))
                 id = uri.pathSegments[1]
-                query = ArrayList(Arrays.asList(*selectionArgs))
+                query = ArrayList(selectionArgs?.let { listOf(*it) }!!)
                 query.add(0, id)
                 db!!.delete(RELATION_TABLE_NAME, _ID_PAD + " = ?", arrayOfNulls(0))
                 count = db!!.delete(PAD_TABLE_NAME, _ID + " = ?" + if (!TextUtils.isEmpty(selection)) " AND (?)" else "", query.toTypedArray())
@@ -67,7 +67,7 @@ class PadContentProvider : ContentProvider() {
             PADGROUP_ID -> {
                 Log.d(TAG, "delete_padgroup_id: " + selection + " - " + Arrays.toString(selectionArgs))
                 id = uri.pathSegments[1]
-                query = ArrayList(Arrays.asList(*selectionArgs))
+                query = ArrayList(selectionArgs?.let { listOf(*it) }!!)
                 query.add(0, id)
                 db!!.delete(RELATION_TABLE_NAME, _ID_GROUP + " = ?", arrayOfNulls(0))
                 count = db!!.delete(PADGROUP_TABLE_NAME, _ID + " = ?" + if (!TextUtils.isEmpty(selection)) " AND (?)" else "", query.toTypedArray())
@@ -97,7 +97,7 @@ class PadContentProvider : ContentProvider() {
             PADLIST -> count = db!!.update(PAD_TABLE_NAME, values, selection, selectionArgs)
             PAD_ID -> {
                 id = uri.pathSegments[1]
-                query = ArrayList(Arrays.asList(*selectionArgs))
+                query = ArrayList(selectionArgs?.let { listOf(*it) }!!)
                 query.add(0, id)
                 count = db!!.update(PAD_TABLE_NAME,
                         values,
@@ -169,7 +169,7 @@ class PadContentProvider : ContentProvider() {
      * @return
      */
     override fun query(uri: Uri, projection: Array<String>?, selection: String?, selectionArgs: Array<String>?, sortOrder: String?): Cursor? {
-        var sortOrder = sortOrder
+        var order = sortOrder
         val qb = SQLiteQueryBuilder()
         when (uriMatcher!!.match(uri)) {
             PADLIST -> {
@@ -189,13 +189,13 @@ class PadContentProvider : ContentProvider() {
 
             else -> throw IllegalArgumentException("Unknown URI $uri")
         }
-        if (sortOrder == null || sortOrder.isEmpty()) {
+        if (order.isNullOrEmpty()) {
             /**
              * By default sort
              */
-            sortOrder = LAST_USED_DATE + " DESC "
+            order = "$LAST_USED_DATE DESC "
         }
-        val c = qb.query(db, projection, selection, selectionArgs, null, null, sortOrder)
+        val c = qb.query(db, projection, selection, selectionArgs, null, null, order)
         /**
          * register to watch a content URI for changes
          */
@@ -219,11 +219,11 @@ class PadContentProvider : ContentProvider() {
     }
 
     companion object {
-        const val PROVIDER_NAME = "com.mikifus.padland.padlandcontentprovider"
+        private const val PROVIDER_NAME = "com.mikifus.padland.padlandcontentprovider"
         const val TAG = "PadLandContentProvider"
-        const val AUTHORITY = "content://" + PROVIDER_NAME + "/"
-        val PADLIST_CONTENT_URI = Uri.parse(AUTHORITY + "padlist")
-        val PADGROUPS_CONTENT_URI = Uri.parse(AUTHORITY + "padgroups")
+        private const val AUTHORITY = "content://$PROVIDER_NAME/"
+        val PADLIST_CONTENT_URI: Uri = Uri.parse(AUTHORITY + "padlist")
+        val PADGROUPS_CONTENT_URI: Uri = Uri.parse(AUTHORITY + "padgroups")
         const val DATABASE_VERSION = 8
         const val _ID = "_id"
         const val LOCAL_NAME = "local_name" // Alias of the pad
@@ -239,15 +239,15 @@ class PadContentProvider : ContentProvider() {
         const val PADGROUP_ID = 4
         const val PADLIST_PADGROUP_ID = 5
         private val PROJECTION_MAP: HashMap<String, String>? = null
-        val uriMatcher: UriMatcher? = null
+        var uriMatcher: UriMatcher? = null
 
         init {
             uriMatcher = UriMatcher(UriMatcher.NO_MATCH)
-            uriMatcher.addURI(PROVIDER_NAME, "padlist", PADLIST)
-            uriMatcher.addURI(PROVIDER_NAME, "padlist/#", PAD_ID)
-            uriMatcher.addURI(PROVIDER_NAME, "padgroups", PADGROUP_LIST)
-            uriMatcher.addURI(PROVIDER_NAME, "padgroups/#", PADGROUP_ID)
-            uriMatcher.addURI(PROVIDER_NAME, "padlist_padgroup_id/#", PADLIST_PADGROUP_ID)
+            uriMatcher!!.addURI(PROVIDER_NAME, "padlist", PADLIST)
+            uriMatcher!!.addURI(PROVIDER_NAME, "padlist/#", PAD_ID)
+            uriMatcher!!.addURI(PROVIDER_NAME, "padgroups", PADGROUP_LIST)
+            uriMatcher!!.addURI(PROVIDER_NAME, "padgroups/#", PADGROUP_ID)
+            uriMatcher!!.addURI(PROVIDER_NAME, "padlist_padgroup_id/#", PADLIST_PADGROUP_ID)
         }
 
         const val PAD_TABLE_NAME = "padlist"

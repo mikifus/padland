@@ -9,7 +9,7 @@ import java.net.URL
 class PadUrl private constructor(builder: Builder) {
     val padName: String?
     val padServer: String?
-    val padPrefix: String?
+    private val padPrefix: String?
 
     init {
         padName = builder.name
@@ -23,16 +23,16 @@ class PadUrl private constructor(builder: Builder) {
     val string: String
         get() = makeBaseUrl() + padName
 
-    private fun makeBaseUrl(): String? {
-        var local_prefix = padPrefix
-        if (local_prefix!!.isEmpty()) {
-            throw RuntimeException("The pad url was not correctly built. Check the fconfiguration for this server (" + padServer + ").")
+    private fun makeBaseUrl(): String {
+        var localPrefix = padPrefix
+        if (localPrefix!!.isEmpty()) {
+            throw RuntimeException("The pad url was not correctly built. Check the configuration for this server ($padServer).")
         }
         // Must end with /
-        if (!local_prefix.endsWith("/")) {
-            local_prefix = "$local_prefix/"
+        if (!localPrefix.endsWith("/")) {
+            localPrefix = "$localPrefix/"
         }
-        return local_prefix
+        return localPrefix
     }
 
     override fun toString(): String {

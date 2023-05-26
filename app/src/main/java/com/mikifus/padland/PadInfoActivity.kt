@@ -18,7 +18,7 @@ import java.util.LinkedList
  * Its menu as well allows to delete.
  */
 class PadInfoActivity : PadLandDataActivity() {
-    var pad_id: Long = 0
+    private var padId: Long = 0
 
     /**
      *
@@ -27,16 +27,16 @@ class PadInfoActivity : PadLandDataActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pad_info)
-        pad_id = _getPadId()
-        if (pad_id <= 0) {
+        padId = _getPadId()
+        if (padId <= 0) {
             Toast.makeText(this, getString(R.string.unexpected_error), Toast.LENGTH_LONG).show()
             return
         }
-        val pad_data = _getPad(pad_id)
+        val padData = _getPad(padId)
 
         // Action bar title
-        supportActionBar.setTitle(pad_data.localName)
-        val adapter = _doInfoList(pad_data)
+        supportActionBar?.title = padData.localName
+        val adapter = _doInfoList(padData)
         val list = findViewById<View>(R.id.listView) as ListView
         list.adapter = adapter
     }
@@ -44,15 +44,15 @@ class PadInfoActivity : PadLandDataActivity() {
     /**
      * Takes the pad data and prepares a list with information,
      * then returns the adapter for the view.
-     * @param pad_data
+     * @param padData
      * @return
      */
-    private fun _doInfoList(pad_data: Pad?): SeparatedListAdapter {
+    private fun _doInfoList(padData: Pad?): SeparatedListAdapter {
         val datalist: MutableList<Map<String, *>> = LinkedList()
-        datalist.add(_doListItem(pad_data.getUrl(), getString(R.string.padinfo_pad_url)))
-        datalist.add(_doListItem(pad_data!!.getCreateDate(this), getString(R.string.padinfo_createdate)))
-        datalist.add(_doListItem(pad_data.getLastUsedDate(this), getString(R.string.padinfo_lastuseddate)))
-        datalist.add(_doListItem(pad_data.accessCount.toString(), getString(R.string.padinfo_times_accessed)))
+        datalist.add(_doListItem(padData!!.url, getString(R.string.padinfo_pad_url)))
+        datalist.add(_doListItem(padData.getCreateDate(this), getString(R.string.padinfo_createdate)))
+        datalist.add(_doListItem(padData.getLastUsedDate(this), getString(R.string.padinfo_lastuseddate)))
+        datalist.add(_doListItem(padData.accessCount.toString(), getString(R.string.padinfo_times_accessed)))
         val adapter = SeparatedListAdapter(this)
 
         // create our list and custom adapter
@@ -87,22 +87,22 @@ class PadInfoActivity : PadLandDataActivity() {
 //        Intent intent;
 
 //        Log.d(TAG, "OptionsItemSelected pad_id: " + pad_id);
-        val pad_list = ArrayList<String?>()
-        pad_list.add(pad_id.toString())
+        val padList = ArrayList<String?>()
+        padList.add(padId.toString())
         when (item.itemId) {
             R.id.menuitem_share -> {
-                Log.d("MENU_SHARE", pad_id.toString())
-                menu_share(pad_list)
+                Log.d("MENU_SHARE", padId.toString())
+                menuShare(padList)
             }
 
             R.id.menuitem_copy -> {
-                Log.d("MENU_SHARE", pad_id.toString())
-                menu_copy(pad_list)
+                Log.d("MENU_SHARE", padId.toString())
+                menuCopy(padList)
             }
 
             R.id.menuitem_delete -> {
-                Log.d("MENU_DELETE", pad_id.toString())
-                AskDelete(pad_list)
+                Log.d("MENU_DELETE", padId.toString())
+                askDelete(padList)
             }
 
             else -> return super.onOptionsItemSelected(item)
@@ -112,11 +112,10 @@ class PadInfoActivity : PadLandDataActivity() {
 
     /**
      * Takes you to the padView activity
-     * @param w
      */
-    fun onViewButtonClick(w: View?) {
+    fun onViewButtonClick() {
         val padViewIntent = Intent(this@PadInfoActivity, PadViewActivity::class.java)
-        padViewIntent.putExtra("pad_id", pad_id)
+        padViewIntent.putExtra("pad_id", padId)
         startActivity(padViewIntent)
     }
 

@@ -22,7 +22,6 @@ import com.mikifus.padland.Models.PadModel
 import com.mikifus.padland.Models.ServerModel
 import java.net.MalformedURLException
 import java.net.URL
-import java.util.Arrays
 
 /**
  * A data activity inherits from the main activity and provides methods
@@ -32,16 +31,16 @@ import java.util.Arrays
  */
 open class PadLandDataActivity : PadLandActivity(), FormDialogCallBack {
     var padlistDb: PadlistDb? = null
-    private val meta_groups = ArrayList<HashMap<String, String>>()
+    private val metaGroups = ArrayList<HashMap<String, String>>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         padlistDb = PadlistDb(contentResolver)
         Log.d(TAG, "Data activity started running")
-        val unclassified_group = HashMap<String, String>()
-        unclassified_group[PadContentProvider.Companion._ID] = "0"
-        unclassified_group[PadModel.Companion.NAME] = "Unclassified"
-        unclassified_group[PadGroupModel.Companion.POSITION] = "999999"
-        meta_groups.add(unclassified_group)
+        val unclassifiedGroup = HashMap<String, String>()
+        unclassifiedGroup[PadContentProvider.Companion._ID] = "0"
+        unclassifiedGroup[PadModel.Companion.NAME] = "Unclassified"
+        unclassifiedGroup[PadGroupModel.Companion.POSITION] = "999999"
+        metaGroups.add(unclassifiedGroup)
     }
 
     /**
@@ -61,9 +60,9 @@ open class PadLandDataActivity : PadLandActivity(), FormDialogCallBack {
     fun _getPad(pad_id: Long): Pad {
         val cursor = padlistDb!!._getPadById(pad_id)
         cursor!!.moveToFirst()
-        val pad_data = Pad(cursor)
+        val padData = Pad(cursor)
         cursor.close()
-        return pad_data
+        return padData
     }
 
     /**
@@ -71,12 +70,12 @@ open class PadLandDataActivity : PadLandActivity(), FormDialogCallBack {
      * @return
      */
     fun _getPads(): HashMap<Long, Pad> {
-        val PadHashMap = HashMap<Long, Pad>()
-        val Pads = padlistDb!!._getAllPad()
-        for (Pad in Pads) {
-            PadHashMap[Pad.id] = Pad
+        val padHashMap = HashMap<Long, Pad>()
+        val pads = padlistDb!!._getAllPad()
+        for (Pad in pads) {
+            padHashMap[Pad.id] = Pad
         }
-        return PadHashMap
+        return padHashMap
     }
 
     /**
@@ -86,9 +85,9 @@ open class PadLandDataActivity : PadLandActivity(), FormDialogCallBack {
      * @param selectedItems
      * @return AlertDialog
      */
-    open fun AskDelete(selectedItems: ArrayList<String>): AlertDialog {
+    open fun askDelete(selectedItems: ArrayList<String?>): AlertDialog {
         val activity: Context = this
-        val DeleteDialogBox = AlertDialog.Builder(this) //set message, title, and icon
+        val deleteDialogBox = AlertDialog.Builder(this) //set message, title, and icon
                 .setTitle(R.string.delete)
                 .setMessage(getString(R.string.sure_to_delete_pad))
                 .setIcon(android.R.drawable.ic_menu_delete)
@@ -98,8 +97,8 @@ open class PadLandDataActivity : PadLandActivity(), FormDialogCallBack {
                 }
                 .setNegativeButton(getString(R.string.cancel)) { dialog, which -> dialog.dismiss() }
                 .create()
-        DeleteDialogBox.show()
-        return DeleteDialogBox
+        deleteDialogBox.show()
+        return deleteDialogBox
     }
 
     /**
@@ -107,12 +106,12 @@ open class PadLandDataActivity : PadLandActivity(), FormDialogCallBack {
      *
      * @param pad_id_list
      */
-    open fun _deletePad(pad_id_list: ArrayList<String>) {
+    open fun _deletePad(pad_id_list: ArrayList<String?>) {
         if (pad_id_list.size > 0) {
             for (i in pad_id_list.indices) {
                 Log.d("DELETE_PAD", "list_get: " + pad_id_list[i])
-                val result = padlistDb!!.deletePad(pad_id_list[i].toLong())
-                if (result) {
+                val result = pad_id_list[i]?.let { padlistDb!!.deletePad(it.toLong()) }
+                if (result == true) {
                     Toast.makeText(this, getString(R.string.padlist_document_deleted), Toast.LENGTH_LONG).show()
                 }
             }
@@ -125,72 +124,71 @@ open class PadLandDataActivity : PadLandActivity(), FormDialogCallBack {
      * deleted.
      * @return AlertDialog
      */
-    protected fun getGroupIdFromAdapterData(groupPosition: Int): Long {
+    private fun getGroupIdFromAdapterData(groupPosition: Int): Long {
         val model = PadGroupModel(this)
-        val padgroups_data = model.getPadgroupAt(groupPosition)
+        val padgroupsData = model.getPadgroupAt(groupPosition)
         var id = 0L
-        if (padgroups_data!!.size > 0) {
-            id = padgroups_data[PadContentProvider.Companion._ID]!!.toLong()
+        if (padgroupsData.size > 0) {
+            id = padgroupsData[PadContentProvider.Companion._ID]!!.toLong()
         }
         return id
     }
 
-    protected fun getGroupNameFromAdapterData(groupPosition: Int): String? {
+    private fun getGroupNameFromAdapterData(groupPosition: Int): String? {
         val model = PadGroupModel(this)
-        val padgroups_data = model.getPadgroupAt(groupPosition)
+        val padgroupsData = model.getPadgroupAt(groupPosition)
         var name: String? = ""
-        if (padgroups_data!!.size > 0) {
-            name = padgroups_data[PadModel.Companion.NAME]
+        if (padgroupsData.size > 0) {
+            name = padgroupsData[PadModel.Companion.NAME]
         }
         return name
     }
 
-    fun menu_copy(selectedItems: ArrayList<String>) {
-        val copy_string = StringBuilder()
+    fun menuCopy(selectedItems: ArrayList<String?>) {
+        val copyString = StringBuilder()
         for (pad_id_string in selectedItems) {
-            val Pad = _getPad(pad_id_string.toLong())
-            if (copy_string.length > 0) {
-                copy_string.append("\n")
+            val pad = pad_id_string?.let { _getPad(it.toLong()) }
+            if (copyString.isNotEmpty()) {
+                copyString.append("\n")
             }
-            copy_string.append(Pad.url)
+            copyString.append(pad!!.url)
         }
         val clipboard = baseContext.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-        val clip = ClipData.newPlainText("Pad urls", copy_string)
+        val clip = ClipData.newPlainText("Pad urls", copyString)
         clipboard.setPrimaryClip(clip)
         Toast.makeText(this@PadLandDataActivity, getString(R.string.copy_copied), Toast.LENGTH_LONG).show()
     }
 
-    fun menu_edit(selectedItems: ArrayList<String>): FormDialog {
+    fun menuEdit(selectedItems: ArrayList<String?>): FormDialog {
         val fm = supportFragmentManager
         val dialog = EditPadDialog(getString(R.string.padlist_dialog_edit_pad_title), this)
-        dialog.editPadId(selectedItems[0].toLong())
+        selectedItems[0]?.let { dialog.editPadId(it.toLong()) }
         dialog.show(fm, EDIT_PAD_DIALOG)
         return dialog
     }
 
-    fun menu_group(selectedItems: ArrayList<String>): AlertDialog {
+    fun menuGroup(selectedItems: ArrayList<String?>): AlertDialog {
         val context = this
         val selectedGroups = ArrayList<Long>()
         val padGroupModel = PadGroupModel(this)
-        val group_count = padGroupModel.padgroupsCount
-        val group_names = arrayOfNulls<String>(group_count + 1)
-        for (i in 0 until group_count) {
-            group_names[i] = getGroupNameFromAdapterData(i)
+        val groupCount = padGroupModel.padgroupsCount
+        val groupNames = arrayOfNulls<String>(groupCount + 1)
+        for (i in 0 until groupCount) {
+            groupNames[i] = getGroupNameFromAdapterData(i)
         }
 
         // Add unclassified group as choice
-        group_names[group_count] = getString(R.string.padlist_group_unclassified_name)
-        val checkboxStatusArray = BooleanArray(group_count + 1)
-        val DeleteDialogBox = AlertDialog.Builder(this) //set message, title, and icon
+        groupNames[groupCount] = getString(R.string.padlist_group_unclassified_name)
+        val checkboxStatusArray = BooleanArray(groupCount + 1)
+        val deleteDialogBox = AlertDialog.Builder(this) //set message, title, and icon
                 .setTitle(R.string.padlist_group_select_dialog)
                 .setIcon(R.drawable.ic_group_add)
-                .setMultiChoiceItems(group_names, checkboxStatusArray
+                .setMultiChoiceItems(groupNames, checkboxStatusArray
                 ) { dialog, which, isChecked ->
                     if (isChecked) {
 
-                        // Noew clean and set the view
+                        // Now clean and set the view
                         val listView = (dialog as AlertDialog).listView
-                        //                                SparseBooleanArray checked = listView.getCheckedItemPositions();
                         for (i in checkboxStatusArray.indices) {
                             if (checkboxStatusArray[i] && i != which) {
                                 checkboxStatusArray[i] = false
@@ -202,21 +200,20 @@ open class PadLandDataActivity : PadLandActivity(), FormDialogCallBack {
                         selectedGroups.clear()
 
                         // If the user checked the item, add it to the selected items
-                        val group_id = context.getGroupIdFromAdapterData(which)
-                        selectedGroups.add(group_id)
-                    } else if (selectedGroups.contains(which)) {
+                        val groupId = context.getGroupIdFromAdapterData(which)
+                        selectedGroups.add(groupId)
+                    } else if (selectedGroups.contains(which.toLong())) {
                         // Else, if the item is already in the array, remove it
-//                                selectedGroups.remove(Integer.valueOf(which));
                         (dialog as AlertDialog).listView.setItemChecked(which, true)
                     }
                 }
                 .setPositiveButton(R.string.ok) { dialog, whichButton ->
-                    var save_pad_id: Long
-                    val padGroupModel = PadGroupModel(context)
+                    var savePadId: Long
+                    PadGroupModel(context)
                     for (pad_id_string in selectedItems) {
-                        save_pad_id = pad_id_string.toLong()
+                        savePadId = pad_id_string!!.toLong()
                         for (save_padgroup_id in selectedGroups) {
-                            val saved = context.padlistDb!!.savePadgroupRelation(save_padgroup_id, save_pad_id)
+                            val saved = context.padlistDb!!.savePadgroupRelation(save_padgroup_id, savePadId)
                             Log.d(TAG, "Added to group? $saved")
                         }
                     }
@@ -225,13 +222,13 @@ open class PadLandDataActivity : PadLandActivity(), FormDialogCallBack {
                 }
                 .setNegativeButton(getString(R.string.cancel)) { dialog, which -> dialog.dismiss() }
                 .create()
-        DeleteDialogBox.show()
-        return DeleteDialogBox
+        deleteDialogBox.show()
+        return deleteDialogBox
     }
 
-    fun menu_delete_group(group_id: Long): AlertDialog {
+    fun menuDeleteGroup(group_id: Long): AlertDialog {
         val context = this
-        val DeleteDialogBox = AlertDialog.Builder(this) //set message, title, and icon
+        val deleteDialogBox = AlertDialog.Builder(this) //set message, title, and icon
                 .setTitle(R.string.delete)
                 .setMessage(getString(R.string.sure_to_delete_group))
                 .setIcon(android.R.drawable.ic_menu_delete)
@@ -244,8 +241,8 @@ open class PadLandDataActivity : PadLandActivity(), FormDialogCallBack {
                 }
                 .setNegativeButton(getString(R.string.cancel)) { dialog, which -> dialog.dismiss() }
                 .create()
-        DeleteDialogBox.show()
-        return DeleteDialogBox
+        deleteDialogBox.show()
+        return deleteDialogBox
     }
 
     /**
@@ -253,13 +250,13 @@ open class PadLandDataActivity : PadLandActivity(), FormDialogCallBack {
      * TODO: Share multiple pads.
      * @param selectedItems
      */
-    fun menu_share(selectedItems: ArrayList<String>) {
-        Log.d("PadLandDataActivity", selectedItems[0])
+    fun menuShare(selectedItems: ArrayList<String?>) {
+        selectedItems[0]?.let { Log.d("PadLandDataActivity", it) }
         // Only the first one
-        val selectedItem_id = selectedItems[0]
-        val Pad = _getPad(selectedItem_id.toLong())
-        val padUrl = Pad.url
-        Log.d("SHARING_PAD", "$selectedItem_id - $padUrl")
+        val selectedItemId = selectedItems[0]
+        val pad = selectedItemId?.let { _getPad(it.toLong()) }
+        val padUrl = pad!!.url
+        Log.d("SHARING_PAD", "$selectedItemId - $padUrl")
         val sendIntent = Intent()
         sendIntent.action = Intent.ACTION_SEND
         sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_auto_text) + padUrl)
@@ -290,14 +287,14 @@ open class PadLandDataActivity : PadLandActivity(), FormDialogCallBack {
          */
         private fun _getPadFromDatabase(field: String, comparation: String?): Cursor? {
             val c: Cursor?
-            val comparation_set = arrayOf(comparation)
+            val comparationSet = arrayOf(comparation)
 
             // I have to use LIKE in order to query by ID. A mistery.
             c = contentResolver.query(
-                    PadContentProvider.Companion.PADLIST_CONTENT_URI,
-                    PadContentProvider.Companion.getPadFieldsList(),
+                    PadContentProvider.PADLIST_CONTENT_URI,
+                    PadContentProvider.padFieldsList,
                     "$field LIKE ?",
-                    comparation_set,  // AKA id
+                    comparationSet,  // AKA id
                     null
             )
             return c
@@ -309,15 +306,13 @@ open class PadLandDataActivity : PadLandActivity(), FormDialogCallBack {
          * @return
          */
         private fun _getPadFromDatabase(): Cursor? {
-            val c: Cursor?
-            c = contentResolver.query(
-                    PadContentProvider.Companion.PADLIST_CONTENT_URI,
-                    PadContentProvider.Companion.getPadFieldsList(),
+            return contentResolver.query(
+                    PadContentProvider.PADLIST_CONTENT_URI,
+                    PadContentProvider.padFieldsList,
                     null,
                     null,  // AKA id
                     null
             )
-            return c
         }
 
         /**
@@ -326,24 +321,24 @@ open class PadLandDataActivity : PadLandActivity(), FormDialogCallBack {
          */
         fun _getAllPad(): ArrayList<Pad> {
             val cursor = this._getPadFromDatabase()
-            val Pads = ArrayList<Pad>()
+            val pads = ArrayList<Pad>()
             if (cursor == null) {
-                return Pads
+                return pads
             }
             if (cursor.count == 0) {
                 cursor.close()
-                return Pads
+                return pads
             }
-            var Pad: Pad
+            var pad: Pad
             cursor.moveToFirst()
             while (!cursor.isAfterLast) {
                 // Goes to next by itself
-                Pad = Pad(cursor)
-                Pads.add(Pad)
+                pad = Pad(cursor)
+                pads.add(pad)
                 cursor.moveToNext()
             }
             cursor.close()
-            return Pads
+            return pads
         }
 
         /**
@@ -364,8 +359,8 @@ open class PadLandDataActivity : PadLandActivity(), FormDialogCallBack {
             return this._getPadFromDatabase(PadModel.Companion.URL, padUrl)
         }
 
-        val nowDate: Long
-            get() = PadContentProvider.Companion.getNowDate()
+        private val nowDate: Long
+            get() = PadContentProvider.nowDate
 
         /**
          * Gets current pad data and saves the modified values (LAST_USED_DATE and ACCESS_COUNT).
@@ -384,10 +379,10 @@ open class PadLandDataActivity : PadLandActivity(), FormDialogCallBack {
             }
         }
 
-        fun _debug_relations() {
-            val QUERY = "SELECT " + PadContentProvider.Companion._ID_GROUP + ", " + PadContentProvider.Companion._ID_PAD + " FROM " + PadContentProvider.Companion.RELATION_TABLE_NAME
+        fun _debugRelations() {
+            val query = "SELECT " + PadContentProvider.Companion._ID_GROUP + ", " + PadContentProvider.Companion._ID_PAD + " FROM " + PadContentProvider.Companion.RELATION_TABLE_NAME
             val values = arrayOf<String>()
-            val cursor = db.rawQuery(QUERY, values)
+            val cursor = db.rawQuery(query, values)
             val hashMap = HashMap<Long, Long>()
             cursor.moveToFirst()
             while (!cursor.isAfterLast) {
@@ -400,14 +395,14 @@ open class PadLandDataActivity : PadLandActivity(), FormDialogCallBack {
 
         /**
          * Saves a new group if padgroup_id=0 or updates an existing one.
-         * @param padgroup_id
+         * @param padgroupId
          * @param values
          * @return
          */
-        fun savePadgroupData(padgroup_id: Long, values: ContentValues): Boolean {
-            return if (padgroup_id > 0) {
-                val where_value = arrayOf(padgroup_id.toString())
-                val result = contentResolver.update(PadContentProvider.Companion.PADGROUPS_CONTENT_URI, values, PadContentProvider.Companion._ID + "=?", where_value)
+        fun savePadgroupData(padgroupId: Long, values: ContentValues): Boolean {
+            return if (padgroupId > 0) {
+                val whereValue = arrayOf(padgroupId.toString())
+                val result = contentResolver.update(PadContentProvider.Companion.PADGROUPS_CONTENT_URI, values, PadContentProvider.Companion._ID + "=?", whereValue)
                 result > 0
             } else {
                 Log.d("INSERT", "Contents = $values")
@@ -418,18 +413,18 @@ open class PadLandDataActivity : PadLandActivity(), FormDialogCallBack {
 
         /**
          * Saves a new group if padgroup_id=0 or updates an existing one.
-         * @param padgroup_id
-         * @param pad_id
+         * @param padgroupId
+         * @param padId
          * @return
          */
-        fun savePadgroupRelation(padgroup_id: Long, pad_id: Long): Boolean {
-            removePadFromAllGroups(pad_id)
-            if (padgroup_id == 0L) {
+        fun savePadgroupRelation(padgroupId: Long, padId: Long): Boolean {
+            removePadFromAllGroups(padId)
+            if (padgroupId == 0L) {
                 return false
             }
             val contentValues = ContentValues()
-            contentValues.put(PadContentProvider.Companion._ID_PAD, pad_id)
-            contentValues.put(PadContentProvider.Companion._ID_GROUP, padgroup_id)
+            contentValues.put(PadContentProvider.Companion._ID_PAD, padId)
+            contentValues.put(PadContentProvider.Companion._ID_GROUP, padgroupId)
             //            _debug_relations();
             return db.insert(PadContentProvider.Companion.RELATION_TABLE_NAME, null, contentValues) > 0
         }
@@ -439,7 +434,7 @@ open class PadLandDataActivity : PadLandActivity(), FormDialogCallBack {
          * @param pad_id
          * @return
          */
-        fun removePadFromAllGroups(pad_id: Long): Boolean {
+        private fun removePadFromAllGroups(pad_id: Long): Boolean {
             val deleted = db.delete(PadContentProvider.Companion.RELATION_TABLE_NAME, PadContentProvider.Companion._ID_PAD + "=? ", arrayOf<String>(pad_id.toString()))
             return deleted > 0
         }
@@ -479,7 +474,7 @@ open class PadLandDataActivity : PadLandActivity(), FormDialogCallBack {
          * @param group_id
          * @return
          */
-        fun emptyGroup(group_id: Long): Boolean {
+        private fun emptyGroup(group_id: Long): Boolean {
             val result = db.delete(PadContentProvider.Companion.RELATION_TABLE_NAME, PadContentProvider.Companion._ID_GROUP + "=?", arrayOf<String>(group_id.toString()))
             return result > 0
         }
@@ -497,26 +492,26 @@ open class PadLandDataActivity : PadLandActivity(), FormDialogCallBack {
      *
      * @return
      */
-    protected val serverWhiteList: Array<String>
-        protected get() {
-            val server_list: Array<String>
+    protected val serverWhiteList: Array<String?>
+        get() {
+            val serverList: Array<String?>
             // Load the custom servers
             val serverModel = ServerModel(this)
-            val custom_servers = serverModel.enabledServerList
-            val server_names = ArrayList<String>()
-            for (server in custom_servers!!) {
+            val customServers = serverModel.enabledServerList
+            val serverNames = ArrayList<String>()
+            for (server in customServers) {
                 try {
-                    val url = URL(server.getUrl())
-                    server_names.add(url.host)
+                    val url = URL(server.url)
+                    serverNames.add(url.host)
                 } catch (e: MalformedURLException) {
                     e.printStackTrace()
                 }
             }
             val collection: MutableCollection<String> = ArrayList()
-            collection.addAll(server_names)
-            collection.addAll(Arrays.asList(*resources.getStringArray(R.array.etherpad_servers_whitelist)))
-            server_list = collection.toTypedArray()
-            return server_list
+            collection.addAll(serverNames)
+            collection.addAll(listOf(*resources.getStringArray(R.array.etherpad_servers_whitelist)))
+            serverList = collection.toTypedArray()
+            return serverList
         }
 
     override fun onDestroy() {

@@ -22,10 +22,11 @@ import com.mikifus.padland.R
  * Created by mikifus on 20/02/16.
  */
 class PadListAdapter(private val context: PadLandDataActivity) : BaseExpandableListAdapter() {
-    private val layoutInflater: LayoutInflater
-    private val checkedPositions: SparseArray<SparseBooleanArray?>
-    private val items_positions = HashMap<Long, Bundle>()
-    private val padDatas: HashMap<Long?, Pad?>?
+    private val layoutInflater: LayoutInflater = context
+            .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+    private val checkedPositions: SparseArray<SparseBooleanArray?> = SparseArray()
+    private val itemsPositions = HashMap<Long, Bundle>()
+    private val padDatas: HashMap<Long, Pad>?
     private val groupDatas: ArrayList<PadGroup>?
     private val padGroupModel: PadGroupModel
 
@@ -34,9 +35,6 @@ class PadListAdapter(private val context: PadLandDataActivity) : BaseExpandableL
 
     // Initialize constructor for array list
     init {
-        layoutInflater = context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        checkedPositions = SparseArray()
         padDatas = context._getPads()
         padGroupModel = PadGroupModel(context)
         groupDatas = padGroupModel.allPadgroups
@@ -56,7 +54,7 @@ class PadListAdapter(private val context: PadLandDataActivity) : BaseExpandableL
 
     override fun getGroup(groupPosition: Int): PadGroup {
 //        HashMap<String, String> group = context.padlistDb.getPadgroupAt(groupPosition);
-        return if (groupDatas!!.size <= groupPosition || groupDatas[groupPosition] == null) {
+        return if (groupDatas!!.size <= groupPosition) {
             unclassifiedGroup
         } else groupDatas[groupPosition]
     }
@@ -76,59 +74,59 @@ class PadListAdapter(private val context: PadLandDataActivity) : BaseExpandableL
     override fun getChildId(groupPosition: Int, childPosition: Int): Long {
         val group = getGroup(groupPosition)
         val id = group.id
-        val padlist: ArrayList<*>?
-        padlist = if (id == 0L) {
+        val padlist: ArrayList<*>? = if (id == 0L) {
 //            padlist = getUnclassifiedGroupChildList(groupPosition);
             padGroupModel.getPadgroupChildrenIds(0)
         } else {
             padGroupModel.getPadgroupChildrenIds(id)
         }
-        return if (padlist.size == 0) {
+        return if (padlist?.isEmpty() == true) {
             0
-        } else padlist[childPosition]
+        } else padlist!![childPosition] as Long
     }
 
     override fun hasStableIds(): Boolean {
         return true
     }
 
-    override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View, parent: ViewGroup): View {
-        var convertView = convertView
-        val group = getGroup(groupPosition)
+    override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup): View {
+        var view: View? = convertView
         val holder: GroupViewHolder
-        if (convertView == null) {
-            val infalInflater = context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            convertView = infalInflater.inflate(R.layout.padlist_header, null)
-            holder = GroupViewHolder(convertView)
-            holder.name = convertView.findViewById<View>(R.id.list_header_title) as TextView
-            convertView.tag = holder
+        val group = getGroup(groupPosition)
+        if(view == null) {
+            view = layoutInflater.inflate(R.layout.padlist_header, null)
+            holder = GroupViewHolder(view);
+            holder.name = view.findViewById(R.id.list_header_title) as TextView
+            view.tag = holder
         } else {
-            holder = convertView.tag as GroupViewHolder
+            holder = view.tag as GroupViewHolder
         }
-        holder.name.setText(group.name)
-        return convertView
+        holder.name?.text = group.name
+
+        return view as View
     }
 
-    override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View, parent: ViewGroup): View {
-        var convertView = convertView
+    override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup): View {
+        var view: View? = convertView
         val holder: ChildViewHolder
-        if (convertView == null) {
-            convertView = layoutInflater.inflate(R.layout.padlist_item, null)
-            holder = ChildViewHolder(convertView)
-            holder.name = convertView.findViewById<View>(R.id.name) as TextView
-            holder.url = convertView.findViewById<View>(R.id.url) as TextView
-            convertView.tag = holder
+        val group = getGroup(groupPosition)
+        if(view == null) {
+            view = layoutInflater.inflate(R.layout.padlist_item, null)
+            holder = ChildViewHolder(view);
+            holder.name = view.findViewById(R.id.name) as TextView
+            holder.url = view.findViewById(R.id.url) as TextView
+            view.tag = holder
         } else {
-            holder = convertView.tag as ChildViewHolder
+            holder = view.tag as ChildViewHolder
         }
+
         val child = getChild(groupPosition, childPosition)
-        val position_bundle = Bundle()
-        position_bundle.putInt("groupPosition", groupPosition)
-        position_bundle.putInt("childPosition", childPosition)
-        items_positions[child.id] = position_bundle
-        holder.name.setText(child.localName)
-        holder.url.setText(child.url)
+        val positionBundle = Bundle()
+        positionBundle.putInt("groupPosition", groupPosition)
+        positionBundle.putInt("childPosition", childPosition)
+        itemsPositions[child.id] = positionBundle
+        holder.name?.text = child.localName
+        holder.url?.text = child.url
         if (checkedPositions[groupPosition] != null) {
             Log.v(TAG, "\t \t The child checked position has been saved")
             val isChecked = checkedPositions[groupPosition]!![childPosition]
@@ -138,7 +136,7 @@ class PadListAdapter(private val context: PadLandDataActivity) : BaseExpandableL
         } else {
 //            ((CheckedTextView)convertView).setChecked(false);
         }
-        return convertView
+        return view as View
     }
 
     override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean {
@@ -229,7 +227,7 @@ class PadListAdapter(private val context: PadLandDataActivity) : BaseExpandableL
 //        group_deal.put(PadContentProvider.NAME, context.getString(R.string.padlist_group_unclassified_name));
 //        return group_deal;
     private val unclassifiedGroup: PadGroup
-        private get() = PadGroup(context)
+        get() = PadGroup(context)
 
     //        HashMap<String, String> group_deal = new HashMap<>();
 //        group_deal.put(PadContentProvider._ID, "0");
@@ -240,16 +238,16 @@ class PadListAdapter(private val context: PadLandDataActivity) : BaseExpandableL
     }
 
     fun getPosition(pad_id: Long): Bundle? {
-        return items_positions[pad_id]
+        return itemsPositions[pad_id]
     }
 
     private inner class GroupViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView!!) {
-        val name: TextView? = null
+        var name: TextView? = null
     }
 
     private inner class ChildViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView!!) {
-        val name: TextView? = null
-        val url: TextView? = null
+        var name: TextView? = null
+        var url: TextView? = null
     }
 
     companion object {
