@@ -34,7 +34,7 @@ class HSVColorPickerDialog(private val context: Context, private var selectedCol
         fun colorSelected(color: Int)
     }
 
-    override fun onCreate(savedInstanceState: Bundle) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
     }

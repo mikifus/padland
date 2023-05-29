@@ -155,7 +155,7 @@ class PadListActivity : PadLandDataActivity(), ActionMode.Callback, LoaderManage
      * @param view
      */
     fun onNewPadClick(view: View?) {
-        val newPadIntent = Intent(this, NewPadActivity::class.java)
+        val newPadIntent = Intent(this@PadListActivity, NewPadActivity::class.java)
         startActivity(newPadIntent)
     }
 
@@ -342,10 +342,7 @@ class PadListActivity : PadLandDataActivity(), ActionMode.Callback, LoaderManage
      */
     @Deprecated("Deprecated in Java")
     override fun onLoaderReset(loader: Loader<Cursor>) {
-        // data is not available anymore, delete reference
-//        setAdapter();
-        adapter = null
-        expandableListView!!.adapter = adapter
+        adapter!!.notifyDataSetChanged()
     }
 
     /**

@@ -280,7 +280,7 @@ class PadViewActivity : PadLandDataActivity() {
         val urlWhitelist = serverWhiteList
         view.webViewClient = object : PadLandSaferWebViewClient(urlWhitelist) {
             //            private boolean done_auth;
-            override fun onPageStarted(view: WebView, url: String, favicon: Bitmap) {
+            override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
                 ++webviewHttpConnections[0]
                 _showProgressWheel()

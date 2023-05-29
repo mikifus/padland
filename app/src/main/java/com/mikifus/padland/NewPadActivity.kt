@@ -25,7 +25,7 @@ import java.util.Arrays
  * @author mikifus
  */
 open class NewPadActivity : PadLandActivity() {
-    private var serverList: Array<String?> = spinnerValueList
+    private var serverList: Array<String?>? = null
     protected var serverUrlList: Array<String?>? = null
     private var serverUrlPrefixedList: Array<String?>? = null
     private var serverModel: ServerModel? = null
@@ -37,9 +37,10 @@ open class NewPadActivity : PadLandActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_newpad)
-        serverModel = ServerModel(this)
+        serverModel = ServerModel(this@NewPadActivity)
         serverUrlList = serverModel!!.getServerUrlList(this@NewPadActivity)
         serverUrlPrefixedList = serverModel!!.getServerUrlPrefixList(this)
+        serverList = spinnerValueList
         _setViewEvents()
         _setSpinnerValues()
         _setSpinnerDefaultValue()
@@ -80,10 +81,8 @@ open class NewPadActivity : PadLandActivity() {
      */
     private val spinnerValueList: Array<String?>
         get() {
-            val serverList: Array<String?>
             // Load the custom servers
-            val serverModel = ServerModel(this)
-            val customServers = serverModel.enabledServerList
+            val customServers = serverModel!!.enabledServerList
             val serverNames = ArrayList<String?>()
             for (server in customServers) {
                 serverNames.add(server.name)
@@ -94,8 +93,7 @@ open class NewPadActivity : PadLandActivity() {
             val collection: MutableCollection<String?> = ArrayList()
             collection.addAll(serverNames)
             collection.addAll(listOf(*resources.getStringArray(R.array.etherpad_servers_name)))
-            serverList = collection.toTypedArray()
-            return serverList
+            return collection.toTypedArray()
         }
 
     /**
@@ -104,7 +102,7 @@ open class NewPadActivity : PadLandActivity() {
     private fun _setSpinnerValues() {
         val spinner = findViewById<View>(R.id.spinner) as Spinner
         //selected item will look like a spinner set from XML
-        val spinnerArrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, serverList)
+        val spinnerArrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, serverList as Array<String?>)
         spinner.adapter = spinnerArrayAdapter
     }
 
@@ -117,8 +115,8 @@ open class NewPadActivity : PadLandActivity() {
 
         // We get position and set it as default
         val spinner = findViewById<Spinner>(R.id.spinner)
-        val adapter = spinner.adapter as ArrayAdapter<*>
-        spinner.setSelection(adapter.getPosition(defaultServer as Nothing?))
+        val adapter = spinner.adapter as ArrayAdapter<String>
+        spinner.setSelection(adapter.getPosition(defaultServer))
     }
 
     /**
@@ -130,7 +128,7 @@ open class NewPadActivity : PadLandActivity() {
         // Getting user preferences
         val context = applicationContext
         val userDetails = context.getSharedPreferences(packageName + "_preferences", MODE_PRIVATE)
-        return userDetails.getString("padland_default_server", serverList[0])
+        return userDetails.getString("padland_default_server", serverList!![0])
     }
 
     /**
@@ -146,7 +144,7 @@ open class NewPadActivity : PadLandActivity() {
      * Form submit
      */
     @SuppressLint("CutPasteId")
-    fun onCreateButtonClick() {
+    fun onCreateButtonClick(view: View) {
         val padName = getPadNameFromInput(findViewById<View>(R.id.editText) as TextView)
         val padLocalName = getPadNameFromInput(findViewById<View>(R.id.editTextLocalName) as TextView)
         val padPrefix = getPadPrefixFromSpinner(findViewById<View>(R.id.spinner) as Spinner)
