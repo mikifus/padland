@@ -1,22 +1,23 @@
 package com.mikifus.padland
 
 import android.content.Context
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Adapter
 import android.widget.ArrayAdapter
 import android.widget.BaseAdapter
+import android.widget.TextView
+import com.mikifus.padland.Adapters.PadListAdapter
 
 /**
  * @author Jeff Sharkey http://jsharkey.org/blog/2008/08/18/separating-lists-with-headers-in-android-09/
  */
-class SeparatedListAdapter(context: Context?) : BaseAdapter() {
+class SeparatedListAdapter(private val context: Context) : BaseAdapter() {
+    private val layoutInflater: LayoutInflater = context
+        .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     private val sections: MutableMap<String, Adapter> = LinkedHashMap()
-    private val headers: ArrayAdapter<String>
-
-    init {
-        headers = ArrayAdapter(context!!, R.layout.list_header)
-    }
+    private val headers: ArrayAdapter<String> = ArrayAdapter(context, R.layout.list_header)
 
     fun addSection(section: String, adapter: Adapter) {
         headers.add(section)
@@ -79,7 +80,7 @@ class SeparatedListAdapter(context: Context?) : BaseAdapter() {
         return getItemViewType(position) != TYPE_SECTION_HEADER
     }
 
-    override fun getView(position: Int, convertView: View, parent: ViewGroup): View? {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
         var itemPosition = position
         for ((sectionnum, section) in sections.keys.withIndex()) {
             val adapter = sections[section]

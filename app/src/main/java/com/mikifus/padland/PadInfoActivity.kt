@@ -113,7 +113,7 @@ class PadInfoActivity : PadLandDataActivity() {
     /**
      * Takes you to the padView activity
      */
-    fun onViewButtonClick() {
+    fun onViewButtonClick(view: View) {
         val padViewIntent = Intent(this@PadInfoActivity, PadViewActivity::class.java)
         padViewIntent.putExtra("pad_id", padId)
         startActivity(padViewIntent)

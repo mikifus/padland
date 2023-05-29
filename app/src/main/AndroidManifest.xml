@@ -155,6 +155,7 @@
         </activity>
         <activity
             android:name=".NewPadActivity"
+            android:parentActivityName=".PadListActivity"
             android:label="@string/title_activity_new_pad"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
 

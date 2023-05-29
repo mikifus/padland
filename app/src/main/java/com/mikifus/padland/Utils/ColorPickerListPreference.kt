@@ -13,7 +13,8 @@ import com.mikifus.padland.R
 class ColorPickerListPreference(private val mContext: Context, attrs: AttributeSet?) : ListPreference(mContext, attrs) {
     private var dialog: HSVColorPickerDialog? = null
     private var showing = false
-    override fun showDialog(state: Bundle) {
+    @Deprecated("Deprecated in Java")
+    override fun showDialog(state: Bundle?) {
         dialog = HSVColorPickerDialog(mContext, intValue) { color -> // Do something with the selected color
             val hexColor = String.format("#%06X", 0xFFFFFF and color as Int)
             value = hexColor
@@ -28,7 +29,10 @@ class ColorPickerListPreference(private val mContext: Context, attrs: AttributeS
         if (dialog != null && showing) {
             dialog!!.dismiss()
             val handler = Handler()
-            handler.postDelayed({ showDialog(Bundle()) }, 300)
+            handler.postDelayed({
+                    showDialog(Bundle())
+                },
+    300)
         }
     }
 
