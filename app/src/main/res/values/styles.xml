@@ -21,12 +21,8 @@
 <!--        <item name="android:colorBackground">@color/app_theme_color_background</item>-->
     </style>
 
-    <style name="activated" parent="AppBaseTheme">
-<!--        <item name="android:background">?android:attr/activatedBackgroundIndicator</item>-->
-    </style>
-
     <style name="splashScreenTheme" parent="@style/Theme.MaterialComponents.DayNight.NoActionBar">
-        <!--<item name="android:windowBackground">@drawable/cc</item>-->
+        <item name="android:windowBackground">@color/design_default_color_surface</item>
         <item name="android:windowNoTitle">true</item>
     </style>
 

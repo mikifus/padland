@@ -8,7 +8,7 @@
     android:orientation="horizontal"
     android:gravity="center_vertical"
     android:textAppearance="?android:attr/textAppearanceLarge"
-    style="@style/activated">
+    android:background="?android:attr/activatedBackgroundIndicator">
 
     <ImageView
         android:id="@+id/icon"
