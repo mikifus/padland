@@ -10,8 +10,7 @@
         android:text="@string/padinfo_view_pad_button"
         android:id="@+id/button2"
         android:layout_gravity="center_horizontal"
-        android:onClick="onViewButtonClick"
-        style="?attr/buttonBarButtonStyle" />
+        android:onClick="onViewButtonClick" />
 
     <TextView
         android:layout_width="fill_parent"
