@@ -18,7 +18,7 @@ class LinkableAppIntroFragment : CustomAppIntroFragment() {
         val d: TextView
         if (v != null) {
             d = v.findViewById<View>(R.id.description) as TextView
-            d.setLinkTextColor(R.color.intro_link_color)
+            d.setLinkTextColor(resources.getColor(R.color.design_default_color_surface))
             Linkify.addLinks(d, Linkify.ALL)
         }
         return v

@@ -6,5 +6,5 @@
         android:title="@string/action_settings"
         android:orderInCategory="100"
         padland:showAsAction="ifRoom"
-        android:icon="@drawable/ic_settings_inverted" />
+        android:icon="@drawable/ic_settings" />
 </menu>
