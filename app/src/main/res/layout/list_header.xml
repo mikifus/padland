@@ -5,6 +5,5 @@
     android:layout_height="wrap_content"
     android:paddingTop="2dip"
     android:paddingBottom="2dip"
-    android:paddingStart="5dip"
-    android:paddingLeft="5dip"
+    android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"
     style="?android:attr/listSeparatorTextViewStyle" />
