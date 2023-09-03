@@ -33,9 +33,14 @@ To try your new server create a new pad and choose it. You can make it the defau
 The user can now share an URL to the app in order to open it. Keep in mind that the host server must be previously added, otherwise the URL will be considered unsafe. 
 
 ## Current version
-1.9
+2.0
 
-## Changelog
+## 
+### v2.0
+- Migrated code to Kotlin.
+- Implemented AndroidX and Material Design.
+- Theme dark/light follows device
+
 ### v1.9
 - Fixed a vulnerability.
 
