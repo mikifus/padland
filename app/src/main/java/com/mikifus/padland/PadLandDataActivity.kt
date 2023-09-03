@@ -87,7 +87,7 @@ open class PadLandDataActivity : PadLandActivity(), FormDialogCallBack {
      */
     open fun askDelete(selectedItems: ArrayList<String?>): AlertDialog {
         val activity: Context = this
-        val deleteDialogBox = AlertDialog.Builder(this) //set message, title, and icon
+        val deleteDialogBox = AlertDialog.Builder(activity) //set message, title, and icon
                 .setTitle(R.string.delete)
                 .setMessage(getString(R.string.sure_to_delete_pad))
                 .setIcon(android.R.drawable.ic_menu_delete)

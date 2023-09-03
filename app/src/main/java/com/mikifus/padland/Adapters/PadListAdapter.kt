@@ -109,7 +109,7 @@ class PadListAdapter(private val context: PadLandDataActivity) : BaseExpandableL
     override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup): View {
         var view: View? = convertView
         val holder: ChildViewHolder
-        val group = getGroup(groupPosition)
+//        val group = getGroup(groupPosition)
         if(view == null) {
             view = layoutInflater.inflate(R.layout.padlist_item, null)
             holder = ChildViewHolder(view);

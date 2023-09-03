@@ -82,11 +82,11 @@ open class ServerModel(context: Context?) : BaseModel(context) {
 
     val serverCount: Int
         get() {
-            val c: Cursor? = null
-            val comparation_set = arrayOf<String>()
+//            val c: Cursor? = null
+            val comparationSet = arrayOf<String>()
             val query: String = "SELECT " + _ID + " " +
                     "FROM " + TABLE + " "
-            val cursor = db.rawQuery(query, comparation_set)
+            val cursor = db.rawQuery(query, comparationSet)
             val count = cursor.count
             cursor.close()
             return count
