@@ -90,7 +90,7 @@ open class EditPadDialog(title: String, callback: FormDialogCallBack) : FormDial
         val contentValues = contentValues
         val groupContentValues = groupContentValues
         model.savePad(edit_pad_id, contentValues)
-        padGroupModel.savePadgroupRelation(groupContentValues!!.getAsLong(PadContentProvider._ID_GROUP), edit_pad_id)
+        padGroupModel.savePadgroupRelation(groupContentValues.getAsLong(PadContentProvider._ID_GROUP), edit_pad_id)
     }
 
     // Multiple can be returned. TODO: Connect pads with servers by ID.
@@ -100,7 +100,7 @@ open class EditPadDialog(title: String, callback: FormDialogCallBack) : FormDial
             val localName = fieldLocalName!!.text.toString()
             values!!.put(PadModel.LOCAL_NAME, localName)
             val padName = fieldName!!.text.toString().trim { it <= ' ' }
-            values!!.put(PadModel.NAME, padName)
+            values.put(PadModel.NAME, padName)
             val model = PadModel(context)
             val pad = model.getPadById(edit_pad_id)
             val serverModel = ServerModel(context)

@@ -26,18 +26,18 @@ class ServerListAdapter(context: ServerListActivity?, //    private ServerListAc
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         // Get the data item for this position
-        var convertView = convertView
+        var view = convertView
         val server = getItem(position)
 
         // Check if an existing view is being reused, otherwise inflate the view
-        if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(layout_resource, parent, false)
+        if (view == null) {
+            view = LayoutInflater.from(context).inflate(layout_resource, parent, false)
         }
-        (convertView!!.findViewById<View>(R.id.name) as TextView).text = server.name
-        (convertView.findViewById<View>(R.id.url) as TextView).text = server.url
+        (view!!.findViewById<View>(R.id.name) as TextView).text = server.name
+        (view.findViewById<View>(R.id.url) as TextView).text = server.url
 
         // Return the completed view to render on screen
-        return convertView
+        return view
     }
 
     override fun getCount(): Int {

@@ -37,7 +37,7 @@ open class NewServerDialog(title: String, callback: FormDialogCallBack) : FormDi
     override fun saveData() {
         val serverModel = ServerModel(activity)
         val contentValues = contentValues
-        val url = contentValues!!.getAsString(ServerModel.URL)
+        val url = contentValues.getAsString(ServerModel.URL)
         val prefix = contentValues.getAsString(ServerModel.PADPREFIX)
         var finalPrefix = url
         if (!finalPrefix.endsWith(prefix)) {
@@ -49,7 +49,7 @@ open class NewServerDialog(title: String, callback: FormDialogCallBack) : FormDi
 
     override fun validateForm(): Boolean {
         val contentValues = contentValues
-        if (!NAME_VALIDATION.matcher(contentValues!!.getAsString(ServerModel.NAME)).matches()) {
+        if (!NAME_VALIDATION.matcher(contentValues.getAsString(ServerModel.NAME)).matches()) {
             // TODO: Change toast for something better.
             Toast.makeText(context, getString(R.string.serverlist_dialog_new_server_name_invalid), Toast.LENGTH_LONG).show()
             return false
@@ -95,7 +95,7 @@ open class NewServerDialog(title: String, callback: FormDialogCallBack) : FormDi
             } catch (e: MalformedURLException) {
                 e.printStackTrace()
             }
-            contentValues!!.put(ServerModel.URL, url)
+            contentValues.put(ServerModel.URL, url)
             var padprefix = fieldPadprefix!!.text.toString()
             if (padprefix.isNotEmpty()) {
                 // Must start and end with /
@@ -106,9 +106,9 @@ open class NewServerDialog(title: String, callback: FormDialogCallBack) : FormDi
                     padprefix = "$padprefix/"
                 }
             }
-            contentValues!!.put(ServerModel.PADPREFIX, padprefix)
+            contentValues.put(ServerModel.PADPREFIX, padprefix)
             val jquery = if (checkJquery!!.isChecked.toString() === "true") 1 else 0
-            contentValues!!.put(ServerModel.JQUERY, jquery)
+            contentValues.put(ServerModel.JQUERY, jquery)
             return contentValues
         }
 
@@ -146,9 +146,9 @@ open class NewServerDialog(title: String, callback: FormDialogCallBack) : FormDi
             val serverModel = ServerModel(context)
             val server = serverModel.getServerById(editServerId)
             (fieldName as EditText).setText(server!!.name)
-            (fieldUrl as EditText).setText(server!!.url)
-            (fieldPadprefix as EditText).setText(server!!.padPrefix)
-            (checkJquery as CheckBox).isChecked = server!!.jquery
+            (fieldUrl as EditText).setText(server.url)
+            (fieldPadprefix as EditText).setText(server.padPrefix)
+            (checkJquery as CheckBox).isChecked = server.jquery
             if (server.padPrefix == DEFAULT_PADPREFIX_VALUE && server.jquery) {
                 (checkLite as CheckBox).isChecked = true
             }

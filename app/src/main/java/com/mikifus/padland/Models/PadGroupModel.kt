@@ -190,7 +190,7 @@ class PadGroupModel(context: Context) : BaseModel(context) {
                     "WHERE " + PadContentProvider._ID_GROUP + "=? "
             values = arrayOf(id.toString())
         }
-        val cursor = db!!.rawQuery(query, values)
+        val cursor = db.rawQuery(query, values)
         val padIds = ArrayList<Long>()
         cursor.moveToFirst()
         while (!cursor.isAfterLast) {
@@ -216,7 +216,7 @@ class PadGroupModel(context: Context) : BaseModel(context) {
                     "WHERE " + PadContentProvider._ID_GROUP + "=? "
             values = arrayOf(id.toString())
         }
-        val cursor = db!!.rawQuery(query, values)
+        val cursor = db.rawQuery(query, values)
         val count = cursor.count
         cursor.close()
         return count
@@ -226,7 +226,7 @@ class PadGroupModel(context: Context) : BaseModel(context) {
         val query: String = "SELECT " + PadContentProvider.Companion._ID_GROUP + " FROM " + PadContentProvider.Companion.RELATION_TABLE_NAME + " " +
                 "WHERE " + PadContentProvider.Companion._ID_PAD + "=? "
         val values: Array<String> = arrayOf(padId.toString())
-        val cursor = db!!.rawQuery(query, values)
+        val cursor = db.rawQuery(query, values)
         var groupId: Long = 0
         if (cursor.count > 0) {
             cursor.moveToFirst()
@@ -251,7 +251,7 @@ class PadGroupModel(context: Context) : BaseModel(context) {
         contentValues.put(PadContentProvider._ID_PAD, pad_id)
         contentValues.put(PadContentProvider._ID_GROUP, padgroupId)
         //            _debug_relations();
-        return db!!.insert(PadContentProvider.RELATION_TABLE_NAME, null, contentValues) > 0
+        return db.insert(PadContentProvider.RELATION_TABLE_NAME, null, contentValues) > 0
     }
 
     /**
@@ -260,7 +260,7 @@ class PadGroupModel(context: Context) : BaseModel(context) {
      * @return
      */
     private fun removePadFromAllGroups(pad_id: Long): Boolean {
-        val deleted = db!!.delete(PadContentProvider.RELATION_TABLE_NAME, PadContentProvider._ID_PAD + "=? ", arrayOf(pad_id.toString()))
+        val deleted = db.delete(PadContentProvider.RELATION_TABLE_NAME, PadContentProvider._ID_PAD + "=? ", arrayOf(pad_id.toString()))
         return deleted > 0
     }
 
