@@ -41,7 +41,7 @@
     <string name="settings_default_color_explanation">PadLand intentará usar tu color por defecto en todos los documentos</string>
     <string name="settings_default_username">Nombre de usuario por defecto</string>
     <string name="settings_default_username_explanation">PadLand intentará usar tu nombre por defecto en todos los documentos</string>
-    <string name="settings_save_new_pads_desc">Añadir automaticamente todos los nuevos documentos accedidos a la lista</string>
+    <string name="settings_save_new_pads_desc">Añadir automaticamente todos los nuevos documentos accedidos a la lista.</string>
     <string name="settings_save_new_pads_title">Guardar automáticamente nuevos documentos</string>
     <string name="group">Añadir a grupo</string>
     <string name="share">Compartir</string>
@@ -71,9 +71,15 @@
     <string name="no_custom_servers">Sin servidores añadidos.</string>
     <string name="padview_toast_blacklist_url">La dirección del servidor no se encuentra en la lista blanca. Añade un nuevo servidor en la configuración o utiliza otra aplicación.</string>
     <string name="padview_toast_invalid_url">La dirección no parece válida.</string>
-    <string name="pref_server_list_summary">Añade tus servidores de etherpad preferidos</string>
+    <string name="pref_server_list_summary">Añade tus servidores de etherpad preferidos.</string>
     <string name="title_activity_server_list">Lista de servidores</string>
     <string name="serverlist_dialog_delete_server_deleted">Los servidores seleccionados han sido eliminados</string>
+
+    <string name="new_pad_local_name">Pon un alias al documento opcionalmente.</string>
+    <string name="write_pad_local_name">Alias del documento (opcional)</string>
+    <string name="new_pad_name_invalid">El nombre del documento contiene carácteres invalidos.</string>
+    <string name="new_pad_wrong_server">El servidor no está permitido. No se puede continuar. Mira la configuración de tus servidores y prueba de nuevo.</string>
+
     <string name="serverlist_dialog_delete_sure_to_delete">¿Seguro que quieres eliminar los servidores seleccionados?</string>
     <string name="serverlist_dialog_edit_server_title">Editar servidor</string>
     <string name="serverlist_dialog_new_server_advanced">Opciones avanzadas</string>
@@ -82,7 +88,7 @@
     <string name="serverlist_dialog_new_server_lite_label">Marca la casilla si el servidor funciona con Etherpad Lite (recomendado).</string>
     <string name="serverlist_dialog_new_server_lite_title">Funciona con Etherpad Lite</string>
     <string name="serverlist_dialog_new_server_name_invalid">Nombre no válido</string>
-    <string name="serverlist_dialog_new_server_name_label">Introduce el nombre deseado para el servidor (o nada)</string>
+    <string name="serverlist_dialog_new_server_name_label">Introduce el nombre deseado para el servidor (o nada).</string>
     <string name="serverlist_dialog_new_server_name_title">Nombre del servidor</string>
     <string name="serverlist_dialog_new_server_padprefix_invalid">Prefijo inválido</string>
     <string name="serverlist_dialog_new_server_padprefix_label">En servidores nuevos (Etherpad Lite) hay un segmento de url entre el dominio y el nombre del documento. Por defecto es \"p/\".</string>
@@ -92,7 +98,7 @@
     <string name="serverlist_dialog_new_server_url_label">La dirección para acceder al servidor. Añade https:// si es posible.</string>
     <string name="serverlist_dialog_new_server_url_title">Dirección del servidor</string>
     <string name="title_activity_intro">Introducción</string>
-    <string name="launch_intro">Lanza la pantalla de introducción</string>
+    <string name="launch_intro">Lanza la pantalla de introducción.</string>
     <string name="intro_third_title">Edita documentos ya existentes</string>
     <string name="intro_third_desc">Comparte una dirección a Padland para abrir y editar.</string>
     <string name="intro_second_title">Crea nuevos documentos</string>

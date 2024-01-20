@@ -3,7 +3,7 @@
     <string name="app_name">Padland</string>
 
     <string name="title_activity_intro">Introducció</string>
-    <string name="launch_intro">Inicia la pantalla d\'introducció</string>
+    <string name="launch_intro">Inicia la pantalla d\'introducció.</string>
     <string name="intro_first_title">Benvinguda a Padland!</string>
     <string name="intro_first_desc">Padland et permet veure, editar, organitzar i compartir documents col·laboratius.\n Prem següent per veure com funciona!</string>
     <string name="intro_second_title">Crea nous documents</string>
@@ -59,7 +59,7 @@
     <string name="settings_default_username">Nom d\'usuari per defecte</string>
     <string name="settings_default_username_explanation">PadLand intentarà utilitzar el teu nom per defecte en tots els documents</string>
     <string name="settings_miscellaneous">Miscel·lània</string>
-    <string name="settings_save_new_pads_desc">Afegir automàticament a la llista tots els nous documents accedits</string>
+    <string name="settings_save_new_pads_desc">Afegir automàticament a la llista tots els nous documents accedits.</string>
     <string name="settings_save_new_pads_title">Guardar automàticament els nous documents</string>
     <string name="group">Afegir al grup</string>
     <string name="share">Compartir</string>
@@ -87,9 +87,15 @@
     <string name="padview_dialog_basicatuh_username">Nom d\'usuari</string>
     <string name="padview_toast_blacklist_url">L\'adreça del servidor no es troba a la llista blanca. Afegeix un nou servidor a la configuració o utilitza una altra aplicació.</string>
     <string name="padview_toast_invalid_url">L\'adreça no sembla vàlida.</string>
-    <string name="pref_server_list_summary">Afegeix els teus servidors d\'etherpad preferits</string>
+    <string name="pref_server_list_summary">Afegeix els teus servidors d\'etherpad preferits.</string>
     <string name="title_activity_server_list">Llista de servidors</string>
     <string name="serverlist_dialog_delete_server_deleted">Els servidors seleccionats s\'han eliminat</string>
+
+    <string name="new_pad_local_name">Posa un alias al document opcionalment.</string>
+    <string name="write_pad_local_name">Alias del document (opcional)</string>
+    <string name="new_pad_name_invalid">El nom del document conté caracters invàlids.</string>
+    <string name="new_pad_wrong_server">El servidor no està permès. No es pot continuar. Mira la configuració dels teus servidors i prova de nou.</string>
+
     <string name="serverlist_dialog_delete_sure_to_delete">Segur que vols eliminar els servidors seleccionats?</string>
     <string name="serverlist_dialog_edit_server_title">Editar servidor</string>
     <string name="serverlist_dialog_new_server_advanced">Opcions avançades</string>
@@ -98,7 +104,7 @@
     <string name="serverlist_dialog_new_server_lite_label">Marca si el servidor funciona amb Etherpad Lite (recomanat).</string>
     <string name="serverlist_dialog_new_server_lite_title">Funciona amb Etherpad Lite</string>
     <string name="serverlist_dialog_new_server_name_invalid">El nom no és vàlid</string>
-    <string name="serverlist_dialog_new_server_name_label">Introdueix com vols anomenar el servidor (o res)</string>
+    <string name="serverlist_dialog_new_server_name_label">Introdueix com vols anomenar el servidor (o res).</string>
     <string name="serverlist_dialog_new_server_name_title">Nom del servidor</string>
     <string name="serverlist_dialog_new_server_padprefix_invalid">Prefixe invàlid</string>
     <string name="serverlist_dialog_new_server_padprefix_label">En servidors nous (Etherpad Lite) hi ha un segment de la url entre el domini i el nom del document. Per defecte és \"p/\".</string>

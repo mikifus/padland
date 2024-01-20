@@ -3,7 +3,7 @@
     <string name="app_name">Padland</string>
 
     <string name="title_activity_intro">Introduction</string>
-    <string name="launch_intro">Launch introduction screens</string>
+    <string name="launch_intro">Launch introduction screens.</string>
     <string name="intro_first_title">Welcome to Padland!</string>
     <string name="intro_first_desc">Padland allows you to view, edit, organize and share collaborative documents.\n Press next to see how it works!</string>
     <string name="intro_second_title">Create new documents</string>
@@ -35,7 +35,7 @@
         <p>Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache License</a>.</p>
     </string>
     <string name="settings_save_new_pads_title">Auto-save new documents</string>
-    <string name="settings_save_new_pads_desc">Automatically add your newly visited documents to your list</string>
+    <string name="settings_save_new_pads_desc">Automatically add your newly visited documents to your list.</string>
     <string name="group">Add to group</string>
     <string name="copy">Copy</string>
     <string name="share">Share</string>
@@ -124,14 +124,14 @@
     <string name="serverlist_dialog_new_server_advanced">Advanced Options</string>
 
     <string name="title_activity_server_list">Server list</string>
-    <string name="pref_server_list_summary">Add your custom etherpad servers</string>
+    <string name="pref_server_list_summary">Add your custom etherpad servers.</string>
     <string name="no_custom_servers">No servers added.</string>
 
     <string name="serverlist_dialog_new_server_title">New server</string>
     <string name="serverlist_dialog_edit_server_title">Edit server</string>
 
     <string name="serverlist_dialog_new_server_name_title">Server name</string>
-    <string name="serverlist_dialog_new_server_name_label">The name you want to assign to the server (optional)</string>
+    <string name="serverlist_dialog_new_server_name_label">The name you want to assign to the server (optional).</string>
     <string name="serverlist_dialog_new_server_name_invalid">Invalid server name.</string>
 
     <string name="serverlist_dialog_new_server_url_title">Server url</string>
@@ -151,7 +151,7 @@
     <string name="serverlist_dialog_delete_sure_to_delete">Are you sure you want to delete the selected servers?</string>
     <string name="serverlist_dialog_delete_server_deleted">The selected servers have been removed</string>
 
-    <string name="new_pad_local_name">Optionally set a pad Alias</string>
+    <string name="new_pad_local_name">Optionally set a pad Alias.</string>
     <string name="write_pad_local_name">Pad Alias (optional)</string>
     <string name="new_pad_name_invalid">The pad name contains invalid characters.</string>
     <string name="new_pad_wrong_server">The server is not allowed. The operation cannot continue. Check your server settings and try again.</string>
