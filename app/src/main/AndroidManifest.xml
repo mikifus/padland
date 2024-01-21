@@ -31,7 +31,7 @@
             android:label="@string/title_activity_intro"
             android:theme="@style/splashScreenTheme" />
         <activity
-            android:name=".PadListActivity"
+            android:name=".Activities.PadListActivity"
             android:label="@string/title_activity_padlist"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:exported="true">
