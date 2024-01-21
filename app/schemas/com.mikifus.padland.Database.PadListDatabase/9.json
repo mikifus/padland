@@ -1,0 +1,238 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 9,
+    "identityHash": "39a5019da16f60b550719c4920a23967",
+    "entities": [
+      {
+        "tableName": "padlist",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `local_name` TEXT NOT NULL, `server` TEXT NOT NULL, `url` TEXT NOT NULL, `last_used_date` INTEGER, `create_date` INTEGER NOT NULL, `access_count` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "mId",
+            "columnName": "_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mName",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mLocalName",
+            "columnName": "local_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mServer",
+            "columnName": "server",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mUrl",
+            "columnName": "url",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mLastUsedDate",
+            "columnName": "last_used_date",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mCreateDate",
+            "columnName": "create_date",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mAccessCount",
+            "columnName": "access_count",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "_id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "padgroups",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `position` INTEGER NOT NULL, `last_used_date` INTEGER, `create_date` INTEGER NOT NULL, `access_count` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "mId",
+            "columnName": "_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mName",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mPosition",
+            "columnName": "position",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mLastUsedDate",
+            "columnName": "last_used_date",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mCreateDate",
+            "columnName": "create_date",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mAccessCount",
+            "columnName": "access_count",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "_id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "padland_servers",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER NOT NULL, `name` TEXT NOT NULL, `url` TEXT NOT NULL, `padprefix` TEXT NOT NULL, `position` INTEGER NOT NULL, `jquery` INTEGER NOT NULL, `enabled` INTEGER NOT NULL, `create_date` INTEGER NOT NULL, PRIMARY KEY(`_id`))",
+        "fields": [
+          {
+            "fieldPath": "mId",
+            "columnName": "_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mName",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mUrl",
+            "columnName": "url",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mPadprefix",
+            "columnName": "padprefix",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mPosition",
+            "columnName": "position",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mJquery",
+            "columnName": "jquery",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mEnabled",
+            "columnName": "enabled",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mCreateDate",
+            "columnName": "create_date",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "_id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "padlist_padgroups",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id_group` INTEGER NOT NULL, `_id_pad` INTEGER NOT NULL, PRIMARY KEY(`_id_group`, `_id_pad`), FOREIGN KEY(`_id_group`) REFERENCES `padgroups`(`_id`) ON UPDATE NO ACTION ON DELETE NO ACTION , FOREIGN KEY(`_id_pad`) REFERENCES `padlist`(`_id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "fields": [
+          {
+            "fieldPath": "mGroupId",
+            "columnName": "_id_group",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mPadId",
+            "columnName": "_id_pad",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "_id_group",
+            "_id_pad"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "padgroups",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "_id_group"
+            ],
+            "referencedColumns": [
+              "_id"
+            ]
+          },
+          {
+            "table": "padlist",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "_id_pad"
+            ],
+            "referencedColumns": [
+              "_id"
+            ]
+          }
+        ]
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '39a5019da16f60b550719c4920a23967')"
+    ]
+  }
+}
