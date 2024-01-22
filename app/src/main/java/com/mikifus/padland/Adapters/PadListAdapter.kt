@@ -11,7 +11,9 @@ import android.view.ViewGroup
 import android.widget.AbsListView
 import android.widget.BaseExpandableListAdapter
 import android.widget.TextView
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
+import com.mikifus.padland.Database.PadModel.PadViewModel
 import com.mikifus.padland.Models.Pad
 import com.mikifus.padland.Models.PadGroup
 import com.mikifus.padland.Models.PadGroupModel
@@ -27,7 +29,7 @@ class PadListAdapter(private val context: PadLandDataActivity) : BaseExpandableL
     private val checkedPositions: SparseArray<SparseBooleanArray?> = SparseArray()
     private val itemsPositions = HashMap<Long, Bundle>()
     private val padDatas: HashMap<Long, Pad>?
-    private val groupDatas: ArrayList<PadGroup>?
+    private var groupDatas: ArrayList<PadGroup> = ArrayList()
     private val padGroupModel: PadGroupModel
 
     // The default choice is the multiple one
@@ -37,7 +39,11 @@ class PadListAdapter(private val context: PadLandDataActivity) : BaseExpandableL
     init {
         padDatas = context._getPads()
         padGroupModel = PadGroupModel(context)
-        groupDatas = padGroupModel.allPadgroups
+//        groupDatas = padGroupModel.getAllPadGroups()
+
+        context.padGroupViewModel!!.getAll.observe(this.context, Observer { padGroups ->
+            padGroups.forEach { groupDatas.add(PadGroup(it)) }
+        })
     }
 
     override fun getGroupCount(): Int {

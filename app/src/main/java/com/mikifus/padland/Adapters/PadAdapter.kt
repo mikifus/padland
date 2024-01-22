@@ -22,10 +22,11 @@ import com.mikifus.padland.Utils.DragAndDropListener.DragAndDropListener
 import com.mikifus.padland.Utils.DragAndDropListener.DragAndDropListenerInterface
 
 
-class PadAdapter(context: Context, listener: DragAndDropListenerInterface): /*View.OnDragListener,*/View.OnLongClickListener,View.OnTouchListener, RecyclerView.Adapter<PadAdapter.PadViewHolder>(){
+class PadAdapter(context: Context, listener: DragAndDropListenerInterface): /*View.OnLongClickListener,*/View.OnTouchListener, RecyclerView.Adapter<PadAdapter.PadViewHolder>(){
 
     private val mInflater: LayoutInflater
     var data: List<Pad> = listOf()
+    var padGroupId: Long = 0
     private val dragAndDropListener: DragAndDropListenerInterface
     var tracker: SelectionTracker<Long>? = null
 
@@ -41,6 +42,7 @@ class PadAdapter(context: Context, listener: DragAndDropListenerInterface): /*Vi
         val itemLayout: ConstraintLayout
 
         var padId: Long = 0
+//        var padGroupId: Long = 0
 
         init {
             name = itemView.findViewById<TextView>(R.id.text_recyclerview_item_name)
@@ -49,14 +51,8 @@ class PadAdapter(context: Context, listener: DragAndDropListenerInterface): /*Vi
         }
 
         fun getItem(): ItemDetailsLookup.ItemDetails<Long> =
-
-            //1
             object : ItemDetailsLookup.ItemDetails<Long>() {
-
-                //2
                 override fun getPosition(): Int = bindingAdapterPosition
-
-                //3
                 override fun getSelectionKey(): Long = padId
             }
 
@@ -72,20 +68,17 @@ class PadAdapter(context: Context, listener: DragAndDropListenerInterface): /*Vi
         holder.name.text = current.mName
         holder.url.text = current.mUrl
 
-//        holder.itemLayout.tag = position;
-        holder.itemLayout.tag = current.mId;
-//        holder.itemLayout.setOnTouchListener(this);
-//        holder.itemLayout.setOnLongClickListener(this);
-//        holder.itemLayout.setOnDragListener(DragAndDropListener(dragAndDropListener));
+//        holder.itemLayout.tag = position
+//        holder.padGroupId = padGroupId
+        holder.itemLayout.tag = current.mId
+        holder.itemLayout.setTag(R.id.id_padgroup, padGroupId)
+        holder.itemLayout.setOnTouchListener(this);
+//        holder.itemLayout.setOnLongClickListener(this)
+//        holder.itemLayout.setOnDragListener(DragAndDropListener(dragAndDropListener))
         holder.padId = current.mId
 
         tracker?.let {
-            if (it.isSelected(current.mId)) {
-                holder.itemLayout.setBackgroundColor(
-                    ContextCompat.getColor(holder.itemLayout.context, R.color.design_default_color_primary))
-            } else {
-                holder.itemLayout.background = null
-            }
+            holder.itemLayout.isSelected = it.isSelected(current.mId)
         }
     }
 
@@ -104,10 +97,10 @@ class PadAdapter(context: Context, listener: DragAndDropListenerInterface): /*Vi
     }
 
     override fun onTouch(view: View, event: MotionEvent): Boolean {
+
         when(event.action) {
             MotionEvent.ACTION_DOWN -> {
-                view.performClick()
-                return true
+                return view.performClick()
             }
 
 //            MotionEvent.ACTION_UP -> {
@@ -118,27 +111,28 @@ class PadAdapter(context: Context, listener: DragAndDropListenerInterface): /*Vi
 //                return false
 //            }
 
-            MotionEvent.ACTION_MOVE -> {
-                val item = ClipData.Item(view.tag.toString())
-                val data = ClipData(
-                    view.tag.toString(),
-                    arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN),
-                    item
-                )
-                val shadowBuilder = DragShadowBuilder(view)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    view.startDragAndDrop(data, shadowBuilder, view, 0)
-                } else {
-                    view.startDrag(data, shadowBuilder, view, 0)
-                }
-                return true
-            }
+//            MotionEvent.ACTION_MOVE -> {
+////                view.parent.requestDisallowInterceptTouchEvent(true);
+//                val item = ClipData.Item(view.tag.toString())
+//                val data = ClipData(
+//                    view.tag.toString(),
+//                    arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN),
+//                    item
+//                )
+//                val shadowBuilder = DragShadowBuilder(view)
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                    view.startDragAndDrop(data, shadowBuilder, view, 0)
+//                } else {
+//                    view.startDrag(data, shadowBuilder, view, 0)
+//                }
+//                return true
+//            }
 
             else -> return false
         }
     }
 
-    override fun onLongClick(view: View): Boolean {
+//    override fun onLongClick(view: View): Boolean {
 //        val item = ClipData.Item(view.tag.toString())
 //        val data = ClipData(
 //            view.tag.toString(),
@@ -152,7 +146,7 @@ class PadAdapter(context: Context, listener: DragAndDropListenerInterface): /*Vi
 //            view.startDrag(data, shadowBuilder, view, 0)
 //        }
 //        view.visibility = View.INVISIBLE;
-        return true
-    }
+//        return true
+//    }
 
 }

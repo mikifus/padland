@@ -53,10 +53,10 @@ class PadGroupAdapter(context: Context, listener: DragAndDropListenerInterface):
 //
 //            padViewModel = ViewModelProvider(context)[PadViewModel::class.java]
             padAdapter = PadAdapter(context, listener)
-            padAdapter.tracker = padTracker
 
             initListView()
-            initPadSelectionTracker()
+            initPadSelectionTracker(context)
+            padAdapter.tracker = padTracker
         }
 
         private fun initListView() {
@@ -66,7 +66,7 @@ class PadGroupAdapter(context: Context, listener: DragAndDropListenerInterface):
         }
 
 
-        fun initPadSelectionTracker() {
+        fun initPadSelectionTracker(context: AppCompatActivity) {
             padTracker = SelectionTracker.Builder<Long>(
                 "padListTracker",
                 padListRecyclerView,
@@ -80,27 +80,29 @@ class PadGroupAdapter(context: Context, listener: DragAndDropListenerInterface):
                 .build()
 
 
-            padTracker!!.addObserver(object : SelectionTracker.SelectionObserver<Long>() {
-                override fun onSelectionChanged() {
-                    super.onSelectionChanged()
+//            padTracker!!.addObserver(object : SelectionTracker.SelectionObserver<Long>() {
+//                override fun onSelectionChanged() {
+//                    super.onSelectionChanged()
+//
+//                    val currentActivity = itemLayout.context as PadListActivity
+//                    if (currentActivity.mActionMode == null) {
+//                        currentActivity.mActionMode = currentActivity.startSupportActionMode(currentActivity)
+//
+//                        padListRecyclerView.clearFocus()
+//                        padListRecyclerView.isEnabled = false
+//                    }
+//
+//                    val selectionCount = padTracker!!.selection.size()
+//                    if (selectionCount > 0) {
+////                    mActionMode?.title = getString(R.string.action_selected, items)
+//                        currentActivity.mActionMode?.title = selectionCount.toString()
+//                    } else {
+//                        currentActivity.mActionMode?.finish()
+//                    }
+//                }
+//            })
 
-                    val currentActivity = itemLayout.context as PadListActivity
-                    if (currentActivity.mActionMode == null) {
-                        currentActivity.mActionMode = currentActivity.startSupportActionMode(currentActivity)
-
-                        padListRecyclerView.clearFocus()
-                        padListRecyclerView.isEnabled = false
-                    }
-
-                    val selectionCount = padTracker!!.selection.size()
-                    if (selectionCount > 0) {
-//                    mActionMode?.title = getString(R.string.action_selected, items)
-                        currentActivity.mActionMode?.title = selectionCount.toString()
-                    } else {
-                        currentActivity.mActionMode?.finish()
-                    }
-                }
-            })
+            (context as PadListActivity).registerTracker(padTracker!!)
         }
     }
 
@@ -115,6 +117,7 @@ class PadGroupAdapter(context: Context, listener: DragAndDropListenerInterface):
         holder.itemLayout.tag = current.padGroup.mId;
         holder.padGroupId = current.padGroup.mId
 //        holder.padAdapter.setData(current.padList)
+        holder.padAdapter.padGroupId = current.padGroup.mId
         holder.padAdapter.data = current.padList
         holder.padAdapter.notifyDataSetChanged()
 

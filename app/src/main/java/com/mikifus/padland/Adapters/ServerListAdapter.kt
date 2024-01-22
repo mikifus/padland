@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import com.mikifus.padland.Database.PadListDatabase
 import com.mikifus.padland.Models.Server
 import com.mikifus.padland.Models.ServerModel
 import com.mikifus.padland.R
@@ -15,13 +16,14 @@ import com.mikifus.padland.ServerListActivity
  */
 class ServerListAdapter(context: ServerListActivity?, //    private ServerListActivity mContext;
                         private val layout_resource: Int) : ArrayAdapter<Any?>(context!!, layout_resource) {
-    private val serverModel: ServerModel
-    private var items: ArrayList<Server>
+//    private val serverModel: ServerModel
+    private var items: List<com.mikifus.padland.Database.ServerModel.Server>
 
     init {
         //        mContext = context;
-        serverModel = ServerModel(context)
-        items = serverModel.enabledServerList
+//        serverModel = ServerModel(context)
+//        items = serverModel.enabledServerList
+        items = PadListDatabase.getInstance(context!!).serverDao().getAll().value?.let { return@let it } ?: emptyList()
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -33,27 +35,29 @@ class ServerListAdapter(context: ServerListActivity?, //    private ServerListAc
         if (view == null) {
             view = LayoutInflater.from(context).inflate(layout_resource, parent, false)
         }
-        (view!!.findViewById<View>(R.id.name) as TextView).text = server.name
-        (view.findViewById<View>(R.id.url) as TextView).text = server.url
+        (view!!.findViewById<View>(R.id.name) as TextView).text = server.mName
+        (view.findViewById<View>(R.id.url) as TextView).text = server.mUrl
 
         // Return the completed view to render on screen
         return view
     }
 
     override fun getCount(): Int {
-        return serverModel.serverCount
+//        return serverModel.serverCount
+        return items.count()
     }
 
-    override fun getItem(position: Int): Server {
+    override fun getItem(position: Int): com.mikifus.padland.Database.ServerModel.Server {
         return items[position]
     }
 
     override fun getItemId(position: Int): Long {
-        return items[position].id
+        return items[position].mId
     }
 
     override fun notifyDataSetChanged() {
         super.notifyDataSetChanged()
-        items = serverModel.enabledServerList
+//        items = serverModel.enabledServerList
+        items = PadListDatabase.getInstance(context!!).serverDao().getAll().value?.let { return@let it } ?: emptyList()
     }
 }
