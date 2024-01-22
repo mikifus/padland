@@ -6,7 +6,6 @@ import android.view.View.OnDragListener
 import androidx.recyclerview.widget.RecyclerView
 import com.mikifus.padland.Adapters.PadAdapter
 import com.mikifus.padland.Adapters.PadGroupAdapter
-import com.mikifus.padland.Database.PadModel.Pad
 import com.mikifus.padland.R
 
 class DragAndDropListener internal constructor(listener: DragAndDropListenerInterface) : OnDragListener {
@@ -21,35 +20,37 @@ class DragAndDropListener internal constructor(listener: DragAndDropListenerInte
         when (event.action) {
             DragEvent.ACTION_DROP -> {
                 isDropped = true
-                var positionTarget = -1
+                var positionTarget = 0
                 val viewSource = event.localState as View
                 val viewId = view.id
-                val flItem: Int = R.id.pad_list_recyclerview_item_pad
 //                val tvEmptyListTop: Int = R.id.tvEmptyListTop
 //                val tvEmptyListBottom: Int = R.id.tvEmptyListBottom
-
-//                val rvTop: Int = R.id.recyclerview_padgroup
-                val rvBottom: Int = R.id.recyclerview_unclassified
-                val rvContainer: Int = R.id.pad_list_recyclerview_item_padgroup
+                val padItemViewId: Int = R.id.pad_list_recyclerview_item_pad
+                val padGroupRvViewId: Int = R.id.recyclerview_padgroup
+                val unclassifiedViewId: Int = R.id.recyclerview_unclassified
+                val padGroupViewId: Int = R.id.pad_list_recyclerview_item_padgroup
 
                 when (viewId) {
-                    flItem, /*rvTop,*/ rvBottom, rvContainer -> {
+                    padItemViewId, padGroupRvViewId, unclassifiedViewId, padGroupViewId -> {
 //                        val target: RecyclerView
                         val targetGroupId: Long
                         when (viewId) {
-//                            rvTop -> {
-//                                target =
-//                                    view.rootView.findViewById<View>(rvTop) as RecyclerView
-//                                targetGroupId = (target.parent as PadGroupAdapter.PadGroupViewHolder).padGroupId
-//                            }
+                            padItemViewId -> {
+                                targetGroupId = view.getTag(R.id.id_padgroup) as Long
+                                positionTarget = (view.parent as RecyclerView).getChildAdapterPosition(view)
+                            }
 
-//                            rvBottom -> {
+                            padGroupRvViewId -> {
+                                targetGroupId = view.tag as Long
+                            }
+
+                            unclassifiedViewId -> {
 //                                target =
 //                                    view.rootView.findViewById<View>(rvBottom) as RecyclerView
-//                                targetGroupId = 0
-//                            }
+                                targetGroupId = 0
+                            }
 
-                            rvContainer -> {
+                            padGroupViewId -> {
 //                                target =
 //                                    view.rootView.findViewById<View>(rvTop) as RecyclerView
                                 targetGroupId = view.tag as Long
@@ -85,10 +86,13 @@ class DragAndDropListener internal constructor(listener: DragAndDropListenerInte
 //                            adapterTarget.data = customListTarget
 //                            adapterTarget.notifyDataSetChanged()
 
-                            listener.notifyChange(
-                                targetGroupId,
-                                (event.clipData.getItemAt(0).text as String).toLong()
-                            )
+                            if(targetGroupId > -1) {
+                                listener.notifyChange(
+                                    targetGroupId,
+                                    (event.clipData.getItemAt(0).text as String).toLong(),
+                                    positionTarget
+                                )
+                            }
 
 
 //                            if (sourceId == rvBottom && adapterSource.getItemCount() < 1) {

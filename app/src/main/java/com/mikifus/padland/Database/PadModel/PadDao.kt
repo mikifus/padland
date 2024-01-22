@@ -39,4 +39,7 @@ interface PadDao {
 
     @Query("DELETE FROM padlist WHERE _id IN (:selectionArgs)")
     fun deleteBy(selectionArgs: Array<String>?): Int
+
+//    @Query("UPDATE padlist SET position = :position WHERE _id = :padId")
+//    fun updatePadPosition(padId: Long, position: Int)
 }

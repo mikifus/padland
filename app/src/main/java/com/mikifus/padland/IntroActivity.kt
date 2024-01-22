@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.github.paolorotolo.appintro.AppIntro2
 import com.github.paolorotolo.appintro.AppIntroFragment
+import com.mikifus.padland.Activities.PadListActivity
 import com.mikifus.padland.Intro.CustomAppIntroFragment
 import com.mikifus.padland.Intro.LinkableAppIntroFragment
 
