@@ -21,7 +21,7 @@ data class Pad(
     @ColumnInfo(name = "last_used_date") val mLastUsedDate: Date?,
     @ColumnInfo(name = "create_date") val mCreateDate: Date,
     @ColumnInfo(name = "access_count") val mAccessCount: Long,
-    @ColumnInfo(name = "position") val mPosition: Int,
+//    @ColumnInfo(name = "position") val mPosition: Int,
 )
 {
     constructor() : this(
@@ -33,7 +33,7 @@ data class Pad(
         Date(System.currentTimeMillis()),
         Date(System.currentTimeMillis()),
         0,
-        0
+//        0
     )
 
     companion object {

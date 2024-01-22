@@ -23,4 +23,8 @@ class PadRepository(private val padDao: PadDao) {
         padDao.update(padGroup)
     }
 
+//    fun updatePadPosition(padId: Long, position: Int) {
+//        return padDao.updatePadPosition(padId, position)
+//    }
+
 }

@@ -43,4 +43,8 @@ class PadViewModel(application: Application): AndroidViewModel(application) {
     suspend fun updatePad(pad: Pad) {
         viewModelScope.launch(Dispatchers.IO) { repository.updatePadGroup(pad) }
     }
+
+//    fun updatePadPosition(padId: Long, position: Int) {
+//        viewModelScope.launch(Dispatchers.IO) { repository.updatePadPosition(padId, position) }
+//    }
 }

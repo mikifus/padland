@@ -20,14 +20,17 @@
             android:id="@+id/text_recyclerview_item_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/design_default_color_secondary_variant"
             android:gravity="start|center"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
-            android:textColor="@color/design_default_color_on_secondary"
+            android:textAppearance="?android:attr/textAppearanceLarge"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/background_selector"
+            android:foreground="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview_padgroup"

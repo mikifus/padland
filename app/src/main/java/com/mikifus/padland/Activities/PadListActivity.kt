@@ -60,7 +60,8 @@ class PadListActivity: AppCompatActivity(), ActionMode.Callback, DragAndDropList
      * mActionMode defines behaviour of the action-bar
      */
     var mActionMode: ActionMode? = null
-    protected var padSelectionTracker: SelectionTracker<Long>? = null
+//    protected var padSelectionTracker: SelectionTracker<Long>? = null
+    protected var padSelectionTrackers: MutableList<SelectionTracker<Long>>? = null
 
     var padGroupViewModel: PadGroupViewModel? = null
     var padViewModel: PadViewModel? = null
@@ -105,7 +106,7 @@ class PadListActivity: AppCompatActivity(), ActionMode.Callback, DragAndDropList
     here onChanged shall be triggered realtime as the data changes
      */
     private fun initListView() {
-        initPadSelectionTracker()
+        initPadSelectionTrackers()
 
         padGroupViewModel!!.getPadGroupsWithPadList.observe(this) { currentList ->
             mainList = currentList ?: listOf()
@@ -121,8 +122,8 @@ class PadListActivity: AppCompatActivity(), ActionMode.Callback, DragAndDropList
         }
     }
 
-    private fun initPadSelectionTracker() {
-        padSelectionTracker = SelectionTracker.Builder<Long>(
+    private fun initPadSelectionTrackers() {
+        val padSelectionTracker = SelectionTracker.Builder<Long>(
             "padListTracker",
             recyclerViewUnclassified!!,
             PadKeyProvider(padAdapter!!),
@@ -144,42 +145,44 @@ class PadListActivity: AppCompatActivity(), ActionMode.Callback, DragAndDropList
 
         padAdapter!!.tracker = padSelectionTracker
 
-        padSelectionTracker!!.addObserver(object : SelectionTracker.SelectionObserver<Long>() {
-//            override fun onItemStateChanged(key: Long, selected: Boolean) {
-//                super.onItemStateChanged(key, selected)
-//            }
+        registerTracker(padSelectionTracker)
+
+//        padSelectionTracker!!.addObserver(object : SelectionTracker.SelectionObserver<Long>() {
+////            override fun onItemStateChanged(key: Long, selected: Boolean) {
+////                super.onItemStateChanged(key, selected)
+////            }
+////
+////            override fun onSelectionRefresh() {
+////                super.onSelectionRefresh()
+////            }
 //
-//            override fun onSelectionRefresh() {
-//                super.onSelectionRefresh()
-//            }
-
-            override fun onSelectionChanged() {
-                super.onSelectionChanged()
-
-                if (mActionMode == null) {
-                    val currentActivity = this@PadListActivity
-                    mActionMode = currentActivity.startSupportActionMode(this@PadListActivity)
-
-                    recyclerView!!.clearFocus()
-                    recyclerView!!.isEnabled = false
-                }
-
-                val selectionCount = padSelectionTracker!!.selection.size()
-                if (selectionCount > 0) {
-//                    mActionMode?.title = getString(R.string.action_selected, items)
-                    mActionMode?.title = selectionCount.toString()
-                } else {
-                    mActionMode?.finish()
-                }
-            }
+//            override fun onSelectionChanged() {
+//                super.onSelectionChanged()
 //
-//            override fun onSelectionRestored() {
-//                super.onSelectionRestored()
+//                if (mActionMode == null) {
+//                    val currentActivity = this@PadListActivity
+//                    mActionMode = currentActivity.startSupportActionMode(this@PadListActivity)
+//
+//                    recyclerView!!.clearFocus()
+//                    recyclerView!!.isEnabled = false
+//                }
+//
+//                val selectionCount = padSelectionTracker!!.selection.size()
+//                if (selectionCount > 0) {
+////                    mActionMode?.title = getString(R.string.action_selected, items)
+//                    mActionMode?.title = selectionCount.toString()
+//                } else {
+//                    mActionMode?.finish()
+//                }
 //            }
-        })
+////
+////            override fun onSelectionRestored() {
+////                super.onSelectionRestored()
+////            }
+//        })
     }
 
-    private fun initEvents() {
+    fun initEvents() {
         val newPadGroupButton = findViewById<FloatingActionButton>(R.id.new_pad_group_button)
         newPadGroupButton.setOnClickListener(View.OnClickListener {
             showNewPadgroupDialog()
@@ -189,6 +192,40 @@ class PadListActivity: AppCompatActivity(), ActionMode.Callback, DragAndDropList
         newPadButton.setOnClickListener(View.OnClickListener {
             val newPadIntent = Intent(this@PadListActivity, NewPadActivity::class.java)
             startActivity(newPadIntent)
+        })
+    }
+
+    fun registerTracker(tracker: SelectionTracker<Long>) {
+        if(padSelectionTrackers == null) {
+            padSelectionTrackers = mutableListOf(tracker)
+        } else {
+            padSelectionTrackers?.add(tracker)
+        }
+
+
+        tracker.addObserver(object : SelectionTracker.SelectionObserver<Long>() {
+            override fun onSelectionChanged() {
+                super.onSelectionChanged()
+
+                if (mActionMode == null) {
+                    val currentActivity = this@PadListActivity
+                    mActionMode = currentActivity.startSupportActionMode(this@PadListActivity)
+
+//                    recyclerView!!.clearFocus()
+//                    recyclerView!!.isEnabled = false
+                }
+
+//                val selectionCount = tracker.selection.size()
+                var selectionCount = 0
+                padSelectionTrackers!!.forEach {
+                    selectionCount += it.selection.size()
+                }
+                if (selectionCount > 0) {
+                    mActionMode?.title = selectionCount.toString()
+                } else {
+                    mActionMode?.finish()
+                }
+            }
         })
     }
 
@@ -278,6 +315,9 @@ class PadListActivity: AppCompatActivity(), ActionMode.Callback, DragAndDropList
     override fun onDestroyActionMode(mode: ActionMode?) {
         mActionMode = null
 //        uncheckAllItems()
+        padSelectionTrackers!!.forEach {
+            it.clearSelection()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -294,17 +334,17 @@ class PadListActivity: AppCompatActivity(), ActionMode.Callback, DragAndDropList
         TODO("Not yet implemented")
     }
 
-    override fun notifyChange(padGroupId: Long, padId: Long) {
+    override fun notifyChange(padGroupId: Long, padId: Long, position: Int) {
         lifecycleScope.launch {
-            if(padGroupId == -1L) {
-                padGroupViewModel!!.deletePadGroupsAndPadList(padId)
-            } else {
+            padGroupViewModel!!.deletePadGroupsAndPadList(padId)
+            if(padGroupId > 1) {
                 padGroupViewModel!!.insertPadGroupsAndPadList(
                     PadGroupsAndPadListEntity(
                         mGroupId = padGroupId,
-                        mPadId = padId
+                        mPadId = padId,
                     )
                 )
+//                padViewModel!!.updatePadPosition(padId, position)
             }
         }
     }
