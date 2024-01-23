@@ -17,7 +17,7 @@ import com.mikifus.padland.Adapters.PadSelectionTracker.DragAndDropListener.Drag
 import com.mikifus.padland.Adapters.PadSelectionTracker.DragAndDropListener.IDragAndDropListener
 
 
-class PadAdapter(context: Context, listener: IDragAndDropListener): View.OnTouchListener, RecyclerView.Adapter<PadAdapter.PadViewHolder>(){
+class PadAdapter(context: Context, listener: IDragAndDropListener): RecyclerView.Adapter<PadAdapter.PadViewHolder>(){
 
     private val mInflater: LayoutInflater
     var data: List<Pad> = listOf()
@@ -65,9 +65,6 @@ class PadAdapter(context: Context, listener: IDragAndDropListener): View.OnTouch
 
         holder.padGroupId = padGroupId
         holder.itemLayout.tag = current.mId
-        holder.itemLayout.setOnTouchListener(this);
-//        holder.itemLayout.setOnLongClickListener(this)
-//        holder.itemLayout.setOnDragListener(DragAndDropListener(dragAndDropListener))
         holder.padId = current.mId
 
         tracker?.let {
@@ -88,58 +85,5 @@ class PadAdapter(context: Context, listener: IDragAndDropListener): View.OnTouch
             null
         }
     }
-
-    override fun onTouch(view: View, event: MotionEvent): Boolean {
-
-        when(event.action) {
-            MotionEvent.ACTION_DOWN -> {
-                return view.performClick()
-            }
-
-//            MotionEvent.ACTION_UP -> {
-//                if(allowDrag) {
-//                    allowDrag = false
-//                    return true
-//                }
-//                return false
-//            }
-
-//            MotionEvent.ACTION_MOVE -> {
-////                view.parent.requestDisallowInterceptTouchEvent(true);
-//                val item = ClipData.Item(view.tag.toString())
-//                val data = ClipData(
-//                    view.tag.toString(),
-//                    arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN),
-//                    item
-//                )
-//                val shadowBuilder = DragShadowBuilder(view)
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//                    view.startDragAndDrop(data, shadowBuilder, view, 0)
-//                } else {
-//                    view.startDrag(data, shadowBuilder, view, 0)
-//                }
-//                return true
-//            }
-
-            else -> return false
-        }
-    }
-
-//    override fun onLongClick(view: View): Boolean {
-//        val item = ClipData.Item(view.tag.toString())
-//        val data = ClipData(
-//            view.tag.toString(),
-//            arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN),
-//            item
-//        )
-//        val shadowBuilder = DragShadowBuilder(view)
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//            view.startDragAndDrop(data, shadowBuilder, view, 0)
-//        } else {
-//            view.startDrag(data, shadowBuilder, view, 0)
-//        }
-//        view.visibility = View.INVISIBLE;
-//        return true
-//    }
 
 }
