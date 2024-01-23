@@ -7,25 +7,22 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.recyclerview.selection.SelectionPredicates
-import androidx.recyclerview.selection.SelectionTracker
-import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mikifus.padland.Activities.PadListActivity
 import com.mikifus.padland.Database.PadGroupModel.PadGroupsWithPadList
 import com.mikifus.padland.R
-import com.mikifus.padland.Utils.DragAndDropListener.DragAndDropListenerInterface
+import com.mikifus.padland.Adapters.PadSelectionTracker.DragAndDropListener.IDragAndDropListener
 
 
-class PadGroupAdapter(context: Context, listener: DragAndDropListenerInterface):
+class PadGroupAdapter(context: Context, listener: IDragAndDropListener):
     RecyclerView.Adapter<PadGroupAdapter.PadGroupViewHolder>() {
 
     private val activityContext: Context
 
     private val mInflater: LayoutInflater
     var data: List<PadGroupsWithPadList> = listOf()
-    private val dragAndDropListener: DragAndDropListenerInterface
+    private val dragAndDropListener: IDragAndDropListener
 
     init {
         mInflater = LayoutInflater.from(context);
@@ -33,12 +30,11 @@ class PadGroupAdapter(context: Context, listener: DragAndDropListenerInterface):
         dragAndDropListener = listener
     }
 
-    class PadGroupViewHolder(itemView: View, context: AppCompatActivity, listener: DragAndDropListenerInterface) :
+    class PadGroupViewHolder(itemView: View, context: AppCompatActivity, listener: IDragAndDropListener) :
         RecyclerView.ViewHolder(itemView) {
         val dataText: TextView
         val itemLayout: ConstraintLayout
         private val padListRecyclerView: RecyclerView
-        var padTracker: SelectionTracker<Long>? = null
 
         val padAdapter: PadAdapter
 
@@ -48,61 +44,17 @@ class PadGroupAdapter(context: Context, listener: DragAndDropListenerInterface):
             dataText = itemView.findViewById<TextView>(R.id.text_recyclerview_item_name)
             padListRecyclerView = itemView.findViewById(R.id.recyclerview_padgroup)
             itemLayout = itemView.findViewById(R.id.pad_list_recyclerview_item_padgroup)
-//            padRecyclerView = itemView.findViewById(R.id.recyclerview)
             padListRecyclerView.layoutManager = LinearLayoutManager(context)
-//
-//            padViewModel = ViewModelProvider(context)[PadViewModel::class.java]
             padAdapter = PadAdapter(context, listener)
 
             initListView()
-            initPadSelectionTracker(context)
-            padAdapter.tracker = padTracker
+            padAdapter.tracker = (context as PadListActivity).makePadSelectionTracker(context, padListRecyclerView, padAdapter)
         }
 
         private fun initListView() {
             itemView.setOnDragListener(padAdapter.getDragInstance())
             padListRecyclerView.setOnDragListener(padAdapter.getDragInstance())
             padListRecyclerView.adapter = padAdapter
-        }
-
-
-        fun initPadSelectionTracker(context: AppCompatActivity) {
-            padTracker = SelectionTracker.Builder<Long>(
-                "padListTracker",
-                padListRecyclerView,
-                PadKeyProvider(padAdapter),
-                PadDetailsLookup(padListRecyclerView!!),
-                StorageStrategy.createLongStorage()
-            )
-                .withSelectionPredicate(
-                    SelectionPredicates.createSelectAnything()
-                )
-                .build()
-
-
-//            padTracker!!.addObserver(object : SelectionTracker.SelectionObserver<Long>() {
-//                override fun onSelectionChanged() {
-//                    super.onSelectionChanged()
-//
-//                    val currentActivity = itemLayout.context as PadListActivity
-//                    if (currentActivity.mActionMode == null) {
-//                        currentActivity.mActionMode = currentActivity.startSupportActionMode(currentActivity)
-//
-//                        padListRecyclerView.clearFocus()
-//                        padListRecyclerView.isEnabled = false
-//                    }
-//
-//                    val selectionCount = padTracker!!.selection.size()
-//                    if (selectionCount > 0) {
-////                    mActionMode?.title = getString(R.string.action_selected, items)
-//                        currentActivity.mActionMode?.title = selectionCount.toString()
-//                    } else {
-//                        currentActivity.mActionMode?.finish()
-//                    }
-//                }
-//            })
-
-            (context as PadListActivity).registerTracker(padTracker!!)
         }
     }
 
@@ -114,24 +66,17 @@ class PadGroupAdapter(context: Context, listener: DragAndDropListenerInterface):
     override fun onBindViewHolder(holder: PadGroupViewHolder, position: Int) {
         val current: PadGroupsWithPadList = data[position]
         holder.dataText.text = current.padGroup.mName
-        holder.itemLayout.tag = current.padGroup.mId;
+        holder.itemLayout.tag = current.padGroup.mId
         holder.padGroupId = current.padGroup.mId
-//        holder.padAdapter.setData(current.padList)
         holder.padAdapter.padGroupId = current.padGroup.mId
         holder.padAdapter.data = current.padList
-        holder.padAdapter.notifyDataSetChanged()
 
-//        holder.padTracker = padSelectionTracker
+        holder.padAdapter.notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {
         return data.size;
     }
-
-//    fun setData(data: List<PadGroupsWithPadList>?) {
-//        this.data = data!!
-//        notifyDataSetChanged()
-//    }
 
 
 }

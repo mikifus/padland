@@ -1,6 +1,6 @@
-package com.mikifus.padland.Utils.DragAndDropListener
+package com.mikifus.padland.Adapters.PadSelectionTracker.DragAndDropListener
 
-interface DragAndDropListenerInterface {
+interface IDragAndDropListener {
     fun setEmptyListTop(visibility: Boolean)
     fun setEmptyListBottom(visibility: Boolean)
 
