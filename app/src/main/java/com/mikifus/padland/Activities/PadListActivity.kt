@@ -39,7 +39,7 @@ import com.mikifus.padland.Database.PadModel.PadViewModel
 import com.mikifus.padland.Dialog.NewPadGroup
 import com.mikifus.padland.NewPadActivity
 import com.mikifus.padland.R
-import com.mikifus.padland.Adapters.PadSelectionTracker.DragAndDropListener.IDragAndDropListener
+import com.mikifus.padland.Adapters.DragAndDropListener.IDragAndDropListener
 import com.mikifus.padland.Adapters.PadSelectionTracker.IMakesPadSelectionTracker
 import com.mikifus.padland.Adapters.PadSelectionTracker.MakesPadSelectionTrackerImpl
 import kotlinx.coroutines.launch

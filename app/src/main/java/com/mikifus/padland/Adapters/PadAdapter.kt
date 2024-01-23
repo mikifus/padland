@@ -13,8 +13,8 @@ import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.RecyclerView
 import com.mikifus.padland.Database.PadModel.Pad
 import com.mikifus.padland.R
-import com.mikifus.padland.Adapters.PadSelectionTracker.DragAndDropListener.DragAndDropListener
-import com.mikifus.padland.Adapters.PadSelectionTracker.DragAndDropListener.IDragAndDropListener
+import com.mikifus.padland.Adapters.DragAndDropListener.DragAndDropListener
+import com.mikifus.padland.Adapters.DragAndDropListener.IDragAndDropListener
 
 
 class PadAdapter(context: Context, listener: IDragAndDropListener): RecyclerView.Adapter<PadAdapter.PadViewHolder>(){

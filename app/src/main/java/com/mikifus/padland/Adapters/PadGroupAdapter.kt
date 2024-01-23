@@ -15,7 +15,7 @@ import androidx.transition.AutoTransition
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import com.mikifus.padland.Activities.PadListActivity
-import com.mikifus.padland.Adapters.PadSelectionTracker.DragAndDropListener.IDragAndDropListener
+import com.mikifus.padland.Adapters.DragAndDropListener.IDragAndDropListener
 import com.mikifus.padland.Database.PadGroupModel.PadGroupsWithPadList
 import com.mikifus.padland.R
 
