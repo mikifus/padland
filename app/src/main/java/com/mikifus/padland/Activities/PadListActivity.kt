@@ -29,6 +29,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mikifus.padland.Adapters.PadAdapter
 import com.mikifus.padland.Adapters.PadGroupAdapter
+import com.mikifus.padland.Adapters.PadGroupSelectionTracker.IMakesPadGroupSelectionTracker
+import com.mikifus.padland.Adapters.PadGroupSelectionTracker.MakesMakesPadGroupSelectionTrackerImpl
 import com.mikifus.padland.Database.PadGroupModel.PadGroupViewModel
 import com.mikifus.padland.Database.PadGroupModel.PadGroupsAndPadListEntity
 import com.mikifus.padland.Database.PadGroupModel.PadGroupsWithPadList
@@ -54,13 +56,13 @@ import kotlinx.coroutines.launch
 class PadListActivity: AppCompatActivity(),
     ActionMode.Callback,
     IDragAndDropListener,
-    IMakesPadSelectionTracker by MakesPadSelectionTrackerImpl() {
+    IMakesPadSelectionTracker by MakesPadSelectionTrackerImpl(),
+    IMakesPadGroupSelectionTracker by MakesMakesPadGroupSelectionTrackerImpl() {
 
     /**
      * mActionMode defines behaviour of the action-bar
      */
     var mActionMode: ActionMode? = null
-//    protected var padSelectionTracker: SelectionTracker<Long>? = null
 
     var padGroupViewModel: PadGroupViewModel? = null
     var padViewModel: PadViewModel? = null
@@ -73,7 +75,6 @@ class PadListActivity: AppCompatActivity(),
 
     private var adapter: PadGroupAdapter? = null
     private var padAdapter: PadAdapter? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -105,7 +106,7 @@ class PadListActivity: AppCompatActivity(),
     here onChanged shall be triggered realtime as the data changes
      */
     private fun initListView() {
-        initPadSelectionTrackers()
+        initSelectionTrackers()
 
         padGroupViewModel!!.getPadGroupsWithPadList.observe(this) { currentList ->
             mainList = currentList ?: listOf()
@@ -120,8 +121,9 @@ class PadListActivity: AppCompatActivity(),
         }
     }
 
-    private fun initPadSelectionTrackers() {
+    private fun initSelectionTrackers() {
         padAdapter!!.tracker = makePadSelectionTracker(this, recyclerViewUnclassified!!, padAdapter!!)
+        adapter!!.tracker = makePadGroupSelectionTracker(this, recyclerView!!, adapter!!)
     }
 
     fun initEvents() {
@@ -291,7 +293,8 @@ class PadListActivity: AppCompatActivity(),
 
     override fun onDestroyActionMode(mode: ActionMode?) {
         mActionMode = null
-        clearSelection()
+        clearPadSelection()
+        clearPadGroupSelection()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

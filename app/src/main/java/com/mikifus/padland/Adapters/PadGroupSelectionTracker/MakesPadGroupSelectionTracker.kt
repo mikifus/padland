@@ -1,4 +1,4 @@
-package com.mikifus.padland.Adapters.PadSelectionTracker
+package com.mikifus.padland.Adapters.PadGroupSelectionTracker
 
 import android.content.ClipData
 import android.content.ClipDescription
@@ -9,22 +9,22 @@ import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.RecyclerView
 import com.mikifus.padland.Activities.PadListActivity
-import com.mikifus.padland.Adapters.PadAdapter
+import com.mikifus.padland.Adapters.PadGroupAdapter
 
-interface IMakesPadSelectionTracker {
-    var padSelectionTrackers: MutableList<SelectionTracker<Long>>?
-    fun makePadSelectionTracker(activity: PadListActivity, recyclerView: RecyclerView, padAdapter: PadAdapter): SelectionTracker<Long>
-    fun clearPadSelection()
+interface IMakesPadGroupSelectionTracker {
+    var padGroupSelectionTracker: SelectionTracker<Long>?
+    fun makePadGroupSelectionTracker(activity: PadListActivity, recyclerView: RecyclerView, padGroupAdapter: PadGroupAdapter): SelectionTracker<Long>
+    fun clearPadGroupSelection()
 }
-class MakesPadSelectionTrackerImpl: IMakesPadSelectionTracker {
-    override var padSelectionTrackers: MutableList<SelectionTracker<Long>>? = null
+class MakesMakesPadGroupSelectionTrackerImpl: IMakesPadGroupSelectionTracker {
+    override var padGroupSelectionTracker: SelectionTracker<Long>? = null
 
-    override fun makePadSelectionTracker(activity: PadListActivity, recyclerView: RecyclerView, padAdapter: PadAdapter): SelectionTracker<Long> {
-        val padSelectionTracker: SelectionTracker<Long> = SelectionTracker.Builder(
-            "padSelectionTracker",
+    override fun makePadGroupSelectionTracker(activity: PadListActivity, recyclerView: RecyclerView, padGroupAdapter: PadGroupAdapter): SelectionTracker<Long> {
+        padGroupSelectionTracker = SelectionTracker.Builder(
+            "padGroupSelectionTracker",
             recyclerView,
-            PadKeyProvider(padAdapter),
-            PadDetailsLookup(recyclerView),
+            PadGroupKeyProvider(padGroupAdapter),
+            PadGroupDetailsLookup(recyclerView),
             StorageStrategy.createLongStorage()
         )
             .withSelectionPredicate(
@@ -33,7 +33,7 @@ class MakesPadSelectionTrackerImpl: IMakesPadSelectionTracker {
             .withOnItemActivatedListener { item, event ->
                 if(activity.mActionMode != null) {
                     if(item.selectionKey != null) {
-                        padAdapter.tracker!!.select(item.selectionKey!!)
+                        padGroupAdapter.tracker!!.select(item.selectionKey!!)
                     }
                     return@withOnItemActivatedListener true
                 }
@@ -58,7 +58,7 @@ class MakesPadSelectionTrackerImpl: IMakesPadSelectionTracker {
             }
             .build()
 
-        padSelectionTracker.addObserver(object : SelectionTracker.SelectionObserver<Long>() {
+        padGroupSelectionTracker!!.addObserver(object : SelectionTracker.SelectionObserver<Long>() {
             override fun onSelectionChanged() {
                 super.onSelectionChanged()
 
@@ -66,10 +66,7 @@ class MakesPadSelectionTrackerImpl: IMakesPadSelectionTracker {
                     activity.mActionMode = activity.startSupportActionMode(activity)
                 }
 
-                var selectionCount = 0
-                padSelectionTrackers?.forEach {
-                    selectionCount += it.selection.size()
-                }
+                val selectionCount = padGroupSelectionTracker!!.selection.size()
                 if (selectionCount > 0) {
                     activity.mActionMode?.title = selectionCount.toString()
                 } else {
@@ -78,18 +75,10 @@ class MakesPadSelectionTrackerImpl: IMakesPadSelectionTracker {
             }
         })
 
-        if(padSelectionTrackers != null) {
-            padSelectionTrackers!!.add(padSelectionTracker)
-        } else {
-            padSelectionTrackers = mutableListOf(padSelectionTracker)
-        }
-
-        return padSelectionTracker
+        return padGroupSelectionTracker!!
     }
 
-    override fun clearPadSelection() {
-        padSelectionTrackers?.forEach {
-            it.clearSelection()
-        }
+    override fun clearPadGroupSelection() {
+        padGroupSelectionTracker?.clearSelection()
     }
 }
