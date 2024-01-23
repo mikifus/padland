@@ -1,33 +1,28 @@
 package com.mikifus.padland.Adapters
 
-import android.content.ClipData
-import android.content.ClipDescription
 import android.content.Context
-import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
-import android.view.View.DragShadowBuilder
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.RecyclerView
 import com.mikifus.padland.Database.PadModel.Pad
 import com.mikifus.padland.R
-import com.mikifus.padland.Utils.DragAndDropListener.DragAndDropListener
-import com.mikifus.padland.Utils.DragAndDropListener.DragAndDropListenerInterface
+import com.mikifus.padland.Adapters.PadSelectionTracker.DragAndDropListener.DragAndDropListener
+import com.mikifus.padland.Adapters.PadSelectionTracker.DragAndDropListener.IDragAndDropListener
 
 
-class PadAdapter(context: Context, listener: DragAndDropListenerInterface): /*View.OnLongClickListener,*/View.OnTouchListener, RecyclerView.Adapter<PadAdapter.PadViewHolder>(){
+class PadAdapter(context: Context, listener: IDragAndDropListener): View.OnTouchListener, RecyclerView.Adapter<PadAdapter.PadViewHolder>(){
 
     private val mInflater: LayoutInflater
     var data: List<Pad> = listOf()
     var padGroupId: Long = 0
-    private val dragAndDropListener: DragAndDropListenerInterface
+    private val dragAndDropListener: IDragAndDropListener
     var tracker: SelectionTracker<Long>? = null
 
     init {
@@ -42,7 +37,7 @@ class PadAdapter(context: Context, listener: DragAndDropListenerInterface): /*Vi
         val itemLayout: ConstraintLayout
 
         var padId: Long = 0
-//        var padGroupId: Long = 0
+        var padGroupId: Long = 0
 
         init {
             name = itemView.findViewById<TextView>(R.id.text_recyclerview_item_name)
@@ -68,10 +63,8 @@ class PadAdapter(context: Context, listener: DragAndDropListenerInterface): /*Vi
         holder.name.text = current.mName
         holder.url.text = current.mUrl
 
-//        holder.itemLayout.tag = position
-//        holder.padGroupId = padGroupId
+        holder.padGroupId = padGroupId
         holder.itemLayout.tag = current.mId
-        holder.itemLayout.setTag(R.id.id_padgroup, padGroupId)
         holder.itemLayout.setOnTouchListener(this);
 //        holder.itemLayout.setOnLongClickListener(this)
 //        holder.itemLayout.setOnDragListener(DragAndDropListener(dragAndDropListener))

@@ -1,16 +1,15 @@
-package com.mikifus.padland.Utils.DragAndDropListener
+package com.mikifus.padland.Adapters.PadSelectionTracker.DragAndDropListener
 
 import android.view.DragEvent
 import android.view.View
 import android.view.View.OnDragListener
 import androidx.recyclerview.widget.RecyclerView
 import com.mikifus.padland.Adapters.PadAdapter
-import com.mikifus.padland.Adapters.PadGroupAdapter
 import com.mikifus.padland.R
 
-class DragAndDropListener internal constructor(listener: DragAndDropListenerInterface) : OnDragListener {
+class DragAndDropListener internal constructor(listener: IDragAndDropListener) : OnDragListener {
     private var isDropped = false
-    private val listener: DragAndDropListenerInterface
+    private val listener: IDragAndDropListener
 
     init {
         this.listener = listener
@@ -36,33 +35,45 @@ class DragAndDropListener internal constructor(listener: DragAndDropListenerInte
                         val targetGroupId: Long
                         when (viewId) {
                             padItemViewId -> {
-                                targetGroupId = view.getTag(R.id.id_padgroup) as Long
+                                targetGroupId =
+                                    (
+                                        (view.parent
+                                                as RecyclerView)
+                                            .getChildViewHolder(view)
+                                                as PadAdapter.PadViewHolder
+                                    )
+                                    .padGroupId
+
                                 positionTarget = (view.parent as RecyclerView).getChildAdapterPosition(view)
                             }
 
                             padGroupRvViewId -> {
-                                targetGroupId = view.tag as Long
+                                val itemView = (view as RecyclerView).findChildViewUnder(event.x, event.y)
+                                if(itemView != null) {
+                                    targetGroupId = (
+                                                view.getChildViewHolder(itemView)
+                                                        as PadAdapter.PadViewHolder
+                                            ).padGroupId
+
+                                    positionTarget = view.getChildAdapterPosition(itemView)
+                                } else {
+                                    targetGroupId = -1
+                                }
                             }
 
                             unclassifiedViewId -> {
-//                                target =
-//                                    view.rootView.findViewById<View>(rvBottom) as RecyclerView
                                 targetGroupId = 0
                             }
 
                             padGroupViewId -> {
-//                                target =
-//                                    view.rootView.findViewById<View>(rvTop) as RecyclerView
                                 targetGroupId = view.tag as Long
                             }
 
                             else -> {
-//                                target = view.parent as RecyclerView
-//                                positionTarget = view.tag as Int
                                 targetGroupId = -1
                             }
                         }
-                        if (viewSource != null) {
+//                        if (viewSource != null) {
 //                            val source = viewSource.parent as RecyclerView
 //                            val adapterSource: PadAdapter? = source.adapter as PadAdapter?
 //                            val positionSource = viewSource.tag as Int
@@ -92,6 +103,9 @@ class DragAndDropListener internal constructor(listener: DragAndDropListenerInte
                                     (event.clipData.getItemAt(0).text as String).toLong(),
                                     positionTarget
                                 )
+                                return true
+                            } else {
+                                return false
                             }
 
 
@@ -101,14 +115,14 @@ class DragAndDropListener internal constructor(listener: DragAndDropListenerInte
 //                            if (sourceId == rvTop && adapterSource.getItemCount() < 1) {
 //                                listener.setEmptyListTop(true)
 //                            }
-                        }
+//                        }
                     }
                 }
             }
         }
-        if (!isDropped && event.localState != null) {
-            (event.localState as View).visibility = View.VISIBLE
-        }
+//        if (!isDropped && event.localState != null) {
+//            (event.localState as View).visibility = View.VISIBLE
+//        }
         return true
     }
 }

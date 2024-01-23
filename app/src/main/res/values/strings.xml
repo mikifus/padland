@@ -165,10 +165,5 @@
     <string name="edit_pad_group">Select group</string>
     <string name="edit">Edit</string>
     <string name="copy_copied">Copied to clipboard</string>
-    <string name="id_padgroup">id_padgroup</string>
-
-    <!-- IDs -->
-    <item type="id" name="id_pad" />
-    <item type="id" name="id_padgroup" />
 
 </resources>
