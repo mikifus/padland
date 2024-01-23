@@ -7,12 +7,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.isVisible
+import androidx.recyclerview.selection.ItemDetailsLookup
+import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.AutoTransition
-import androidx.transition.Explode
-import androidx.transition.Slide
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import com.mikifus.padland.Activities.PadListActivity
@@ -29,6 +28,7 @@ class PadGroupAdapter(context: Context, listener: IDragAndDropListener):
     private val mInflater: LayoutInflater
     var data: List<PadGroupsWithPadList> = listOf()
     private val dragAndDropListener: IDragAndDropListener
+    var tracker: SelectionTracker<Long>? = null
 
     init {
         mInflater = LayoutInflater.from(context)
@@ -85,6 +85,12 @@ class PadGroupAdapter(context: Context, listener: IDragAndDropListener):
                 View.GONE
             }
         }
+
+        fun getItem(): ItemDetailsLookup.ItemDetails<Long> =
+            object : ItemDetailsLookup.ItemDetails<Long>() {
+                override fun getPosition(): Int = bindingAdapterPosition
+                override fun getSelectionKey(): Long = padGroupId
+            }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PadGroupViewHolder {
@@ -101,6 +107,10 @@ class PadGroupAdapter(context: Context, listener: IDragAndDropListener):
         holder.padAdapter.data = current.padList
 
         holder.padAdapter.notifyDataSetChanged()
+
+        tracker?.let {
+            holder.itemLayout.isSelected = it.isSelected(current.padGroup.mId)
+        }
     }
 
     override fun getItemCount(): Int {

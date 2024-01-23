@@ -6,9 +6,10 @@
     android:id="@+id/pad_list_recyclerview_item_padgroup"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:animateLayoutChanges="true"
+    android:background="@drawable/background_selector"
     android:clickable="true"
-    android:focusable="true">
+    android:focusable="true"
+    android:animateLayoutChanges="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -57,7 +58,8 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:clickable="false"
-                android:focusable="false" />
+                android:focusable="false"
+                android:contentDescription="TODO" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
