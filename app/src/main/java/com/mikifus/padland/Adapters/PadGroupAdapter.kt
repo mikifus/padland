@@ -7,12 +7,18 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.AutoTransition
+import androidx.transition.Explode
+import androidx.transition.Slide
+import androidx.transition.Transition
+import androidx.transition.TransitionManager
 import com.mikifus.padland.Activities.PadListActivity
+import com.mikifus.padland.Adapters.PadSelectionTracker.DragAndDropListener.IDragAndDropListener
 import com.mikifus.padland.Database.PadGroupModel.PadGroupsWithPadList
 import com.mikifus.padland.R
-import com.mikifus.padland.Adapters.PadSelectionTracker.DragAndDropListener.IDragAndDropListener
 
 
 class PadGroupAdapter(context: Context, listener: IDragAndDropListener):
@@ -25,14 +31,14 @@ class PadGroupAdapter(context: Context, listener: IDragAndDropListener):
     private val dragAndDropListener: IDragAndDropListener
 
     init {
-        mInflater = LayoutInflater.from(context);
+        mInflater = LayoutInflater.from(context)
         activityContext = context
         dragAndDropListener = listener
     }
 
     class PadGroupViewHolder(itemView: View, context: AppCompatActivity, listener: IDragAndDropListener) :
         RecyclerView.ViewHolder(itemView) {
-        val dataText: TextView
+        val titleTextView: TextView
         val itemLayout: ConstraintLayout
         private val padListRecyclerView: RecyclerView
 
@@ -41,20 +47,43 @@ class PadGroupAdapter(context: Context, listener: IDragAndDropListener):
         var padGroupId: Long = 0
 
         init {
-            dataText = itemView.findViewById<TextView>(R.id.text_recyclerview_item_name)
+            titleTextView = itemView.findViewById(R.id.text_recyclerview_item_name)
             padListRecyclerView = itemView.findViewById(R.id.recyclerview_padgroup)
             itemLayout = itemView.findViewById(R.id.pad_list_recyclerview_item_padgroup)
+            itemLayout.isActivated = true
             padListRecyclerView.layoutManager = LinearLayoutManager(context)
             padAdapter = PadAdapter(context, listener)
 
             initListView()
             padAdapter.tracker = (context as PadListActivity).makePadSelectionTracker(context, padListRecyclerView, padAdapter)
+
+            initEvents()
         }
 
         private fun initListView() {
             itemView.setOnDragListener(padAdapter.getDragInstance())
             padListRecyclerView.setOnDragListener(padAdapter.getDragInstance())
             padListRecyclerView.adapter = padAdapter
+        }
+
+        fun initEvents() {
+            itemView.setOnClickListener {
+                toggle()
+            }
+        }
+
+        private fun toggle() {
+            val transition: Transition = AutoTransition()
+            transition.duration = 400
+            transition.addTarget(padListRecyclerView)
+            TransitionManager.beginDelayedTransition(padListRecyclerView.rootView as ViewGroup, transition)
+
+            itemLayout.isActivated = !itemLayout.isActivated
+            padListRecyclerView.visibility = if (itemLayout.isActivated){
+                View.VISIBLE
+            } else{
+                View.GONE
+            }
         }
     }
 
@@ -65,7 +94,7 @@ class PadGroupAdapter(context: Context, listener: IDragAndDropListener):
 
     override fun onBindViewHolder(holder: PadGroupViewHolder, position: Int) {
         val current: PadGroupsWithPadList = data[position]
-        holder.dataText.text = current.padGroup.mName
+        holder.titleTextView.text = current.padGroup.mName
         holder.itemLayout.tag = current.padGroup.mId
         holder.padGroupId = current.padGroup.mId
         holder.padAdapter.padGroupId = current.padGroup.mId
@@ -75,7 +104,7 @@ class PadGroupAdapter(context: Context, listener: IDragAndDropListener):
     }
 
     override fun getItemCount(): Int {
-        return data.size;
+        return data.size
     }
 
 
