@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.mikifus.padland.Database.PadListDatabase
+import com.mikifus.padland.Database.PadModel.Pad
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -13,6 +14,7 @@ class PadGroupViewModel(application: Application): AndroidViewModel(application)
 
     val getAll: LiveData<List<PadGroup>>
     val getPadGroupsWithPadList: LiveData<List<PadGroupsWithPadList>>
+    val getPadsWithoutGroup: LiveData<List<Pad>>
 
     val padGroup = MutableLiveData<PadGroup>()
 
@@ -23,6 +25,7 @@ class PadGroupViewModel(application: Application): AndroidViewModel(application)
         repository = PadGroupRepository(padGroupDao)
         getAll = repository.getAll
         getPadGroupsWithPadList = repository.getPadGroupsWithPadList
+        getPadsWithoutGroup = repository.getPadsWithoutGroup
     }
 
     suspend fun insertPadGroup(padGroup: PadGroup) {
@@ -33,7 +36,7 @@ class PadGroupViewModel(application: Application): AndroidViewModel(application)
 
     suspend fun getById(id: Long) {
         viewModelScope.launch {
-            padGroup.value = repository.getById(id).value
+            padGroup.value = repository.getById(id)
         }
     }
 
@@ -52,4 +55,5 @@ class PadGroupViewModel(application: Application): AndroidViewModel(application)
             repository.deletePadGroupsAndPadList(padId)
         }
     }
+
 }

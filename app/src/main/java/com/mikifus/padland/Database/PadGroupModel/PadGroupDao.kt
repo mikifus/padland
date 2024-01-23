@@ -9,6 +9,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
+import com.mikifus.padland.Database.PadModel.Pad
 
 
 @Dao
@@ -29,7 +30,7 @@ interface PadGroupDao {
     fun getAllCursor(): Cursor
 
     @Query("SELECT * FROM padgroups WHERE _id == :id")
-    fun getById(id: Long): LiveData<PadGroup>
+    fun getById(id: Long): PadGroup
 
     @Query("SELECT * FROM padgroups WHERE _id == :id")
     fun getByIdCursor(id: Long): Cursor
@@ -50,4 +51,8 @@ interface PadGroupDao {
 
     @Query("DELETE FROM padlist_padgroups WHERE _id_pad = :padId")
     fun deletePadGroupsAndPadList(padId: Long)
+
+    @Query("SELECT * FROM padlist WHERE _id NOT IN" +
+            "(SELECT _id_pad FROM padlist_padgroups)")
+    fun getPadsWithoutGroup(): LiveData<List<Pad>>
 }

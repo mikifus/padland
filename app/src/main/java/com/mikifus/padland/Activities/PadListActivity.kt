@@ -113,7 +113,7 @@ class PadListActivity: AppCompatActivity(),
             adapter!!.notifyDataSetChanged()
         }
 
-        padViewModel!!.getAll.observe(this) { currentList ->
+        padGroupViewModel!!.getPadsWithoutGroup.observe(this) { currentList ->
             unclassifiedList = currentList ?: listOf()
             padAdapter!!.data = unclassifiedList!!
             padAdapter!!.notifyDataSetChanged()
