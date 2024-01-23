@@ -1,4 +1,4 @@
-package com.mikifus.padland.Adapters.PadSelectionTracker.DragAndDropListener
+package com.mikifus.padland.Adapters.DragAndDropListener
 
 interface IDragAndDropListener {
     fun setEmptyListTop(visibility: Boolean)
