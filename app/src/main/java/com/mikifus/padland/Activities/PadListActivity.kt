@@ -96,6 +96,7 @@ class PadListActivity: AppCompatActivity(),
         recyclerViewUnclassified!!.adapter = padAdapter
         recyclerViewUnclassified!!.layoutManager = LinearLayoutManager(this)
         recyclerViewUnclassified!!.setOnDragListener(padAdapter!!.getDragInstance())
+        recyclerViewUnclassified!!.setNestedScrollingEnabled(false)
 
         initListView()
         initEvents()
