@@ -54,7 +54,7 @@ import kotlinx.coroutines.launch
  * @since 0.1
  */
 class PadListActivity: AppCompatActivity(),
-    ActionMode.Callback,
+//    ActionMode.Callback,
     IDragAndDropListener,
     IMakesPadSelectionTracker by MakesPadSelectionTrackerImpl(),
     IMakesPadGroupSelectionTracker by MakesMakesPadGroupSelectionTrackerImpl() {
@@ -214,88 +214,88 @@ class PadListActivity: AppCompatActivity(),
         dialog.show(fm, "dialog_new_padgroup")
     }
 
-    /**
-     * Called when the action mode is created; startActionMode() was called
-     *
-     * @param mode
-     * @param menu
-     * @return boolean
-     */
-    override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-        // Inflate a menu resource providing context menu items
-        if(mode != null) {
-            val inflater = mode.menuInflater
-            inflater.inflate(R.menu.rowselection, menu)
-            mActionMode = mode
-        }
-        return true
-    }
-
-    /**
-     * Called each time the action mode is shown. Always called after onCreateActionMode, but
-     * may be called multiple times if the mode is invalidated.
-     *
-     * @param mode
-     * @param menu
-     * @return boolean
-     */
-    override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-        return false // Return false if nothing is done
-    }
-
-    /**
-     * Called when the user selects a contextual menu item
-     *
-     * @param mode
-     * @param item
-     * @return
-     */
-    override fun onActionItemClicked(mode: ActionMode?, item: MenuItem): Boolean {
-        return when (item.itemId) {
-//            R.id.menuitem_group -> {
-//                menuGroup(checkedItemIds)
-//                // Action picked, so close the CAB
-//                mode.finish()
-//                true
-//            }
+//    /**
+//     * Called when the action mode is created; startActionMode() was called
+//     *
+//     * @param mode
+//     * @param menu
+//     * @return boolean
+//     */
+//    override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+//        // Inflate a menu resource providing context menu items
+//        if(mode != null) {
+//            val inflater = mode.menuInflater
+//            inflater.inflate(R.menu.rowselection, menu)
+//            mActionMode = mode
+//        }
+//        return true
+//    }
 //
-//            R.id.menuitem_copy -> {
-//                menuCopy(checkedItemIds)
-//                // Action picked, so close the CAB
-//                mode.finish()
-//                true
-//            }
+//    /**
+//     * Called each time the action mode is shown. Always called after onCreateActionMode, but
+//     * may be called multiple times if the mode is invalidated.
+//     *
+//     * @param mode
+//     * @param menu
+//     * @return boolean
+//     */
+//    override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+//        return false // Return false if nothing is done
+//    }
 //
-//            R.id.menuitem_edit -> {
-//                menuEdit(checkedItemIds)
-//                // Action picked, so close the CAB
-//                mode.finish()
-//                true
-//            }
+//    /**
+//     * Called when the user selects a contextual menu item
+//     *
+//     * @param mode
+//     * @param item
+//     * @return
+//     */
+//    override fun onActionItemClicked(mode: ActionMode?, item: MenuItem): Boolean {
+//        return when (item.itemId) {
+////            R.id.menuitem_group -> {
+////                menuGroup(checkedItemIds)
+////                // Action picked, so close the CAB
+////                mode.finish()
+////                true
+////            }
+////
+////            R.id.menuitem_copy -> {
+////                menuCopy(checkedItemIds)
+////                // Action picked, so close the CAB
+////                mode.finish()
+////                true
+////            }
+////
+////            R.id.menuitem_edit -> {
+////                menuEdit(checkedItemIds)
+////                // Action picked, so close the CAB
+////                mode.finish()
+////                true
+////            }
+////
+////            R.id.menuitem_delete -> {
+////                askDelete(checkedItemIds)
+////                // Action picked, so close the CAB
+////                mode.finish()
+////                true
+////            }
+////
+////            R.id.menuitem_share -> {
+////                menuShare(checkedItemIds)
+////                // Action picked, so close the CAB
+////                mode.finish()
+////                true
+////            }
+////
+//            else -> false
+//        }
+//    }
 //
-//            R.id.menuitem_delete -> {
-//                askDelete(checkedItemIds)
-//                // Action picked, so close the CAB
-//                mode.finish()
-//                true
-//            }
-//
-//            R.id.menuitem_share -> {
-//                menuShare(checkedItemIds)
-//                // Action picked, so close the CAB
-//                mode.finish()
-//                true
-//            }
-//
-            else -> false
-        }
-    }
-
-    override fun onDestroyActionMode(mode: ActionMode?) {
-        mActionMode = null
-        clearPadSelection()
-        clearPadGroupSelection()
-    }
+//    override fun onDestroyActionMode(mode: ActionMode?) {
+//        mActionMode = null
+//        clearPadSelection()
+//        clearPadGroupSelection()
+//    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.

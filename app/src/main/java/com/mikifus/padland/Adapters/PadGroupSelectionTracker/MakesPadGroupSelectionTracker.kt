@@ -4,20 +4,25 @@ import android.content.ClipData
 import android.content.ClipDescription
 import android.os.Build
 import android.view.View
+import androidx.appcompat.view.ActionMode
 import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.RecyclerView
+import com.mikifus.padland.ActionModes.PadGroupActionModeCallback
 import com.mikifus.padland.Activities.PadListActivity
 import com.mikifus.padland.Adapters.PadGroupAdapter
 
 interface IMakesPadGroupSelectionTracker {
     var padGroupSelectionTracker: SelectionTracker<Long>?
+    var padGroupActionMode: ActionMode?
     fun makePadGroupSelectionTracker(activity: PadListActivity, recyclerView: RecyclerView, padGroupAdapter: PadGroupAdapter): SelectionTracker<Long>
     fun clearPadGroupSelection()
 }
 class MakesMakesPadGroupSelectionTrackerImpl: IMakesPadGroupSelectionTracker {
     override var padGroupSelectionTracker: SelectionTracker<Long>? = null
+    override var padGroupActionMode: ActionMode? = null
+
 
     override fun makePadGroupSelectionTracker(activity: PadListActivity, recyclerView: RecyclerView, padGroupAdapter: PadGroupAdapter): SelectionTracker<Long> {
         padGroupSelectionTracker = SelectionTracker.Builder(
@@ -31,7 +36,7 @@ class MakesMakesPadGroupSelectionTrackerImpl: IMakesPadGroupSelectionTracker {
                 SelectionPredicates.createSelectAnything()
             )
             .withOnItemActivatedListener { item, event ->
-                if(activity.mActionMode != null) {
+                if(padGroupActionMode != null) {
                     if(item.selectionKey != null) {
                         padGroupAdapter.tracker!!.select(item.selectionKey!!)
                     }
@@ -62,15 +67,15 @@ class MakesMakesPadGroupSelectionTrackerImpl: IMakesPadGroupSelectionTracker {
             override fun onSelectionChanged() {
                 super.onSelectionChanged()
 
-                if (activity.mActionMode == null) {
-                    activity.mActionMode = activity.startSupportActionMode(activity)
+                if (padGroupActionMode == null) {
+                    padGroupActionMode = activity.startSupportActionMode(PadGroupActionModeCallback(activity))
                 }
 
                 val selectionCount = padGroupSelectionTracker!!.selection.size()
                 if (selectionCount > 0) {
-                    activity.mActionMode?.title = selectionCount.toString()
+                    padGroupActionMode?.title = selectionCount.toString()
                 } else {
-                    activity.mActionMode?.finish()
+                    finishActionMode()
                 }
             }
         })
@@ -81,4 +86,10 @@ class MakesMakesPadGroupSelectionTrackerImpl: IMakesPadGroupSelectionTracker {
     override fun clearPadGroupSelection() {
         padGroupSelectionTracker?.clearSelection()
     }
+
+    fun finishActionMode() {
+        padGroupActionMode?.finish()
+        padGroupActionMode = null
+    }
+
 }
