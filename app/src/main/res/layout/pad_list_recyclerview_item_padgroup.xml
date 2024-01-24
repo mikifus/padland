@@ -24,6 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="?android:attr/listSeparatorTextViewStyle"
+            android:foreground="?attr/selectableItemBackground"
             >
 
             <TextView
@@ -32,7 +33,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:background="@drawable/background_selector"
-                android:foreground="?attr/selectableItemBackground"
                 android:gravity="start|center"
                 android:paddingTop="8dp"
                 android:paddingBottom="6dp"

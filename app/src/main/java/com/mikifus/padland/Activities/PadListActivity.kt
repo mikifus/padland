@@ -18,14 +18,17 @@ package com.mikifus.padland.Activities
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.AutoTransition
+import androidx.transition.Transition
+import androidx.transition.TransitionManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mikifus.padland.Adapters.PadAdapter
 import com.mikifus.padland.Adapters.PadGroupAdapter
@@ -72,6 +75,7 @@ class PadListActivity: AppCompatActivity(),
 
     private var recyclerView: RecyclerView? = null
     private var recyclerViewUnclassified: RecyclerView? = null
+    private var titleViewUnclassified: View? = null
 
     private var adapter: PadGroupAdapter? = null
     private var padAdapter: PadAdapter? = null
@@ -96,7 +100,10 @@ class PadListActivity: AppCompatActivity(),
         recyclerViewUnclassified!!.adapter = padAdapter
         recyclerViewUnclassified!!.layoutManager = LinearLayoutManager(this)
         recyclerViewUnclassified!!.setOnDragListener(padAdapter!!.getDragInstance())
-        recyclerViewUnclassified!!.setNestedScrollingEnabled(false)
+        recyclerViewUnclassified!!.isNestedScrollingEnabled = false
+
+        // Unclassified list title
+        titleViewUnclassified = findViewById(R.id.unclassified_title)
 
         initListView()
         initEvents()
@@ -138,165 +145,38 @@ class PadListActivity: AppCompatActivity(),
             val newPadIntent = Intent(this@PadListActivity, NewPadActivity::class.java)
             startActivity(newPadIntent)
         })
+
+
+        titleViewUnclassified!!.isActivated = true
+        titleViewUnclassified!!.setOnClickListener {
+            toggleUnclassifiedRecyclerView()
+        }
     }
-//
-//    fun makePadSelectionTracker(recyclerView: RecyclerView, adapter: PadAdapter): SelectionTracker<Long> {
-//        val padSelectionTracker: SelectionTracker<Long> = SelectionTracker.Builder(
-//            "padListTracker",
-//            recyclerView,
-//            PadKeyProvider(adapter),
-//            PadDetailsLookup(recyclerView),
-//            StorageStrategy.createLongStorage()
-//        )
-//            .withSelectionPredicate(
-//                SelectionPredicates.createSelectAnything()
-//            )
-//            .withOnItemActivatedListener { item, event ->
-//                if(mActionMode != null) {
-//                    if(item.selectionKey != null) {
-//                        padAdapter!!.tracker!!.select(item.selectionKey!!)
-//                    }
-//                    return@withOnItemActivatedListener true
-//                }
-//                return@withOnItemActivatedListener false
-//            }
-//            .withOnDragInitiatedListener {
-//                val view = recyclerView.findChildViewUnder(it.x, it.y)!!
-//                val item = ClipData.Item(view.tag.toString())
-//                val data = ClipData(
-//                    view.tag.toString(),
-//                    arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN),
-//                    item
-//                )
-//                val shadowBuilder = View.DragShadowBuilder(view)
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//                    view.startDragAndDrop(data, shadowBuilder, view, 0)
-//                } else {
-//                    view.startDrag(data, shadowBuilder, view, 0)
-//                }
-//                return@withOnDragInitiatedListener true
-//            }
-//            .build()
-//
-//        padSelectionTracker.addObserver(object : SelectionTracker.SelectionObserver<Long>() {
-//            override fun onSelectionChanged() {
-//                super.onSelectionChanged()
-//
-//                if (mActionMode == null) {
-//                    val currentActivity = this@PadListActivity
-//                    mActionMode = currentActivity.startSupportActionMode(this@PadListActivity)
-//                }
-//
-//                var selectionCount = 0
-//                padSelectionTrackers!!.forEach {
-//                    selectionCount += it.selection.size()
-//                }
-//                if (selectionCount > 0) {
-//                    mActionMode?.title = selectionCount.toString()
-//                } else {
-//                    mActionMode?.finish()
-//                }
-//            }
-//        })
-//
-//
-//        if(padSelectionTrackers == null) {
-//            padSelectionTrackers = mutableListOf(padSelectionTracker)
-//        } else {
-//            padSelectionTrackers?.add(padSelectionTracker)
-//        }
-//
-//        return padSelectionTracker
-//    }
+
+    private fun toggleUnclassifiedRecyclerView() {
+        if(recyclerViewUnclassified != null) {
+            val transition: Transition = AutoTransition()
+            transition.duration = 400
+            transition.addTarget(recyclerViewUnclassified!!)
+            TransitionManager.beginDelayedTransition(
+                recyclerViewUnclassified!!.rootView as ViewGroup,
+                transition
+            )
+
+            titleViewUnclassified!!.isActivated = !titleViewUnclassified!!.isActivated
+            recyclerViewUnclassified!!.visibility = if (titleViewUnclassified!!.isActivated) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
+        }
+    }
 
     private fun showNewPadgroupDialog() {
         val fm = supportFragmentManager
         val dialog = NewPadGroup()
         dialog.show(fm, "dialog_new_padgroup")
     }
-
-//    /**
-//     * Called when the action mode is created; startActionMode() was called
-//     *
-//     * @param mode
-//     * @param menu
-//     * @return boolean
-//     */
-//    override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-//        // Inflate a menu resource providing context menu items
-//        if(mode != null) {
-//            val inflater = mode.menuInflater
-//            inflater.inflate(R.menu.rowselection, menu)
-//            mActionMode = mode
-//        }
-//        return true
-//    }
-//
-//    /**
-//     * Called each time the action mode is shown. Always called after onCreateActionMode, but
-//     * may be called multiple times if the mode is invalidated.
-//     *
-//     * @param mode
-//     * @param menu
-//     * @return boolean
-//     */
-//    override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-//        return false // Return false if nothing is done
-//    }
-//
-//    /**
-//     * Called when the user selects a contextual menu item
-//     *
-//     * @param mode
-//     * @param item
-//     * @return
-//     */
-//    override fun onActionItemClicked(mode: ActionMode?, item: MenuItem): Boolean {
-//        return when (item.itemId) {
-////            R.id.menuitem_group -> {
-////                menuGroup(checkedItemIds)
-////                // Action picked, so close the CAB
-////                mode.finish()
-////                true
-////            }
-////
-////            R.id.menuitem_copy -> {
-////                menuCopy(checkedItemIds)
-////                // Action picked, so close the CAB
-////                mode.finish()
-////                true
-////            }
-////
-////            R.id.menuitem_edit -> {
-////                menuEdit(checkedItemIds)
-////                // Action picked, so close the CAB
-////                mode.finish()
-////                true
-////            }
-////
-////            R.id.menuitem_delete -> {
-////                askDelete(checkedItemIds)
-////                // Action picked, so close the CAB
-////                mode.finish()
-////                true
-////            }
-////
-////            R.id.menuitem_share -> {
-////                menuShare(checkedItemIds)
-////                // Action picked, so close the CAB
-////                mode.finish()
-////                true
-////            }
-////
-//            else -> false
-//        }
-//    }
-//
-//    override fun onDestroyActionMode(mode: ActionMode?) {
-//        mActionMode = null
-//        clearPadSelection()
-//        clearPadGroupSelection()
-//    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.

@@ -17,7 +17,8 @@ interface IMakesPadSelectionTracker {
     var padSelectionTrackers: MutableList<SelectionTracker<Long>>?
     var padActionMode: ActionMode?
     fun makePadSelectionTracker(activity: PadListActivity, recyclerView: RecyclerView, padAdapter: PadAdapter): SelectionTracker<Long>
-    fun clearPadSelection()
+    fun getPadSelection(): List<Long>
+    fun onDestroyPadActionMode()
 }
 class MakesPadSelectionTrackerImpl: IMakesPadSelectionTracker {
     override var padSelectionTrackers: MutableList<SelectionTracker<Long>>? = null
@@ -70,10 +71,7 @@ class MakesPadSelectionTrackerImpl: IMakesPadSelectionTracker {
                     padActionMode = activity.startSupportActionMode(PadActionModeCallback(activity))
                 }
 
-                var selectionCount = 0
-                padSelectionTrackers?.forEach {
-                    selectionCount += it.selection.size()
-                }
+                val selectionCount = getPadSelection().size
                 if (selectionCount > 0) {
                     padActionMode?.title = selectionCount.toString()
                 } else {
@@ -90,8 +88,14 @@ class MakesPadSelectionTrackerImpl: IMakesPadSelectionTracker {
 
         return padSelectionTracker
     }
+    override fun getPadSelection(): List<Long> {
+        val selection = padSelectionTrackers?.flatMap { it.selection.toList() }
+        return selection?: listOf()
+    }
 
-    override fun clearPadSelection() {
+    override fun onDestroyPadActionMode() {
+        padActionMode = null
+
         padSelectionTrackers?.forEach {
             it.clearSelection()
         }
@@ -99,6 +103,5 @@ class MakesPadSelectionTrackerImpl: IMakesPadSelectionTracker {
 
     fun finishActionMode() {
         padActionMode?.finish()
-        padActionMode = null
     }
 }
