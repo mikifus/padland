@@ -3,10 +3,15 @@ package com.mikifus.padland.ActionModes
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.view.ActionMode
+import androidx.fragment.app.Fragment
 import com.mikifus.padland.Activities.PadListActivity
+import com.mikifus.padland.Dialog.EditPadDialog
+import com.mikifus.padland.Dialog.FormDialog
+import com.mikifus.padland.PadLandDataActivity
 import com.mikifus.padland.R
 
-class PadActionModeCallback(activity: PadListActivity): ActionMode.Callback {
+class PadActionModeCallback(activity: PadListActivity): ActionMode.Callback,
+    FormDialog.FormDialogCallBack {
 
     var padActionMode: ActionMode? = null
     var padListActivity: PadListActivity
@@ -26,7 +31,7 @@ class PadActionModeCallback(activity: PadListActivity): ActionMode.Callback {
         // Inflate a menu resource providing context menu items
         if(mode != null) {
             val inflater = mode.menuInflater
-            inflater.inflate(R.menu.rowselection, menu)
+            inflater.inflate(R.menu.pad_action_mode_menu, menu)
             padActionMode = mode
         }
         return true
@@ -67,12 +72,12 @@ class PadActionModeCallback(activity: PadListActivity): ActionMode.Callback {
 //                true
 //            }
 //
-//            R.id.menuitem_edit -> {
-//                menuEdit(checkedItemIds)
-//                // Action picked, so close the CAB
-//                mode.finish()
-//                true
-//            }
+            R.id.menuitem_edit -> {
+                menuEdit(padListActivity.getPadSelection())
+                // Action picked, so close the CAB
+                mode?.finish()
+                true
+            }
 //
 //            R.id.menuitem_delete -> {
 //                askDelete(checkedItemIds)
@@ -94,6 +99,22 @@ class PadActionModeCallback(activity: PadListActivity): ActionMode.Callback {
 
     override fun onDestroyActionMode(mode: ActionMode?) {
         padActionMode = null
-        padListActivity.clearPadSelection()
+        padListActivity.onDestroyPadActionMode()
+    }
+
+    fun menuEdit(selection: List<Long>): Fragment {
+        val fm = padListActivity.supportFragmentManager
+        val dialog = EditPadDialog(padListActivity.getString(R.string.padlist_dialog_edit_pad_title), this)
+        selection[0].let { dialog.editPadId(it.toLong()) }
+        dialog.show(fm, PadLandDataActivity.EDIT_PAD_DIALOG)
+        return dialog
+    }
+
+    override fun onDialogDismiss() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onDialogSuccess() {
+        TODO("Not yet implemented")
     }
 }

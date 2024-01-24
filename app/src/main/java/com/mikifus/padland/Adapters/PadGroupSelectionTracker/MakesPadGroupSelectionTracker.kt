@@ -17,7 +17,8 @@ interface IMakesPadGroupSelectionTracker {
     var padGroupSelectionTracker: SelectionTracker<Long>?
     var padGroupActionMode: ActionMode?
     fun makePadGroupSelectionTracker(activity: PadListActivity, recyclerView: RecyclerView, padGroupAdapter: PadGroupAdapter): SelectionTracker<Long>
-    fun clearPadGroupSelection()
+    fun getPadGroupSelection(): List<Long>
+    fun onDestroyPadGroupActionMode()
 }
 class MakesMakesPadGroupSelectionTrackerImpl: IMakesPadGroupSelectionTracker {
     override var padGroupSelectionTracker: SelectionTracker<Long>? = null
@@ -71,7 +72,7 @@ class MakesMakesPadGroupSelectionTrackerImpl: IMakesPadGroupSelectionTracker {
                     padGroupActionMode = activity.startSupportActionMode(PadGroupActionModeCallback(activity))
                 }
 
-                val selectionCount = padGroupSelectionTracker!!.selection.size()
+                val selectionCount = getPadGroupSelection().size
                 if (selectionCount > 0) {
                     padGroupActionMode?.title = selectionCount.toString()
                 } else {
@@ -83,13 +84,16 @@ class MakesMakesPadGroupSelectionTrackerImpl: IMakesPadGroupSelectionTracker {
         return padGroupSelectionTracker!!
     }
 
-    override fun clearPadGroupSelection() {
+    override fun getPadGroupSelection(): List<Long> {
+        return padGroupSelectionTracker?.selection?.toList() ?: listOf()
+    }
+
+    override fun onDestroyPadGroupActionMode() {
+        padGroupActionMode = null
         padGroupSelectionTracker?.clearSelection()
     }
 
     fun finishActionMode() {
         padGroupActionMode?.finish()
-        padGroupActionMode = null
     }
-
 }
