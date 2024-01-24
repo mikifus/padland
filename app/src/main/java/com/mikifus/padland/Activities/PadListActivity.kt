@@ -18,6 +18,7 @@ package com.mikifus.padland.Activities
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -45,6 +46,7 @@ import com.mikifus.padland.R
 import com.mikifus.padland.Adapters.DragAndDropListener.IDragAndDropListener
 import com.mikifus.padland.Adapters.PadSelectionTracker.IMakesPadSelectionTracker
 import com.mikifus.padland.Adapters.PadSelectionTracker.MakesPadSelectionTrackerImpl
+import com.mikifus.padland.SettingsActivity
 import kotlinx.coroutines.launch
 
 
@@ -181,6 +183,24 @@ class PadListActivity: AppCompatActivity(),
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.pad_list, menu)
+        return true
+    }
+
+    /**
+     * Manage the menu options when selected
+     * @param item
+     * @return
+     */
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val intent: Intent
+        when (item.itemId) {
+            R.id.action_settings -> {
+                intent = Intent(this, SettingsActivity::class.java)
+                this.startActivity(intent)
+            }
+
+            else -> return super.onOptionsItemSelected(item)
+        }
         return true
     }
 
