@@ -1,15 +1,9 @@
 package com.mikifus.padland.ActionModes
 
-import android.app.AlertDialog
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.view.ActionMode
-import androidx.fragment.app.Fragment
 import com.mikifus.padland.Activities.PadListActivity
-import com.mikifus.padland.Dialog.EditPadDialog
-import com.mikifus.padland.Models.PadGroupModel
-import com.mikifus.padland.PadLandDataActivity
 import com.mikifus.padland.R
 
 class PadGroupActionModeCallback(activity: PadListActivity): ActionMode.Callback {

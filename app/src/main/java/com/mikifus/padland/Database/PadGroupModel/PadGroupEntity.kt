@@ -28,6 +28,13 @@ data class PadGroup(
     )
 
     companion object {
+        fun fromName(name: String): MutableLiveData<PadGroup> {
+            val item = MutableLiveData<PadGroup>(PadGroup())
+
+            item.value = item.value!!.copy(mName = name)
+
+            return item
+        }
 
         fun fromContentValues(contentValues: ContentValues): MutableLiveData<PadGroup> {
             val item = MutableLiveData<PadGroup>(PadGroup())
