@@ -6,8 +6,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.mikifus.padland.Database.PadGroupModel.PadGroup
 import com.mikifus.padland.Database.PadGroupModel.PadGroupViewModel
-import com.mikifus.padland.Dialog.NewPadGroup
-import com.mikifus.padland.R
 import kotlinx.coroutines.launch
 
 interface IManagesNewPadGroupDialog {
