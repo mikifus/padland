@@ -165,5 +165,6 @@
     <string name="edit_pad_group">Select group</string>
     <string name="edit">Edit</string>
     <string name="copy_copied">Copied to clipboard</string>
+    <string name="add_padgroup_name">Group name</string>
 
 </resources>

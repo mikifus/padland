@@ -124,4 +124,5 @@
     <string name="edit_pad_group">Seleccionar grupo</string>
     <string name="edit_pad_local_name">Alias del pad</string>
     <string name="edit_pad_name">Nombre del pad (URL)</string>
+    <string name="add_padgroup_name">Nombre del grupo</string>
 </resources>
