@@ -34,18 +34,19 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mikifus.padland.Adapters.PadAdapter
 import com.mikifus.padland.Adapters.PadGroupAdapter
 import com.mikifus.padland.Adapters.PadGroupSelectionTracker.IMakesPadGroupSelectionTracker
-import com.mikifus.padland.Adapters.PadGroupSelectionTracker.MakesMakesPadGroupSelectionTrackerImpl
+import com.mikifus.padland.Adapters.PadGroupSelectionTracker.MakesPadGroupSelectionTrackerImpl
 import com.mikifus.padland.Database.PadGroupModel.PadGroupViewModel
 import com.mikifus.padland.Database.PadGroupModel.PadGroupsAndPadListEntity
 import com.mikifus.padland.Database.PadGroupModel.PadGroupsWithPadList
 import com.mikifus.padland.Database.PadModel.Pad
 import com.mikifus.padland.Database.PadModel.PadViewModel
-import com.mikifus.padland.Dialog.NewPadGroup
 import com.mikifus.padland.NewPadActivity
 import com.mikifus.padland.R
 import com.mikifus.padland.Adapters.DragAndDropListener.IDragAndDropListener
 import com.mikifus.padland.Adapters.PadSelectionTracker.IMakesPadSelectionTracker
 import com.mikifus.padland.Adapters.PadSelectionTracker.MakesPadSelectionTrackerImpl
+import com.mikifus.padland.Dialogs.IManagesNewPadGroupDialog
+import com.mikifus.padland.Dialogs.ManagesNewPadGroupDialog
 import com.mikifus.padland.SettingsActivity
 import kotlinx.coroutines.launch
 
@@ -59,17 +60,17 @@ import kotlinx.coroutines.launch
  * @since 0.1
  */
 class PadListActivity: AppCompatActivity(),
-//    ActionMode.Callback,
     IDragAndDropListener,
     IMakesPadSelectionTracker by MakesPadSelectionTrackerImpl(),
-    IMakesPadGroupSelectionTracker by MakesMakesPadGroupSelectionTrackerImpl() {
+    IMakesPadGroupSelectionTracker by MakesPadGroupSelectionTrackerImpl(),
+    IManagesNewPadGroupDialog by ManagesNewPadGroupDialog() {
 
     /**
      * mActionMode defines behaviour of the action-bar
      */
     var mActionMode: ActionMode? = null
 
-    var padGroupViewModel: PadGroupViewModel? = null
+    override var padGroupViewModel: PadGroupViewModel? = null
     var padViewModel: PadViewModel? = null
 
     private var mainList: List<PadGroupsWithPadList>? = null
@@ -139,7 +140,7 @@ class PadListActivity: AppCompatActivity(),
     fun initEvents() {
         val newPadGroupButton = findViewById<FloatingActionButton>(R.id.new_pad_group_button)
         newPadGroupButton.setOnClickListener(View.OnClickListener {
-            showNewPadgroupDialog()
+            showNewPadGroupDialog(this@PadListActivity)
         })
 
         val newPadButton = findViewById<FloatingActionButton>(R.id.new_pad_button)
@@ -172,12 +173,6 @@ class PadListActivity: AppCompatActivity(),
                 View.GONE
             }
         }
-    }
-
-    private fun showNewPadgroupDialog() {
-        val fm = supportFragmentManager
-        val dialog = NewPadGroup()
-        dialog.show(fm, "dialog_new_padgroup")
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

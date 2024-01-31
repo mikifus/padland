@@ -20,7 +20,7 @@ interface IMakesPadGroupSelectionTracker {
     fun getPadGroupSelection(): List<Long>
     fun onDestroyPadGroupActionMode()
 }
-class MakesMakesPadGroupSelectionTrackerImpl: IMakesPadGroupSelectionTracker {
+class MakesPadGroupSelectionTrackerImpl: IMakesPadGroupSelectionTracker {
     override var padGroupSelectionTracker: SelectionTracker<Long>? = null
     override var padGroupActionMode: ActionMode? = null
 
