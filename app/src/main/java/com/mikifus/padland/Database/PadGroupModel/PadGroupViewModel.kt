@@ -9,6 +9,7 @@ import com.mikifus.padland.Database.PadListDatabase
 import com.mikifus.padland.Database.PadModel.Pad
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PadGroupViewModel(application: Application): AndroidViewModel(application) {
 
@@ -44,13 +45,31 @@ class PadGroupViewModel(application: Application): AndroidViewModel(application)
         viewModelScope.launch(Dispatchers.IO) { repository.updatePadGroup(padGroup) }
     }
 
-    suspend fun insertPadGroupsAndPadList(padGroupsAndPadListEntity: PadGroupsAndPadListEntity) {
+    fun deletePadGroup(id: Long) {
+        viewModelScope.launch {
+            repository.deletePadGroup(PadGroup.withOnlyId(id).value!!)
+        }
+    }
+
+    fun deletePadGroup(ids: List<Long>)=viewModelScope.launch {
+        viewModelScope.launch {
+            ids.forEach {
+                val padGroup = PadGroup.withOnlyId(it).value!!
+
+                withContext(Dispatchers.IO) {
+                    repository.deletePadGroup(padGroup)
+                }
+            }
+        }
+    }
+
+    fun insertPadGroupsAndPadList(padGroupsAndPadListEntity: PadGroupsAndPadListEntity) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.insertPadGroupWithPadlist(padGroupsAndPadListEntity)
         }
     }
 
-    suspend fun deletePadGroupsAndPadList(padId: Long) {
+    fun deletePadGroupsAndPadList(padId: Long) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.deletePadGroupsAndPadList(padId)
         }

@@ -1,4 +1,4 @@
-package com.mikifus.padland.Dialogs;
+package com.mikifus.padland.Dialogs.Managers;
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.mikifus.padland.Database.PadGroupModel.PadGroup
 import com.mikifus.padland.Database.PadGroupModel.PadGroupViewModel
+import com.mikifus.padland.Dialogs.NewPadGroupDialog
 import kotlinx.coroutines.launch
 
 interface IManagesNewPadGroupDialog {
@@ -54,6 +55,6 @@ public class ManagesNewPadGroupDialog: IManagesNewPadGroupDialog {
     companion object {
         private const val DIALOG_TAG: String = "DIALOG_NEW_PADGROUP"
 
-        private val dialog by lazy { NewPadGroup() }
+        private val dialog by lazy { NewPadGroupDialog() }
     }
 }

@@ -4,12 +4,16 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.view.ActionMode
 import com.mikifus.padland.Activities.PadListActivity
+import com.mikifus.padland.Dialogs.Managers.IManagesDeletePadGroupDialog
+import com.mikifus.padland.Dialogs.Managers.ManagesDeletePadGroupDialog
 import com.mikifus.padland.R
 
-class PadGroupActionModeCallback(activity: PadListActivity): ActionMode.Callback {
+class PadGroupActionModeCallback(activity: PadListActivity):
+        ActionMode.Callback,
+        IManagesDeletePadGroupDialog by ManagesDeletePadGroupDialog() {
 
-    var padGrupActionMode: ActionMode? = null
-    var padListActivity: PadListActivity
+    private var padGrupActionMode: ActionMode? = null
+    private var padListActivity: PadListActivity
 
     init {
         padListActivity = activity
@@ -60,7 +64,7 @@ class PadGroupActionModeCallback(activity: PadListActivity): ActionMode.Callback
             }
 
             R.id.menuitem_delete -> {
-//                askDelete(checkedItemIds)
+                showDeletePadGroupDialog(padListActivity, padListActivity.getPadGroupSelection())
                 mode?.finish()
                 true
             }

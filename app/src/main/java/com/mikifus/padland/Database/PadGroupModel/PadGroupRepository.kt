@@ -17,15 +17,19 @@ class PadGroupRepository(private val padGroupDao: PadGroupDao) {
         return padGroupDao.getById(id)
     }
 
-    suspend fun updatePadGroup(padGroup: PadGroup) {
+    fun updatePadGroup(padGroup: PadGroup) {
         padGroupDao.update(padGroup)
     }
 
-    suspend fun insertPadGroupWithPadlist(padGroupsAndPadListEntity: PadGroupsAndPadListEntity) {
+    suspend fun deletePadGroup(padGroup: PadGroup) {
+        return padGroupDao.delete(padGroup)
+    }
+
+    fun insertPadGroupWithPadlist(padGroupsAndPadListEntity: PadGroupsAndPadListEntity) {
         padGroupDao.insertPadGroupWithPadlist(padGroupsAndPadListEntity)
     }
 
-    suspend fun deletePadGroupsAndPadList(padId: Long) {
+    fun deletePadGroupsAndPadList(padId: Long) {
         padGroupDao.deletePadGroupsAndPadList(padId)
     }
 }

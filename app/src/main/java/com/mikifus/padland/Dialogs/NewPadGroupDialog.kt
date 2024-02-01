@@ -13,7 +13,7 @@ import com.mikifus.padland.R
 /**
  * Created by mikifus on 10/03/16.
  */
-class NewPadGroup: FormDialog() {
+class NewPadGroupDialog: FormDialog() {
 
     private var mEditText: EditText? = null
 
