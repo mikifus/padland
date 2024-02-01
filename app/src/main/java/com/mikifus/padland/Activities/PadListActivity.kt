@@ -22,6 +22,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -93,11 +94,12 @@ class PadListActivity: AppCompatActivity(),
 
         recyclerView!!.adapter = adapter
         recyclerView!!.layoutManager = LinearLayoutManager(this)
+        ViewCompat.setNestedScrollingEnabled(recyclerView!!, false);
 
         recyclerViewUnclassified!!.adapter = padAdapter
         recyclerViewUnclassified!!.layoutManager = LinearLayoutManager(this)
         recyclerViewUnclassified!!.setOnDragListener(padAdapter!!.getDragInstance())
-        recyclerViewUnclassified!!.isNestedScrollingEnabled = false
+        ViewCompat.setNestedScrollingEnabled(recyclerViewUnclassified!!, false);
 
         // Unclassified list title
         titleViewUnclassified = findViewById(R.id.unclassified_title)
