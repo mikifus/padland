@@ -22,7 +22,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.view.ActionMode
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -45,8 +44,8 @@ import com.mikifus.padland.R
 import com.mikifus.padland.Adapters.DragAndDropListener.IDragAndDropListener
 import com.mikifus.padland.Adapters.PadSelectionTracker.IMakesPadSelectionTracker
 import com.mikifus.padland.Adapters.PadSelectionTracker.MakesPadSelectionTrackerImpl
-import com.mikifus.padland.Dialogs.IManagesNewPadGroupDialog
-import com.mikifus.padland.Dialogs.ManagesNewPadGroupDialog
+import com.mikifus.padland.Dialogs.Managers.IManagesNewPadGroupDialog
+import com.mikifus.padland.Dialogs.Managers.ManagesNewPadGroupDialog
 import com.mikifus.padland.SettingsActivity
 import kotlinx.coroutines.launch
 
@@ -64,11 +63,6 @@ class PadListActivity: AppCompatActivity(),
     IMakesPadSelectionTracker by MakesPadSelectionTrackerImpl(),
     IMakesPadGroupSelectionTracker by MakesPadGroupSelectionTrackerImpl(),
     IManagesNewPadGroupDialog by ManagesNewPadGroupDialog() {
-
-    /**
-     * mActionMode defines behaviour of the action-bar
-     */
-    var mActionMode: ActionMode? = null
 
     override var padGroupViewModel: PadGroupViewModel? = null
     var padViewModel: PadViewModel? = null
@@ -137,7 +131,7 @@ class PadListActivity: AppCompatActivity(),
         adapter!!.tracker = makePadGroupSelectionTracker(this, recyclerView!!, adapter!!)
     }
 
-    fun initEvents() {
+    private fun initEvents() {
         val newPadGroupButton = findViewById<FloatingActionButton>(R.id.new_pad_group_button)
         newPadGroupButton.setOnClickListener(View.OnClickListener {
             showNewPadGroupDialog(this@PadListActivity)
