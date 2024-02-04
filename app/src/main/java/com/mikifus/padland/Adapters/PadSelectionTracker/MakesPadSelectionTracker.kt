@@ -9,6 +9,8 @@ import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.RecyclerView
+import com.mikifus.padland.ActionModes.AnyActionModeActive
+import com.mikifus.padland.ActionModes.IAnyActionModeActive
 import com.mikifus.padland.ActionModes.PadActionModeCallback
 import com.mikifus.padland.Activities.PadListActivity
 import com.mikifus.padland.Adapters.PadAdapter
@@ -19,12 +21,18 @@ interface IMakesPadSelectionTracker {
     fun makePadSelectionTracker(activity: PadListActivity, recyclerView: RecyclerView, padAdapter: PadAdapter): SelectionTracker<Long>
     fun getPadSelection(): List<Long>
     fun onDestroyPadActionMode()
+    fun getSelectionBlock(): Boolean
+    fun setSelectionBlock(value: Boolean)
 }
-class MakesPadSelectionTrackerImpl: IMakesPadSelectionTracker {
+class MakesPadSelectionTracker: IMakesPadSelectionTracker,
+    IAnyActionModeActive by AnyActionModeActive() {
+
     override var padSelectionTrackers: MutableList<SelectionTracker<Long>>? = null
     override var padActionMode: ActionMode? = null
+    var activity: PadListActivity? = null
 
     override fun makePadSelectionTracker(activity: PadListActivity, recyclerView: RecyclerView, padAdapter: PadAdapter): SelectionTracker<Long> {
+        this.activity = activity
         val padSelectionTracker: SelectionTracker<Long> = SelectionTracker.Builder(
             "padSelectionTracker",
             recyclerView,
@@ -32,9 +40,17 @@ class MakesPadSelectionTrackerImpl: IMakesPadSelectionTracker {
             PadDetailsLookup(recyclerView),
             StorageStrategy.createLongStorage()
         )
-            .withSelectionPredicate(
-                SelectionPredicates.createSelectAnything()
-            )
+            .withSelectionPredicate(object: SelectionTracker.SelectionPredicate<Long>() {
+                override fun canSetStateForKey(key: Long, nextState: Boolean): Boolean {
+                    if(padActionMode == null && getSelectionBlock()) {
+                        return false
+                    }
+                    return true
+                }
+
+                override fun canSetStateAtPosition(position: Int, nextState: Boolean) = true
+                override fun canSelectMultiple() = true
+            })
             .withOnItemActivatedListener { item, event ->
                 if(padActionMode != null) {
                     if(item.selectionKey != null) {
@@ -68,13 +84,15 @@ class MakesPadSelectionTrackerImpl: IMakesPadSelectionTracker {
                 super.onSelectionChanged()
 
                 if (padActionMode == null) {
-                    padActionMode = activity.startSupportActionMode(PadActionModeCallback(activity))
+                    padActionMode =
+                        activity.startSupportActionMode(PadActionModeCallback(activity))
+                    setSelectionBlock(true)
                 }
 
                 val selectionCount = getPadSelection().size
                 if (selectionCount > 0) {
                     padActionMode?.title = selectionCount.toString()
-                } else {
+                } else if(padActionMode != null) {
                     finishActionMode()
                 }
             }
@@ -94,14 +112,24 @@ class MakesPadSelectionTrackerImpl: IMakesPadSelectionTracker {
     }
 
     override fun onDestroyPadActionMode() {
-        padActionMode = null
-
-        padSelectionTrackers?.forEach {
-            it.clearSelection()
+        if(padActionMode != null) {
+            padActionMode = null
+            padSelectionTrackers?.forEach {
+                it.clearSelection()
+            }
         }
+        setSelectionBlock(false)
     }
 
     fun finishActionMode() {
         padActionMode?.finish()
+    }
+
+    override fun getSelectionBlock(): Boolean {
+        return activity?.getSelectionBlock() ?: false
+    }
+
+    override fun setSelectionBlock(value: Boolean) {
+        activity?.setSelectionBlock(value)
     }
 }

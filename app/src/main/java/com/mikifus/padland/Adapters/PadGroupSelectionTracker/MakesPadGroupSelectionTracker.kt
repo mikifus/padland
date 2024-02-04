@@ -4,11 +4,14 @@ import android.content.ClipData
 import android.content.ClipDescription
 import android.os.Build
 import android.view.View
+import androidx.annotation.NonNull
 import androidx.appcompat.view.ActionMode
 import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.RecyclerView
+import com.mikifus.padland.ActionModes.AnyActionModeActive
+import com.mikifus.padland.ActionModes.IAnyActionModeActive
 import com.mikifus.padland.ActionModes.PadGroupActionModeCallback
 import com.mikifus.padland.Activities.PadListActivity
 import com.mikifus.padland.Adapters.PadGroupAdapter
@@ -19,13 +22,17 @@ interface IMakesPadGroupSelectionTracker {
     fun makePadGroupSelectionTracker(activity: PadListActivity, recyclerView: RecyclerView, padGroupAdapter: PadGroupAdapter): SelectionTracker<Long>
     fun getPadGroupSelection(): List<Long>
     fun onDestroyPadGroupActionMode()
+    fun getSelectionBlock(): Boolean
+    fun setSelectionBlock(value: Boolean)
 }
-class MakesPadGroupSelectionTrackerImpl: IMakesPadGroupSelectionTracker {
+class MakesPadGroupSelectionTracker: IMakesPadGroupSelectionTracker,
+    IAnyActionModeActive by AnyActionModeActive() {
     override var padGroupSelectionTracker: SelectionTracker<Long>? = null
     override var padGroupActionMode: ActionMode? = null
-
+    var activity: PadListActivity? = null
 
     override fun makePadGroupSelectionTracker(activity: PadListActivity, recyclerView: RecyclerView, padGroupAdapter: PadGroupAdapter): SelectionTracker<Long> {
+        this.activity = activity
         padGroupSelectionTracker = SelectionTracker.Builder(
             "padGroupSelectionTracker",
             recyclerView,
@@ -33,9 +40,17 @@ class MakesPadGroupSelectionTrackerImpl: IMakesPadGroupSelectionTracker {
             PadGroupDetailsLookup(recyclerView),
             StorageStrategy.createLongStorage()
         )
-            .withSelectionPredicate(
-                SelectionPredicates.createSelectAnything()
-            )
+            .withSelectionPredicate(object: SelectionTracker.SelectionPredicate<Long>() {
+                override fun canSetStateForKey(key: Long, nextState: Boolean): Boolean {
+                    if(padGroupActionMode == null && getSelectionBlock()) {
+                        return false
+                    }
+                    return true
+                }
+
+                override fun canSetStateAtPosition(position: Int, nextState: Boolean) = true
+                override fun canSelectMultiple() = true
+            })
             .withOnItemActivatedListener { item, event ->
                 if(padGroupActionMode != null) {
                     if(item.selectionKey != null) {
@@ -69,13 +84,15 @@ class MakesPadGroupSelectionTrackerImpl: IMakesPadGroupSelectionTracker {
                 super.onSelectionChanged()
 
                 if (padGroupActionMode == null) {
-                    padGroupActionMode = activity.startSupportActionMode(PadGroupActionModeCallback(activity))
+                    padGroupActionMode =
+                        activity.startSupportActionMode(PadGroupActionModeCallback(activity))
+                    setSelectionBlock(true)
                 }
 
                 val selectionCount = getPadGroupSelection().size
                 if (selectionCount > 0) {
                     padGroupActionMode?.title = selectionCount.toString()
-                } else {
+                } else if(padGroupActionMode != null) {
                     finishActionMode()
                 }
             }
@@ -89,11 +106,22 @@ class MakesPadGroupSelectionTrackerImpl: IMakesPadGroupSelectionTracker {
     }
 
     override fun onDestroyPadGroupActionMode() {
-        padGroupActionMode = null
-        padGroupSelectionTracker?.clearSelection()
+        if(padGroupActionMode != null) {
+            padGroupActionMode = null
+            padGroupSelectionTracker?.clearSelection()
+        }
+        setSelectionBlock(false)
     }
 
     fun finishActionMode() {
         padGroupActionMode?.finish()
+    }
+
+    override fun getSelectionBlock(): Boolean {
+        return activity?.getSelectionBlock() ?: false
+    }
+
+    override fun setSelectionBlock(value: Boolean) {
+        activity?.setSelectionBlock(value)
     }
 }
