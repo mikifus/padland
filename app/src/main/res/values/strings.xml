@@ -167,6 +167,8 @@
     <string name="copy_copied">Copied to clipboard</string>
     <string name="add_padgroup_name">Group name</string>
 
+    <string name="show_padgroup_title" translatable="false">(%d) %s</string>
+
     <string name="model_padgroup">Groups</string>
     <string name="model_pad">Documents</string>
 
