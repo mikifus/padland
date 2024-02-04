@@ -14,6 +14,7 @@ import com.mikifus.padland.ActionModes.IAnyActionModeActive
 import com.mikifus.padland.ActionModes.PadActionModeCallback
 import com.mikifus.padland.Activities.PadListActivity
 import com.mikifus.padland.Adapters.PadAdapter
+import com.mikifus.padland.R
 
 interface IMakesPadSelectionTracker {
     var padSelectionTrackers: MutableList<SelectionTracker<Long>>?
@@ -91,7 +92,7 @@ class MakesPadSelectionTracker: IMakesPadSelectionTracker,
 
                 val selectionCount = getPadSelection().size
                 if (selectionCount > 0) {
-                    padActionMode?.title = selectionCount.toString()
+                    padActionMode?.title = "$selectionCount " + activity.getString(R.string.model_pad)
                 } else if(padActionMode != null) {
                     finishActionMode()
                 }

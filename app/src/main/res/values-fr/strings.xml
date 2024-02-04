@@ -140,4 +140,7 @@
     <string name="titanpad_deprecated_title">Attention : Titanpad.com est obsolète</string>
     <string name="titanpad_deprecated_text">Les documents sont en lecture seule depuis mai 2017. Le 31 décembre 2017, Titanpad.com sera fermé. Prévoyez de sauvegarder vos documents ailleurs, et n\'en créez pas de nouveaux.</string>
 
+   <string name="model_padgroup">Groupes</string>
+   <string name="model_pad">Documents</string>
+
 </resources>
