@@ -34,7 +34,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mikifus.padland.Adapters.PadAdapter
 import com.mikifus.padland.Adapters.PadGroupAdapter
 import com.mikifus.padland.Adapters.PadGroupSelectionTracker.IMakesPadGroupSelectionTracker
-import com.mikifus.padland.Adapters.PadGroupSelectionTracker.MakesPadGroupSelectionTrackerImpl
+import com.mikifus.padland.Adapters.PadGroupSelectionTracker.MakesPadGroupSelectionTracker
 import com.mikifus.padland.Database.PadGroupModel.PadGroupViewModel
 import com.mikifus.padland.Database.PadGroupModel.PadGroupsAndPadListEntity
 import com.mikifus.padland.Database.PadGroupModel.PadGroupsWithPadList
@@ -44,7 +44,7 @@ import com.mikifus.padland.NewPadActivity
 import com.mikifus.padland.R
 import com.mikifus.padland.Adapters.DragAndDropListener.IDragAndDropListener
 import com.mikifus.padland.Adapters.PadSelectionTracker.IMakesPadSelectionTracker
-import com.mikifus.padland.Adapters.PadSelectionTracker.MakesPadSelectionTrackerImpl
+import com.mikifus.padland.Adapters.PadSelectionTracker.MakesPadSelectionTracker
 import com.mikifus.padland.Dialogs.Managers.IManagesNewPadGroupDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesNewPadGroupDialog
 import com.mikifus.padland.SettingsActivity
@@ -61,12 +61,13 @@ import kotlinx.coroutines.launch
  */
 class PadListActivity: AppCompatActivity(),
     IDragAndDropListener,
-    IMakesPadSelectionTracker by MakesPadSelectionTrackerImpl(),
-    IMakesPadGroupSelectionTracker by MakesPadGroupSelectionTrackerImpl(),
+    IMakesPadSelectionTracker by MakesPadSelectionTracker(),
+    IMakesPadGroupSelectionTracker by MakesPadGroupSelectionTracker(),
     IManagesNewPadGroupDialog by ManagesNewPadGroupDialog() {
 
+    private var isSelectionBlocked: Boolean = false
     override var padGroupViewModel: PadGroupViewModel? = null
-    var padViewModel: PadViewModel? = null
+    private var padViewModel: PadViewModel? = null
 
     private var mainList: List<PadGroupsWithPadList>? = null
     private var unclassifiedList: List<Pad>? = null
@@ -83,23 +84,23 @@ class PadListActivity: AppCompatActivity(),
         setContentView(R.layout.pad_list_activity)
 
         //initializing all the UI elements
-        recyclerView = findViewById(R.id.recyclerview)
+        recyclerView = findViewById(R.id.recyclerview_padgroups)
         recyclerViewUnclassified = findViewById(R.id.recyclerview_unclassified)
 
-        padGroupViewModel = ViewModelProvider(this).get(PadGroupViewModel::class.java)
+        padGroupViewModel = ViewModelProvider(this)[PadGroupViewModel::class.java]
         adapter = PadGroupAdapter(this, this)
 
-        padViewModel = ViewModelProvider(this).get(PadViewModel::class.java)
+        padViewModel = ViewModelProvider(this)[PadViewModel::class.java]
         padAdapter = PadAdapter(this, this)
 
         recyclerView!!.adapter = adapter
         recyclerView!!.layoutManager = LinearLayoutManager(this)
-        ViewCompat.setNestedScrollingEnabled(recyclerView!!, false);
+        ViewCompat.setNestedScrollingEnabled(recyclerView!!, false)
 
         recyclerViewUnclassified!!.adapter = padAdapter
         recyclerViewUnclassified!!.layoutManager = LinearLayoutManager(this)
         recyclerViewUnclassified!!.setOnDragListener(padAdapter!!.getDragInstance())
-        ViewCompat.setNestedScrollingEnabled(recyclerViewUnclassified!!, false);
+        ViewCompat.setNestedScrollingEnabled(recyclerViewUnclassified!!, false)
 
         // Unclassified list title
         titleViewUnclassified = findViewById(R.id.unclassified_title)
@@ -135,15 +136,15 @@ class PadListActivity: AppCompatActivity(),
 
     private fun initEvents() {
         val newPadGroupButton = findViewById<FloatingActionButton>(R.id.new_pad_group_button)
-        newPadGroupButton.setOnClickListener(View.OnClickListener {
+        newPadGroupButton.setOnClickListener {
             showNewPadGroupDialog(this@PadListActivity)
-        })
+        }
 
         val newPadButton = findViewById<FloatingActionButton>(R.id.new_pad_button)
-        newPadButton.setOnClickListener(View.OnClickListener {
+        newPadButton.setOnClickListener {
             val newPadIntent = Intent(this@PadListActivity, NewPadActivity::class.java)
             startActivity(newPadIntent)
-        })
+        }
 
 
         titleViewUnclassified!!.isActivated = true
@@ -216,6 +217,14 @@ class PadListActivity: AppCompatActivity(),
 //                padViewModel!!.updatePadPosition(padId, position)
             }
         }
+    }
+
+    override fun getSelectionBlock(): Boolean {
+        return isSelectionBlocked
+    }
+
+    override fun setSelectionBlock(value: Boolean) {
+        isSelectionBlocked = value
     }
 
 }

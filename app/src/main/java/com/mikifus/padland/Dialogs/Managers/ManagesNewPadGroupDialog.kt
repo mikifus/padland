@@ -42,6 +42,7 @@ public class ManagesNewPadGroupDialog: IManagesNewPadGroupDialog {
     private fun initEvents(activity: AppCompatActivity) {
         dialog.setPositiveButtonCallback { data ->
             saveNewPadgroupDialog(activity, data["name"].toString())
+            dialog.clearForm()
         }
     }
 

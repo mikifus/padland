@@ -1,20 +1,22 @@
 package com.mikifus.padland.Adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
+import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.RecyclerView
-import com.mikifus.padland.Database.PadModel.Pad
-import com.mikifus.padland.R
 import com.mikifus.padland.Adapters.DragAndDropListener.DragAndDropListener
 import com.mikifus.padland.Adapters.DragAndDropListener.IDragAndDropListener
+import com.mikifus.padland.Database.PadModel.Pad
+import com.mikifus.padland.R
 
 
 class PadAdapter(context: Context, listener: IDragAndDropListener): RecyclerView.Adapter<PadAdapter.PadViewHolder>(){
@@ -24,9 +26,10 @@ class PadAdapter(context: Context, listener: IDragAndDropListener): RecyclerView
     var padGroupId: Long = 0
     private val dragAndDropListener: IDragAndDropListener
     var tracker: SelectionTracker<Long>? = null
+    var onTouchListener: OnTouchListener? = null
 
     init {
-        mInflater = LayoutInflater.from(context);
+        mInflater = LayoutInflater.from(context)
         dragAndDropListener = listener
     }
 
@@ -40,8 +43,8 @@ class PadAdapter(context: Context, listener: IDragAndDropListener): RecyclerView
         var padGroupId: Long = 0
 
         init {
-            name = itemView.findViewById<TextView>(R.id.text_recyclerview_item_name)
-            url = itemView.findViewById<TextView>(R.id.text_recyclerview_item_url)
+            name = itemView.findViewById(R.id.text_recyclerview_item_name)
+            url = itemView.findViewById(R.id.text_recyclerview_item_url)
             itemLayout = itemView.findViewById(R.id.pad_list_recyclerview_item_pad)
         }
 
@@ -67,23 +70,20 @@ class PadAdapter(context: Context, listener: IDragAndDropListener): RecyclerView
         holder.itemLayout.tag = current.mId
         holder.padId = current.mId
 
+        onTouchListener?.let { holder.itemLayout.setOnTouchListener(onTouchListener) }
+
         tracker?.let {
             holder.itemLayout.isSelected = it.isSelected(current.mId)
         }
     }
 
     override fun getItemCount(): Int {
-        return data.size;
+        return data.size
     }
 
 
-    fun getDragInstance(): DragAndDropListener? {
-        return if (dragAndDropListener != null) {
-            DragAndDropListener(dragAndDropListener)
-        } else {
-            Log.e("ListAdapter", "Listener wasn't initialized!")
-            null
-        }
+    fun getDragInstance(): DragAndDropListener {
+        return DragAndDropListener(dragAndDropListener)
     }
 
 }

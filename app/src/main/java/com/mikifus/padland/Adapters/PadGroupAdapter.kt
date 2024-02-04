@@ -1,8 +1,11 @@
 package com.mikifus.padland.Adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
+import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -28,12 +31,40 @@ class PadGroupAdapter(context: Context, listener: IDragAndDropListener):
     private val mInflater: LayoutInflater
     var data: List<PadGroupsWithPadList> = listOf()
     private val dragAndDropListener: IDragAndDropListener
+    private var padAdapterTouchListener: OnTouchListener? = null
     var tracker: SelectionTracker<Long>? = null
 
     init {
         mInflater = LayoutInflater.from(context)
         activityContext = context
         dragAndDropListener = listener
+
+        initEvents()
+    }
+
+    @SuppressLint("ClickableViewAccessibility") // See the onTouchListener
+    private fun initEvents() {
+        padAdapterTouchListener = OnTouchListener { view, motionEvent ->
+            /**
+             * If the user touches a pad inside a padgroup recyclerview
+             * the top recyclerview that holds the padgroups is going
+             * to manage the event. If we check and that's the case and
+             * use requestDisallowInterceptTouchEvent() we can block
+             * the top recyclerview from managing the event. Then, when
+             * the user stops interacting (or changes interaction), we
+             * release the block.
+             */
+            when(motionEvent.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    if(view.parent?.parent?.parent?.parent !== null
+                        && view.parent?.parent?.parent?.parent is RecyclerView
+                        && (view.parent.parent.parent.parent as RecyclerView).tag == "recyclerview_padgroups")
+                        view.parent.parent.parent.parent.requestDisallowInterceptTouchEvent(true)
+                }
+                else -> view.parent.parent.parent.parent.requestDisallowInterceptTouchEvent(false)
+            }
+            false
+        }
     }
 
     class PadGroupViewHolder(itemView: View, context: AppCompatActivity, listener: IDragAndDropListener) :
@@ -66,7 +97,7 @@ class PadGroupAdapter(context: Context, listener: IDragAndDropListener):
             padListRecyclerView.adapter = padAdapter
         }
 
-        fun initEvents() {
+        private fun initEvents() {
             itemView.setOnClickListener {
                 toggle()
             }
@@ -103,8 +134,10 @@ class PadGroupAdapter(context: Context, listener: IDragAndDropListener):
         holder.titleTextView.text = current.padGroup.mName
         holder.itemLayout.tag = current.padGroup.mId
         holder.padGroupId = current.padGroup.mId
+
         holder.padAdapter.padGroupId = current.padGroup.mId
         holder.padAdapter.data = current.padList
+        holder.padAdapter.onTouchListener = padAdapterTouchListener
 
         holder.padAdapter.notifyDataSetChanged()
 
