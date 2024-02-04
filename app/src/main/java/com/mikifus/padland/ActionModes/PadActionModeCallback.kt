@@ -98,11 +98,13 @@ class PadActionModeCallback(activity: PadListActivity): ActionMode.Callback,
     }
 
     override fun onDestroyActionMode(mode: ActionMode?) {
-        padActionMode = null
-        padListActivity.onDestroyPadActionMode()
+        if(padActionMode != null) {
+            padActionMode = null
+            padListActivity.onDestroyPadActionMode()
+        }
     }
 
-    fun menuEdit(selection: List<Long>): Fragment {
+    private fun menuEdit(selection: List<Long>): Fragment {
         val fm = padListActivity.supportFragmentManager
         val dialog = EditPadDialog(padListActivity.getString(R.string.padlist_dialog_edit_pad_title), this)
         selection[0].let { dialog.editPadId(it.toLong()) }

@@ -74,8 +74,10 @@ class PadGroupActionModeCallback(activity: PadListActivity):
     }
 
     override fun onDestroyActionMode(mode: ActionMode?) {
-        padGrupActionMode = null
-        padListActivity.onDestroyPadGroupActionMode()
+        if(padGrupActionMode != null) {
+            padGrupActionMode = null
+            padListActivity.onDestroyPadGroupActionMode()
+        }
     }
 
     private fun menuEdit(selectedItems: List<Long> = listOf())/*: Fragment*/ {
