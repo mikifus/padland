@@ -16,6 +16,7 @@ interface IFormDialog {
     fun setPositiveButtonCallback(callback: (Map<String, Any>) -> Unit)
     fun validateForm(): Boolean
     fun getFormData(): Map<String, Any>
+    fun clearForm()
     fun initEvents()
     fun initToolBar()
 }
@@ -44,6 +45,9 @@ open class FormDialog: DialogFragment(), IFormDialog {
 
     override fun getFormData(): Map<String, Any> {
         return mapOf()
+    }
+
+    override fun clearForm() {
     }
 
     override fun initEvents() {

@@ -6,15 +6,22 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.lifecycleScope
 import com.mikifus.padland.R
+import kotlinx.coroutines.launch
 
 /**
  * Created by mikifus on 27/02/18.
  */
-open class FormDialog    /*R.layout.dialog_new_server*/(protected var title: String, private var callbackObject: FormDialogCallBack) : DialogFragment() {
-    protected var view = 0
+open class FormDialog(protected var title: String, private var callbackObject: FormDialogCallBack) : DialogFragment() {
+    protected var view: Int
     private var currentDialog: Dialog? = null
     protected var mainView: View? = null
+
+    init {
+        view = R.layout.dialog_pad_edit
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         mainView = requireActivity().layoutInflater.inflate(view, null)
         val builder = AlertDialog.Builder(requireActivity())
@@ -39,22 +46,24 @@ open class FormDialog    /*R.layout.dialog_new_server*/(protected var title: Str
         return alertDialog
     }
 
-    protected open fun validateForm(): Boolean {
+    protected open suspend fun validateForm(): Boolean {
         return true
     }
 
-    protected open fun saveData() {}
+    protected open suspend fun saveData() {}
     override fun onStart() {
         super.onStart()
         val d = dialog as AlertDialog?
         if (d != null) {
             val positiveButton = d.getButton(Dialog.BUTTON_POSITIVE)
             positiveButton.setOnClickListener {
-                if (validateForm()) {
-                    saveData()
-                    callbackObject.onDialogSuccess()
-                    callbackObject.onDialogDismiss()
-                    d.dismiss()
+                lifecycleScope.launch{
+                    if (validateForm()) {
+                        saveData()
+                        callbackObject.onDialogSuccess()
+                        callbackObject.onDialogDismiss()
+                        d.dismiss()
+                    }
                 }
             }
         }
