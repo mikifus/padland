@@ -128,4 +128,8 @@
     <string name="edit_pad_name">Nom del pad (URL)</string>
     <string name="padlist_dialog_edit_pad_title">Edita el pad</string>
     <string name="add_padgroup_name">Nom del grup</string>
+
+    <string name="model_padgroup">Grups</string>
+    <string name="model_pad">Documents</string>
+
 </resources>

@@ -125,4 +125,8 @@
     <string name="edit_pad_local_name">Alias del pad</string>
     <string name="edit_pad_name">Nombre del pad (URL)</string>
     <string name="add_padgroup_name">Nombre del grupo</string>
+
+    <string name="model_padgroup">Grupos</string>
+    <string name="model_pad">Documentos</string>
+
 </resources>
