@@ -131,7 +131,11 @@ class PadGroupAdapter(context: Context, listener: IDragAndDropListener):
 
     override fun onBindViewHolder(holder: PadGroupViewHolder, position: Int) {
         val current: PadGroupsWithPadList = data[position]
-        holder.titleTextView.text = current.padGroup.mName
+        holder.titleTextView.text = activityContext.getString(
+            R.string.show_padgroup_title,
+            current.padList.size,
+            current.padGroup.mName
+        )
         holder.itemLayout.tag = current.padGroup.mId
         holder.padGroupId = current.padGroup.mId
 
