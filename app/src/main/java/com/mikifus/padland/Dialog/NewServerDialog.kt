@@ -9,8 +9,12 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
+import com.mikifus.padland.Database.PadListDatabase
+import com.mikifus.padland.Database.ServerModel.Server
 import com.mikifus.padland.Models.ServerModel
 import com.mikifus.padland.R
+import kotlinx.coroutines.launch
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.regex.Pattern
@@ -34,7 +38,7 @@ open class NewServerDialog(title: String, callback: FormDialogCallBack) : FormDi
         view = R.layout.dialog_new_server
     }
 
-    override fun saveData() {
+    override suspend fun saveData() {
         val serverModel = ServerModel(activity)
         val contentValues = contentValues
         val url = contentValues.getAsString(ServerModel.URL)
@@ -44,10 +48,11 @@ open class NewServerDialog(title: String, callback: FormDialogCallBack) : FormDi
             finalPrefix += prefix
         }
         contentValues.put(ServerModel.PADPREFIX, finalPrefix)
-        serverModel.saveServerData(editServerId, contentValues)
+//        serverModel.saveServerData(editServerId, contentValues)
+        PadListDatabase.getInstance(requireContext()).serverDao().insertAll(Server.fromFormContentValues(contentValues).value!!)
     }
 
-    override fun validateForm(): Boolean {
+    override suspend fun validateForm(): Boolean {
         val contentValues = contentValues
         if (!NAME_VALIDATION.matcher(contentValues.getAsString(ServerModel.NAME)).matches()) {
             // TODO: Change toast for something better.
@@ -134,39 +139,43 @@ open class NewServerDialog(title: String, callback: FormDialogCallBack) : FormDi
     }
 
     override fun setViewEvents() {
-        fieldName = mainView!!.findViewById(R.id.txt_server_name)
-        fieldUrl = mainView!!.findViewById(R.id.txt_server_url)
-        fieldPadprefix = mainView!!.findViewById(R.id.txt_server_padprefix)
-        checkLite = mainView!!.findViewById(R.id.chk_lite)
-        checkJquery = mainView!!.findViewById(R.id.chk_jquery)
-        advancedButton = mainView!!.findViewById(R.id.advanced_options)
-        advancedLayout = mainView!!.findViewById(R.id.advanced_options_layout)
-        (fieldPadprefix as EditText).setText(DEFAULT_PADPREFIX_VALUE)
-        if (editServerId > 0) {
-            val serverModel = ServerModel(context)
-            val server = serverModel.getServerById(editServerId)
-            (fieldName as EditText).setText(server!!.name)
-            (fieldUrl as EditText).setText(server.url)
-            (fieldPadprefix as EditText).setText(server.padPrefix)
-            (checkJquery as CheckBox).isChecked = server.jquery
-            if (server.padPrefix == DEFAULT_PADPREFIX_VALUE && server.jquery) {
-                (checkLite as CheckBox).isChecked = true
+        lifecycleScope.launch {
+            fieldName = mainView!!.findViewById(R.id.txt_server_name)
+            fieldUrl = mainView!!.findViewById(R.id.txt_server_url)
+            fieldPadprefix = mainView!!.findViewById(R.id.txt_server_padprefix)
+            checkLite = mainView!!.findViewById(R.id.chk_lite)
+            checkJquery = mainView!!.findViewById(R.id.chk_jquery)
+            advancedButton = mainView!!.findViewById(R.id.advanced_options)
+            advancedLayout = mainView!!.findViewById(R.id.advanced_options_layout)
+            (fieldPadprefix as EditText).setText(DEFAULT_PADPREFIX_VALUE)
+            if (editServerId > 0) {
+//            val serverModel = ServerModel(context)
+//            val server = serverModel.getServerById(editServerId)
+                val server =
+                    PadListDatabase.getInstance(requireContext()).serverDao().getById(editServerId)
+                (fieldName as EditText).setText(server.mName)
+                (fieldUrl as EditText).setText(server.mUrl)
+                (fieldPadprefix as EditText).setText(server.mPadprefix)
+                (checkJquery as CheckBox).isChecked = server.mJquery
+                if (server.mPadprefix == DEFAULT_PADPREFIX_VALUE && server.mEnabled) {
+                    (checkLite as CheckBox).isChecked = true
+                }
             }
-        }
-        (advancedButton as Button).setOnClickListener(View.OnClickListener {
-            if ((advancedLayout as LinearLayout).getVisibility() == View.VISIBLE) {
-                (advancedLayout as LinearLayout).setVisibility(View.GONE)
-            } else {
-                (advancedLayout as LinearLayout).setVisibility(View.VISIBLE)
+            (advancedButton as Button).setOnClickListener(View.OnClickListener {
+                if ((advancedLayout as LinearLayout).getVisibility() == View.VISIBLE) {
+                    (advancedLayout as LinearLayout).setVisibility(View.GONE)
+                } else {
+                    (advancedLayout as LinearLayout).setVisibility(View.VISIBLE)
+                }
+            })
+            (checkLite as CheckBox).setOnCheckedChangeListener { buttonView, isChecked ->
+                if (isChecked) {
+                    (fieldPadprefix as EditText).setText(DEFAULT_PADPREFIX_VALUE)
+                } else {
+                    (fieldPadprefix as EditText).setText("")
+                }
+                (checkJquery as CheckBox).isChecked = isChecked
             }
-        })
-        (checkLite as CheckBox).setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                (fieldPadprefix as EditText).setText(DEFAULT_PADPREFIX_VALUE)
-            } else {
-                (fieldPadprefix as EditText).setText("")
-            }
-            (checkJquery as CheckBox).isChecked = isChecked
         }
     }
 

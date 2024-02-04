@@ -1,12 +1,14 @@
 package com.mikifus.padland.Dialogs
 
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
+import com.mikifus.padland.Dialogs.Managers.ManagesNewPadGroupDialog
 import com.mikifus.padland.R
 
 
@@ -44,6 +46,10 @@ class NewPadGroupDialog: FormDialog() {
         return mapOf("name" to text)
     }
 
+    override fun clearForm() {
+        mEditText!!.text = null
+    }
+
     override fun onStart() {
         super.onStart()
 
@@ -55,5 +61,11 @@ class NewPadGroupDialog: FormDialog() {
         super.onCreateView(inflater, container, savedInstanceState)
 
         return inflater.inflate(R.layout.dialog_new_padgroup, container, false)
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+
+        activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
     }
 }
