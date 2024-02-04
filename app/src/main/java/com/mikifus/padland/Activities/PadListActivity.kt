@@ -207,7 +207,7 @@ class PadListActivity: AppCompatActivity(),
     override fun notifyChange(padGroupId: Long, padId: Long, position: Int) {
         lifecycleScope.launch {
             padGroupViewModel!!.deletePadGroupsAndPadList(padId)
-            if(padGroupId > 1) {
+            if(padGroupId > 0) {
                 padGroupViewModel!!.insertPadGroupsAndPadList(
                     PadGroupsAndPadListEntity(
                         mGroupId = padGroupId,
