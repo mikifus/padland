@@ -4,14 +4,19 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.view.ActionMode
 import com.mikifus.padland.Activities.PadListActivity
+import com.mikifus.padland.Database.PadGroupModel.PadGroupViewModel
 import com.mikifus.padland.Dialogs.Managers.IManagesDeletePadGroupDialog
+import com.mikifus.padland.Dialogs.Managers.IManagesEditPadGroupDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesDeletePadGroupDialog
+import com.mikifus.padland.Dialogs.Managers.ManagesEditPadGroupDialog
 import com.mikifus.padland.R
 
 class PadGroupActionModeCallback(activity: PadListActivity):
         ActionMode.Callback,
-        IManagesDeletePadGroupDialog by ManagesDeletePadGroupDialog() {
+    IManagesDeletePadGroupDialog by ManagesDeletePadGroupDialog(),
+    IManagesEditPadGroupDialog by ManagesEditPadGroupDialog() {
 
+    override var padGroupViewModel: PadGroupViewModel? = null
     private var padGrupActionMode: ActionMode? = null
     private var padListActivity: PadListActivity
 
@@ -58,7 +63,8 @@ class PadGroupActionModeCallback(activity: PadListActivity):
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menuitem_edit -> {
-                menuEdit(padListActivity.getPadGroupSelection())
+//                menuEdit(padListActivity.getPadGroupSelection())
+                showEditPadGroupDialog(padListActivity, padListActivity.getPadGroupSelection()[0])
                 mode?.finish()
                 true
             }
@@ -80,7 +86,7 @@ class PadGroupActionModeCallback(activity: PadListActivity):
         }
     }
 
-    private fun menuEdit(selectedItems: List<Long> = listOf())/*: Fragment*/ {
+//    private fun menuEdit(selectedItems: List<Long> = listOf())/*: Fragment*/ {
 //        val context = this
 //        val selectedGroups = ArrayList<Long>()
 //        val padGroupModel = PadGroupModel(this)
@@ -137,5 +143,5 @@ class PadGroupActionModeCallback(activity: PadListActivity):
 //            .create()
 //        deleteDialogBox.show()
 //        return deleteDialogBox
-    }
+//    }
 }

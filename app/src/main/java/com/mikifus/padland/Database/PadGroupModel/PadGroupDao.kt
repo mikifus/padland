@@ -30,7 +30,7 @@ interface PadGroupDao {
     fun getAllCursor(): Cursor
 
     @Query("SELECT * FROM padgroups WHERE _id == :id")
-    fun getById(id: Long): PadGroup
+    suspend fun getById(id: Long): PadGroup
 
     @Query("SELECT * FROM padgroups WHERE _id == :id")
     fun getByIdCursor(id: Long): Cursor

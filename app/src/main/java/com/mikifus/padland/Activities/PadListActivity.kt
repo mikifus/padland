@@ -45,7 +45,9 @@ import com.mikifus.padland.R
 import com.mikifus.padland.Adapters.DragAndDropListener.IDragAndDropListener
 import com.mikifus.padland.Adapters.PadSelectionTracker.IMakesPadSelectionTracker
 import com.mikifus.padland.Adapters.PadSelectionTracker.MakesPadSelectionTracker
+import com.mikifus.padland.Dialogs.Managers.IManagesEditPadGroupDialog
 import com.mikifus.padland.Dialogs.Managers.IManagesNewPadGroupDialog
+import com.mikifus.padland.Dialogs.Managers.ManagesEditPadGroupDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesNewPadGroupDialog
 import com.mikifus.padland.SettingsActivity
 import kotlinx.coroutines.launch

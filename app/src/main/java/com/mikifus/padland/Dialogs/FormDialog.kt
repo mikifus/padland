@@ -14,9 +14,10 @@ interface IFormDialog {
     var positiveButtonCallback: View.OnClickListener?
     var toolbar: Toolbar?
     fun setPositiveButtonCallback(callback: (Map<String, Any>) -> Unit)
-    fun validateForm(): Boolean
-    fun getFormData(): Map<String, Any>
-    fun clearForm()
+    fun validateForm(): Boolean { return false }
+    fun setFormData(data: HashMap<String, Any>) {}
+    fun getFormData(): Map<String, Any> { return mapOf() }
+    fun clearForm() {}
     fun initEvents()
     fun initToolBar()
 }
@@ -39,24 +40,13 @@ open class FormDialog: DialogFragment(), IFormDialog {
         }
     }
 
-    override fun validateForm(): Boolean {
-        return false
-    }
-
-    override fun getFormData(): Map<String, Any> {
-        return mapOf()
-    }
-
-    override fun clearForm() {
-    }
-
     override fun initEvents() {
         val positiveButton = toolbar?.findViewById<Button>(R.id.dialog_positive_button)
         positiveButton?.setOnClickListener(positiveButtonCallback)
     }
 
     override fun initToolBar() {
-        toolbar!!.title = getString(R.string.padlist_dialog_new_padgroup_title)
+        toolbar!!.title = getString(R.string.edit)
         toolbar!!.setNavigationIcon(R.drawable.ic_arrow_back_white)
         toolbar!!.setNavigationOnClickListener {
             dismiss()

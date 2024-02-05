@@ -3,6 +3,7 @@ package com.mikifus.padland.Dialogs
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,13 +15,14 @@ import com.mikifus.padland.R
 /**
  * Created by mikifus on 10/03/16.
  */
-class NewPadGroupDialog: FormDialog() {
+class EditPadGroupDialog: FormDialog() {
 
     private var mEditText: EditText? = null
 
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
-        dialog.setTitle(R.string.padlist_dialog_new_padgroup_title)
+        dialog.setTitle(R.string.edit)
         return dialog
     }
 
@@ -33,6 +35,12 @@ class NewPadGroupDialog: FormDialog() {
         }
 
         return true
+    }
+
+    override fun setFormData(data: HashMap<String, Any>) {
+        data["name"]?.let {
+            mEditText!!.text = Editable.Factory.getInstance().newEditable(it.toString())
+        }
     }
 
     override fun getFormData(): Map<String, Any> {
@@ -70,6 +78,6 @@ class NewPadGroupDialog: FormDialog() {
     override fun initToolBar() {
         super.initToolBar()
 
-        toolbar!!.title = getString(R.string.padlist_dialog_new_padgroup_title)
+        toolbar!!.title = getString(R.string.edit)
     }
 }
