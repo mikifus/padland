@@ -13,7 +13,7 @@ class PadGroupRepository(private val padGroupDao: PadGroupDao) {
         padGroupDao.insertAll(padGroup)
     }
 
-    fun getById(id: Long): PadGroup {
+    suspend fun getById(id: Long): PadGroup {
         return padGroupDao.getById(id)
     }
 

@@ -11,7 +11,7 @@ import java.sql.Date
 data class PadGroup(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "_id") val mId: Long,
-    @ColumnInfo(name = "name") val mName: String,
+    @ColumnInfo(name = "name") var mName: String,
     @ColumnInfo(name = "position") val mPosition: Int,
     @ColumnInfo(name = "last_used_date") val mLastUsedDate: Date?,
     @ColumnInfo(name = "create_date") val mCreateDate: Date,
