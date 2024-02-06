@@ -9,7 +9,7 @@ class PadGroupRepository(private val padGroupDao: PadGroupDao) {
     val getPadGroupsWithPadList: LiveData<List<PadGroupsWithPadList>> = padGroupDao.getPadGroupsWithPadList()
     val getPadsWithoutGroup: LiveData<List<Pad>> = padGroupDao.getPadsWithoutGroup()
 
-    suspend fun insertPadGroupWithPadlist(padGroup: PadGroup) {
+    suspend fun insertPadGroup(padGroup: PadGroup) {
         padGroupDao.insertAll(padGroup)
     }
 
@@ -25,11 +25,15 @@ class PadGroupRepository(private val padGroupDao: PadGroupDao) {
         return padGroupDao.delete(padGroup)
     }
 
-    fun insertPadGroupWithPadlist(padGroupsAndPadListEntity: PadGroupsAndPadListEntity) {
+    suspend fun deletePadGroups(padGroups: List<PadGroup>) {
+        return padGroupDao.delete(padGroups)
+    }
+
+    suspend fun insertPadGroupWithPadlist(padGroupsAndPadListEntity: PadGroupsAndPadListEntity) {
         padGroupDao.insertPadGroupWithPadlist(padGroupsAndPadListEntity)
     }
 
-    fun deletePadGroupsAndPadList(padId: Long) {
+    suspend fun deletePadGroupsAndPadList(padId: Long) {
         padGroupDao.deletePadGroupsAndPadList(padId)
     }
 }

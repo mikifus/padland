@@ -45,11 +45,12 @@ import com.mikifus.padland.R
 import com.mikifus.padland.Adapters.DragAndDropListener.IDragAndDropListener
 import com.mikifus.padland.Adapters.PadSelectionTracker.IMakesPadSelectionTracker
 import com.mikifus.padland.Adapters.PadSelectionTracker.MakesPadSelectionTracker
-import com.mikifus.padland.Dialogs.Managers.IManagesEditPadGroupDialog
+import com.mikifus.padland.Dialogs.Managers.IManagesNewPadDialog
 import com.mikifus.padland.Dialogs.Managers.IManagesNewPadGroupDialog
-import com.mikifus.padland.Dialogs.Managers.ManagesEditPadGroupDialog
+import com.mikifus.padland.Dialogs.Managers.ManagesNewPadDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesNewPadGroupDialog
 import com.mikifus.padland.SettingsActivity
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
@@ -65,11 +66,12 @@ class PadListActivity: AppCompatActivity(),
     IDragAndDropListener,
     IMakesPadSelectionTracker by MakesPadSelectionTracker(),
     IMakesPadGroupSelectionTracker by MakesPadGroupSelectionTracker(),
-    IManagesNewPadGroupDialog by ManagesNewPadGroupDialog() {
+    IManagesNewPadGroupDialog by ManagesNewPadGroupDialog(),
+    IManagesNewPadDialog by ManagesNewPadDialog() {
 
     private var isSelectionBlocked: Boolean = false
     override var padGroupViewModel: PadGroupViewModel? = null
-    private var padViewModel: PadViewModel? = null
+    override var padViewModel: PadViewModel? = null
 
     private var mainList: List<PadGroupsWithPadList>? = null
     private var unclassifiedList: List<Pad>? = null
@@ -145,7 +147,9 @@ class PadListActivity: AppCompatActivity(),
         val newPadButton = findViewById<FloatingActionButton>(R.id.new_pad_button)
         newPadButton.setOnClickListener {
             val newPadIntent = Intent(this@PadListActivity, NewPadActivity::class.java)
-            startActivity(newPadIntent)
+//            startActivity(newPadIntent)
+            showNewPadDialog(this@PadListActivity)
+
         }
 
 
@@ -207,7 +211,7 @@ class PadListActivity: AppCompatActivity(),
     }
 
     override fun notifyChange(padGroupId: Long, padId: Long, position: Int) {
-        lifecycleScope.launch {
+        lifecycleScope.launch(Dispatchers.IO) {
             padGroupViewModel!!.deletePadGroupsAndPadList(padId)
             if(padGroupId > 0) {
                 padGroupViewModel!!.insertPadGroupsAndPadList(

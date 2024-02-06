@@ -7,6 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import com.mikifus.padland.Database.PadGroupModel.PadGroup
 import com.mikifus.padland.Database.PadGroupModel.PadGroupViewModel
 import com.mikifus.padland.Dialogs.NewPadGroupDialog
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 interface IManagesNewPadGroupDialog {
@@ -47,8 +48,9 @@ public class ManagesNewPadGroupDialog: IManagesNewPadGroupDialog {
     }
 
     private fun saveNewPadgroupDialog(activity: AppCompatActivity, name: String) {
-        activity.lifecycleScope.launch {
-            padGroupViewModel!!.insertPadGroup(PadGroup.fromName(name).value!!)
+        val padGroup = PadGroup.fromName(name).value!!
+        activity.lifecycleScope.launch(Dispatchers.IO) {
+            padGroupViewModel!!.insertPadGroup(padGroup)
         }
         dialog.dismiss()
     }

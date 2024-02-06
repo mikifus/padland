@@ -33,16 +33,17 @@ class PadGroupViewModel(application: Application): AndroidViewModel(application)
 
     suspend fun insertPadGroup(padGroup: PadGroup) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.insertPadGroupWithPadlist(padGroup)
+            repository.insertPadGroup(padGroup)
         }
     }
 
     suspend fun getById(id: Long): PadGroup {
-        val deferred: Deferred<PadGroup> = viewModelScope.async {
-            repository.getById(id)
-        }
-        padGroup.value = deferred.await()
-        return padGroup.value!!
+//        val deferred: Deferred<PadGroup> = viewModelScope.async {
+//            repository.getById(id)
+//        }
+//        padGroup.value = deferred.await()
+//        return padGroup.value!!
+        return repository.getById(id)
     }
 
     suspend fun updatePadGroup(padGroup: PadGroup) {
@@ -50,30 +51,26 @@ class PadGroupViewModel(application: Application): AndroidViewModel(application)
     }
 
     fun deletePadGroup(id: Long) {
-        viewModelScope.launch {
-            repository.deletePadGroup(PadGroup.withOnlyId(id).value!!)
+        val padGroup = PadGroup.withOnlyId(id).value!!
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deletePadGroup(padGroup)
         }
     }
 
     fun deletePadGroup(ids: List<Long>)=viewModelScope.launch {
-        viewModelScope.launch {
-            ids.forEach {
-                val padGroup = PadGroup.withOnlyId(it).value!!
-
-                withContext(Dispatchers.IO) {
-                    repository.deletePadGroup(padGroup)
-                }
-            }
+        val padGroups = ids.map { PadGroup.withOnlyId(it).value!! }
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deletePadGroups(padGroups)
         }
     }
 
-    fun insertPadGroupsAndPadList(padGroupsAndPadListEntity: PadGroupsAndPadListEntity) {
+    suspend fun insertPadGroupsAndPadList(padGroupsAndPadListEntity: PadGroupsAndPadListEntity) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.insertPadGroupWithPadlist(padGroupsAndPadListEntity)
         }
     }
 
-    fun deletePadGroupsAndPadList(padId: Long) {
+    suspend fun deletePadGroupsAndPadList(padId: Long) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.deletePadGroupsAndPadList(padId)
         }

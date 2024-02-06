@@ -9,6 +9,8 @@ import com.mikifus.padland.PadContentProvider
 import com.mikifus.padland.PadLandDataActivity
 import com.mikifus.padland.PadlandApp
 import com.mikifus.padland.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /**
  * Created by mikifus on 28/02/18.
@@ -139,41 +141,63 @@ class PadGroupModel(context: Context) : BaseModel(context) {
 //            group.put(PadContentProvider.NAME, name);
 //            group.put(PadGroupModel.POSITION, pos);
 //            groups.add(group);
-    val allPadgroups: ArrayList<PadGroup>
-        get() {
+
+    suspend fun getAllPadGroups(): ArrayList<PadGroup> {
+        val groups = ArrayList<PadGroup>()
+
+        withContext(Dispatchers.IO) {
             val padlistUri = Uri.parse(context!!.getString(R.string.request_padgroups))
-            val cursor = contentResolver.query(padlistUri, arrayOf(PadContentProvider._ID, PadModel.NAME, POSITION),
-                    null,
-                    null,
-                    PadContentProvider.CREATE_DATE + " DESC")
-            val groups = ArrayList<PadGroup>()
+            val cursor = contentResolver.query(
+                padlistUri, arrayOf(PadContentProvider._ID, PadModel.NAME, POSITION),
+                null,
+                null,
+                PadContentProvider.CREATE_DATE + " DESC"
+            )
             var group: PadGroup
-            if (cursor == null) {
-                return groups
-            }
-            if (cursor.count == 0) {
-                cursor.close()
-                return groups
-            }
-            cursor.moveToFirst()
-            while (!cursor.isAfterLast) {
-                group = PadGroup(cursor)
-                groups.add(group)
+            if (cursor != null) {
+                if (cursor.count > 0) {
+                    cursor.moveToFirst()
+                    while (!cursor.isAfterLast) {
+                        group = PadGroup(cursor)
+                        groups.add(group)
 
-//            String id = cursor.getString(0);
-//            String name = cursor.getString(1);
-//            String pos = cursor.getString(2);
-
-//            group = new HashMap<>();
-//            group.put(PadContentProvider._ID, id);
-//            group.put(PadContentProvider.NAME, name);
-//            group.put(PadGroupModel.POSITION, pos);
-//            groups.add(group);
-                cursor.moveToNext()
+                        cursor.moveToNext()
+                    }
+                    cursor.close()
+                }else{
+                    cursor.close()
+                }
             }
-            cursor.close()
-            return groups
         }
+        return groups
+    }
+
+//    val allPadgroups: ArrayList<PadGroup>
+//        get() {
+//            val padlistUri = Uri.parse(context!!.getString(R.string.request_padgroups))
+//            val cursor = contentResolver.query(padlistUri, arrayOf(PadContentProvider._ID, PadModel.NAME, POSITION),
+//                    null,
+//                    null,
+//                    PadContentProvider.CREATE_DATE + " DESC")
+//            val groups = ArrayList<PadGroup>()
+//            var group: PadGroup
+//            if (cursor == null) {
+//                return groups
+//            }
+//            if (cursor.count == 0) {
+//                cursor.close()
+//                return groups
+//            }
+//            cursor.moveToFirst()
+//            while (!cursor.isAfterLast) {
+//                group = PadGroup(cursor)
+//                groups.add(group)
+//
+//                cursor.moveToNext()
+//            }
+//            cursor.close()
+//            return groups
+//        }
 
     fun getPadgroupChildrenIds(id: Long): ArrayList<Long> {
         val query: String

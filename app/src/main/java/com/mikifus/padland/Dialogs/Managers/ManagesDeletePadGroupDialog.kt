@@ -6,6 +6,7 @@ import androidx.lifecycle.lifecycleScope
 import com.mikifus.padland.Database.PadGroupModel.PadGroupViewModel
 import com.mikifus.padland.Dialogs.ConfirmDialog
 import com.mikifus.padland.R
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 interface IManagesDeletePadGroupDialog {
@@ -45,7 +46,7 @@ class ManagesDeletePadGroupDialog: IManagesDeletePadGroupDialog {
     }
 
     private fun confirmDeletePadGroupDialog(activity: AppCompatActivity) {
-        activity.lifecycleScope.launch {
+        activity.lifecycleScope.launch(Dispatchers.IO) {
             padGroupViewModel!!.deletePadGroup(ids)
         }
         dialog.dismiss()
