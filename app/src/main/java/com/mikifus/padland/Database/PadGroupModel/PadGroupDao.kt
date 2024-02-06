@@ -22,6 +22,8 @@ interface PadGroupDao {
 
     @Delete
     fun delete(pad: PadGroup)
+    @Delete
+    fun delete(pad: List<PadGroup>)
 
     @Query("SELECT * FROM padgroups")
     fun getAll(): LiveData<List<PadGroup>>
@@ -47,7 +49,7 @@ interface PadGroupDao {
     fun getPadGroupsWithPadListWithEmpty(): LiveData<List<PadGroupsWithPadList>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertPadGroupWithPadlist(padGroupsAndPadListEntity: PadGroupsAndPadListEntity): Long
+    suspend fun insertPadGroupWithPadlist(padGroupsAndPadListEntity: PadGroupsAndPadListEntity): Long
 
     @Query("DELETE FROM padlist_padgroups WHERE _id_pad = :padId")
     fun deletePadGroupsAndPadList(padId: Long)

@@ -49,7 +49,7 @@ class EditPadGroupDialog: FormDialog() {
         val data = HashMap<String, Any>()
         data["name"] = text
 
-        return mapOf("name" to text)
+        return data
     }
 
     override fun clearForm() {

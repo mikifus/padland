@@ -11,6 +11,7 @@ import com.mikifus.padland.Database.PadGroupModel.PadGroupViewModel
 import com.mikifus.padland.Dialogs.EditPadGroupDialog
 import com.mikifus.padland.Dialogs.NewPadGroupDialog
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 
@@ -40,7 +41,7 @@ public class ManagesEditPadGroupDialog: IManagesEditPadGroupDialog {
     }
 
     private fun setData(activity: PadListActivity, id: Long) {
-        activity.lifecycleScope.launch {
+        activity.lifecycleScope.launch(Dispatchers.IO) {
             val padGroup = padGroupViewModel?.getById(id)
 
             val data = HashMap<String, Any>()
@@ -48,7 +49,9 @@ public class ManagesEditPadGroupDialog: IManagesEditPadGroupDialog {
                 data["name"] = it
             }
 
-            dialog.setFormData(data)
+            activity.lifecycleScope.launch {
+                dialog.setFormData(data)
+            }
         }
     }
 
@@ -66,7 +69,7 @@ public class ManagesEditPadGroupDialog: IManagesEditPadGroupDialog {
     }
 
     private fun saveEditPadgroupDialog(activity: AppCompatActivity, id: Long, name: String) {
-        activity.lifecycleScope.launch {
+        activity.lifecycleScope.launch(Dispatchers.IO) {
             val padGroup = padGroupViewModel?.getById(id)
 
             padGroup?.mName = name

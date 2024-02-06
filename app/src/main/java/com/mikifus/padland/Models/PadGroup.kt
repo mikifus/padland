@@ -21,6 +21,12 @@ class PadGroup {
         position = 0
     }
 
+    constructor(padGroup: com.mikifus.padland.Database.PadGroupModel.PadGroup) {
+        id = padGroup.mId!!
+        name = padGroup.mName
+        position = padGroup.mPosition
+    }
+
     constructor(c: Cursor?) {
         if (c != null && c.count > 0) {
             id = c.getLong(0)
