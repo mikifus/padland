@@ -91,7 +91,7 @@
     <string name="title_activity_server_list">Llista de servidors</string>
     <string name="serverlist_dialog_delete_server_deleted">Els servidors seleccionats s\'han eliminat</string>
 
-    <string name="new_pad_local_name">Posa un alias al document opcionalment.</string>
+    <string name="new_pad_local_name">Alias del document</string>
     <string name="write_pad_local_name">Alias del document (opcional)</string>
     <string name="new_pad_name_invalid">El nom del document conté caracters invàlids.</string>
     <string name="new_pad_wrong_server">El servidor no està permès. No es pot continuar. Mira la configuració dels teus servidors i prova de nou.</string>
@@ -131,5 +131,6 @@
 
     <string name="model_padgroup">Grups</string>
     <string name="model_pad">Documents</string>
+    <string name="new_pad_local_name_explanation">Opcionalment indica un alias local per al document.</string>
 
 </resources>

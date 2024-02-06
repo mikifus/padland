@@ -75,7 +75,7 @@
     <string name="title_activity_server_list">Lista de servidores</string>
     <string name="serverlist_dialog_delete_server_deleted">Los servidores seleccionados han sido eliminados</string>
 
-    <string name="new_pad_local_name">Pon un alias al documento opcionalmente.</string>
+    <string name="new_pad_local_name">Alias del documento</string>
     <string name="write_pad_local_name">Alias del documento (opcional)</string>
     <string name="new_pad_name_invalid">El nombre del documento contiene carácteres invalidos.</string>
     <string name="new_pad_wrong_server">El servidor no está permitido. No se puede continuar. Mira la configuración de tus servidores y prueba de nuevo.</string>
@@ -128,5 +128,6 @@
 
     <string name="model_padgroup">Grupos</string>
     <string name="model_pad">Documentos</string>
+    <string name="new_pad_local_name_explanation">Opcionalmente indica un alias local para el documento.</string>
 
 </resources>

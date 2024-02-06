@@ -7,7 +7,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.mikifus.padland.Database.PadGroupModel.PadGroup
 import com.mikifus.padland.Database.PadListDatabase
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class PadViewModel(application: Application): AndroidViewModel(application) {
@@ -24,18 +26,30 @@ class PadViewModel(application: Application): AndroidViewModel(application) {
         getAll = repository.getAll
     }
 
-    suspend fun insertPad(pad: Pad) {
-        viewModelScope.launch(Dispatchers.IO) { repository.insertPad(pad) }
+    suspend fun insertPad(pad: Pad): Long {
+        val deferred: Deferred<Long> = viewModelScope.async(Dispatchers.IO) {
+            repository.insertPad(pad)
+        }
+
+        return deferred.await()
+    }
+
+    suspend fun insertPads(pads: List<Pad>): List<Long> {
+        val deferred: Deferred<List<Long>> = viewModelScope.async(Dispatchers.IO) {
+            repository.insertPads(pads)
+        }
+
+        return deferred.await()
     }
 
     suspend fun getById(id: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             pad.value = repository.getById(id).value
         }
     }
 
     suspend fun getByUrl(url: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             pad.value = repository.getByUrl(url).value
         }
     }

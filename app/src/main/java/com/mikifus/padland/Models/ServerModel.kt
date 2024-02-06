@@ -33,13 +33,6 @@ open class ServerModel(context: Context?) : BaseModel(context) {
                 null,
                 POSITION + " ASC, " + _ID + " DESC"
         )
-        //        QUERY =
-//                "SELECT * " +
-//                        "FROM " + ServerModel.TABLE + " " +
-//                        "WHERE " + field + " LIKE ?" +
-//                " ORDER BY " + POSITION + " ASC,"+ _ID +" DESC ";
-//
-//        c = db.rawQuery(QUERY, comparation_set);
         return c
     }
 
@@ -48,18 +41,18 @@ open class ServerModel(context: Context?) : BaseModel(context) {
      * @param pad_id
      * @return
      */
-    private fun _getServerDataById(pad_id: Long): Cursor? {
-        return _getServerDataFromDatabase(_ID, pad_id.toString())
-    }
+//    private fun _getServerDataById(pad_id: Long): Cursor? {
+//        return _getServerDataFromDatabase(_ID, pad_id.toString())
+//    }
 
     /**
      * Queries the database and compares to padUrl
      * @param padUrl
      * @return
      */
-    private fun _getServerDataByUrl(padUrl: String): Cursor? {
-        return _getServerDataFromDatabase(URL, padUrl)
-    }
+//    private fun _getServerDataByUrl(padUrl: String): Cursor? {
+//        return _getServerDataFromDatabase(URL, padUrl)
+//    }
 
     /**
      * Saves a new server if server_id=0 or updates an existing one.
@@ -68,87 +61,87 @@ open class ServerModel(context: Context?) : BaseModel(context) {
      * @param values
      * @return
      */
-    fun saveServerData(server_id: Long, values: ContentValues?): Boolean {
-        return if (server_id > 0) {
-            val whereValue = arrayOf(server_id.toString())
-            val result = db.update(TABLE, values, PadContentProvider._ID + "=?", whereValue)
-            result > 0
-        } else {
-            Log.d("INSERT", "Contents = " + values.toString())
-            val result = db.insert(TABLE, null, values)
-            result > 0
-        }
-    }
+//    fun saveServerData(server_id: Long, values: ContentValues?): Boolean {
+//        return if (server_id > 0) {
+//            val whereValue = arrayOf(server_id.toString())
+//            val result = db.update(TABLE, values, PadContentProvider._ID + "=?", whereValue)
+//            result > 0
+//        } else {
+//            Log.d("INSERT", "Contents = " + values.toString())
+//            val result = db.insert(TABLE, null, values)
+//            result > 0
+//        }
+//    }
 
-    val serverCount: Int
-        get() {
-//            val c: Cursor? = null
-            val comparationSet = arrayOf<String>()
-            val query: String = "SELECT " + _ID + " " +
-                    "FROM " + TABLE + " "
-            val cursor = db.rawQuery(query, comparationSet)
-            val count = cursor.count
-            cursor.close()
-            return count
-        }
+//    val serverCount: Int
+//        get() {
+////            val c: Cursor? = null
+//            val comparationSet = arrayOf<String>()
+//            val query: String = "SELECT " + _ID + " " +
+//                    "FROM " + TABLE + " "
+//            val cursor = db.rawQuery(query, comparationSet)
+//            val count = cursor.count
+//            cursor.close()
+//            return count
+//        }
 
-    private fun _getServerDataByPosition(position: Int): Cursor? {
-        var c: Cursor? = null
-        val comparationSet = arrayOf<String>()
-        val query: String = "SELECT * " +
-                "FROM " + TABLE + " " +  //                            "WHERE " + field + "=?" +
-                " ORDER BY " + POSITION + " ASC," + _ID + " DESC " +
-                " LIMIT " + position + ", 1"
-        c = db.rawQuery(query, comparationSet)
-        return c
-    }
+//    private fun _getServerDataByPosition(position: Int): Cursor? {
+//        var c: Cursor? = null
+//        val comparationSet = arrayOf<String>()
+//        val query: String = "SELECT * " +
+//                "FROM " + TABLE + " " +  //                            "WHERE " + field + "=?" +
+//                " ORDER BY " + POSITION + " ASC," + _ID + " DESC " +
+//                " LIMIT " + position + ", 1"
+//        c = db.rawQuery(query, comparationSet)
+//        return c
+//    }
 
-    fun getServerAt(position: Int): Server {
-        val server = Server()
-        val cursor = _getServerDataByPosition(position)
-        cursor!!.moveToFirst()
-        while (!cursor.isAfterLast) {
-            val id = cursor.getLong(0)
-            val name = cursor.getString(1)
-            val url = cursor.getString(2)
-            val padprefix = cursor.getString(3)
-            val pos = cursor.getString(4)
-            val jquery = cursor.getInt(5)
-            server.id = id
-            server.name = name
-            server.url = url
-            server.urlPadprefix = padprefix
-            server.position = pos
-            server.jquery = jquery == 1
-            break
-        }
-        cursor.close()
-        return server
-    }
+//    fun getServerAt(position: Int): Server {
+//        val server = Server()
+//        val cursor = _getServerDataByPosition(position)
+//        cursor!!.moveToFirst()
+//        while (!cursor.isAfterLast) {
+//            val id = cursor.getLong(0)
+//            val name = cursor.getString(1)
+//            val url = cursor.getString(2)
+//            val padprefix = cursor.getString(3)
+//            val pos = cursor.getString(4)
+//            val jquery = cursor.getInt(5)
+//            server.id = id
+//            server.name = name
+//            server.url = url
+//            server.urlPadprefix = padprefix
+//            server.position = pos
+//            server.jquery = jquery == 1
+//            break
+//        }
+//        cursor.close()
+//        return server
+//    }
 
-    fun getServerById(id: Long): Server? {
-        val cursor = _getServerDataById(id)
-        cursor!!.moveToFirst()
-        var server: Server? = null
-        while (!cursor.isAfterLast) {
-            server = cursorToServer(cursor)
-            cursor.moveToNext()
-        }
-        cursor.close()
-        return server
-    }
+//    fun getServerById(id: Long): Server? {
+//        val cursor = _getServerDataById(id)
+//        cursor!!.moveToFirst()
+//        var server: Server? = null
+//        while (!cursor.isAfterLast) {
+//            server = cursorToServer(cursor)
+//            cursor.moveToNext()
+//        }
+//        cursor.close()
+//        return server
+//    }
 
-    fun getServerByUrl(url: String): Server? {
-        val cursor = _getServerDataByUrl(url)
-        cursor!!.moveToFirst()
-        var server: Server? = null
-        while (!cursor.isAfterLast) {
-            server = cursorToServer(cursor)
-            cursor.moveToNext()
-        }
-        cursor.close()
-        return server
-    }
+//    fun getServerByUrl(url: String): Server? {
+//        val cursor = _getServerDataByUrl(url)
+//        cursor!!.moveToFirst()
+//        var server: Server? = null
+//        while (!cursor.isAfterLast) {
+//            server = cursorToServer(cursor)
+//            cursor.moveToNext()
+//        }
+//        cursor.close()
+//        return server
+//    }
 
     val enabledServerList: ArrayList<Server>
         get() {
@@ -239,26 +232,26 @@ open class ServerModel(context: Context?) : BaseModel(context) {
         return serverList
     }
 
-    fun getServerPrefixFromUrl(context: Context?, server: String?): String? {
-        var c = 0
-        val serverUrlList = getServerUrlList(context)
-        val serverUrlPrefixList = getServerUrlPrefixList(context)
-        for (s in serverUrlList) {
-            if (s == server) {
-                break
-            }
-            c++
-        }
-        return if (c < serverUrlPrefixList.size && serverUrlPrefixList[c] != null) {
-            serverUrlPrefixList[c]
-        } else null
-    }
+//    fun getServerPrefixFromUrl(context: Context?, server: String?): String? {
+//        var c = 0
+//        val serverUrlList = getServerUrlList(context)
+//        val serverUrlPrefixList = getServerUrlPrefixList(context)
+//        for (s in serverUrlList) {
+//            if (s == server) {
+//                break
+//            }
+//            c++
+//        }
+//        return if (c < serverUrlPrefixList.size && serverUrlPrefixList[c] != null) {
+//            serverUrlPrefixList[c]
+//        } else null
+//    }
 
     companion object {
         const val TAG = "ServerModel"
         protected const val OLD_DATABASE_NAME = "commments.db"
         protected val DATABASE_NAME: String = PadlandDbHelper.DATABASE_NAME
-        protected val DATABASE_VERSION: Int = BaseModel.DATABASE_VERSION
+//        protected val DATABASE_VERSION: Int = BaseModel.DATABASE_VERSION
         const val TABLE = "padland_servers"
         const val _ID = "_id"
         const val NAME = "name" // Name of the server

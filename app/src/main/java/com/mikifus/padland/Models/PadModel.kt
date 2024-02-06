@@ -6,6 +6,8 @@ import android.content.Context
 import android.database.Cursor
 import android.util.Log
 import com.mikifus.padland.PadContentProvider
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /**
  * Created by mikifus on 27/02/18.
@@ -24,16 +26,19 @@ class PadModel(context: Context?) : BaseModel(context) {
      * @param comparation
      * @return
      */
-    private fun _getPadDataFromDatabase(field: String, comparation: String): Cursor? {
+    suspend fun _getPadDataFromDatabase(field: String, comparation: String): Cursor? {
         val c: Cursor?
-        val comparationSet = arrayOf(comparation)
-        c = contentResolver.query(
+
+        withContext(Dispatchers.IO) {
+            val comparationSet = arrayOf(comparation)
+            c = contentResolver.query(
                 PadContentProvider.PADLIST_CONTENT_URI,
                 PadContentProvider.padFieldsList,
                 "$field = ?",
                 comparationSet,  // AKA id
                 null
-        )
+            )
+        }
         return c
     }
 
@@ -84,7 +89,7 @@ class PadModel(context: Context?) : BaseModel(context) {
      * @param pad_id
      * @return
      */
-    private fun _getPadDataById(pad_id: Long): Cursor? {
+    suspend fun _getPadDataById(pad_id: Long): Cursor? {
         return this._getPadDataFromDatabase(PadContentProvider._ID, pad_id.toString())
     }
 
@@ -93,13 +98,13 @@ class PadModel(context: Context?) : BaseModel(context) {
      * @param padUrl
      * @return
      */
-    fun _getPadDataByUrl(padUrl: String): Cursor? {
+    suspend fun _getPadDataByUrl(padUrl: String): Cursor? {
         return this._getPadDataFromDatabase(URL, padUrl)
     }
 
-    fun getPadById(id: Long): Pad {
+    suspend fun getPadById(id: Long): Pad {
         val c = _getPadDataById(id)
-        c!!.moveToFirst()
+        c?.moveToFirst()
         return Pad(c)
     }
 
@@ -109,16 +114,25 @@ class PadModel(context: Context?) : BaseModel(context) {
      * @param values
      * @return
      */
-    fun savePad(pad_id: Long, values: ContentValues?): Boolean {
-        return if (pad_id > 0) {
-            val whereValue = arrayOf(pad_id.toString())
-            val result = contentResolver.update(PadContentProvider.PADLIST_CONTENT_URI, values, PadContentProvider._ID + " = ?", whereValue)
-            result > 0
-        } else {
-            Log.d("INSERT", "Contents = " + values.toString())
-            val result = contentResolver.insert(PadContentProvider.PADLIST_CONTENT_URI, values)
-            result != null
+    suspend fun savePad(pad_id: Long, values: ContentValues?): Boolean {
+        var saved = false
+        withContext(Dispatchers.IO) {
+            saved = if (pad_id > 0) {
+                val whereValue = arrayOf(pad_id.toString())
+                val result = contentResolver.update(
+                    PadContentProvider.PADLIST_CONTENT_URI,
+                    values,
+                    PadContentProvider._ID + " = ?",
+                    whereValue
+                )
+                result > 0
+            } else {
+                Log.d("INSERT", "Contents = " + values.toString())
+                val result = contentResolver.insert(PadContentProvider.PADLIST_CONTENT_URI, values)
+                result != null
+            }
         }
+        return saved
     }
 
     companion object {
