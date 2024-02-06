@@ -7,8 +7,12 @@ class PadRepository(private val padDao: PadDao) {
 
     val getAll: LiveData<List<Pad>> = padDao.getAll()
 
-    suspend fun insertPad(pad: Pad) {
-        padDao.insertAll(pad)
+    suspend fun insertPad(pad: Pad): Long {
+        return padDao.insert(pad)
+    }
+
+    suspend fun insertPads(pads: List<Pad>): List<Long> {
+        return padDao.insertAll(pads)
     }
 
     fun getById(id: Long): LiveData<Pad> {

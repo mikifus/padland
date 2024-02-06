@@ -3,6 +3,7 @@ package com.mikifus.padland.Models
 import android.content.Context
 import android.database.Cursor
 import android.text.format.DateFormat
+import com.mikifus.padland.Database.PadModel.Pad
 import java.util.Date
 
 /**
@@ -13,7 +14,7 @@ import java.util.Date
  * to deal with the documents. It has the info and returns it
  * in the right format.
  */
-class Pad(c: Cursor?) {
+class Pad {
     var id: Long = 0
     var name: String? = null
     private var initLocalName: String? = null
@@ -23,7 +24,17 @@ class Pad(c: Cursor?) {
     private var createDate: Long = 0
     var accessCount: Long = 0
 
-    init {
+    constructor(pad: Pad) {
+        id = pad.mId!!
+        name = pad.mName
+        initLocalName = pad.mLocalName
+        server = pad.mServer
+        url = pad.mUrl
+        createDate = pad.mCreateDate.time
+        accessCount = pad.mAccessCount
+    }
+
+    constructor(c: Cursor?) {
         if (c != null && c.count > 0) {
             id = c.getLong(0)
             name = c.getString(1)

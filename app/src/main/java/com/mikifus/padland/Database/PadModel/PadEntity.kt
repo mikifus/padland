@@ -48,5 +48,15 @@ data class Pad(
 
             return item
         }
+
+        fun fromData(data: Map<String, Any>): MutableLiveData<Pad> {
+            val item = MutableLiveData(Pad())
+            data["name"]?.let { item.value = item.value!!.copy(mName = it as String) }
+            data["local_name"]?.let { item.value = item.value!!.copy(mLocalName = it as String) }
+            data["url"]?.let { item.value = item.value!!.copy(mUrl = it as String) }
+            data["server"]?.let { item.value = item.value!!.copy(mServer = it as String) }
+
+            return item
+        }
     }
 }

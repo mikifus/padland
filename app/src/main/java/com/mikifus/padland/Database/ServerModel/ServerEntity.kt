@@ -48,6 +48,14 @@ data class Server(
 
             return item
         }
+
+        fun withOnlyId(id: Long): MutableLiveData<Server> {
+            val item = MutableLiveData(Server())
+
+            item.value = item.value!!.copy(mId = id)
+
+            return item
+        }
     }
 }
 

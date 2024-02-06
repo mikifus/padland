@@ -51,15 +51,14 @@ class PadUrl private constructor(builder: Builder) {
         }
 
         fun padServer(server: String?): Builder {
-            var server = server
-            server = server!!.replace("/$".toRegex(), "") // Remove trailing slash
-            this.server = server
+            val parsedServer = server!!.replace("/$".toRegex(), "") // Remove trailing slash
+            this.server = parsedServer
             return this
         }
 
         fun padPrefix(prefix: String?): Builder {
-            server = server!!.replace("/$".toRegex(), "") // Remove trailing slash
-            this.prefix = prefix
+            val parsedPrefix = prefix!!.replace("/$".toRegex(), "") // Remove trailing slash
+            this.prefix = parsedPrefix
             return this
         }
 

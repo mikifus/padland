@@ -11,7 +11,10 @@ import androidx.room.Update
 @Dao
 interface PadDao {
     @Insert
-    fun insertAll(vararg pads: Pad): List<Long>
+    fun insert(pad: Pad): Long
+
+    @Insert
+    fun insertAll(pads: List<Pad>): List<Long>
 
     @Update
     fun update(vararg pads: Pad): Int
