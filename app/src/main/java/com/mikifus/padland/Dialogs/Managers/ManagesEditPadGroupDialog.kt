@@ -17,14 +17,14 @@ import kotlinx.coroutines.launch
 
 interface IManagesEditPadGroupDialog {
     var padGroupViewModel: PadGroupViewModel?
-    fun showEditPadGroupDialog(activity: PadListActivity, id: Long)
+    fun showEditPadGroupDialog(activity: AppCompatActivity, id: Long)
 }
 
 public class ManagesEditPadGroupDialog: IManagesEditPadGroupDialog {
 
     override var padGroupViewModel: PadGroupViewModel? = null
 
-    override fun showEditPadGroupDialog(activity: PadListActivity, id: Long) {
+    override fun showEditPadGroupDialog(activity: AppCompatActivity, id: Long) {
         initViewModels(activity)
         initEvents(activity, id)
         setData(activity, id)
@@ -40,7 +40,7 @@ public class ManagesEditPadGroupDialog: IManagesEditPadGroupDialog {
         dialog.show(transaction, DIALOG_TAG)
     }
 
-    private fun setData(activity: PadListActivity, id: Long) {
+    private fun setData(activity: AppCompatActivity, id: Long) {
         activity.lifecycleScope.launch(Dispatchers.IO) {
             val padGroup = padGroupViewModel?.getById(id)
 
