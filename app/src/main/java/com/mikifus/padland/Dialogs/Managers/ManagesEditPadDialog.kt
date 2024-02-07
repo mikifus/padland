@@ -93,7 +93,8 @@ public class ManagesEditPadDialog: IManagesEditPadDialog {
             val savePad = pad.copy(
                 mName = data["name"].toString(),
                 mLocalName = data["local_name"].toString(),
-                mServer = data["server"].toString()
+                mServer = data["server"].toString(),
+                mUrl = data["url"].toString()
             )
 
             padViewModel?.updatePad(savePad)
