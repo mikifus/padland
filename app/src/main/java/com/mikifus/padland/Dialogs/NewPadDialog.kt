@@ -10,7 +10,6 @@ import android.webkit.URLUtil
 import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import android.widget.EditText
-import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -38,21 +37,10 @@ class NewPadDialog: FormDialog() {
 
     private var padGroupsSpinnerData: List<PadGroup>? = listOf()
     private var serverSpinnerData: List<Pair<String, String>>? = listOf()
-//
-//    private var mServerSpinnerSelection: Int = 0
-//        set(value) {
-//            mServerSpinner?.adapter?.getItem(value)?.let {
-//                mServerSpinner?.setText(it.toString(), false)
-//            }
-//            field = value
-//        }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
         dialog.setTitle(R.string.title_activity_new_pad)
-
-        initViewModels()
-
         return dialog
     }
 
@@ -197,5 +185,19 @@ class NewPadDialog: FormDialog() {
         super.initToolBar()
 
         toolbar!!.title = getString(R.string.title_activity_new_pad)
+    }
+
+    /**
+     * initViewModels() must be called here. The spinners will
+     * only set the adapter when called from onResume().
+     *
+     *
+     * @see SpinnerHelper
+     * @see https://github.com/material-components/material-components-android/issues/1464
+     * @see https://github.com/material-components/material-components-android/issues/2012
+     */
+    override fun onResume() {
+        super.onResume()
+        initViewModels()
     }
 }
