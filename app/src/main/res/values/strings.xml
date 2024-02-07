@@ -29,6 +29,7 @@
     <string name="new_pad_explanation">Introduce the pad name. If it does not exist it will be created, otherwise it will take you to the pad.</string>
     <string name="save_pad">Save pad</string>
     <string name="download_pad">Save pad</string>
+    <string name="save_pad_explanation">If unchecked, will open the document without saving it to the list.</string>
     <string name="title_activity_about">About Padland</string>
     <string name="about">About</string>
     <string name="about_text">

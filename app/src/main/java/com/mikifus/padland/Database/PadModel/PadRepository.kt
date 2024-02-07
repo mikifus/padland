@@ -15,11 +15,14 @@ class PadRepository(private val padDao: PadDao) {
         return padDao.insertAll(pads)
     }
 
-    fun getById(id: Long): LiveData<Pad> {
+//    suspend fun getById(id: Long): LiveData<Pad> {
+//        return padDao.getById(id)
+//    }
+    suspend fun getById(id: Long): Pad {
         return padDao.getById(id)
     }
 
-    fun getByUrl(url: String): LiveData<Pad> {
+    fun getByUrl(url: String): Pad {
         return padDao.getByUrl(url)
     }
 

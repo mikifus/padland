@@ -1,9 +1,11 @@
 package com.mikifus.padland.Dialogs.Managers;
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.mikifus.padland.Activities.PadViewActivity
 import com.mikifus.padland.Database.PadGroupModel.PadGroupViewModel
 import com.mikifus.padland.Database.PadGroupModel.PadGroupsAndPadListEntity
 import com.mikifus.padland.Database.PadModel.Pad
@@ -49,7 +51,14 @@ public class ManagesNewPadDialog: IManagesNewPadDialog {
 
     private fun initEvents(activity: AppCompatActivity) {
         dialog.setPositiveButtonCallback { data ->
-            saveNewPadDialog(activity, data)
+            if(data["save_pad"] as Boolean) {
+                saveNewPadDialog(activity, data)
+            } else {
+                val padViewIntent = Intent(activity, PadViewActivity::class.java)
+                padViewIntent.putExtra("padUrl", data["url"].toString())
+                activity.startActivity(padViewIntent)
+                activity.finish()
+            }
             dialog.clearForm()
         }
     }
@@ -66,6 +75,13 @@ public class ManagesNewPadDialog: IManagesNewPadDialog {
                         mPadId = padId,
                     )
                 )
+            }
+
+            if(padId != null) {
+                val padViewIntent = Intent(activity, PadViewActivity::class.java)
+                padViewIntent.putExtra("padId", padId)
+                activity.startActivity(padViewIntent)
+                activity.finish()
             }
         }
         dialog.dismiss()
