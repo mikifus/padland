@@ -57,4 +57,18 @@ class PadViewModel(application: Application): AndroidViewModel(application) {
 //    fun updatePadPosition(padId: Long, position: Int) {
 //        viewModelScope.launch(Dispatchers.IO) { repository.updatePadPosition(padId, position) }
 //    }
+
+    fun deletePad(id: Long)=viewModelScope.launch {
+        val pad = Pad.withOnlyId(id).value!!
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deletePad(pad)
+        }
+    }
+
+    fun deletePads(ids: List<Long>)=viewModelScope.launch {
+        val pads = ids.map { Pad.withOnlyId(it).value!! }
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deletePads(pads)
+        }
+    }
 }

@@ -7,6 +7,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import com.mikifus.padland.Database.PadGroupModel.PadGroup
 
 @Dao
 interface PadDao {
@@ -21,6 +22,9 @@ interface PadDao {
 
     @Delete
     fun delete(pad: Pad): Int
+
+    @Delete
+    fun delete(pad: List<Pad>)
 
     @Query("SELECT * FROM padlist")
     fun getAll(): LiveData<List<Pad>>

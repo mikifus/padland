@@ -3,19 +3,23 @@ package com.mikifus.padland.ActionModes
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.view.ActionMode
-import androidx.fragment.app.Fragment
 import com.mikifus.padland.Activities.PadListActivity
-import com.mikifus.padland.Dialog.EditPadDialog
+import com.mikifus.padland.Database.PadGroupModel.PadGroupViewModel
+import com.mikifus.padland.Database.PadModel.PadViewModel
 import com.mikifus.padland.Dialog.FormDialog
+import com.mikifus.padland.Dialogs.Managers.IManagesDeletePadDialog
 import com.mikifus.padland.Dialogs.Managers.IManagesEditPadDialog
+import com.mikifus.padland.Dialogs.Managers.ManagesDeletePadDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesEditPadDialog
-import com.mikifus.padland.PadLandDataActivity
 import com.mikifus.padland.R
 
 class PadActionModeCallback(activity: PadListActivity): ActionMode.Callback,
     FormDialog.FormDialogCallBack,
-    IManagesEditPadDialog by ManagesEditPadDialog() {
+    IManagesEditPadDialog by ManagesEditPadDialog(),
+    IManagesDeletePadDialog by ManagesDeletePadDialog() {
 
+    override var padGroupViewModel: PadGroupViewModel? = null
+    override var padViewModel: PadViewModel? = null
     private var padActionMode: ActionMode? = null
     private var padListActivity: PadListActivity
 
@@ -81,13 +85,13 @@ class PadActionModeCallback(activity: PadListActivity): ActionMode.Callback,
                 mode?.finish()
                 true
             }
-//
-//            R.id.menuitem_delete -> {
+
+            R.id.menuitem_delete -> {
+                showDeletePadDialog(padListActivity, padListActivity.getPadSelection())
 //                askDelete(checkedItemIds)
-//                // Action picked, so close the CAB
-//                mode.finish()
-//                true
-//            }
+                mode?.finish()
+                true
+            }
 //
 //            R.id.menuitem_share -> {
 //                menuShare(checkedItemIds)

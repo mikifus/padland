@@ -1,7 +1,6 @@
 package com.mikifus.padland.Database.PadModel
 
 import androidx.lifecycle.LiveData
-import com.mikifus.padland.Database.PadGroupModel.PadGroup
 
 class PadRepository(private val padDao: PadDao) {
 
@@ -33,5 +32,13 @@ class PadRepository(private val padDao: PadDao) {
 //    fun updatePadPosition(padId: Long, position: Int) {
 //        return padDao.updatePadPosition(padId, position)
 //    }
+
+    suspend fun deletePad(pad: Pad): Int {
+        return padDao.delete(pad)
+    }
+
+    suspend fun deletePads(pads: List<Pad>) {
+        return padDao.delete(pads)
+    }
 
 }
