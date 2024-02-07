@@ -57,4 +57,8 @@ interface PadGroupDao {
     @Query("SELECT * FROM padlist WHERE _id NOT IN" +
             "(SELECT _id_pad FROM padlist_padgroups)")
     fun getPadsWithoutGroup(): LiveData<List<Pad>>
+
+    @Query("SELECT * FROM padgroups WHERE _id IN" +
+            "(SELECT _id_group FROM padlist_padgroups WHERE _id_pad = :id)")
+    suspend fun getByPadId(id: Long): PadGroup
 }

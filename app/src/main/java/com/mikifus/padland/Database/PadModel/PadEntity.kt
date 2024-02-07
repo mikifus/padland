@@ -8,6 +8,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.Query
+import com.mikifus.padland.Utils.PadServer
 import java.sql.Date
 
 @Entity(tableName = "padlist")
@@ -62,8 +63,10 @@ data class Pad(
         fun fromUrl(padUrl: String): MutableLiveData<Pad> {
             val item = MutableLiveData(Pad())
 
-            val name = padUrl.substring(padUrl.lastIndexOf("/") + 1)
-            val server = padUrl.substring(0, padUrl.lastIndexOf("/"))
+            val padServer = PadServer.Builder().padUrl(padUrl)
+
+            val name = padServer.padName?: ""
+            val server = padServer.server?: ""
 
             item.value = item.value!!.copy(mUrl = padUrl, mName = name, mServer = server)
 

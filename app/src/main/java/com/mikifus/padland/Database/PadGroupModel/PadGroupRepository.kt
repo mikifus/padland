@@ -17,6 +17,10 @@ class PadGroupRepository(private val padGroupDao: PadGroupDao) {
         return padGroupDao.getById(id)
     }
 
+    suspend fun getByPadId(id: Long): PadGroup {
+        return padGroupDao.getByPadId(id)
+    }
+
     fun updatePadGroup(padGroup: PadGroup) {
         padGroupDao.update(padGroup)
     }
