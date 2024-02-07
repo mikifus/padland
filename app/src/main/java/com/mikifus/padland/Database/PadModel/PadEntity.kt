@@ -58,5 +58,16 @@ data class Pad(
 
             return item
         }
+
+        fun fromUrl(padUrl: String): MutableLiveData<Pad> {
+            val item = MutableLiveData(Pad())
+
+            val name = padUrl.substring(padUrl.lastIndexOf("/") + 1)
+            val server = padUrl.substring(0, padUrl.lastIndexOf("/"))
+
+            item.value = item.value!!.copy(mUrl = padUrl, mName = name, mServer = server)
+
+            return item
+        }
     }
 }

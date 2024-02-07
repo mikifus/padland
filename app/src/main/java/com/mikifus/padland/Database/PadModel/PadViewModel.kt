@@ -42,16 +42,12 @@ class PadViewModel(application: Application): AndroidViewModel(application) {
         return deferred.await()
     }
 
-    suspend fun getById(id: Long) {
-        viewModelScope.launch(Dispatchers.IO) {
-            pad.value = repository.getById(id).value
-        }
+    suspend fun getById(id: Long): Pad {
+        return repository.getById(id)
     }
 
-    suspend fun getByUrl(url: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            pad.value = repository.getByUrl(url).value
-        }
+    suspend fun getByUrl(url: String): Pad {
+        return repository.getByUrl(url)
     }
 
     suspend fun updatePad(pad: Pad) {

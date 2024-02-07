@@ -49,6 +49,7 @@
     <string name="share_document">Compartir documento</string>
     <string name="sure_to_delete_group">¿Quieres eliminar el grupo seleccionado?</string>
     <string name="sure_to_delete_pad">¿Seguro que quieres eliminar los documentos seleccionados?</string>
+    <string name="save_pad_explanation">Sin marcar, abrirá el documento sin añadirlo a la lista.</string>
     <string name="title_activity_about">Acerca de Padland</string>
     <string name="title_activity_new_pad">Crear documento</string>
     <string name="title_activity_pad_info">Información del documento</string>

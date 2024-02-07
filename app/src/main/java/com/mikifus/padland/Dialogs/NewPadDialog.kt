@@ -101,6 +101,16 @@ class NewPadDialog: FormDialog() {
         }
     }
 
+    private fun initCheckBox() {
+        // Get new pad save from user preferences
+        val userDetails = context?.getSharedPreferences(context?.packageName + "_preferences",
+            AppCompatActivity.MODE_PRIVATE
+        )
+
+        val savePadOption = userDetails?.getBoolean("auto_save_new_pads", true)
+        mSaveCheckBox?.isChecked = savePadOption!!
+    }
+
     override fun validateForm(): Boolean {
         val name = mNameEditText!!.text.toString()
 
@@ -147,6 +157,8 @@ class NewPadDialog: FormDialog() {
         data["local_name"] = localName
         data["url"] = url.string
         data["group_id"] = groupId
+
+        data["save_pad"] = mSaveCheckBox?.isChecked!!
 
         return data
     }
@@ -199,5 +211,6 @@ class NewPadDialog: FormDialog() {
     override fun onResume() {
         super.onResume()
         initViewModels()
+        initCheckBox()
     }
 }
