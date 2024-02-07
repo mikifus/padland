@@ -16,10 +16,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.mikifus.padland.Database.PadGroupModel.PadGroup
 import com.mikifus.padland.Database.PadGroupModel.PadGroupViewModel
-import com.mikifus.padland.Database.ServerModel.Server
 import com.mikifus.padland.Database.ServerModel.ServerViewModel
 import com.mikifus.padland.R
 import com.mikifus.padland.Utils.PadUrl
+import com.mikifus.padland.Views.Helpers.SpinnerHelper
 
 
 /**
@@ -32,12 +32,20 @@ class NewPadDialog: FormDialog() {
 
     private var mNameEditText: EditText? = null
     private var mAliasEditText: EditText? = null
-    private var mServerSpinner: Spinner? = null
-    private var mPadGroupSpinner: Spinner? = null
+    private var mServerSpinner: SpinnerHelper? = null
+    private var mPadGroupSpinner: SpinnerHelper? = null
     private var mSaveCheckBox: CheckBox? = null
 
     private var padGroupsSpinnerData: List<PadGroup>? = listOf()
     private var serverSpinnerData: List<Pair<String, String>>? = listOf()
+//
+//    private var mServerSpinnerSelection: Int = 0
+//        set(value) {
+//            mServerSpinner?.adapter?.getItem(value)?.let {
+//                mServerSpinner?.setText(it.toString(), false)
+//            }
+//            field = value
+//        }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
@@ -61,11 +69,15 @@ class NewPadDialog: FormDialog() {
                     PadGroup.fromName(getString(R.string.padlist_group_unclassified_name)).value!!
                 ) + padGroups
 
-            mPadGroupSpinner?.adapter = ArrayAdapter(
-                requireContext(),
-                android.R.layout.simple_spinner_item,
-                padGroupsSpinnerData!!.map { it.mName }
+            mPadGroupSpinner?.setAdapter(
+                ArrayAdapter(
+                    requireContext(),
+                    R.layout.list_item,
+                    padGroupsSpinnerData!!.map { it.mName }
+                )
             )
+
+            mPadGroupSpinner?.selectedItemPosition = 0
         }
 
         serverViewModel!!.getAll.observe(requireActivity()) { servers ->
@@ -79,22 +91,25 @@ class NewPadDialog: FormDialog() {
                 ) { a,b -> Pair<String, String>(a, b) }
 
             // Set adapter
-            mServerSpinner?.adapter = ArrayAdapter(
-                requireContext(),
-                android.R.layout.simple_spinner_item,
-                serverSpinnerData!!.map { it.first }
+            mServerSpinner?.setAdapter(
+                ArrayAdapter(
+                    requireContext(),
+                    R.layout.list_item,
+                    serverSpinnerData!!.map { it.first }
+                )
             )
 
             // Get default server from user preferences
             val userDetails = context?.getSharedPreferences(context?.packageName + "_preferences",
                 AppCompatActivity.MODE_PRIVATE
             )
+
             // Fallback to first in list
             val defaultServer = userDetails?.getString("padland_default_server", serverSpinnerData!![0].first)
-            val position = servers.indexOfFirst { it.mUrl == defaultServer }
+            val position = serverSpinnerData?.indexOfFirst { it.first == defaultServer } ?: 0
 
             // Set default selection
-            mServerSpinner?.setSelection(position)
+            mServerSpinner?.selectedItemPosition = position
         }
     }
 
@@ -158,12 +173,12 @@ class NewPadDialog: FormDialog() {
     override fun onStart() {
         super.onStart()
 
-        mNameEditText = requireView().findViewById<View>(R.id.txt_pad_name) as EditText
+        mNameEditText = requireView().findViewById(R.id.txt_pad_name)
         mNameEditText?.requestFocus()
-        mAliasEditText = requireView().findViewById<View>(R.id.txt_pad_local_name) as EditText
-        mPadGroupSpinner = requireView().findViewById<View>(R.id.spinner_pad_pad_group) as Spinner
-        mServerSpinner = requireView().findViewById<View>(R.id.spinner_pad_server) as Spinner
-        mSaveCheckBox = requireView().findViewById<View>(R.id.checkbox_pad_save) as CheckBox
+        mAliasEditText = requireView().findViewById(R.id.txt_pad_local_name)
+        mPadGroupSpinner = requireView().findViewById(R.id.spinner_pad_pad_group)
+        mServerSpinner = requireView().findViewById(R.id.spinner_pad_server)
+        mSaveCheckBox = requireView().findViewById(R.id.checkbox_pad_save)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
