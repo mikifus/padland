@@ -8,6 +8,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.Query
+import com.mikifus.padland.Database.PadGroupModel.PadGroup
 import com.mikifus.padland.Utils.PadServer
 import java.sql.Date
 
@@ -38,6 +39,14 @@ data class Pad(
     )
 
     companion object {
+
+        fun withOnlyId(id: Long): MutableLiveData<Pad> {
+            val item = MutableLiveData(Pad())
+
+            item.value = item.value!!.copy(mId = id)
+
+            return item
+        }
 
         fun fromContentValues(contentValues: ContentValues): MutableLiveData<Pad> {
             val item = MutableLiveData<Pad>(Pad())
