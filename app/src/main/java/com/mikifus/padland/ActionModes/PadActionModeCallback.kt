@@ -7,14 +7,17 @@ import androidx.fragment.app.Fragment
 import com.mikifus.padland.Activities.PadListActivity
 import com.mikifus.padland.Dialog.EditPadDialog
 import com.mikifus.padland.Dialog.FormDialog
+import com.mikifus.padland.Dialogs.Managers.IManagesEditPadDialog
+import com.mikifus.padland.Dialogs.Managers.ManagesEditPadDialog
 import com.mikifus.padland.PadLandDataActivity
 import com.mikifus.padland.R
 
 class PadActionModeCallback(activity: PadListActivity): ActionMode.Callback,
-    FormDialog.FormDialogCallBack {
+    FormDialog.FormDialogCallBack,
+    IManagesEditPadDialog by ManagesEditPadDialog() {
 
-    var padActionMode: ActionMode? = null
-    var padListActivity: PadListActivity
+    private var padActionMode: ActionMode? = null
+    private var padListActivity: PadListActivity
 
     init {
         padListActivity = activity
@@ -73,8 +76,8 @@ class PadActionModeCallback(activity: PadListActivity): ActionMode.Callback,
 //            }
 //
             R.id.menuitem_edit -> {
-                menuEdit(padListActivity.getPadSelection())
-                // Action picked, so close the CAB
+                showEditPadDialog(padListActivity, padListActivity.getPadSelection()[0])
+//                menuEdit(padListActivity.getPadSelection())
                 mode?.finish()
                 true
             }
@@ -104,13 +107,13 @@ class PadActionModeCallback(activity: PadListActivity): ActionMode.Callback,
         }
     }
 
-    private fun menuEdit(selection: List<Long>): Fragment {
-        val fm = padListActivity.supportFragmentManager
-        val dialog = EditPadDialog(padListActivity.getString(R.string.padlist_dialog_edit_pad_title), this)
-        selection[0].let { dialog.editPadId(it.toLong()) }
-        dialog.show(fm, PadLandDataActivity.EDIT_PAD_DIALOG)
-        return dialog
-    }
+//    private fun menuEdit(selection: List<Long>): Fragment {
+//        val fm = padListActivity.supportFragmentManager
+//        val dialog = EditPadDialog(padListActivity.getString(R.string.padlist_dialog_edit_pad_title), this)
+//        selection[0].let { dialog.editPadId(it.toLong()) }
+//        dialog.show(fm, PadLandDataActivity.EDIT_PAD_DIALOG)
+//        return dialog
+//    }
 
     override fun onDialogDismiss() {
         TODO("Not yet implemented")

@@ -38,11 +38,6 @@ class PadGroupViewModel(application: Application): AndroidViewModel(application)
     }
 
     suspend fun getById(id: Long): PadGroup {
-//        val deferred: Deferred<PadGroup> = viewModelScope.async {
-//            repository.getById(id)
-//        }
-//        padGroup.value = deferred.await()
-//        return padGroup.value!!
         return repository.getById(id)
     }
 
@@ -62,6 +57,10 @@ class PadGroupViewModel(application: Application): AndroidViewModel(application)
         viewModelScope.launch(Dispatchers.IO) {
             repository.deletePadGroups(padGroups)
         }
+    }
+
+    suspend fun getByPadId(id: Long): PadGroup {
+        return repository.getByPadId(id)
     }
 
     suspend fun insertPadGroupsAndPadList(padGroupsAndPadListEntity: PadGroupsAndPadListEntity) {
