@@ -2,6 +2,7 @@ package com.mikifus.padland.ActionModes
 
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.view.ActionMode
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -14,6 +15,7 @@ import com.mikifus.padland.Dialogs.Managers.IManagesEditPadDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesDeletePadDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesEditPadDialog
 import com.mikifus.padland.R
+import com.mikifus.padland.Utils.PadClipboardHelper
 import com.mikifus.padland.Utils.PadShareHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -86,12 +88,12 @@ class PadActionModeCallback(activity: PadListActivity): ActionMode.Callback,
 //                mode.finish()
 //                true
 //            }
-//            R.id.menuitem_copy -> {
-//                menuCopy(checkedItemIds)
-//                // Action picked, so close the CAB
-//                mode.finish()
-//                true
-//            }
+            R.id.menuitem_copy -> {
+                copyToClipboardPads(padListActivity.getPadSelection())
+                // Action picked, so close the CAB
+                mode?.finish()
+                true
+            }
             R.id.menuitem_edit -> {
                 showEditPadDialog(padListActivity, padListActivity.getPadSelection()[0])
                 mode?.finish()
@@ -122,6 +124,24 @@ class PadActionModeCallback(activity: PadListActivity): ActionMode.Callback,
                         padListActivity.getString(R.string.share_auto_text),
                         pads.map { it.mUrl }
                     )
+                }
+            }
+        }
+    }
+
+    private fun copyToClipboardPads(ids: List<Long>) {
+        padListActivity.lifecycleScope.launch {
+            val pads = padViewModel?.getByIds(ids)
+
+            if (!pads.isNullOrEmpty()) {
+                padListActivity.lifecycleScope.launch(Dispatchers.Main) {
+                    PadClipboardHelper.copyToClipboard(padListActivity, pads.map { it.mUrl })
+
+                    Toast.makeText(
+                        padListActivity,
+                        padListActivity.getString(R.string.copy_copied),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
