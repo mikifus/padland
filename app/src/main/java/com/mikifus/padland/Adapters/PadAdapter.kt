@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
+import android.view.View.OnClickListener
 import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import android.widget.TextView
@@ -19,18 +20,20 @@ import com.mikifus.padland.Database.PadModel.Pad
 import com.mikifus.padland.R
 
 
-class PadAdapter(context: Context, listener: IDragAndDropListener): RecyclerView.Adapter<PadAdapter.PadViewHolder>(){
+class PadAdapter(
+    context: Context,
+    private val dragAndDropListener: IDragAndDropListener,
+    private val onClickListener: OnClickListener? = null):
+    RecyclerView.Adapter<PadAdapter.PadViewHolder>(){
 
     private val mInflater: LayoutInflater
     var data: List<Pad> = listOf()
     var padGroupId: Long = 0
-    private val dragAndDropListener: IDragAndDropListener
     var tracker: SelectionTracker<Long>? = null
     var onTouchListener: OnTouchListener? = null
 
     init {
         mInflater = LayoutInflater.from(context)
-        dragAndDropListener = listener
     }
 
     class PadViewHolder(itemView: View) :
@@ -58,6 +61,9 @@ class PadAdapter(context: Context, listener: IDragAndDropListener): RecyclerView
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PadViewHolder {
         val itemView: View = mInflater.inflate(R.layout.pad_list_recyclerview_item_pad, parent, false)
+
+        onClickListener?.let { itemView.setOnClickListener(onClickListener) }
+
         return PadViewHolder(itemView)
     }
 
