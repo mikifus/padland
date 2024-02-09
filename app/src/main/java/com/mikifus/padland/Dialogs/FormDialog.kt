@@ -3,6 +3,7 @@ package com.mikifus.padland.Dialogs
 import android.app.Dialog
 import android.os.Bundle
 import android.view.View
+import android.view.View.OnClickListener
 import android.view.Window
 import android.widget.Button
 import androidx.appcompat.widget.Toolbar
@@ -11,9 +12,11 @@ import com.mikifus.padland.R
 import java.util.regex.Pattern
 
 interface IFormDialog {
-    var positiveButtonCallback: View.OnClickListener?
+    var positiveButtonCallback: OnClickListener?
+    var negativeButtonCallback: OnClickListener?
     var toolbar: Toolbar?
     fun setPositiveButtonCallback(callback: (Map<String, Any>) -> Unit)
+    fun setNegativeButtonCallback(callback: () -> Unit)
     fun validateForm(): Boolean { return false }
     fun setFormData(data: HashMap<String, Any>) {}
     fun getFormData(): Map<String, Any> { return mapOf() }
@@ -23,7 +26,8 @@ interface IFormDialog {
 }
 
 open class FormDialog: DialogFragment(), IFormDialog {
-    override var positiveButtonCallback: View.OnClickListener? = null
+    override var positiveButtonCallback: OnClickListener? = null
+    override var negativeButtonCallback: OnClickListener? = null
     override var toolbar: Toolbar? = null
 
     override fun getTheme(): Int {
@@ -33,10 +37,17 @@ open class FormDialog: DialogFragment(), IFormDialog {
     }
 
     override fun setPositiveButtonCallback(callback: (Map<String, Any>) -> Unit) {
-        positiveButtonCallback = View.OnClickListener() { view ->
+        positiveButtonCallback = OnClickListener { view ->
             if (validateForm()) {
                 callback(getFormData())
             }
+        }
+    }
+
+    override fun setNegativeButtonCallback(callback: () -> Unit) {
+        negativeButtonCallback = OnClickListener { view ->
+            callback()
+            dismiss()
         }
     }
 
@@ -48,9 +59,12 @@ open class FormDialog: DialogFragment(), IFormDialog {
     override fun initToolBar() {
         toolbar!!.title = getString(R.string.edit)
         toolbar!!.setNavigationIcon(R.drawable.ic_arrow_back_white)
-        toolbar!!.setNavigationOnClickListener {
-            dismiss()
-        }
+        toolbar!!.setNavigationOnClickListener(
+            if(negativeButtonCallback != null) negativeButtonCallback
+            else OnClickListener {
+                dismiss()
+            }
+        )
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
