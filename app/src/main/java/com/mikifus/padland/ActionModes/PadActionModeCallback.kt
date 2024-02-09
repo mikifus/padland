@@ -3,6 +3,8 @@ package com.mikifus.padland.ActionModes
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.view.ActionMode
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.mikifus.padland.Activities.PadListActivity
 import com.mikifus.padland.Database.PadGroupModel.PadGroupViewModel
 import com.mikifus.padland.Database.PadModel.PadViewModel
@@ -12,6 +14,12 @@ import com.mikifus.padland.Dialogs.Managers.IManagesEditPadDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesDeletePadDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesEditPadDialog
 import com.mikifus.padland.R
+import com.mikifus.padland.Utils.PadShareHelper
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 class PadActionModeCallback(activity: PadListActivity): ActionMode.Callback,
     FormDialog.FormDialogCallBack,
@@ -25,6 +33,13 @@ class PadActionModeCallback(activity: PadListActivity): ActionMode.Callback,
 
     init {
         padListActivity = activity
+        initViewModels(activity)
+    }
+
+    private fun initViewModels(activity: PadListActivity) {
+        if(padViewModel == null) {
+            padViewModel = ViewModelProvider(activity)[PadViewModel::class.java]
+        }
     }
 
     /**
@@ -71,36 +86,44 @@ class PadActionModeCallback(activity: PadListActivity): ActionMode.Callback,
 //                mode.finish()
 //                true
 //            }
-//
 //            R.id.menuitem_copy -> {
 //                menuCopy(checkedItemIds)
 //                // Action picked, so close the CAB
 //                mode.finish()
 //                true
 //            }
-//
             R.id.menuitem_edit -> {
                 showEditPadDialog(padListActivity, padListActivity.getPadSelection()[0])
-//                menuEdit(padListActivity.getPadSelection())
                 mode?.finish()
                 true
             }
-
             R.id.menuitem_delete -> {
                 showDeletePadDialog(padListActivity, padListActivity.getPadSelection())
-//                askDelete(checkedItemIds)
                 mode?.finish()
                 true
             }
-//
-//            R.id.menuitem_share -> {
-//                menuShare(checkedItemIds)
-//                // Action picked, so close the CAB
-//                mode.finish()
-//                true
-//            }
-//
+            R.id.menuitem_share -> {
+                sharePads(padListActivity.getPadSelection())
+                mode?.finish()
+                true
+            }
             else -> false
+        }
+    }
+
+    private fun sharePads(ids: List<Long>) {
+        padListActivity.lifecycleScope.launch {
+            val pads = padViewModel?.getByIds(ids)
+
+            if (!pads.isNullOrEmpty()) {
+                padListActivity.lifecycleScope.launch(Dispatchers.Main) {
+                    PadShareHelper.share(
+                        padListActivity,
+                        padListActivity.getString(R.string.share_auto_text),
+                        pads.map { it.mUrl }
+                    )
+                }
+            }
         }
     }
 

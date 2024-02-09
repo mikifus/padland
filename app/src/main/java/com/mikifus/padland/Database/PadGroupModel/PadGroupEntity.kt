@@ -30,23 +30,15 @@ data class PadGroup(
     companion object {
 
         fun withOnlyId(id: Long): MutableLiveData<PadGroup> {
-            val item = MutableLiveData(PadGroup())
-
-            item.value = item.value!!.copy(mId = id)
-
-            return item
+            return MutableLiveData(PadGroup().copy(mId = id))
         }
 
         fun fromName(name: String): MutableLiveData<PadGroup> {
-            val item = MutableLiveData<PadGroup>(PadGroup())
-
-            item.value = item.value!!.copy(mName = name)
-
-            return item
+            return MutableLiveData(PadGroup().copy(mName = name))
         }
 
         fun fromContentValues(contentValues: ContentValues): MutableLiveData<PadGroup> {
-            val item = MutableLiveData<PadGroup>(PadGroup())
+            val item = MutableLiveData(PadGroup())
 
 //            contentValues.valueSet().forEach { item.value = item.value?.copy(contentValues.getAsString(it.key)) }
 //            item.value = item.value?.copy(mId=contentValues.getAsLong(Pad::mId::class.java.canonicalName))

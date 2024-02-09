@@ -1,15 +1,9 @@
 package com.mikifus.padland.Dialogs.Managers
 
-import android.view.View
 import android.webkit.HttpAuthHandler
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
 import com.mikifus.padland.Dialogs.PadViewAuthDialog
-import com.mikifus.padland.PadViewActivity
-import com.mikifus.padland.R
-import java.net.MalformedURLException
-import java.net.URL
 
 interface IManagesPadViewAuthDialog {
     fun showPadViewAuthDialog(

@@ -41,15 +41,11 @@ data class Pad(
     companion object {
 
         fun withOnlyId(id: Long): MutableLiveData<Pad> {
-            val item = MutableLiveData(Pad())
-
-            item.value = item.value!!.copy(mId = id)
-
-            return item
+            return MutableLiveData(Pad().copy(mId = id))
         }
 
         fun fromContentValues(contentValues: ContentValues): MutableLiveData<Pad> {
-            val item = MutableLiveData<Pad>(Pad())
+            val item = MutableLiveData(Pad())
 
 //            contentValues.valueSet().forEach { item.value = item.value?.copy(contentValues.getAsString(it.key)) }
 //            item.value = item.value?.copy(mId=contentValues.getAsLong(Pad::mId::class.java.canonicalName))

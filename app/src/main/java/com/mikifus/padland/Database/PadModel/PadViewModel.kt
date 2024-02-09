@@ -1,6 +1,7 @@
 package com.mikifus.padland.Database.PadModel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -46,29 +47,29 @@ class PadViewModel(application: Application): AndroidViewModel(application) {
         return repository.getById(id)
     }
 
+    suspend fun getByIds(ids: List<Long>): List<Pad> {
+        return repository.getByIds(ids)
+    }
+
     suspend fun getByUrl(url: String): Pad {
         return repository.getByUrl(url)
     }
 
-    suspend fun updatePad(pad: Pad) {
-        viewModelScope.launch(Dispatchers.IO) { repository.updatePadGroup(pad) }
+    suspend fun updatePad(pad: Pad): Int {
+        return repository.updatePadGroup(pad)
     }
 
 //    fun updatePadPosition(padId: Long, position: Int) {
 //        viewModelScope.launch(Dispatchers.IO) { repository.updatePadPosition(padId, position) }
 //    }
 
-    fun deletePad(id: Long)=viewModelScope.launch {
+    suspend fun deletePad(id: Long): Int {
         val pad = Pad.withOnlyId(id).value!!
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.deletePad(pad)
-        }
+        return repository.deletePad(pad)
     }
 
-    fun deletePads(ids: List<Long>)=viewModelScope.launch {
+    suspend fun deletePads(ids: List<Long>): Int {
         val pads = ids.map { Pad.withOnlyId(it).value!! }
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.deletePads(pads)
-        }
+        return repository.deletePads(pads)
     }
 }

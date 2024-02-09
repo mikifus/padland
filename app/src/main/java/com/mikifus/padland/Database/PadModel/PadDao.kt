@@ -12,19 +12,19 @@ import com.mikifus.padland.Database.PadGroupModel.PadGroup
 @Dao
 interface PadDao {
     @Insert
-    fun insert(pad: Pad): Long
+    suspend fun insert(pad: Pad): Long
 
     @Insert
     fun insertAll(pads: List<Pad>): List<Long>
 
     @Update
-    fun update(vararg pads: Pad): Int
+    suspend fun update(vararg pads: Pad): Int
 
     @Delete
     fun delete(pad: Pad): Int
 
     @Delete
-    fun delete(pad: List<Pad>)
+    suspend fun delete(pad: List<Pad>): Int
 
     @Query("SELECT * FROM padlist")
     fun getAll(): LiveData<List<Pad>>
@@ -35,11 +35,14 @@ interface PadDao {
     @Query("SELECT * FROM padlist WHERE _id == :id")
     suspend fun getById(id: Long): Pad
 
+    @Query("SELECT * FROM padlist WHERE _id IN (:ids)")
+    suspend fun getByIds(ids: List<Long>): List<Pad>
+
     @Query("SELECT * FROM padlist WHERE _id == :id")
     fun getByIdCursor(id: Long): /*LiveData<List<Pad>>*/Cursor
 
     @Query("SELECT * FROM padlist WHERE url == :url")
-    fun getByUrl(url: String): Pad
+    suspend fun getByUrl(url: String): Pad
 
     @Query("SELECT * FROM padlist WHERE url == :url")
     fun getByUrlCursor(url: String): Cursor
