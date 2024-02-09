@@ -47,9 +47,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".PadViewActivity"
+            android:name=".Activities.PadViewActivity"
             android:label="@string/title_activity_pad_view"
-            android:parentActivityName=".PadListActivity"
+            android:parentActivityName=".Activities.PadListActivity"
             android:theme="@style/splashScreenTheme"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:exported="false"
@@ -58,7 +58,7 @@
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".PadListActivity" />
+                android:value=".Activities.PadListActivity" />
 
             <!-- Intent filter to catch all URLs -->
             <!--<intent-filter>-->
@@ -87,69 +87,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:scheme="https" />
-                <data android:host="titanpad.com" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:scheme="http" />
-                <data android:host="meetingwords.com" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:scheme="http" />
-                <data android:host="piratepad.net" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:scheme="https" />
-                <data android:host="etherpad.mozilla.org"
-                    android:pathPrefix="/p/" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:scheme="https" />
                 <data
                     android:host="framapad.org"
-                    android:pathPrefix="/p/" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:scheme="http" />
-                <data android:host="free.primarypad.com" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:scheme="https" />
-                <data
-                    android:host="piratenpad.de"
-                    android:pathPrefix="/p/" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:scheme="https" />
-                <data
-                    android:host="piratenpad.de"
                     android:pathPrefix="/p/" />
             </intent-filter>
         </activity>

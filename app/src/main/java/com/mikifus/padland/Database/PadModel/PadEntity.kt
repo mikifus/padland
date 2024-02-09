@@ -11,6 +11,7 @@ import androidx.room.Query
 import com.mikifus.padland.Database.PadGroupModel.PadGroup
 import com.mikifus.padland.Utils.PadServer
 import java.sql.Date
+import java.util.Calendar
 
 @Entity(tableName = "padlist")
 data class Pad(
@@ -32,8 +33,8 @@ data class Pad(
         "",
         "",
         "",
-        Date(System.currentTimeMillis()),
-        Date(System.currentTimeMillis()),
+        Calendar.getInstance().time as Date,
+        Calendar.getInstance().time as Date,
         0,
 //        0
     )
