@@ -69,7 +69,7 @@ class PadAdapter(
 
     override fun onBindViewHolder(holder: PadViewHolder, position: Int) {
         val current: Pad = data[position]
-        holder.name.text = current.mName
+        holder.name.text = current.mLocalName.ifBlank { current.mName }
         holder.url.text = current.mUrl
 
         holder.padGroupId = padGroupId
