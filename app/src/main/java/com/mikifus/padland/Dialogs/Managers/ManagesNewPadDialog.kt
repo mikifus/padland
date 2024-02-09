@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.mikifus.padland.Activities.PadViewActivity
 import com.mikifus.padland.Database.PadGroupModel.PadGroupViewModel
-import com.mikifus.padland.Database.PadGroupModel.PadGroupsAndPadListEntity
+import com.mikifus.padland.Database.PadGroupModel.PadGroupsAndPadList
 import com.mikifus.padland.Database.PadModel.Pad
 import com.mikifus.padland.Database.PadModel.PadViewModel
 import com.mikifus.padland.Dialogs.NewPadDialog
@@ -69,7 +69,7 @@ public class ManagesNewPadDialog: IManagesNewPadDialog {
 
             if(padId != null && data["group_id"] as Long > 0) {
                 padGroupViewModel?.insertPadGroupsAndPadList(
-                    PadGroupsAndPadListEntity(
+                    PadGroupsAndPadList(
                         mGroupId = data["group_id"] as Long,
                         mPadId = padId,
                     )

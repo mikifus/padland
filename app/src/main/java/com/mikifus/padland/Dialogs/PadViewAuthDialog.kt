@@ -69,7 +69,6 @@ class PadViewAuthDialog: FormDialog() {
 
         activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
     }
-    override fun getTheme(): Int {
-        return R.style.Theme_MaterialComponents_Dialog_MinWidth
-    }
+
+    override fun getTheme(): Int = R.style.Theme_MaterialComponents_Dialog_MinWidth
 }

@@ -36,7 +36,7 @@ import com.mikifus.padland.Adapters.PadGroupAdapter
 import com.mikifus.padland.Adapters.PadGroupSelectionTracker.IMakesPadGroupSelectionTracker
 import com.mikifus.padland.Adapters.PadGroupSelectionTracker.MakesPadGroupSelectionTracker
 import com.mikifus.padland.Database.PadGroupModel.PadGroupViewModel
-import com.mikifus.padland.Database.PadGroupModel.PadGroupsAndPadListEntity
+import com.mikifus.padland.Database.PadGroupModel.PadGroupsAndPadList
 import com.mikifus.padland.Database.PadGroupModel.PadGroupsWithPadList
 import com.mikifus.padland.Database.PadModel.Pad
 import com.mikifus.padland.Database.PadModel.PadViewModel
@@ -223,7 +223,7 @@ class PadListActivity: AppCompatActivity(),
             padGroupViewModel!!.deletePadGroupsAndPadList(padId)
             if(padGroupId > 0) {
                 padGroupViewModel!!.insertPadGroupsAndPadList(
-                    PadGroupsAndPadListEntity(
+                    PadGroupsAndPadList(
                         mGroupId = padGroupId,
                         mPadId = padId,
                     )

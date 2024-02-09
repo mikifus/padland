@@ -1,18 +1,13 @@
 package com.mikifus.padland.Dialogs.Managers;
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.mikifus.padland.Activities.PadListActivity
-import com.mikifus.padland.Activities.PadViewActivity
 import com.mikifus.padland.Database.PadGroupModel.PadGroupViewModel
-import com.mikifus.padland.Database.PadGroupModel.PadGroupsAndPadListEntity
-import com.mikifus.padland.Database.PadModel.Pad
+import com.mikifus.padland.Database.PadGroupModel.PadGroupsAndPadList
 import com.mikifus.padland.Database.PadModel.PadViewModel
 import com.mikifus.padland.Dialogs.EditPadDialog
-import com.mikifus.padland.Dialogs.NewPadDialog
 import com.mikifus.padland.Utils.PadServer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -47,7 +42,7 @@ public class ManagesEditPadDialog: IManagesEditPadDialog {
     private fun setData(activity: AppCompatActivity, id: Long) {
         activity.lifecycleScope.launch(Dispatchers.IO) {
             val pad = padViewModel?.getById(id)
-            val padGroup = padGroupViewModel?.getById(id)
+            val padGroupsAndPadList = padGroupViewModel?.getPadGroupsAndPadListByPadIds(listOf(id))
 
             val data = HashMap<String, Any>()
             pad?.mName?.let {
@@ -62,7 +57,11 @@ public class ManagesEditPadDialog: IManagesEditPadDialog {
             pad?.mUrl?.let {
                 data["server"] = PadServer.Builder().padUrl(it).build().server!!
             }
-            data["group_id"] = padGroup?.mId ?: 0
+
+            data["group_id"] = 0
+            if(padGroupsAndPadList?.size!! > 0) {
+                data["group_id"] = padGroupsAndPadList[0].mGroupId
+            }
 
             activity.lifecycleScope.launch {
                 dialog.setFormData(data)
@@ -102,7 +101,7 @@ public class ManagesEditPadDialog: IManagesEditPadDialog {
             padGroupViewModel?.deletePadGroupsAndPadList(padId)
             if(data["group_id"] as Long > 0) {
                 padGroupViewModel?.insertPadGroupsAndPadList(
-                    PadGroupsAndPadListEntity(
+                    PadGroupsAndPadList(
                         mGroupId = data["group_id"] as Long,
                         mPadId = padId,
                     )

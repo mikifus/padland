@@ -21,7 +21,7 @@ import com.mikifus.padland.Database.PadModel.Pad
         )
     ]
 )
-data class PadGroupsAndPadListEntity(
+data class PadGroupsAndPadList (
     @ColumnInfo(name = "_id_group") val mGroupId: Long,
     @ColumnInfo(name = "_id_pad") val mPadId: Long,
 )

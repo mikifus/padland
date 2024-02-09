@@ -12,21 +12,21 @@ import com.mikifus.padland.Database.PadModel.PadViewModel
 import com.mikifus.padland.Dialog.FormDialog
 import com.mikifus.padland.Dialogs.Managers.IManagesDeletePadDialog
 import com.mikifus.padland.Dialogs.Managers.IManagesEditPadDialog
+import com.mikifus.padland.Dialogs.Managers.IManagesGroupPadDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesDeletePadDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesEditPadDialog
+import com.mikifus.padland.Dialogs.Managers.ManagesGroupPadDialog
 import com.mikifus.padland.R
 import com.mikifus.padland.Utils.PadClipboardHelper
 import com.mikifus.padland.Utils.PadShareHelper
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 
 class PadActionModeCallback(activity: PadListActivity): ActionMode.Callback,
     FormDialog.FormDialogCallBack,
     IManagesEditPadDialog by ManagesEditPadDialog(),
-    IManagesDeletePadDialog by ManagesDeletePadDialog() {
+    IManagesDeletePadDialog by ManagesDeletePadDialog(),
+    IManagesGroupPadDialog by ManagesGroupPadDialog() {
 
     override var padGroupViewModel: PadGroupViewModel? = null
     override var padViewModel: PadViewModel? = null
@@ -82,15 +82,13 @@ class PadActionModeCallback(activity: PadListActivity): ActionMode.Callback,
      */
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem): Boolean {
         return when (item.itemId) {
-//            R.id.menuitem_group -> {
-//                menuGroup(checkedItemIds)
-//                // Action picked, so close the CAB
-//                mode.finish()
-//                true
-//            }
+            R.id.menuitem_group -> {
+                showGroupPadDialog(padListActivity, padListActivity.getPadSelection())
+                mode?.finish()
+                true
+            }
             R.id.menuitem_copy -> {
                 copyToClipboardPads(padListActivity.getPadSelection())
-                // Action picked, so close the CAB
                 mode?.finish()
                 true
             }
@@ -153,14 +151,6 @@ class PadActionModeCallback(activity: PadListActivity): ActionMode.Callback,
             padListActivity.onDestroyPadActionMode()
         }
     }
-
-//    private fun menuEdit(selection: List<Long>): Fragment {
-//        val fm = padListActivity.supportFragmentManager
-//        val dialog = EditPadDialog(padListActivity.getString(R.string.padlist_dialog_edit_pad_title), this)
-//        selection[0].let { dialog.editPadId(it.toLong()) }
-//        dialog.show(fm, PadLandDataActivity.EDIT_PAD_DIALOG)
-//        return dialog
-//    }
 
     override fun onDialogDismiss() {
         TODO("Not yet implemented")

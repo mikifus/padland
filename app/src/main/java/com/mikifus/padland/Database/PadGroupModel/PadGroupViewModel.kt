@@ -7,11 +7,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.mikifus.padland.Database.PadListDatabase
 import com.mikifus.padland.Database.PadModel.Pad
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class PadGroupViewModel(application: Application): AndroidViewModel(application) {
 
@@ -63,9 +60,13 @@ class PadGroupViewModel(application: Application): AndroidViewModel(application)
         return repository.getByPadId(id)
     }
 
-    suspend fun insertPadGroupsAndPadList(padGroupsAndPadListEntity: PadGroupsAndPadListEntity) {
+    suspend fun getPadGroupsAndPadListByPadIds(padIds: List<Long>): List<PadGroupsAndPadList> {
+        return repository.getPadGroupsAndPadListByPadIds(padIds)
+    }
+
+    suspend fun insertPadGroupsAndPadList(padGroupsAndPadList: PadGroupsAndPadList) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.insertPadGroupWithPadlist(padGroupsAndPadListEntity)
+            repository.insertPadGroupWithPadlist(padGroupsAndPadList)
         }
     }
 

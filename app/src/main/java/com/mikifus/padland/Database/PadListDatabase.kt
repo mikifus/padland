@@ -8,15 +8,14 @@ import androidx.room.TypeConverters
 import com.mikifus.padland.Database.Migrations.MIGRATION_8_9
 import com.mikifus.padland.Database.PadGroupModel.PadGroup
 import com.mikifus.padland.Database.PadGroupModel.PadGroupDao
-import com.mikifus.padland.Database.PadGroupModel.PadGroupsAndPadListEntity
-import com.mikifus.padland.Database.PadGroupModel.PadGroupsWithPadList
+import com.mikifus.padland.Database.PadGroupModel.PadGroupsAndPadList
 import com.mikifus.padland.Database.PadModel.Pad
 import com.mikifus.padland.Database.PadModel.PadDao
 import com.mikifus.padland.Database.ServerModel.Server
 import com.mikifus.padland.Database.ServerModel.ServerDao
 import com.mikifus.padland.Database.TypeConverters.DateConverter
 
-@Database(entities = [Pad::class, PadGroup::class, Server::class, PadGroupsAndPadListEntity::class], version = 9)
+@Database(entities = [Pad::class, PadGroup::class, Server::class, PadGroupsAndPadList::class], version = 9)
 @TypeConverters(DateConverter::class)
 abstract class PadListDatabase : RoomDatabase() {
 

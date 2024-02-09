@@ -7,7 +7,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Transaction
 import androidx.room.Update
 import com.mikifus.padland.Database.PadModel.Pad
 
@@ -40,16 +39,14 @@ interface PadGroupDao {
     @Query("DELETE FROM padgroups WHERE _id IN (:selectionArgs)")
     fun deleteBy(selectionArgs: Array<String>?): Int
 
-    @Transaction
     @Query("SELECT * FROM padgroups")
     fun getPadGroupsWithPadList(): LiveData<List<PadGroupsWithPadList>>
 
-    @Transaction
-    @Query("SELECT * FROM padgroups")
-    fun getPadGroupsWithPadListWithEmpty(): LiveData<List<PadGroupsWithPadList>>
+    @Query("SELECT * FROM padlist_padgroups WHERE _id_pad IN (:padIds)")
+    fun getPadGroupsAndPadListByPadIds(padIds: List<Long>): List<PadGroupsAndPadList>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertPadGroupWithPadlist(padGroupsAndPadListEntity: PadGroupsAndPadListEntity): Long
+    suspend fun insertPadGroupWithPadlist(padGroupsAndPadList: PadGroupsAndPadList): Long
 
     @Query("DELETE FROM padlist_padgroups WHERE _id_pad = :padId")
     fun deletePadGroupsAndPadList(padId: Long)

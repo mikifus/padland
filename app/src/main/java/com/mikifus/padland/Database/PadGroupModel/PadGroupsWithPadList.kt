@@ -14,7 +14,7 @@ data class PadGroupsWithPadList(
         parentColumn = "_id",
         entityColumn = "_id",
         associateBy = Junction(
-            value = PadGroupsAndPadListEntity::class,
+            value = PadGroupsAndPadList::class,
             parentColumn = "_id_group",
             entityColumn = "_id_pad"
         )
