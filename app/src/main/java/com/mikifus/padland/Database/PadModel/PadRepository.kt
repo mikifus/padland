@@ -21,12 +21,16 @@ class PadRepository(private val padDao: PadDao) {
         return padDao.getById(id)
     }
 
-    fun getByUrl(url: String): Pad {
+    suspend fun getByIds(ids: List<Long>): List<Pad> {
+        return padDao.getByIds(ids)
+    }
+
+    suspend fun getByUrl(url: String): Pad {
         return padDao.getByUrl(url)
     }
 
-    suspend fun updatePadGroup(padGroup: Pad) {
-        padDao.update(padGroup)
+    suspend fun updatePadGroup(padGroup: Pad): Int {
+        return padDao.update(padGroup)
     }
 
 //    fun updatePadPosition(padId: Long, position: Int) {
@@ -37,7 +41,7 @@ class PadRepository(private val padDao: PadDao) {
         return padDao.delete(pad)
     }
 
-    suspend fun deletePads(pads: List<Pad>) {
+    suspend fun deletePads(pads: List<Pad>): Int {
         return padDao.delete(pads)
     }
 

@@ -19,7 +19,7 @@ open class PadLandSaferWebViewClient(protected var hostsWhitelist: List<String>)
 
     private val webResourceResponseFromString: WebResourceResponse
         get() {
-            Log.w("SaferWebViewClient", "Blocked a JS request to an external domain.")
+//            Log.w("SaferWebViewClient", "Blocked a JS request to an external domain.")
             return getUtf8EncodedWebResourceResponse(ByteArrayInputStream("".toByteArray()))
         }
 
