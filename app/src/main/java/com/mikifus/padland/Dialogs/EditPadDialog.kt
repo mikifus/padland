@@ -49,6 +49,7 @@ class EditPadDialog: FormDialog() {
 
     override fun setFormData(data: HashMap<String, Any>) {
         this.data = data
+        applyFormData()
     }
 
     private fun applyFormData() {
@@ -59,12 +60,12 @@ class EditPadDialog: FormDialog() {
             mAliasEditText!!.text = Editable.Factory.getInstance().newEditable(it.toString())
         }
         data?.get("server")?.let {
-            mServerSpinner?.selectedItemPosition =
-                serverSpinnerData?.indexOfFirst { it.second == data!!["server"] } ?: 0
+            val index = serverSpinnerData?.indexOfFirst { it.second == data!!["server"] }!!
+            mServerSpinner?.selectedItemPosition = if(index > -1) index else 0
         }
         data?.get("group_id")?.let {
-            mPadGroupSpinner?.selectedItemPosition =
-                padGroupsSpinnerData?.indexOfFirst { it.mId == data!!["group_id"] } ?: 0
+            val index = padGroupsSpinnerData?.indexOfFirst { it.mId == data!!["group_id"] }!!
+            mPadGroupSpinner?.selectedItemPosition = if(index > -1) index else 0
         }
     }
 

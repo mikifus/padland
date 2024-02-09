@@ -1,14 +1,12 @@
-package com.mikifus.padland.Utils;
+package com.mikifus.padland.Utils
 
-import android.R.attr.label
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.getSystemService
 
 
-public class PadClipboardHelper {
+class PadClipboardHelper {
 
     companion object {
         fun copyToClipboard(activity: AppCompatActivity, urls: List<String>) {
