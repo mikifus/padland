@@ -5,6 +5,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
+import android.view.View.OnClickListener
 import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import android.widget.TextView
@@ -23,21 +24,21 @@ import com.mikifus.padland.Database.PadGroupModel.PadGroupsWithPadList
 import com.mikifus.padland.R
 
 
-class PadGroupAdapter(context: Context, listener: IDragAndDropListener):
+class PadGroupAdapter(context: Context,
+                      private val dragAndDropListener: IDragAndDropListener,
+                      private val onClickListener: OnClickListener):
     RecyclerView.Adapter<PadGroupAdapter.PadGroupViewHolder>() {
 
     private val activityContext: Context
 
     private val mInflater: LayoutInflater
     var data: List<PadGroupsWithPadList> = listOf()
-    private val dragAndDropListener: IDragAndDropListener
     private var padAdapterTouchListener: OnTouchListener? = null
     var tracker: SelectionTracker<Long>? = null
 
     init {
         mInflater = LayoutInflater.from(context)
         activityContext = context
-        dragAndDropListener = listener
 
         initEvents()
     }
@@ -67,7 +68,7 @@ class PadGroupAdapter(context: Context, listener: IDragAndDropListener):
         }
     }
 
-    class PadGroupViewHolder(itemView: View, context: AppCompatActivity, listener: IDragAndDropListener) :
+    class PadGroupViewHolder(itemView: View, context: Context, listener: IDragAndDropListener, onClickListener: OnClickListener) :
         RecyclerView.ViewHolder(itemView) {
         val titleTextView: TextView
         val itemLayout: ConstraintLayout
@@ -83,7 +84,7 @@ class PadGroupAdapter(context: Context, listener: IDragAndDropListener):
             itemLayout = itemView.findViewById(R.id.pad_list_recyclerview_item_padgroup)
             itemLayout.isActivated = true
             padListRecyclerView.layoutManager = LinearLayoutManager(context)
-            padAdapter = PadAdapter(context, listener)
+            padAdapter = PadAdapter(context, listener, onClickListener)
 
             initListView()
             padAdapter.tracker = (context as PadListActivity).makePadSelectionTracker(context, padListRecyclerView, padAdapter)
@@ -126,7 +127,7 @@ class PadGroupAdapter(context: Context, listener: IDragAndDropListener):
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PadGroupViewHolder {
         val itemView: View = mInflater.inflate(R.layout.pad_list_recyclerview_item_padgroup, parent, false)
-        return PadGroupViewHolder(itemView, activityContext as AppCompatActivity, dragAndDropListener)
+        return PadGroupViewHolder(itemView, activityContext, dragAndDropListener, onClickListener)
     }
 
     override fun onBindViewHolder(holder: PadGroupViewHolder, position: Int) {

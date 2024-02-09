@@ -92,10 +92,10 @@ class PadListActivity: AppCompatActivity(),
         recyclerViewUnclassified = findViewById(R.id.recyclerview_unclassified)
 
         padGroupViewModel = ViewModelProvider(this)[PadGroupViewModel::class.java]
-        adapter = PadGroupAdapter(this, this)
+        adapter = PadGroupAdapter(this, this, getOnItemClickListener())
 
         padViewModel = ViewModelProvider(this)[PadViewModel::class.java]
-        padAdapter = PadAdapter(this, this)
+        padAdapter = PadAdapter(this, this, getOnItemClickListener())
 
         recyclerView!!.adapter = adapter
         recyclerView!!.layoutManager = LinearLayoutManager(this)
@@ -111,6 +111,14 @@ class PadListActivity: AppCompatActivity(),
 
         initListView()
         initEvents()
+    }
+
+    private fun getOnItemClickListener(): View.OnClickListener {
+        return View.OnClickListener{ view: View ->
+            val padViewIntent = Intent(this, PadViewActivity::class.java)
+            padViewIntent.putExtra("padId", view.tag as Long)
+            startActivity(padViewIntent)
+        }
     }
 
     /*
