@@ -133,5 +133,6 @@
     <string name="model_padgroup">Grups</string>
     <string name="model_pad">Documents</string>
     <string name="new_pad_local_name_explanation">Opcionalment indica un alias local per al document.</string>
+    <string name="padview_pad_save_success">El document s\'ha afegit a la llista.</string>
 
 </resources>

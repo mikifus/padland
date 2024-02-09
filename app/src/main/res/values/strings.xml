@@ -173,5 +173,6 @@
 
     <string name="model_padgroup">Groups</string>
     <string name="model_pad">Documents</string>
+    <string name="padview_pad_save_success">The document has been added to the list.</string>
 
 </resources>

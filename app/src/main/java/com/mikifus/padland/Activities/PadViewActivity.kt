@@ -1,45 +1,54 @@
 package com.mikifus.padland.Activities
 
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.webkit.CookieManager
+import android.webkit.HttpAuthHandler
+import android.webkit.WebSettings
 import android.webkit.WebView
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.mikifus.padland.Database.PadModel.Pad
 import com.mikifus.padland.Database.PadModel.PadViewModel
+import com.mikifus.padland.Database.ServerModel.ServerViewModel
+import com.mikifus.padland.Dialogs.Managers.IManagesPadViewAuthDialog
+import com.mikifus.padland.Dialogs.Managers.ManagesPadViewAuthDialog
 import com.mikifus.padland.R
-import com.mikifus.padland.Utils.PadLandSafeWebViewClientInstance
-import com.pnikosis.materialishprogress.ProgressWheel
+import com.mikifus.padland.Utils.PadLandWebViewClient.PadLandWebClientCallbacks
+import com.mikifus.padland.Utils.PadLandWebViewClient.PadLandWebViewClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class PadViewActivity : AppCompatActivity() {
+class PadViewActivity :
+    AppCompatActivity(),
+    IManagesPadViewAuthDialog by ManagesPadViewAuthDialog() {
+
     private var padViewModel: PadViewModel? = null
+    private var serverViewModel: ServerViewModel? = null
     private var webView: WebView? = null
-    private var currentPadUrl: String? = ""
+    private var currentPadUrl: String? = null
+        set(value) {
+            value?.let { loadUrl(value) }
+            field = value
+        }
 
-    // It happens that many connections are stablished. We count them so we can track them.
-    // They must be handled asyncronously as Android calls the events for each connection.
-    val webviewHttpConnections = IntArray(1)
-//    private var handler: Handler? = null
-
-    /*
-    Progress wheel is a fancy alternative to the ProgressBar, that wasn't working at all.
-     */
-    private var pwheel: ProgressWheel? = null
+    // ProgressBar
+    private var pwheel: ProgressBar? = null
 
     /**
      * Check whether it is possible to connect to the internet
      * @return
      */
+    @Suppress("DEPRECATION")
     private val isNetworkAvailable: Boolean
         get() {
             val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -79,26 +88,69 @@ class PadViewActivity : AppCompatActivity() {
             return
         }
 
+        setContentView(R.layout.activity_padview)
+
+        loadProgress()
+        showProgress()
+
+        initViewModels()
+    }
+
+    private fun makeWebView(urlWhitelist: List<String>) {
         // If no network...
         if(!isNetworkAvailable) {
             Toast.makeText(applicationContext, getString(R.string.network_is_unreachable), Toast.LENGTH_LONG)
                 .show()
-        } else {
-            setContentView(R.layout.activity_padview)
-            initViewModels()
-            loadProgressWheel()
-            loadOrSavePad()
-//            updateViewedPad()
-            makeWebView()
-        }
-    }
 
-    private fun makeWebView() {
+            return
+        }
+
         webView = findViewById(R.id.activity_main_webview)
-//        webView.layoutParams =
-//            RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-//        val urlWhitelist = serverWhiteList
-        webView!!.webViewClient = PadLandSafeWebViewClientInstance(arrayOf())
+        webView!!.webViewClient = PadLandWebViewClient(urlWhitelist, object: PadLandWebClientCallbacks {
+            override fun onStartLoading() {
+                showProgress()
+            }
+
+            override fun onStopLoading() {
+                hideProgress()
+            }
+
+            override fun onUnsafeUrlProtocol(url: String?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onExternalHostUrlLoad(url: String): Boolean {
+                startActivity(
+                    Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                )
+                return true
+            }
+
+            override fun onReceivedSslError(message: String) {
+    //        val builder = AlertDialog.Builder(this@PadViewActivity)
+    //        builder.setTitle(R.string.ssl_error)
+    //        builder.setMessage(message)
+    //        builder.setPositiveButton(R.string.ok) { dialogInterface, i ->
+    //            dialogInterface.dismiss()
+    //            finish()
+    //        }
+    //        builder.setNegativeButton(R.string.ssl_learn_more) { dialogInterface, i ->
+    //            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.ssl_learn_more_link)))
+    //            startActivity(browserIntent)
+    //        }
+    //        val alertDialog: Dialog = builder.create()
+    //        alertDialog.setCanceledOnTouchOutside(true)
+    //        alertDialog.show()
+            }
+
+            override fun onReceivedHttpAuthRequest(
+                handler: HttpAuthHandler,
+                host: String,
+                realm: String
+            ) {
+                showPadViewAuthDialog(this@PadViewActivity, handler)
+            }
+        })
 
         makeWebSettings(webView)
     }
@@ -106,6 +158,18 @@ class PadViewActivity : AppCompatActivity() {
     private fun initViewModels() {
         if(padViewModel == null) {
             padViewModel = ViewModelProvider(this)[PadViewModel::class.java]
+        }
+
+        if(serverViewModel == null) {
+            serverViewModel = ViewModelProvider(this)[ServerViewModel::class.java]
+        }
+
+        serverViewModel?.getAllEnabled!!.observe(this) { servers ->
+            val serverList = servers.map { it.mUrl } +
+                    resources.getStringArray(R.array.etherpad_servers_whitelist)
+
+            makeWebView(serverList)
+            loadOrSavePad()
         }
     }
 
@@ -116,8 +180,7 @@ class PadViewActivity : AppCompatActivity() {
 
                 if(pad != null) {
                     currentPadUrl = pad.mUrl
-
-                    loadUrl(currentPadUrl)
+                    updateViewedPad(pad)
                 } else {
                     Toast.makeText(applicationContext, getString(R.string.unexpected_error), Toast.LENGTH_LONG)
                         .show()
@@ -129,15 +192,13 @@ class PadViewActivity : AppCompatActivity() {
         intent.extras?.containsKey("padUrl")?.let {
             if(!it) return
 
+            val padUrl = intent.extras!!.getString("padUrl")!!
+
+            currentPadUrl = padUrl
+
             val userDetails =
                 getSharedPreferences(packageName + "_preferences", MODE_PRIVATE)
             if(userDetails.getBoolean("auto_save_new_pads", true)) {
-                val padUrl = intent.extras!!.getString("padUrl")!!
-
-                currentPadUrl = padUrl
-
-                loadUrl(currentPadUrl)
-
                 lifecycleScope.launch(Dispatchers.IO) {
                     val pad = padViewModel?.getByUrl(padUrl)
 
@@ -146,9 +207,10 @@ class PadViewActivity : AppCompatActivity() {
 
                         lifecycleScope.launch(Dispatchers.IO) {
                             padViewModel!!.insertPad(newPad)
+                            updateViewedPad(newPad)
 
-//                                Toast.makeText(applicationContext, "SAVE SUCCESS", Toast.LENGTH_LONG)
-//                                    .show()
+                            Toast.makeText(applicationContext, getString(R.string.padview_pad_save_success), Toast.LENGTH_SHORT)
+                                .show()
                         }
                     }
                 }
@@ -156,26 +218,28 @@ class PadViewActivity : AppCompatActivity() {
         }
     }
 
+    private suspend fun updateViewedPad(pad: Pad) {
+        val updatedPad = pad.copy(
+            mAccessCount = pad.mAccessCount + 1,
+            mLastUsedDate = java.sql.Date(System.currentTimeMillis())
+        )
+
+        padViewModel?.updatePad(updatedPad)
+    }
+
     /**
      * Loads the fancy ProgressWheel to show it's loading.
      */
-    private fun loadProgressWheel() {
-        pwheel = findViewById(R.id.progress_wheel)
-        pwheel!!.spin()
-    }
-    fun showProgressWheel() {
-        pwheel!!.visibility = View.VISIBLE
-//        Log.d("LOAD_PROGRESS_LOG", "PWheel must be gone by now...")
-//        handler!!.postDelayed({
-//            if (webviewHttpConnections[0] > 0 && pwheel!!.visibility == View.VISIBLE) {
-//                _hideProgressWheel()
-//            }
-//        }, 7000)
+    private fun loadProgress() {
+        pwheel = findViewById(R.id.progress_indicator)
     }
 
-    fun hideProgressWheel() {
+    fun showProgress() {
+        pwheel!!.visibility = View.VISIBLE
+    }
+
+    fun hideProgress() {
         pwheel!!.visibility = View.GONE
-//        Log.d("LOAD_PROGRESS_LOG", "PWheel must be gone by now...")
     }
 
     /**
@@ -229,6 +293,7 @@ class PadViewActivity : AppCompatActivity() {
         webSettings.displayZoomControls = false
         webSettings.loadWithOverviewMode = true
         webSettings.domStorageEnabled = true // Required for some NodeJS based code
+        webSettings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK // Feature?: keep cookies
 
 
         // Cookies will be needed for pads
@@ -237,5 +302,15 @@ class PadViewActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             cookieManager.setAcceptThirdPartyCookies(webView, true)
         }
+    }
+
+//    private fun showPadViewAuthDialog(handler: HttpAuthHandler) {
+//        val fm = supportFragmentManager
+//        val dialog: BasicAuthDialog = PadViewActivity.PadViewAuthDialog(currentPadUrl, handler)
+//        dialog.show(fm, "dialog_auth")
+//    }
+
+    companion object {
+        const val TAG = "PadViewActivity"
     }
 }

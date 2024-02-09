@@ -15,6 +15,7 @@ import kotlinx.coroutines.withContext
 class ServerViewModel(application: Application): AndroidViewModel(application) {
 
     val getAll: LiveData<List<Server>>
+    val getAllEnabled: LiveData<List<Server>>
 
     val server = MutableLiveData<Server>()
 
@@ -24,6 +25,7 @@ class ServerViewModel(application: Application): AndroidViewModel(application) {
         val serverDao = PadListDatabase.getInstance(application).serverDao()
         repository = ServerRepository(serverDao)
         getAll = repository.getAll
+        getAllEnabled = repository.getAllEnabled
     }
 
     suspend fun insertServer(server: Server) {

@@ -57,7 +57,6 @@ public class ManagesNewPadDialog: IManagesNewPadDialog {
                 val padViewIntent = Intent(activity, PadViewActivity::class.java)
                 padViewIntent.putExtra("padUrl", data["url"].toString())
                 activity.startActivity(padViewIntent)
-                activity.finish()
             }
             dialog.clearForm()
         }
