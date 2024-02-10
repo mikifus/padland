@@ -28,6 +28,9 @@ class SpinnerHelper @JvmOverloads constructor(context: Context,
          * the text for the selected position.
          */
         set(value) {
+            if(value < 0) {
+                return
+            }
             adapter?.getItem(value)?.let {
                 if(text.toString() != it.toString()) {
                     setText(it.toString(), false)
