@@ -116,7 +116,7 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".PadListActivity" />
+                android:value=".Activities.PadListActivity" />
         </activity>
         <activity
             android:name=".PadInfoActivity"
