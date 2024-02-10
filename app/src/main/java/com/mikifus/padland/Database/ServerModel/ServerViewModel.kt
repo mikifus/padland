@@ -35,11 +35,7 @@ class ServerViewModel(application: Application): AndroidViewModel(application) {
     }
 
     suspend fun getById(id: Long): Server {
-        val deferred: Deferred<Server> = viewModelScope.async {
-            repository.getById(id)
-        }
-        server.value = deferred.await()
-        return server.value!!
+        return repository.getById(id)
     }
 
     suspend fun updateServer(server: Server) {

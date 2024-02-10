@@ -23,6 +23,10 @@ public class ManagesGroupPadDialog: IManagesGroupPadDialog {
     override var padGroupViewModel: PadGroupViewModel? = null
 
     override fun showGroupPadDialog(activity: AppCompatActivity, ids: List<Long>) {
+        if(dialog.isAdded) {
+            return
+        }
+
         initViewModels(activity)
         initEvents(activity, ids)
         setData(activity, ids)

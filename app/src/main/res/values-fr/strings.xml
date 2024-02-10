@@ -121,7 +121,7 @@
     <string name="serverlist_dialog_new_server_url_title">URL du serveur</string>
     <string name="serverlist_dialog_new_server_url_label">L\'URL du serveur hébergeant Etherpad.\n
  Ajoutez https:// si les connexions sécurisées sont disponibles.</string>
-    <string name="serverlist_dialog_new_server_url_invalid">URL du serveur invalide</string>
+    <string name="validation_url_invalid">URL du serveur invalide</string>
 
     <string name="serverlist_dialog_new_server_lite_title">Etherpad Lite</string>
     <string name="serverlist_dialog_new_server_lite_label">Je sais que ce serveur utilise Etherpad Lite.</string>
@@ -142,5 +142,6 @@
 
    <string name="model_padgroup">Groupes</string>
    <string name="model_pad">Documents</string>
+   <string name="model_server">Serveurs</string>
 
 </resources>

@@ -137,7 +137,7 @@
 
     <string name="serverlist_dialog_new_server_url_title">Server url</string>
     <string name="serverlist_dialog_new_server_url_label">The url where the server is accessible. Add https:// if available.</string>
-    <string name="serverlist_dialog_new_server_url_invalid">Invalid server url</string>
+    <string name="validation_url_invalid">Invalid server url</string>
 
     <string name="serverlist_dialog_new_server_lite_title">Runs Etherpad Lite</string>
     <string name="serverlist_dialog_new_server_lite_label">I know that this server uses Etherpad Lite.</string>
@@ -146,7 +146,7 @@
     <string name="serverlist_dialog_new_server_padprefix_label">New servers (Etherpad Lite) have an url segment between the server domain and the pad name. By default it is \"/p/\". Change it here if it is different.</string>
     <string name="serverlist_dialog_new_server_padprefix_invalid">Invalid pad prefix.</string>
 
-    <string name="serverlist_dialog_new_server_jquery_title">Embedding options</string>
+    <string name="serverlist_dialog_new_server_jquery_title">Compatible with jQuery</string>
     <string name="serverlist_dialog_new_server_jquery_label">Server is supported by client-side \"etherpad-lite-jquery-plugin\".</string>
 
     <string name="serverlist_dialog_delete_sure_to_delete">Are you sure you want to delete the selected servers?</string>
@@ -170,9 +170,12 @@
     <string name="add_padgroup_name">Group name</string>
 
     <string name="show_padgroup_title" translatable="false">(%d) %s</string>
+    <string name="default_pad_prefix" translatable="false">/p/</string>
 
     <string name="model_padgroup">Groups</string>
     <string name="model_pad">Documents</string>
+    <string name="model_server">Servers</string>
     <string name="padview_pad_save_success">The document has been added to the list.</string>
+    <string name="validation_url_invalid_remove">The address (URL) is invalid.</string>
 
 </resources>

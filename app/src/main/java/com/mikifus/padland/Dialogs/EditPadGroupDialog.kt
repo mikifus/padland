@@ -18,6 +18,7 @@ import com.mikifus.padland.R
 class EditPadGroupDialog: FormDialog() {
 
     private var mEditText: EditText? = null
+    private var data: Map<String, Any?> = mapOf()
 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -38,6 +39,11 @@ class EditPadGroupDialog: FormDialog() {
     }
 
     override fun setFormData(data: HashMap<String, Any>) {
+        this.data = data
+        applyFormData()
+    }
+
+    private fun applyFormData() {
         data["name"]?.let {
             mEditText!!.text = Editable.Factory.getInstance().newEditable(it.toString())
         }
@@ -71,7 +77,6 @@ class EditPadGroupDialog: FormDialog() {
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-
         activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
     }
 
@@ -79,5 +84,10 @@ class EditPadGroupDialog: FormDialog() {
         super.initToolBar()
 
         toolbar!!.title = getString(R.string.edit)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        applyFormData()
     }
 }

@@ -49,7 +49,6 @@ import com.mikifus.padland.Dialogs.Managers.IManagesNewPadDialog
 import com.mikifus.padland.Dialogs.Managers.IManagesNewPadGroupDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesNewPadDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesNewPadGroupDialog
-import com.mikifus.padland.SettingsActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -85,7 +84,7 @@ class PadListActivity: AppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.pad_list_activity)
+        setContentView(R.layout.activity_pad_list)
 
         //initializing all the UI elements
         recyclerView = findViewById(R.id.recyclerview_padgroups)

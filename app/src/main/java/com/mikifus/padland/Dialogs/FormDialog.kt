@@ -83,7 +83,7 @@ open class FormDialog: DialogFragment(), IFormDialog {
 
     companion object {
         val NAME_VALIDATION: Pattern = Pattern.compile(
-            "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+\\@\\ ]{2,256}"
+            "[a-zA-Z0-9\\+\\.\\_\\%\\-\\@\\ \\:\\/\\?\\!\\¿\\¡\\#\\|\\&\\=\\·\\$]{2,256}"
         )
     }
 }
