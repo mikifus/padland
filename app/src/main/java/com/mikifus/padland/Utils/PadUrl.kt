@@ -1,7 +1,10 @@
 package com.mikifus.padland.Utils
 
+import android.util.Xml
 import java.net.MalformedURLException
+import java.net.URI
 import java.net.URL
+import java.net.URLEncoder
 
 /**
  * Created by mikifus on 16/03/17.
@@ -64,6 +67,36 @@ class PadUrl private constructor(builder: Builder) {
 
         fun build(): PadUrl {
             return PadUrl(this)
+        }
+    }
+
+    companion object {
+
+        fun etherpadAddUsernameAndColor(url: String, username: String?, color: Int?): String {
+            val uri = URI(url)
+
+            val queryParams = StringBuilder(uri.query.orEmpty())
+            if (queryParams.isNotEmpty()) {
+                queryParams.append('&')
+            }
+
+            if(username?.isNotEmpty() == true) {
+                queryParams
+                    .append('&')
+                    .append(URLEncoder.encode("userName", Xml.Encoding.UTF_8.name))
+                    .append("=")
+                    .append(URLEncoder.encode(username, Xml.Encoding.UTF_8.name))
+            }
+            if(color != null) {
+                val colorString = "#" + Integer.toHexString(color).substring(0, 6)
+                queryParams
+                    .append('&')
+                    .append(URLEncoder.encode("userColor", Xml.Encoding.UTF_8.name))
+                    .append("=")
+                    .append(URLEncoder.encode(colorString, Xml.Encoding.UTF_8.name))
+            }
+
+            return URI(uri.scheme, uri.authority, uri.path, queryParams.toString(), uri.fragment).toString()
         }
     }
 }
