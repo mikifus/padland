@@ -177,5 +177,6 @@
     <string name="model_server">Servers</string>
     <string name="padview_pad_save_success">The document has been added to the list.</string>
     <string name="validation_url_invalid_remove">The address (URL) is invalid.</string>
+    <string name="none">None</string>
 
 </resources>

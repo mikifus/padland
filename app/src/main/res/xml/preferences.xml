@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
             android:title="@string/pref_header_general">
@@ -39,11 +40,13 @@
             android:dialogMessage=""
             android:defaultValue="" />
 
-        <com.mikifus.padland.Utils.ColorPickerListPreference
+        <com.rarepebble.colorpicker.ColorPreference
             android:key="padland_default_color"
             android:title="@string/settings_default_color"
             android:summary="@string/settings_default_color_explanation"
-            android:defaultValue="#555" />
+            app:colorpicker_selectNoneButtonText="@string/none"
+            app:colorpicker_showAlpha="false"
+            />
 
     </PreferenceCategory>
 

@@ -132,5 +132,6 @@
     <string name="model_server">Servidores</string>
     <string name="new_pad_local_name_explanation">Opcionalmente indica un alias local para el documento.</string>
     <string name="padview_pad_save_success">El documento se ha añadido a la lista.</string>
+    <string name="none">Ninguno</string>
 
 </resources>

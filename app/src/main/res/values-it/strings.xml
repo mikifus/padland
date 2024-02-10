@@ -111,5 +111,6 @@
 
     <string name="model_padgroup">Gruppi</string>
     <string name="model_pad">Documenti</string>
+    <string name="none">Nessuno</string>
 
 </resources>

@@ -94,8 +94,8 @@ class NewPadDialog: FormDialog() {
             )
 
             // Fallback to first in list
-            val defaultServer = userDetails?.getString("padland_default_server", serverSpinnerData!![0].first)
-            val position = serverSpinnerData?.indexOfFirst { it.first == defaultServer } ?: 0
+            val defaultServer = userDetails?.getString("padland_default_server", serverSpinnerData!![0].second)
+            val position = serverSpinnerData?.indexOfFirst { it.second == defaultServer } ?: 0
 
             // Set default selection
             mServerSpinner?.selectedItemPosition = position
