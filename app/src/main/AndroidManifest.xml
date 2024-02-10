@@ -77,9 +77,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:scheme="https" />
-                <data
-                    android:host="pad.riseup.net"
-                    android:pathPrefix="/p/" />
+                <data android:host="pad.riseup.net"/>
+                <data android:pathPrefix="/p/"/>
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -87,9 +86,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:scheme="https" />
-                <data
-                    android:host="framapad.org"
-                    android:pathPrefix="/p/" />
+                <data android:host="framapad.org"/>
+                <data android:pathPrefix="/p/"/>
             </intent-filter>
         </activity>
         <activity
@@ -110,10 +108,10 @@
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".SettingsActivity" />
+                android:value=".Activities.SettingsActivity" />
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name=".Activities.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
             <meta-data
@@ -134,14 +132,14 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
         </activity>
         <activity
-            android:name=".ServerListActivity"
+            android:name=".Activities.ServerListActivity"
             android:label="@string/title_activity_server_list"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".SettingsActivity" />
+                android:value=".Activities.SettingsActivity" />
         </activity>
         <provider
             android:name="com.mikifus.padland.PadContentProvider"

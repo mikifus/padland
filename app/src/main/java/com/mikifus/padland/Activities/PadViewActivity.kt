@@ -88,7 +88,7 @@ class PadViewActivity :
             return
         }
 
-        setContentView(R.layout.activity_padview)
+        setContentView(R.layout.pad_view_activity)
 
         loadProgress()
         showProgress()

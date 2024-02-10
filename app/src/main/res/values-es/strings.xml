@@ -95,7 +95,7 @@
     <string name="serverlist_dialog_new_server_padprefix_label">En servidores nuevos (Etherpad Lite) hay un segmento de url entre el dominio y el nombre del documento. Por defecto es \"p/\".</string>
     <string name="serverlist_dialog_new_server_padprefix_title">Prefijo en la url del pad</string>
     <string name="serverlist_dialog_new_server_title">Nuevo servidor</string>
-    <string name="serverlist_dialog_new_server_url_invalid">Dirección no válida</string>
+    <string name="validation_url_invalid">La dirección (URL) no es válida.</string>
     <string name="serverlist_dialog_new_server_url_label">La dirección para acceder al servidor. Añade https:// si es posible.</string>
     <string name="serverlist_dialog_new_server_url_title">Dirección del servidor</string>
     <string name="title_activity_intro">Introducción</string>
@@ -129,6 +129,7 @@
 
     <string name="model_padgroup">Grupos</string>
     <string name="model_pad">Documentos</string>
+    <string name="model_server">Servidores</string>
     <string name="new_pad_local_name_explanation">Opcionalmente indica un alias local para el documento.</string>
     <string name="padview_pad_save_success">El documento se ha añadido a la lista.</string>
 

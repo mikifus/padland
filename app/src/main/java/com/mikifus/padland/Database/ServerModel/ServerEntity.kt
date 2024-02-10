@@ -11,7 +11,7 @@ import java.sql.Date
 
 @Entity(tableName = "padland_servers")
 data class Server(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "_id") val mId: Long,
     @ColumnInfo(name = "name") val mName: String,
     @ColumnInfo(name = "url") val mUrl: String,

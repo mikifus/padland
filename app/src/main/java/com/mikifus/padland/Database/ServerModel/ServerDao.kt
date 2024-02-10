@@ -28,7 +28,7 @@ interface ServerDao {
 //    fun getById(id: Long): LiveData<Server>
 
     @Query("SELECT * FROM padland_servers WHERE _id == :id")
-    fun getById(id: Long): Server
+    suspend fun getById(id: Long): Server
 
     @Query("SELECT padprefix FROM padland_servers WHERE url == :url")
     fun getServerPrefixFromUrl(url: String?): String

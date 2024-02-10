@@ -11,21 +11,6 @@
         wheel:layout_constraintTop_toTopOf="parent"
         wheel:layout_constraintBottom_toBottomOf="parent"/>
 
-<!--    <RelativeLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent">-->
-<!--        <com.pnikosis.materialishprogress.ProgressWheel-->
-<!--            android:id="@+id/progress_wheel"-->
-<!--            android:layout_width="80dp"-->
-<!--            android:layout_height="80dp"-->
-<!--            android:layout_centerHorizontal="true"-->
-<!--            android:layout_centerVertical="true"-->
-<!--            android:layout_centerInParent="true"-->
-<!--            android:gravity="center"-->
-<!--            wheel:matProg_barColor="#000000"-->
-<!--            wheel:matProg_progressIndeterminate="true" />-->
-<!--    </RelativeLayout>-->
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

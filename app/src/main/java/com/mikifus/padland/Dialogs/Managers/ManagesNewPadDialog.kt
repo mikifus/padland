@@ -26,6 +26,10 @@ public class ManagesNewPadDialog: IManagesNewPadDialog {
     override var padGroupViewModel: PadGroupViewModel? = null
 
     override fun showNewPadDialog(activity: AppCompatActivity) {
+        if(dialog.isAdded) {
+            return
+        }
+
         initViewModels(activity)
         initEvents(activity)
 
@@ -80,7 +84,6 @@ public class ManagesNewPadDialog: IManagesNewPadDialog {
                 val padViewIntent = Intent(activity, PadViewActivity::class.java)
                 padViewIntent.putExtra("padId", padId)
                 activity.startActivity(padViewIntent)
-                activity.finish()
             }
         }
         dialog.dismiss()

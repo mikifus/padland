@@ -19,6 +19,7 @@ import com.mikifus.padland.Database.ServerModel.ServerViewModel
 import com.mikifus.padland.R
 import com.mikifus.padland.Utils.PadUrl
 import com.mikifus.padland.Views.Helpers.SpinnerHelper
+import java.lang.Exception
 
 
 /**
@@ -70,7 +71,7 @@ class NewPadDialog: FormDialog() {
 
         serverViewModel!!.getAll.observe(requireActivity()) { servers ->
             // Get DB servers
-            serverSpinnerData = servers.map { Pair(it.mName, it.mPadprefix) }
+            serverSpinnerData = servers.map { Pair(it.mName, it.mUrl + it.mPadprefix) }
 
             // Get hardcoded servers
             serverSpinnerData = serverSpinnerData!! + resources.getStringArray(R.array.etherpad_servers_name)
@@ -119,17 +120,23 @@ class NewPadDialog: FormDialog() {
             return false
         }
         if(!NAME_VALIDATION.matcher(name).matches()) {
-            Toast.makeText(context, getString(R.string.new_pad_name_invalid), Toast.LENGTH_LONG).show()
+            Toast.makeText(context, getString(R.string.serverlist_dialog_new_server_name_title), Toast.LENGTH_LONG).show()
             return false
         }
 
         val server: Pair<String, String> = serverSpinnerData!![mServerSpinner!!.selectedItemPosition]
 
         // Build URL, it will throw an exception if not correct
-        val padUrl = PadUrl.Builder()
+        val padUrl: PadUrl?
+        try {
+            padUrl = PadUrl.Builder()
                 .padName(name)
                 .padPrefix(server.second)
                 .build()
+        } catch (exception: Exception) {
+            Toast.makeText(context, getString(R.string.validation_url_invalid), Toast.LENGTH_LONG).show()
+            return false
+        }
 
         if (!URLUtil.isValidUrl(padUrl.string)) {
             Toast.makeText(context, getString(R.string.new_pad_name_invalid), Toast.LENGTH_LONG).show()

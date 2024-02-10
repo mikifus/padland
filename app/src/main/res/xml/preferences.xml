@@ -5,8 +5,8 @@
     <PreferenceCategory
             android:title="@string/pref_header_general">
 
-        <CheckBoxPreference
-                android:key="auto_save_new_pads"
+        <SwitchPreferenceCompat
+            android:key="auto_save_new_pads"
                 android:title="@string/settings_save_new_pads_title"
                 android:summary="@string/settings_save_new_pads_desc"
                 android:defaultValue="true"
@@ -18,7 +18,7 @@
             android:summary="@string/pref_server_list_summary" >
             <intent
                 android:targetPackage="com.mikifus.padland"
-                android:targetClass="com.mikifus.padland.ServerListActivity"/>
+                android:targetClass="com.mikifus.padland.Activities.ServerListActivity"/>
         </PreferenceScreen>
 
         <ListPreference
@@ -49,6 +49,7 @@
 
     <PreferenceCategory
         android:title="@string/settings_miscellaneous">
+
         <PreferenceScreen
             android:key="padland_about"
             android:title="@string/about"
@@ -57,6 +58,7 @@
                 android:targetPackage="com.mikifus.padland"
                 android:targetClass="com.mikifus.padland.About"/>
         </PreferenceScreen>
+
         <PreferenceScreen
             android:key="padland_intro"
             android:title="@string/title_activity_intro"
@@ -65,6 +67,7 @@
                 android:targetPackage="com.mikifus.padland"
                 android:targetClass="com.mikifus.padland.IntroActivity"/>
         </PreferenceScreen>
+
     </PreferenceCategory>
 
 </PreferenceScreen>

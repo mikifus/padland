@@ -25,6 +25,10 @@ public class ManagesEditPadGroupDialog: IManagesEditPadGroupDialog {
     override var padGroupViewModel: PadGroupViewModel? = null
 
     override fun showEditPadGroupDialog(activity: AppCompatActivity, id: Long) {
+        if(dialog.isAdded) {
+            return
+        }
+
         initViewModels(activity)
         initEvents(activity, id)
         setData(activity, id)

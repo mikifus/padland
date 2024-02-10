@@ -14,6 +14,10 @@ interface IManagesPadViewAuthDialog {
 class ManagesPadViewAuthDialog: IManagesPadViewAuthDialog {
 
     override fun showPadViewAuthDialog(activity: AppCompatActivity, handler: HttpAuthHandler) {
+        if(dialog.isAdded) {
+            return
+        }
+
         initEvents(handler)
 
         val transaction = activity.supportFragmentManager.beginTransaction()
