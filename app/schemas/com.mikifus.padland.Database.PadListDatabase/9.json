@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 9,
-    "identityHash": "39a5019da16f60b550719c4920a23967",
+    "identityHash": "31700f073d17ec9dc1e5dd2a62c8cb5c",
     "entities": [
       {
         "tableName": "padlist",
@@ -118,7 +118,7 @@
       },
       {
         "tableName": "padland_servers",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER NOT NULL, `name` TEXT NOT NULL, `url` TEXT NOT NULL, `padprefix` TEXT NOT NULL, `position` INTEGER NOT NULL, `jquery` INTEGER NOT NULL, `enabled` INTEGER NOT NULL, `create_date` INTEGER NOT NULL, PRIMARY KEY(`_id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `url` TEXT NOT NULL, `padprefix` TEXT NOT NULL, `position` INTEGER NOT NULL, `jquery` INTEGER NOT NULL, `enabled` INTEGER NOT NULL, `create_date` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "mId",
@@ -170,7 +170,7 @@
           }
         ],
         "primaryKey": {
-          "autoGenerate": false,
+          "autoGenerate": true,
           "columnNames": [
             "_id"
           ]
@@ -232,7 +232,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '39a5019da16f60b550719c4920a23967')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '31700f073d17ec9dc1e5dd2a62c8cb5c')"
     ]
   }
 }
