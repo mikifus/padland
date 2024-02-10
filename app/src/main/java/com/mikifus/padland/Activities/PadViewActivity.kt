@@ -7,6 +7,7 @@ import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Xml
 import android.view.View
 import android.webkit.CookieManager
 import android.webkit.HttpAuthHandler
@@ -25,8 +26,12 @@ import com.mikifus.padland.Dialogs.Managers.ManagesPadViewAuthDialog
 import com.mikifus.padland.R
 import com.mikifus.padland.Utils.PadLandWebViewClient.PadLandWebClientCallbacks
 import com.mikifus.padland.Utils.PadLandWebViewClient.PadLandWebViewClient
+import com.mikifus.padland.Utils.PadUrl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.net.URI
+import java.net.URL
+import java.net.URLEncoder
 
 class PadViewActivity :
     AppCompatActivity(),
@@ -244,12 +249,21 @@ class PadViewActivity :
 
     /**
      * Loads the specified url into the webView, it must be previously set up.
+     * Reads user config on username and color and adds them to the URL.
      *
      * @param url
      */
-    private fun loadUrl(url: String?) {
+    private fun loadUrl(url: String) {
+        val userDetails =
+            getSharedPreferences(packageName + "_preferences", MODE_PRIVATE)
+
+        val username = userDetails.getString("padland_default_username", "")
+        val color = userDetails.getInt("padland_default_color", 0)
+
+        val newUrl = PadUrl.etherpadAddUsernameAndColor(url, username, color)
+
         lifecycleScope.launch(Dispatchers.Main) {
-            webView!!.loadUrl(url!!)
+            webView!!.loadUrl(newUrl)
         }
     }
 
