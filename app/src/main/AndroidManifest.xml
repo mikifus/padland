@@ -11,7 +11,8 @@
         android:icon="@drawable/ic_launcher"
         android:logo="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppBaseTheme">
+        android:theme="@style/AppBaseTheme"
+        android:usesCleartextTraffic="true">
 
         <!-- Privacy please -->
         <meta-data android:name="android.webkit.WebView.MetricsOptOut" android:value="true" />

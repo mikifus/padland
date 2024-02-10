@@ -11,5 +11,5 @@ interface PadLandWebClientCallbacks {
     fun onUnsafeUrlProtocol(url: String?)
     fun onReceivedSslError(message: String)
     fun onExternalHostUrlLoad(url: String): Boolean
-    fun onReceivedHttpAuthRequest(handler: HttpAuthHandler, host: String, realm: String)
+    fun onReceivedHttpAuthRequestCallback(view: WebView, handler: HttpAuthHandler, host: String, realm: String)
 }

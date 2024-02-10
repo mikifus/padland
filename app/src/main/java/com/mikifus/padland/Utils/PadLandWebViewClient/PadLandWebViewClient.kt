@@ -1,8 +1,6 @@
 package com.mikifus.padland.Utils.PadLandWebViewClient;
 
-import android.content.Intent
 import android.graphics.Bitmap
-import android.net.Uri
 import android.net.http.SslError
 import android.os.Build
 import android.util.Log
@@ -13,13 +11,10 @@ import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.findViewTreeLifecycleOwner
-import androidx.lifecycle.lifecycleScope
 import com.mikifus.padland.PadViewActivity
 import com.mikifus.padland.R
 import com.mikifus.padland.SaferWebView.PadLandSaferWebViewClient
 import com.mikifus.padland.Utils.WhiteListMatcher
-import kotlinx.coroutines.launch
 
 public class PadLandWebViewClient(hostsWhitelist: List<String>, private val callbacks: PadLandWebClientCallbacks) :
     PadLandSaferWebViewClient(hostsWhitelist),
@@ -82,7 +77,7 @@ public class PadLandWebViewClient(hostsWhitelist: List<String>, private val call
 //        val fm = supportFragmentManager
 //        val dialog: BasicAuthDialog = PadViewActivity.PadViewAuthDialog(currentPadUrl, handler)
 //        dialog.show(fm, "dialog_auth")
-        onReceivedHttpAuthRequest(handler, host, realm)
+        onReceivedHttpAuthRequestCallback(view, handler, host, realm)
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)

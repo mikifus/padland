@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import com.google.android.material.textview.MaterialTextView
 import com.mikifus.padland.R
 
 
@@ -19,6 +20,8 @@ class PadViewAuthDialog: FormDialog() {
 
     private var mUserEditText: EditText? = null
     private var mPasswordEditText: EditText? = null
+    private var mAuthErrorMessage: MaterialTextView? = null
+    private var mAuthSslMessage: MaterialTextView? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
@@ -41,21 +44,24 @@ class PadViewAuthDialog: FormDialog() {
 
     override fun clearForm() {
         mUserEditText!!.text = null
-        mPasswordEditText!!.text = null
+//        mPasswordEditText!!.text = null
+        hideLoginError()
+        hideSslWarning()
     }
 
     override fun onStart() {
         super.onStart()
 
-        mUserEditText = requireView().findViewById<View>(R.id.txt_username) as EditText
-        mPasswordEditText = requireView().findViewById<View>(R.id.txt_password) as EditText
+        mUserEditText = requireView().findViewById(R.id.txt_username)
+        mPasswordEditText = requireView().findViewById(R.id.txt_password)
+        mAuthErrorMessage = requireView().findViewById(R.id.auth_error_message)
+        mAuthSslMessage = requireView().findViewById(R.id.auth_warning_message)
 
         mUserEditText?.requestFocus()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
-
         return inflater.inflate(R.layout.dialog_auth, container, false)
     }
 
@@ -63,11 +69,23 @@ class PadViewAuthDialog: FormDialog() {
         val positiveButton = toolbar?.findViewById<Button>(R.id.dialog_positive_button)
         positiveButton?.setOnClickListener(positiveButtonCallback)
     }
+    fun showLoginError() {
+        mAuthErrorMessage?.visibility = View.VISIBLE
+    }
+    fun hideLoginError() {
+        mAuthErrorMessage?.visibility = View.GONE
+    }
+    fun showSslWarning() {
+        mAuthSslMessage?.visibility = View.VISIBLE
+    }
+    fun hideSslWarning() {
+        mAuthSslMessage?.visibility = View.GONE
+    }
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-
         activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
+        clearForm()
     }
 
     override fun getTheme(): Int = R.style.Theme_MaterialComponents_Dialog_MinWidth

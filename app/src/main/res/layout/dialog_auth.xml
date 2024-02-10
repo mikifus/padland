@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/basic_auth"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+    android:background="?attr/colorSurface">
 
-<!--    <TextView-->
-<!--        android:text="@string/padview_dialog_basicatuh_username"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content" />-->
+    <include
+        android:id="@+id/include"
+        layout="@layout/dialog_header"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
         android:hint="@string/padview_dialog_basicatuh_username">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -22,23 +30,13 @@
             android:layout_height="wrap_content"
             android:inputType="text"
             android:imeOptions="actionNext"/>
-        <!--    <EditText-->
-<!--        android:id="@+id/txt_username"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:inputType="text"-->
-<!--        android:imeOptions="actionNext" />-->
 
     </com.google.android.material.textfield.TextInputLayout>
-
-    <!--    <TextView-->
-    <!--        android:text="@string/padview_dialog_basicatuh_password"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content" />-->
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
         android:hint="@string/padview_dialog_basicatuh_password">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -47,25 +45,19 @@
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:imeOptions="actionDone"/>
-<!--        <EditText-->
-<!--            android:id="@+id/txt_password"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:inputType="textPassword"-->
-<!--            android:imeOptions="actionDone" />-->
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/auth_warning_message"
-        android:text=""
+        android:text="@string/basic_auth_warning"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"/>
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/auth_error_message"
-        android:text=""
+        android:text="@string/basic_auth_error"
         android:textColor="@color/design_default_color_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
