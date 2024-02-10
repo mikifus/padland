@@ -1,5 +1,6 @@
 package com.mikifus.padland.Activities
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
@@ -7,7 +8,6 @@ import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Xml
 import android.view.View
 import android.webkit.CookieManager
 import android.webkit.HttpAuthHandler
@@ -29,9 +29,7 @@ import com.mikifus.padland.Utils.PadLandWebViewClient.PadLandWebViewClient
 import com.mikifus.padland.Utils.PadUrl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.net.URI
 import java.net.URL
-import java.net.URLEncoder
 
 class PadViewActivity :
     AppCompatActivity(),
@@ -47,7 +45,7 @@ class PadViewActivity :
         }
 
     // ProgressBar
-    private var pwheel: ProgressBar? = null
+    private var mProgressBar: ProgressBar? = null
 
     /**
      * Check whether it is possible to connect to the internet
@@ -93,7 +91,7 @@ class PadViewActivity :
             return
         }
 
-        setContentView(R.layout.pad_view_activity)
+        setContentView(R.layout.activity_pad_view)
 
         loadProgress()
         showProgress()
@@ -148,12 +146,13 @@ class PadViewActivity :
     //        alertDialog.show()
             }
 
-            override fun onReceivedHttpAuthRequest(
+            override fun onReceivedHttpAuthRequestCallback(
+                view: WebView,
                 handler: HttpAuthHandler,
                 host: String,
                 realm: String
             ) {
-                showPadViewAuthDialog(this@PadViewActivity, handler)
+                showPadViewAuthDialog(this@PadViewActivity, view, handler)
             }
         })
 
@@ -170,8 +169,9 @@ class PadViewActivity :
         }
 
         serverViewModel?.getAllEnabled!!.observe(this) { servers ->
-            val serverList = servers.map { it.mUrl } +
-                    resources.getStringArray(R.array.etherpad_servers_whitelist)
+            val serverList = servers.map {
+                    URL(it.mUrl).host
+                } + resources.getStringArray(R.array.etherpad_servers_whitelist)
 
             makeWebView(serverList)
             loadOrSavePad()
@@ -236,15 +236,15 @@ class PadViewActivity :
      * Loads the fancy ProgressWheel to show it's loading.
      */
     private fun loadProgress() {
-        pwheel = findViewById(R.id.progress_indicator)
+        mProgressBar = findViewById(R.id.progress_indicator)
     }
 
     fun showProgress() {
-        pwheel!!.visibility = View.VISIBLE
+        mProgressBar!!.visibility = View.VISIBLE
     }
 
     fun hideProgress() {
-        pwheel!!.visibility = View.GONE
+        mProgressBar!!.visibility = View.GONE
     }
 
     /**
@@ -294,6 +294,7 @@ class PadViewActivity :
      *
      * @param webView
      */
+    @SuppressLint("SetJavaScriptEnabled")
     private fun makeWebSettings(webView: WebView?) {
         webView!!.setInitialScale(1)
         val webSettings = webView.settings
@@ -307,7 +308,7 @@ class PadViewActivity :
         webSettings.displayZoomControls = false
         webSettings.loadWithOverviewMode = true
         webSettings.domStorageEnabled = true // Required for some NodeJS based code
-        webSettings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK // Feature?: keep cookies
+//        webSettings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK // Feature?: keep cookies
 
 
         // Cookies will be needed for pads

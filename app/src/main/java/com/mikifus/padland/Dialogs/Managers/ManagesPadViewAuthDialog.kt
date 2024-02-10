@@ -1,6 +1,8 @@
 package com.mikifus.padland.Dialogs.Managers
 
 import android.webkit.HttpAuthHandler
+import android.webkit.URLUtil
+import android.webkit.WebView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
 import com.mikifus.padland.Dialogs.PadViewAuthDialog
@@ -8,15 +10,20 @@ import com.mikifus.padland.Dialogs.PadViewAuthDialog
 interface IManagesPadViewAuthDialog {
     fun showPadViewAuthDialog(
         activity: AppCompatActivity,
+        view: WebView,
         handler: HttpAuthHandler
     )
 }
 class ManagesPadViewAuthDialog: IManagesPadViewAuthDialog {
 
-    override fun showPadViewAuthDialog(activity: AppCompatActivity, handler: HttpAuthHandler) {
+    private var webView: WebView? = null
+    private var lastLoginUrl: String? = null
+
+    override fun showPadViewAuthDialog(activity: AppCompatActivity, view: WebView, handler: HttpAuthHandler) {
         if(dialog.isAdded) {
             return
         }
+        this.webView = view
 
         initEvents(handler)
 
@@ -29,34 +36,29 @@ class ManagesPadViewAuthDialog: IManagesPadViewAuthDialog {
         transaction.addToBackStack(DIALOG_TAG)
 
         dialog.show(transaction, DIALOG_TAG)
-
-        // TODO: Implement these features
-//        if (PadViewActivity.PadViewAuthDialog.done_auth) {
-//            // Credentials must be invalid
-//            val textView = requireView().findViewById<View>(R.id.auth_error_message) as TextView
-//            textView.setText(R.string.basic_auth_error)
-//        }
-//        try {
-//            // Warn the user that is not using SSL
-//            val url = URL(currentPadUrl)
-//            if (url.protocol != "https") {
-//                val textView = requireView().findViewById<View>(R.id.auth_warning_message) as TextView
-//                textView.setText(R.string.basic_auth_warning)
-//            }
-//        } catch (e: MalformedURLException) {
-//            e.printStackTrace()
-//        }
     }
 
     private fun initEvents(handler: HttpAuthHandler) {
         dialog.setPositiveButtonCallback { data ->
             handler.proceed(data["user"].toString(), data["password"].toString())
-
-            // TODO: Check if it is useful to not clear (repeated login requests)
-//            dialog.clearForm()
+//            this.webView?.clearCache(true) // No effect?
+            dialog.dismiss()
         }
         dialog.setNegativeButtonCallback {
             handler.cancel()
+            this.webView?.clearCache(true)
+        }
+        dialog.setOnResumeCallback {
+            if(lastLoginUrl == webView?.url) {
+                // Credentials must be invalid, trying again
+                dialog.showLoginError()
+            }
+            lastLoginUrl = webView?.url
+
+            if(URLUtil.isHttpUrl(webView?.url)) {
+                // Warn the user that they're not using SSL
+                dialog.showSslWarning()
+            }
         }
     }
 

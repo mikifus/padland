@@ -30,6 +30,8 @@ open class FormDialog: DialogFragment(), IFormDialog {
     override var negativeButtonCallback: OnClickListener? = null
     override var toolbar: Toolbar? = null
 
+    private var onResumeCallback: (() -> Unit)? = null
+
     override fun getTheme(): Int {
         return if (activity?.resources!!.getBoolean(R.bool.large_layout))
             R.style.Theme_MaterialComponents_Dialog_MinWidth
@@ -49,6 +51,10 @@ open class FormDialog: DialogFragment(), IFormDialog {
             callback()
             dismiss()
         }
+    }
+
+    fun setOnResumeCallback(callback: () -> Unit) {
+        onResumeCallback = callback
     }
 
     override fun initEvents() {
@@ -79,6 +85,11 @@ open class FormDialog: DialogFragment(), IFormDialog {
         toolbar = view.findViewById(R.id.dialog_toolbar)
         initToolBar()
         initEvents()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        onResumeCallback?.let { it() }
     }
 
     companion object {

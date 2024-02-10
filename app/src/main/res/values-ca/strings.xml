@@ -81,7 +81,7 @@
     <string name="pref_header_general">Preferències</string>
     <string name="settings_default_username_dialog_title">Entra el nom d\'usuari</string>
     <string name="basic_auth_error">L\'autenticació ha fallat</string>
-    <string name="basic_auth_warning">Les credencials s\'enviaràn sense encriptació SSL. Es recomana evitar això. Procura utilitzar el protocol HTTPS si es troba disponible.</string>
+    <string name="basic_auth_warning">Les credencials s\'enviaràn sense encriptació SSL. Es recomana evitar-ho. Procura utilitzar el protocol HTTPS si es troba disponible.</string>
     <string name="no_custom_servers">No s\'han afegit servidors.</string>
     <string name="padview_dialog_basicatuh_password">Contrasenya</string>
     <string name="padview_dialog_basicatuh_title">Autenticació requerida</string>

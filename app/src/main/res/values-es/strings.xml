@@ -65,7 +65,7 @@
     <string name="pref_header_general">Preferencias</string>
     <string name="settings_default_username_dialog_title">Introduce el nombre de ususario</string>
     <string name="basic_auth_error">Fallo de autenticación</string>
-    <string name="basic_auth_warning">Las credenciales se enviarán sin encriptación SSL. Se recomienda evitar esto. Procura utilizar el protocolo HTTPS si está disponible.</string>
+    <string name="basic_auth_warning">Las credenciales se enviarán sin encriptación SSL. Se recomienda evitarlo. Procura utilizar el protocolo HTTPS si está disponible.</string>
     <string name="padview_dialog_basicatuh_password">Contraseña</string>
     <string name="padview_dialog_basicatuh_title">Autenticación requerida</string>
     <string name="padview_dialog_basicatuh_username">Nombre de usuario</string>

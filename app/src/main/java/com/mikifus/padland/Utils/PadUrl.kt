@@ -1,5 +1,6 @@
 package com.mikifus.padland.Utils
 
+import android.net.Uri
 import android.util.Xml
 import java.net.MalformedURLException
 import java.net.URI
@@ -76,9 +77,6 @@ class PadUrl private constructor(builder: Builder) {
             val uri = URI(url)
 
             val queryParams = StringBuilder(uri.query.orEmpty())
-            if (queryParams.isNotEmpty()) {
-                queryParams.append('&')
-            }
 
             if(username?.isNotEmpty() == true) {
                 queryParams
@@ -93,10 +91,18 @@ class PadUrl private constructor(builder: Builder) {
                     .append('&')
                     .append(URLEncoder.encode("userColor", Xml.Encoding.UTF_8.name))
                     .append("=")
-                    .append(URLEncoder.encode(colorString, Xml.Encoding.UTF_8.name))
+                    .append(colorString)
             }
 
-            return URI(uri.scheme, uri.authority, uri.path, queryParams.toString(), uri.fragment).toString()
+            return Uri.Builder()
+                .scheme(uri.scheme)
+                .authority(uri.authority)
+                .path(uri.path)
+                .encodedQuery(queryParams.toString())
+                .fragment(uri.fragment)
+                .build()
+                .toString()
+
         }
     }
 }
