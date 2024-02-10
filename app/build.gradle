@@ -71,6 +71,7 @@ dependencies {
     implementation 'androidx.test.ext:junit-ktx:1.1.5'
     implementation 'androidx.recyclerview:recyclerview-selection:1.1.0'
     implementation 'com.android.support.constraint:constraint-layout:2.0.4'
+    implementation "androidx.preference:preference-ktx:1.2.0"
 
     // Room database
     def room_version = "2.6.1"
