@@ -59,7 +59,6 @@ import kotlinx.coroutines.launch
  * It handles as well the sharing intent to the app.
  *
  * @author mikifus
- * @since 0.1
  */
 class PadListActivity: AppCompatActivity(),
     IDragAndDropListener,

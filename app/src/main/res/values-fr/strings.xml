@@ -143,5 +143,6 @@
    <string name="model_padgroup">Groupes</string>
    <string name="model_pad">Documents</string>
    <string name="model_server">Serveurs</string>
+   <string name="none">Aucun</string>
 
 </resources>
