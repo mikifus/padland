@@ -187,8 +187,13 @@ class PadViewActivity :
                     currentPadUrl = pad.mUrl
                     updateViewedPad(pad)
                 } else {
-                    Toast.makeText(applicationContext, getString(R.string.unexpected_error), Toast.LENGTH_LONG)
-                        .show()
+                    lifecycleScope.launch {
+                        Toast.makeText(
+                            applicationContext,
+                            getString(R.string.unexpected_error),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                 }
             }
             return
@@ -308,7 +313,7 @@ class PadViewActivity :
         webSettings.displayZoomControls = false
         webSettings.loadWithOverviewMode = true
         webSettings.domStorageEnabled = true // Required for some NodeJS based code
-//        webSettings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK // Feature?: keep cookies
+        webSettings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK // Feature?: keep cookies
 
 
         // Cookies will be needed for pads
