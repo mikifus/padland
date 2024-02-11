@@ -1,5 +1,6 @@
 package com.mikifus.padland.Dialogs.Managers
 
+import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -27,7 +28,7 @@ class ManagesDeletePadGroupDialog: IManagesDeletePadGroupDialog {
 
         dialog.setTitle(activity.getString(R.string.delete))
         dialog.setMessage(activity.getString(R.string.sure_to_delete_group))
-        dialog.setPositiveButtonText(activity.getString(R.string.delete))
+        dialog.positiveButtonText = activity.getString(R.string.delete)
 
         dialog.show(activity.supportFragmentManager, DIALOG_TAG)
     }
@@ -39,7 +40,7 @@ class ManagesDeletePadGroupDialog: IManagesDeletePadGroupDialog {
     }
 
     private fun initEvents(activity: AppCompatActivity) {
-        dialog.setPositiveButtonCallback { dialog, which ->
+        dialog.positiveButtonCallback = DialogInterface.OnClickListener { dialog, which ->
             confirmDeletePadGroupDialog(activity)
             this.ids = listOf()
         }

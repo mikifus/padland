@@ -77,7 +77,9 @@ class EditPadGroupDialog: FormDialog() {
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
+        if(activity?.supportFragmentManager?.isDestroyed == true) {
+            activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
+        }
     }
 
     override fun initToolBar() {

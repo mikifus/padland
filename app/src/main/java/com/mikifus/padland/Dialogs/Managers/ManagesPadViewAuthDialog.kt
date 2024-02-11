@@ -20,7 +20,7 @@ class ManagesPadViewAuthDialog: IManagesPadViewAuthDialog {
     private var lastLoginUrl: String? = null
 
     override fun showPadViewAuthDialog(activity: AppCompatActivity, view: WebView, handler: HttpAuthHandler) {
-        if(dialog.isAdded) {
+        if(dialog.isAdded || activity.supportFragmentManager.isDestroyed) {
             return
         }
         this.webView = view

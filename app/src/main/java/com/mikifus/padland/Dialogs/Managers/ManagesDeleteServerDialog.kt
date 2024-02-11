@@ -1,9 +1,9 @@
 package com.mikifus.padland.Dialogs.Managers
 
+import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.mikifus.padland.Database.PadGroupModel.PadGroupViewModel
 import com.mikifus.padland.Database.ServerModel.ServerViewModel
 import com.mikifus.padland.Dialogs.ConfirmDialog
 import com.mikifus.padland.R
@@ -28,7 +28,7 @@ class ManagesDeleteServerDialog: IManagesDeleteServerDialog {
 
         dialog.setTitle(activity.getString(R.string.delete))
         dialog.setMessage(activity.getString(R.string.serverlist_dialog_delete_sure_to_delete))
-        dialog.setPositiveButtonText(activity.getString(R.string.delete))
+        dialog.positiveButtonText = activity.getString(R.string.delete)
 
         dialog.show(activity.supportFragmentManager, DIALOG_TAG)
     }
@@ -40,13 +40,13 @@ class ManagesDeleteServerDialog: IManagesDeleteServerDialog {
     }
 
     private fun initEvents(activity: AppCompatActivity) {
-        dialog.setPositiveButtonCallback { dialog, which ->
-            confirmDeletePadGroupDialog(activity)
+        dialog.positiveButtonCallback = DialogInterface.OnClickListener { dialog, which ->
+            confirmDeleteServer(activity)
             this.ids = listOf()
         }
     }
 
-    private fun confirmDeletePadGroupDialog(activity: AppCompatActivity) {
+    private fun confirmDeleteServer(activity: AppCompatActivity) {
         activity.lifecycleScope.launch(Dispatchers.IO) {
             serverViewModel!!.deleteServer(ids)
         }

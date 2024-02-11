@@ -25,7 +25,7 @@ public class ManagesEditPadGroupDialog: IManagesEditPadGroupDialog {
     override var padGroupViewModel: PadGroupViewModel? = null
 
     override fun showEditPadGroupDialog(activity: AppCompatActivity, id: Long) {
-        if(dialog.isAdded) {
+        if(dialog.isAdded || activity.supportFragmentManager.isDestroyed) {
             return
         }
 

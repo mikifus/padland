@@ -2,10 +2,8 @@ package com.mikifus.padland.Activities
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -18,29 +16,44 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import com.mikifus.padland.Database.PadModel.Pad
 import com.mikifus.padland.Database.PadModel.PadViewModel
 import com.mikifus.padland.Database.ServerModel.ServerViewModel
+import com.mikifus.padland.Dialogs.Managers.IManagesNewServerDialog
 import com.mikifus.padland.Dialogs.Managers.IManagesPadViewAuthDialog
+import com.mikifus.padland.Dialogs.Managers.IManagesWhitelistServerDialog
+import com.mikifus.padland.Dialogs.Managers.ManagesNewServerDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesPadViewAuthDialog
+import com.mikifus.padland.Dialogs.Managers.ManagesWhitelistServerDialog
 import com.mikifus.padland.R
 import com.mikifus.padland.Utils.PadLandWebViewClient.PadLandWebClientCallbacks
 import com.mikifus.padland.Utils.PadLandWebViewClient.PadLandWebViewClient
 import com.mikifus.padland.Utils.PadUrl
+import com.mikifus.padland.Utils.WhiteListMatcher
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.net.URL
 
 class PadViewActivity :
     AppCompatActivity(),
-    IManagesPadViewAuthDialog by ManagesPadViewAuthDialog() {
+    IManagesPadViewAuthDialog by ManagesPadViewAuthDialog(),
+    IManagesWhitelistServerDialog by ManagesWhitelistServerDialog(),
+    IManagesNewServerDialog by ManagesNewServerDialog() {
 
     private var padViewModel: PadViewModel? = null
-    private var serverViewModel: ServerViewModel? = null
+    override var serverViewModel: ServerViewModel? = null
     private var webView: WebView? = null
+    private var webViewClient: PadLandWebViewClient? = null
+
     private var currentPadUrl: String? = null
         set(value) {
-            value?.let { loadUrl(value) }
+            lifecycleScope.launch(Dispatchers.IO) {
+                value?.let { loadUrl(value) }
+            }
             field = value
         }
 
@@ -108,8 +121,7 @@ class PadViewActivity :
             return
         }
 
-        webView = findViewById(R.id.activity_main_webview)
-        webView!!.webViewClient = PadLandWebViewClient(urlWhitelist, object: PadLandWebClientCallbacks {
+        webViewClient = PadLandWebViewClient(urlWhitelist, object: PadLandWebClientCallbacks {
             override fun onStartLoading() {
                 showProgress()
             }
@@ -122,11 +134,19 @@ class PadViewActivity :
                 TODO("Not yet implemented")
             }
 
-            override fun onExternalHostUrlLoad(url: String): Boolean {
-                startActivity(
-                    Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            override suspend fun onExternalHostUrlLoad(url: String): Boolean {
+                val deferred = CompletableDeferred<Boolean>()
+                showWhitelistServerDialog(this@PadViewActivity, url,
+                    { dialogUrl ->
+                        showNewServerDialog(this@PadViewActivity, dialogUrl)
+                        deferred.complete(true)
+                    },
+                    { dialogUrl ->
+                        deferred.complete(true)
+                    }
                 )
-                return true
+
+                return deferred.await()
             }
 
             override fun onReceivedSslError(message: String) {
@@ -156,7 +176,7 @@ class PadViewActivity :
             }
         })
 
-        makeWebSettings(webView)
+        makeWebSettings()
     }
 
     private fun initViewModels() {
@@ -259,6 +279,19 @@ class PadViewActivity :
      * @param url
      */
     private fun loadUrl(url: String) {
+        if (!WhiteListMatcher.isValidHost(url, webViewClient!!.hostsWhitelist)) {
+            showWhitelistServerDialog(this, url,
+                { dialogUrl ->
+                    showNewServerDialog(this, dialogUrl)
+                },
+                { dialogUrl ->
+                    whitelistUrl(dialogUrl)
+                    loadUrl(dialogUrl)
+                }
+            )
+            return
+        }
+
         val userDetails =
             getSharedPreferences(packageName + "_preferences", MODE_PRIVATE)
 
@@ -270,6 +303,11 @@ class PadViewActivity :
         lifecycleScope.launch(Dispatchers.Main) {
             webView!!.loadUrl(newUrl)
         }
+    }
+
+    fun whitelistUrl(url: String) {
+        val urlObject = URL(url)
+        webViewClient!!.hostsWhitelist += urlObject.host
     }
 
     /**
@@ -300,13 +338,20 @@ class PadViewActivity :
      * @param webView
      */
     @SuppressLint("SetJavaScriptEnabled")
-    private fun makeWebSettings(webView: WebView?) {
+    private fun makeWebSettings() {
+        webView = findViewById(R.id.activity_main_webview)
+        webView!!.webViewClient = webViewClient!!
         webView!!.setInitialScale(1)
-        val webSettings = webView.settings
+
+        val webSettings = webView!!.settings
+
         // Enable Javascript
         webSettings.javaScriptEnabled = true
+
         // remove a weird white line on the right size
-        webView.scrollBarStyle = WebView.SCROLLBARS_OUTSIDE_OVERLAY
+//        webView!!.scrollBarStyle = WebView.SCROLLBARS_OUTSIDE_OVERLAY
+
+        // Other options
         webSettings.useWideViewPort = true
         webSettings.setSupportZoom(true)
         webSettings.builtInZoomControls = true
@@ -315,7 +360,6 @@ class PadViewActivity :
         webSettings.domStorageEnabled = true // Required for some NodeJS based code
         webSettings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK // Feature?: keep cookies
 
-
         // Cookies will be needed for pads
         val cookieManager = CookieManager.getInstance()
         cookieManager.setAcceptCookie(true)
@@ -323,12 +367,6 @@ class PadViewActivity :
             cookieManager.setAcceptThirdPartyCookies(webView, true)
         }
     }
-
-//    private fun showPadViewAuthDialog(handler: HttpAuthHandler) {
-//        val fm = supportFragmentManager
-//        val dialog: BasicAuthDialog = PadViewActivity.PadViewAuthDialog(currentPadUrl, handler)
-//        dialog.show(fm, "dialog_auth")
-//    }
 
     companion object {
         const val TAG = "PadViewActivity"

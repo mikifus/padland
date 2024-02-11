@@ -19,7 +19,7 @@ public class ManagesEditServerDialog: IManagesEditServerDialog {
     override var serverViewModel: ServerViewModel? = null
 
     override fun showEditServerDialog(activity: AppCompatActivity, id: Long) {
-        if(dialog.isAdded) {
+        if(dialog.isAdded || activity.supportFragmentManager.isDestroyed) {
             return
         }
 

@@ -31,6 +31,9 @@ open class NewServerDialog: FormDialog() {
     private var mAdvancedButton: Button? = null
     private var mAdvancedLayout: LinearLayout? = null
 
+    var initialName: String? = null
+    var initialUrl: String? = null
+    var initialPrefix: String? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
@@ -106,6 +109,10 @@ open class NewServerDialog: FormDialog() {
         mLiteCheckbox?.isChecked = true
         mPadPrefixEditText!!.text = Editable.Factory.getInstance().newEditable(getString(R.string.default_pad_prefix))
         mJqueryCheckBox?.isChecked = true
+
+        initialName = null
+        initialUrl = null
+        initialPrefix = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -130,7 +137,9 @@ open class NewServerDialog: FormDialog() {
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
+        if(activity?.supportFragmentManager?.isDestroyed == true) {
+            activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
+        }
     }
 
     override fun initToolBar() {
@@ -170,6 +179,19 @@ open class NewServerDialog: FormDialog() {
         mJqueryCheckBox?.setOnCheckedChangeListener { compoundButton, b ->
             mLiteCheckbox?.isChecked = b && mPadPrefixEditText?.text.toString() ==
                     activity?.getString(R.string.default_pad_prefix)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        initialName?.let {
+            mNameEditText?.text = Editable.Factory.getInstance().newEditable(initialName)
+        }
+        initialUrl?.let {
+            mUrlEditText?.text = Editable.Factory.getInstance().newEditable(initialUrl)
+        }
+        initialPrefix?.let {
+            mPadPrefixEditText?.text = Editable.Factory.getInstance().newEditable(initialPrefix)
         }
     }
 }
