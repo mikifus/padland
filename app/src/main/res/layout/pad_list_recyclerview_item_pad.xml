@@ -24,12 +24,13 @@
         android:contentDescription="TODO" />
 
     <LinearLayout
+        android:id="@+id/content"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="start|center_vertical"
         android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/divider"
         app:layout_constraintStart_toEndOf="@+id/icon"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -48,5 +49,26 @@
             android:gravity="start|center_vertical"
             android:singleLine="true" />
     </LinearLayout>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider"
+        android:layout_width="@dimen/cardview_compat_inset_shadow"
+        android:minWidth="@dimen/cardview_compat_inset_shadow"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/action_button_margin"
+        app:layout_constraintStart_toEndOf="@id/content"
+        app:layout_constraintEnd_toStartOf="@id/button_copy"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/button_copy"
+        android:layout_width="48dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_info"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
