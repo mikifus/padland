@@ -4,7 +4,9 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.LiveDataScope
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.mikifus.padland.Database.PadGroupModel.PadGroup
 import com.mikifus.padland.Database.PadListDatabase
@@ -17,7 +19,7 @@ class PadViewModel(application: Application): AndroidViewModel(application) {
 
     val getAll: LiveData<List<Pad>>
 
-    val pad = MutableLiveData<Pad>()
+    val pad: MutableLiveData<Pad> = MutableLiveData()
 
     private val repository: PadRepository
 
@@ -44,7 +46,9 @@ class PadViewModel(application: Application): AndroidViewModel(application) {
     }
 
     suspend fun getById(id: Long): Pad {
-        return repository.getById(id)
+        val padQuery = repository.getById(id)
+        pad.postValue(padQuery)
+        return padQuery
     }
 
     suspend fun getByIds(ids: List<Long>): List<Pad> {
@@ -56,7 +60,11 @@ class PadViewModel(application: Application): AndroidViewModel(application) {
     }
 
     suspend fun updatePad(pad: Pad): Int {
-        return repository.updatePadGroup(pad)
+        val result = repository.updatePadGroup(pad)
+        if(result > 0 && this.pad.value != null && pad.mId == this.pad.value!!.mId) {
+            getById(pad.mId)
+        }
+        return result
     }
 
 //    fun updatePadPosition(padId: Long, position: Int) {
@@ -65,7 +73,11 @@ class PadViewModel(application: Application): AndroidViewModel(application) {
 
     suspend fun deletePad(id: Long): Int {
         val pad = Pad.withOnlyId(id).value!!
-        return repository.deletePad(pad)
+        val result = repository.deletePad(pad)
+        if(result > 0 && this.pad.value != null && pad.mId == this.pad.value!!.mId) {
+            this.pad.postValue(null)
+        }
+        return result
     }
 
     suspend fun deletePads(ids: List<Long>): Int {

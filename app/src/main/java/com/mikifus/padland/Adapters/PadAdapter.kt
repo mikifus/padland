@@ -9,6 +9,8 @@ import android.view.View
 import android.view.View.OnClickListener
 import android.view.View.OnTouchListener
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.selection.ItemDetailsLookup
@@ -23,8 +25,9 @@ import com.mikifus.padland.R
 class PadAdapter(
     context: Context,
     private val dragAndDropListener: IDragAndDropListener,
-    private val onClickListener: OnClickListener? = null):
-    RecyclerView.Adapter<PadAdapter.PadViewHolder>(){
+    private val onClickListener: OnClickListener? = null,
+    private val onClickInfoListener: OnClickListener? = null):
+    RecyclerView.Adapter<PadAdapter.PadViewHolder>() {
 
     private val mInflater: LayoutInflater
     var data: List<Pad> = listOf()
@@ -40,6 +43,8 @@ class PadAdapter(
         RecyclerView.ViewHolder(itemView) {
         val name: TextView
         val url: TextView
+        val content: LinearLayout
+        val buttonCopy: ImageButton
         val itemLayout: ConstraintLayout
 
         var padId: Long = 0
@@ -48,6 +53,8 @@ class PadAdapter(
         init {
             name = itemView.findViewById(R.id.text_recyclerview_item_name)
             url = itemView.findViewById(R.id.text_recyclerview_item_url)
+            content = itemView.findViewById(R.id.content)
+            buttonCopy = itemView.findViewById(R.id.button_copy)
             itemLayout = itemView.findViewById(R.id.pad_list_recyclerview_item_pad)
         }
 
@@ -61,9 +68,6 @@ class PadAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PadViewHolder {
         val itemView: View = mInflater.inflate(R.layout.pad_list_recyclerview_item_pad, parent, false)
-
-        onClickListener?.let { itemView.setOnClickListener(onClickListener) }
-
         return PadViewHolder(itemView)
     }
 
@@ -74,9 +78,19 @@ class PadAdapter(
 
         holder.padGroupId = padGroupId
         holder.itemLayout.tag = current.mId
+        holder.content.tag = current.mId
+        holder.buttonCopy.tag = current.mId
         holder.padId = current.mId
 
-        onTouchListener?.let { holder.itemLayout.setOnTouchListener(onTouchListener) }
+        onTouchListener?.let {
+            holder.itemLayout.setOnTouchListener(onTouchListener)
+        }
+        onClickListener?.let {
+            holder.content.setOnClickListener(onClickListener)
+        }
+        onClickInfoListener?.let {
+            holder.buttonCopy.setOnClickListener(onClickInfoListener)
+        }
 
         tracker?.let {
             holder.itemLayout.isSelected = it.isSelected(current.mId)

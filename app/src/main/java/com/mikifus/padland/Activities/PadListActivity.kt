@@ -90,10 +90,14 @@ class PadListActivity: AppCompatActivity(),
         recyclerViewUnclassified = findViewById(R.id.recyclerview_unclassified)
 
         padGroupViewModel = ViewModelProvider(this)[PadGroupViewModel::class.java]
-        adapter = PadGroupAdapter(this, this, getOnItemClickListener())
+        adapter = PadGroupAdapter(this, this,
+            getOnItemClickListener(),
+            getOnInfoClickListener())
 
         padViewModel = ViewModelProvider(this)[PadViewModel::class.java]
-        padAdapter = PadAdapter(this, this, getOnItemClickListener())
+        padAdapter = PadAdapter(this, this,
+            getOnItemClickListener(),
+            getOnInfoClickListener())
 
         recyclerView!!.adapter = adapter
         recyclerView!!.layoutManager = LinearLayoutManager(this)
@@ -114,6 +118,14 @@ class PadListActivity: AppCompatActivity(),
     private fun getOnItemClickListener(): View.OnClickListener {
         return View.OnClickListener{ view: View ->
             val padViewIntent = Intent(this, PadViewActivity::class.java)
+            padViewIntent.putExtra("padId", view.tag as Long)
+            startActivity(padViewIntent)
+        }
+    }
+
+    private fun getOnInfoClickListener(): View.OnClickListener {
+        return View.OnClickListener{ view: View ->
+            val padViewIntent = Intent(this, PadInfoActivity::class.java)
             padViewIntent.putExtra("padId", view.tag as Long)
             startActivity(padViewIntent)
         }
@@ -152,10 +164,7 @@ class PadListActivity: AppCompatActivity(),
 
         val newPadButton = findViewById<FloatingActionButton>(R.id.new_pad_button)
         newPadButton.setOnClickListener {
-            val newPadIntent = Intent(this@PadListActivity, NewPadActivity::class.java)
-//            startActivity(newPadIntent)
             showNewPadDialog(this@PadListActivity)
-
         }
 
 

@@ -120,12 +120,12 @@
                 android:value=".Activities.PadListActivity" />
         </activity>
         <activity
-            android:name=".PadInfoActivity"
+            android:name=".Activities.PadInfoActivity"
             android:label="@string/title_activity_pad_info"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.mikifus.padland.PadInfoActivity" />
+                android:value=".Activities.PadListActivity" />
         </activity>
         <activity
             android:name=".PadLandDataActivity"

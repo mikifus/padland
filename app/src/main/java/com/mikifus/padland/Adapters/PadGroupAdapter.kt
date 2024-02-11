@@ -26,7 +26,8 @@ import com.mikifus.padland.R
 
 class PadGroupAdapter(context: Context,
                       private val dragAndDropListener: IDragAndDropListener,
-                      private val onClickListener: OnClickListener):
+                      private val onClickListener: OnClickListener,
+                      private val onClickInfoListener: OnClickListener? = null):
     RecyclerView.Adapter<PadGroupAdapter.PadGroupViewHolder>() {
 
     private val activityContext: Context
@@ -68,7 +69,13 @@ class PadGroupAdapter(context: Context,
         }
     }
 
-    class PadGroupViewHolder(itemView: View, context: Context, listener: IDragAndDropListener, onClickListener: OnClickListener) :
+    class PadGroupViewHolder(
+        itemView: View,
+        context: Context,
+        listener: IDragAndDropListener,
+        onClickListener: OnClickListener?,
+        onClickInfoListener: OnClickListener?
+    ) :
         RecyclerView.ViewHolder(itemView) {
         val titleTextView: TextView
         val itemLayout: ConstraintLayout
@@ -84,7 +91,7 @@ class PadGroupAdapter(context: Context,
             itemLayout = itemView.findViewById(R.id.pad_list_recyclerview_item_padgroup)
             itemLayout.isActivated = true
             padListRecyclerView.layoutManager = LinearLayoutManager(context)
-            padAdapter = PadAdapter(context, listener, onClickListener)
+            padAdapter = PadAdapter(context, listener, onClickListener, onClickInfoListener)
 
             initListView()
             padAdapter.tracker = (context as PadListActivity).makePadSelectionTracker(context, padListRecyclerView, padAdapter)
@@ -127,7 +134,7 @@ class PadGroupAdapter(context: Context,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PadGroupViewHolder {
         val itemView: View = mInflater.inflate(R.layout.pad_list_recyclerview_item_padgroup, parent, false)
-        return PadGroupViewHolder(itemView, activityContext, dragAndDropListener, onClickListener)
+        return PadGroupViewHolder(itemView, activityContext, dragAndDropListener, onClickListener, onClickInfoListener)
     }
 
     override fun onBindViewHolder(holder: PadGroupViewHolder, position: Int) {
