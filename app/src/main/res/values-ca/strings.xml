@@ -137,5 +137,8 @@
     <string name="padview_pad_save_success">El document s\'ha afegit a la llista.</string>
     <string name="validation_url_invalid_remove">L\'adreça (URL) del no és vàlida.</string>
     <string name="none">Cap</string>
+    <string name="ignore">Ignora</string>
+    <string name="whitelist_server_dialog_open_browser">Obre al navegador</string>
+    <string name="whitelist_server_dialog_title">Adreça no permesa</string>
 
 </resources>

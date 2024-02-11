@@ -7,25 +7,28 @@ import androidx.lifecycle.lifecycleScope
 import com.mikifus.padland.Database.ServerModel.Server
 import com.mikifus.padland.Database.ServerModel.ServerViewModel
 import com.mikifus.padland.Dialogs.NewServerDialog
+import com.mikifus.padland.Utils.PadServer
+import com.mikifus.padland.Utils.PadUrl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 interface IManagesNewServerDialog {
     var serverViewModel: ServerViewModel?
-    fun showNewServerDialog(activity: AppCompatActivity)
+    fun showNewServerDialog(activity: AppCompatActivity, url: String? = null)
 }
 
 class ManagesNewServerDialog: IManagesNewServerDialog {
 
     override var serverViewModel: ServerViewModel? = null
 
-    override fun showNewServerDialog(activity: AppCompatActivity) {
-        if(dialog.isAdded) {
+    override fun showNewServerDialog(activity: AppCompatActivity, url: String?) {
+        if(dialog.isAdded || activity.supportFragmentManager.isDestroyed) {
             return
         }
 
         initViewModels(activity)
         initEvents(activity)
+        url?.let { onSetInitialUrl(url) }
 
         val transaction = activity.supportFragmentManager.beginTransaction()
 
@@ -49,6 +52,14 @@ class ManagesNewServerDialog: IManagesNewServerDialog {
             saveNewServerDialog(activity, data)
             dialog.clearForm()
         }
+    }
+
+    private fun onSetInitialUrl(url: String) {
+        val padUrl = PadServer.Builder().padUrl(url)
+
+        dialog.initialName = padUrl.host
+        dialog.initialUrl = padUrl.baseUrl
+        dialog.initialPrefix = padUrl.prefix
     }
 
     private fun saveNewServerDialog(activity: AppCompatActivity, data: Map<String, Any>) {

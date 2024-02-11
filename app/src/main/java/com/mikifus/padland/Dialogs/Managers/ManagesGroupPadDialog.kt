@@ -23,7 +23,7 @@ public class ManagesGroupPadDialog: IManagesGroupPadDialog {
     override var padGroupViewModel: PadGroupViewModel? = null
 
     override fun showGroupPadDialog(activity: AppCompatActivity, ids: List<Long>) {
-        if(dialog.isAdded) {
+        if(dialog.isAdded || activity.supportFragmentManager.isDestroyed) {
             return
         }
 

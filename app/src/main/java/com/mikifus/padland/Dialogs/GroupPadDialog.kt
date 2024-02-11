@@ -47,10 +47,10 @@ class GroupPadDialog: FormDialog() {
 
     private fun initViewModels() {
         if(padGroupViewModel == null) {
-            padGroupViewModel = ViewModelProvider(requireActivity())[PadGroupViewModel::class.java]
+            padGroupViewModel = ViewModelProvider(this)[PadGroupViewModel::class.java]
         }
 
-        padGroupViewModel!!.getAll.observe(requireActivity()) { padGroups ->
+        padGroupViewModel!!.getAll.observe(this) { padGroups ->
             padGroupsSpinnerData = listOf(
                     PadGroup.fromName(getString(R.string.padlist_group_unclassified_name)).value!!
                 ) + padGroups
@@ -97,7 +97,9 @@ class GroupPadDialog: FormDialog() {
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
 
-        activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
+        if(activity?.supportFragmentManager?.isDestroyed == true) {
+            activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
+        }
     }
 
     override fun initToolBar() {

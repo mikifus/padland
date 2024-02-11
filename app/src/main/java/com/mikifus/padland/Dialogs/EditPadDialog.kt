@@ -72,13 +72,13 @@ class EditPadDialog: FormDialog() {
 
     private fun initViewModels() {
         if(padGroupViewModel == null) {
-            padGroupViewModel = ViewModelProvider(requireActivity())[PadGroupViewModel::class.java]
+            padGroupViewModel = ViewModelProvider(this)[PadGroupViewModel::class.java]
         }
         if(serverViewModel == null) {
-            serverViewModel = ViewModelProvider(requireActivity())[ServerViewModel::class.java]
+            serverViewModel = ViewModelProvider(this)[ServerViewModel::class.java]
         }
 
-        padGroupViewModel!!.getAll.observe(requireActivity()) { padGroups ->
+        padGroupViewModel!!.getAll.observe(this) { padGroups ->
             padGroupsSpinnerData = listOf(
                     PadGroup.fromName(getString(R.string.padlist_group_unclassified_name)).value!!
                 ) + padGroups
@@ -95,7 +95,7 @@ class EditPadDialog: FormDialog() {
             applyFormData()
         }
 
-        serverViewModel!!.getAll.observe(requireActivity()) { servers ->
+        serverViewModel!!.getAll.observe(this) { servers ->
             // Get DB servers
             serverSpinnerData = servers.map { Pair(it.mName, it.mUrl + it.mPadprefix) }
 
@@ -212,7 +212,9 @@ class EditPadDialog: FormDialog() {
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
 
-        activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
+        if(activity?.supportFragmentManager?.isDestroyed == true) {
+            activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
+        }
     }
 
     override fun initToolBar() {

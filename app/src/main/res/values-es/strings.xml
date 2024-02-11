@@ -133,5 +133,8 @@
     <string name="new_pad_local_name_explanation">Opcionalmente indica un alias local para el documento.</string>
     <string name="padview_pad_save_success">El documento se ha añadido a la lista.</string>
     <string name="none">Ninguno</string>
+    <string name="ignore">Ignorar</string>
+    <string name="whitelist_server_dialog_open_browser">Abrir en navegador</string>
+    <string name="whitelist_server_dialog_title">Dirección no permitida</string>
 
 </resources>

@@ -10,6 +10,11 @@ interface PadLandWebClientCallbacks {
     fun onStopLoading()
     fun onUnsafeUrlProtocol(url: String?)
     fun onReceivedSslError(message: String)
-    fun onExternalHostUrlLoad(url: String): Boolean
+
+    /**
+     * Implemented with runBlocking so it can suspend and
+     * ask the user before returning.
+     */
+    suspend fun onExternalHostUrlLoad(url: String): Boolean
     fun onReceivedHttpAuthRequestCallback(view: WebView, handler: HttpAuthHandler, host: String, realm: String)
 }

@@ -15,6 +15,7 @@ import com.mikifus.padland.PadViewActivity
 import com.mikifus.padland.R
 import com.mikifus.padland.SaferWebView.PadLandSaferWebViewClient
 import com.mikifus.padland.Utils.WhiteListMatcher
+import kotlinx.coroutines.runBlocking
 
 public class PadLandWebViewClient(hostsWhitelist: List<String>, private val callbacks: PadLandWebClientCallbacks) :
     PadLandSaferWebViewClient(hostsWhitelist),
@@ -74,9 +75,6 @@ public class PadLandWebViewClient(hostsWhitelist: List<String>, private val call
     }
 
     override fun onReceivedHttpAuthRequest(view: WebView, handler: HttpAuthHandler, host: String, realm: String) {
-//        val fm = supportFragmentManager
-//        val dialog: BasicAuthDialog = PadViewActivity.PadViewAuthDialog(currentPadUrl, handler)
-//        dialog.show(fm, "dialog_auth")
         onReceivedHttpAuthRequestCallback(view, handler, host, realm)
     }
 
@@ -90,7 +88,11 @@ public class PadLandWebViewClient(hostsWhitelist: List<String>, private val call
     override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
         if ((URLUtil.isHttpUrl(url) || URLUtil.isHttpsUrl(url)) &&
             !WhiteListMatcher.isValidHost(url, hostsWhitelist)) {
-            return onExternalHostUrlLoad(url)
+
+            // WARNING: Runs blocking, it seems to work as expected
+            return runBlocking {
+                onExternalHostUrlLoad(url)
+            }
         }
         return false
     }

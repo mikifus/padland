@@ -22,18 +22,18 @@ class EditServerDialog: NewServerDialog() {
 
     private fun applyFormData() {
         data?.get("name")?.let {
-            mNameEditText!!.text = Editable.Factory.getInstance().newEditable(it.toString())
+            mNameEditText?.text = Editable.Factory.getInstance().newEditable(it.toString())
         }
         data?.get("url")?.let {
-            mUrlEditText!!.text = Editable.Factory.getInstance().newEditable(it.toString())
+            mUrlEditText?.text = Editable.Factory.getInstance().newEditable(it.toString())
         }
         data?.get("prefix")?.let {
-            mPadPrefixEditText!!.text = Editable.Factory.getInstance().newEditable(it.toString())
+            mPadPrefixEditText?.text = Editable.Factory.getInstance().newEditable(it.toString())
         }
         data?.get("jquery")?.let {
-            mJqueryCheckBox!!.isChecked = it as Boolean
+            mJqueryCheckBox?.isChecked = it as Boolean
             if(!it) {
-                mLiteCheckbox!!.isChecked = false
+                mLiteCheckbox?.isChecked = false
             }
         }
     }

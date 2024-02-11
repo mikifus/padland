@@ -26,7 +26,7 @@ public class ManagesNewPadDialog: IManagesNewPadDialog {
     override var padGroupViewModel: PadGroupViewModel? = null
 
     override fun showNewPadDialog(activity: AppCompatActivity) {
-        if(dialog.isAdded) {
+        if(dialog.isAdded || activity.supportFragmentManager.isDestroyed) {
             return
         }
 

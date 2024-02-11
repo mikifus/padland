@@ -51,7 +51,7 @@ class SettingsActivity : AppCompatActivity() {
 
         private fun initDefaultServerPreference() {
             if(serverViewModel == null) {
-                serverViewModel = ViewModelProvider(requireActivity())[ServerViewModel::class.java]
+                serverViewModel = ViewModelProvider(this)[ServerViewModel::class.java]
             }
 
             serverViewModel!!.getAllEnabled.observe(this) { servers ->
