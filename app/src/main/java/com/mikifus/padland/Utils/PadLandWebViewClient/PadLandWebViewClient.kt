@@ -13,11 +13,10 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import androidx.annotation.RequiresApi
 import com.mikifus.padland.R
-import com.mikifus.padland.SaferWebView.PadLandSaferWebViewClient
 import com.mikifus.padland.Utils.WhiteListMatcher
 import kotlinx.coroutines.runBlocking
 
-public class PadLandWebViewClient(hostsWhitelist: List<String>, private val callbacks: PadLandWebClientCallbacks) :
+class PadLandWebViewClient(hostsWhitelist: List<String>, private val callbacks: PadLandWebClientCallbacks) :
     PadLandSaferWebViewClient(hostsWhitelist),
     PadLandWebClientCallbacks by callbacks {
 
@@ -36,14 +35,14 @@ public class PadLandWebViewClient(hostsWhitelist: List<String>, private val call
         super.onPageStarted(view, url, favicon)
         ++webViewHttpConnections
         isLoading = true
-        Log.d(PadViewActivity.TAG, "Added connection $webViewHttpConnections")
+        Log.d(TAG, "Added connection $webViewHttpConnections")
     }
 
 
     override fun onPageFinished(view: WebView, url: String) {
         super.onPageFinished(view, url)
         --webViewHttpConnections
-        Log.d(PadViewActivity.TAG, "Removed connection $webViewHttpConnections")
+        Log.d(TAG, "Removed connection $webViewHttpConnections")
         if(webViewHttpConnections == 0) {
             isLoading = false
         }
@@ -52,7 +51,7 @@ public class PadLandWebViewClient(hostsWhitelist: List<String>, private val call
     override fun onPageCommitVisible(view: WebView?, url: String?) {
         super.onPageCommitVisible(view, url)
         --webViewHttpConnections
-        Log.d(PadViewActivity.TAG, "Removed connection $webViewHttpConnections")
+        Log.d(TAG, "Removed connection $webViewHttpConnections")
         if(webViewHttpConnections == 0) {
             isLoading = false
         }
@@ -62,7 +61,7 @@ public class PadLandWebViewClient(hostsWhitelist: List<String>, private val call
         super.onReceivedError(view, request, error)
         --webViewHttpConnections
         isLoading = false
-        Log.e(PadViewActivity.TAG, "WebView Error $error, Request: $request")
+        Log.e(TAG, "WebView Error $error, Request: $request")
     }
 
     @Deprecated("Deprecated in Java")
@@ -71,7 +70,7 @@ public class PadLandWebViewClient(hostsWhitelist: List<String>, private val call
         super.onReceivedError(view, errorCode, description, failingUrl)
         --webViewHttpConnections
         isLoading = false
-        Log.e(PadViewActivity.TAG, "WebView Error ($errorCode) $description, Request: $failingUrl")
+        Log.e(TAG, "WebView Error ($errorCode) $description, Request: $failingUrl")
     }
 
     override fun onReceivedHttpAuthRequest(view: WebView, handler: HttpAuthHandler, host: String, realm: String) {
@@ -108,7 +107,7 @@ public class PadLandWebViewClient(hostsWhitelist: List<String>, private val call
             else -> { error.primaryError.toString() }
         }
 
-        Log.e(PadViewActivity.TAG, "SSL Error received: " + error.primaryError + " - " + message)
+        Log.e(TAG, "SSL Error received: " + error.primaryError + " - " + message)
 
         callbacks.onReceivedSslError(handler, error.url, message)
     }
@@ -117,5 +116,9 @@ public class PadLandWebViewClient(hostsWhitelist: List<String>, private val call
         return runBlocking {
             callbacks.onUnsafeUrlProtocol(url)
         }
+    }
+
+    companion object {
+        const val TAG: String = "WEB_VIEW_CLIENT"
     }
 }

@@ -375,8 +375,4 @@ class PadViewActivity :
             cookieManager.setAcceptThirdPartyCookies(webView, true)
         }
     }
-
-    companion object {
-        const val TAG = "PadViewActivity"
-    }
 }
