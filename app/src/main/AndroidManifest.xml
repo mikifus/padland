@@ -18,19 +18,18 @@
         <meta-data android:name="android.webkit.WebView.MetricsOptOut" android:value="true" />
 
         <activity
-            android:name=".SplashActivity"
-            android:label="@string/app_name"
-            android:theme="@style/splashScreenTheme"
+            android:name=".Activities.InitialActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".IntroActivity"
+
+        <activity android:name=".Activities.IntroActivity"
             android:label="@string/title_activity_intro"
             android:theme="@style/splashScreenTheme" />
+
         <activity
             android:name=".Activities.PadListActivity"
             android:label="@string/title_activity_padlist"
@@ -47,6 +46,7 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".Activities.PadViewActivity"
             android:label="@string/title_activity_pad_view"
@@ -91,17 +91,7 @@
                 <data android:pathPrefix="/p/"/>
             </intent-filter>
         </activity>
-        <activity
-            android:name=".NewPadActivity"
-            android:parentActivityName=".PadListActivity"
-            android:label="@string/title_activity_new_pad"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
 
-            <!-- Parent activity meta-data to support 4.0 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".PadListActivity" />
-        </activity>
         <activity
             android:name=".About"
             android:label="@string/title_activity_about" >
@@ -111,6 +101,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.SettingsActivity" />
         </activity>
+
         <activity
             android:name=".Activities.SettingsActivity"
             android:label="@string/title_activity_settings"
@@ -119,6 +110,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.PadListActivity" />
         </activity>
+
         <activity
             android:name=".Activities.PadInfoActivity"
             android:label="@string/title_activity_pad_info"
@@ -127,11 +119,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.PadListActivity" />
         </activity>
+
         <activity
             android:name=".PadLandDataActivity"
             android:label="@string/title_activity_pad_land_data"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
         </activity>
+
         <activity
             android:name=".Activities.ServerListActivity"
             android:label="@string/title_activity_server_list"
@@ -142,12 +136,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.SettingsActivity" />
         </activity>
+
         <provider
             android:name="com.mikifus.padland.PadContentProvider"
             android:authorities="com.mikifus.padland.padlandcontentprovider"
             android:enabled="true"
             android:exported="false" >
         </provider>
+
     </application>
 
 </manifest>
