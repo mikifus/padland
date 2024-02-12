@@ -59,7 +59,7 @@
             android:summary="@string/about" >
             <intent
                 android:targetPackage="com.mikifus.padland"
-                android:targetClass="com.mikifus.padland.About"/>
+                android:targetClass="com.mikifus.padland.Activities.AboutActivity"/>
         </PreferenceScreen>
 
         <PreferenceScreen

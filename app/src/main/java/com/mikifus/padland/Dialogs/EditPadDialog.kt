@@ -86,7 +86,7 @@ class EditPadDialog: FormDialog() {
             mPadGroupSpinner?.setAdapter(
                 ArrayAdapter(
                     requireContext(),
-                    R.layout.list_item,
+                    R.layout.recyclerview_item,
                     padGroupsSpinnerData!!.map { it.mName }
                 )
             )
@@ -109,7 +109,7 @@ class EditPadDialog: FormDialog() {
             mServerSpinner?.setAdapter(
                 ArrayAdapter(
                     requireContext(),
-                    R.layout.list_item,
+                    R.layout.recyclerview_item,
                     serverSpinnerData!!.map { it.first }
                 )
             )

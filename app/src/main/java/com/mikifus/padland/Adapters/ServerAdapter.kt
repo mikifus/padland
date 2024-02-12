@@ -3,17 +3,14 @@ package com.mikifus.padland.Adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.RecyclerView
-import com.mikifus.padland.Database.PadModel.Pad
 import com.mikifus.padland.Database.ServerModel.Server
 import com.mikifus.padland.R
-import com.mikifus.padland.ServerListActivity
 
 /**
  * Created by mikifus on 29/05/16.
@@ -77,39 +74,4 @@ class ServerAdapter(
     override fun getItemCount(): Int {
         return data.size
     }
-
-//    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-//        // Get the data item for this position
-//        var view = convertView
-//        val server = getItem(position)
-//
-//        // Check if an existing view is being reused, otherwise inflate the view
-//        if (view == null) {
-//            view = LayoutInflater.from(context).inflate(layout_resource, parent, false)
-//        }
-//        (view!!.findViewById<View>(R.id.name) as TextView).text = server.mName
-//        (view.findViewById<View>(R.id.url) as TextView).text = server.mUrl
-//
-//        // Return the completed view to render on screen
-//        return view
-//    }
-//
-//    override fun getCount(): Int {
-////        return serverModel.serverCount
-//        return items.count()
-//    }
-//
-//    override fun getItem(position: Int): com.mikifus.padland.Database.ServerModel.Server {
-//        return items[position]
-//    }
-//
-//    override fun getItemId(position: Int): Long {
-//        return items[position].mId
-//    }
-//
-//    override fun notifyDataSetChanged() {
-//        super.notifyDataSetChanged()
-////        items = serverModel.enabledServerList
-//        items = PadListDatabase.getInstance(context!!).serverDao().getAll().value?.let { return@let it } ?: emptyList()
-//    }
 }

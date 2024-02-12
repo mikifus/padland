@@ -5,15 +5,21 @@ import android.content.ContentUris
 import android.content.ContentValues
 import android.content.UriMatcher
 import android.database.Cursor
-import android.database.DatabaseUtils
+import android.database.MatrixCursor
 import android.database.SQLException
-import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteQueryBuilder
 import android.net.Uri
-import android.text.TextUtils
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.mikifus.padland.Database.PadGroupModel.PadGroup
+import com.mikifus.padland.Database.PadGroupModel.PadGroupDao
+import com.mikifus.padland.Database.PadListDatabase
+import com.mikifus.padland.Database.PadModel.Pad
+import com.mikifus.padland.Database.PadModel.PadDao
 import com.mikifus.padland.Models.PadGroupModel
 import com.mikifus.padland.Models.PadModel
+import kotlinx.coroutines.runBlocking
 import java.util.Arrays
 import java.util.Date
 
@@ -28,7 +34,30 @@ open class PadContentProvider : ContentProvider() {
     /**
      * Database specific constant declarations
      */
-    private var db: SQLiteDatabase? = null
+//    private var db: SQLiteDatabase? = null
+
+    private fun getCursorFromLiveData(liveData: LiveData<List<Pad>>): Cursor {
+        val cursor = MatrixCursor(padFieldsList)
+        if(liveData.value == null || liveData.value!!.isEmpty()) {
+            return cursor
+        }
+//        val columnNames = liveData.value!![0].javaClass.declaredFields.map { it.name }.toTypedArray()
+//        val cursor = MatrixCursor(columnNames)
+
+        liveData.value?.forEach { item -> cursor.addRow(item.javaClass.declaredFields.map{it as Object}) }
+
+        return cursor
+    }
+    private fun getCursorFromLiveDataGroup(liveData: LiveData<List<PadGroup>>): Cursor {
+        val cursor = MatrixCursor(padFieldsList)
+        if(liveData.value == null || liveData.value!!.isEmpty()) {
+            return cursor
+        }
+
+        liveData.value?.forEach { item -> cursor.addRow(item.javaClass.declaredFields.map{it as Object}) }
+
+        return cursor
+    }
 
     /**
      * Deletes a document from the db
@@ -42,40 +71,57 @@ open class PadContentProvider : ContentProvider() {
         Log.d("DELETE_QUERY", selection + " - " + selectionArgs.toString())
         val id: String
         val query: ArrayList<String?>
+        val context = context ?: return 0
         when (uriMatcher!!.match(uri)) {
+//            PADLIST -> {
+//                Log.d("DELETE_PADLIST", selection + " - " + selectionArgs.toString())
+//                db!!.delete(RELATION_TABLE_NAME, "$_ID_PAD =?", selectionArgs)
+//                count = db!!.delete(PAD_TABLE_NAME, selection, selectionArgs)
+//            }
             PADLIST -> {
                 Log.d("DELETE_PADLIST", selection + " - " + selectionArgs.toString())
-                db!!.delete(RELATION_TABLE_NAME, "$_ID_PAD =?", selectionArgs)
-                count = db!!.delete(PAD_TABLE_NAME, selection, selectionArgs)
+                count = PadListDatabase.getInstance(context).padDao().deleteBy(selectionArgs)
             }
 
+//            PAD_ID -> {
+//                Log.d("DELETE_PAD_ID", selection + " - " + Arrays.toString(selectionArgs))
+//                id = uri.pathSegments[1]
+//                query = ArrayList(selectionArgs?.let { listOf(*it) }!!)
+//                query.add(0, id)
+//                db!!.delete(RELATION_TABLE_NAME, _ID_PAD + " = ?", arrayOfNulls(0))
+//                count = db!!.delete(PAD_TABLE_NAME, _ID + " = ?" + if (!TextUtils.isEmpty(selection)) " AND (?)" else "", query.toTypedArray())
+//            }
             PAD_ID -> {
                 Log.d("DELETE_PAD_ID", selection + " - " + Arrays.toString(selectionArgs))
-                id = uri.pathSegments[1]
-                query = ArrayList(selectionArgs?.let { listOf(*it) }!!)
-                query.add(0, id)
-                db!!.delete(RELATION_TABLE_NAME, _ID_PAD + " = ?", arrayOfNulls(0))
-                count = db!!.delete(PAD_TABLE_NAME, _ID + " = ?" + if (!TextUtils.isEmpty(selection)) " AND (?)" else "", query.toTypedArray())
+                count = PadListDatabase.getInstance(context).padDao().deleteBy(selectionArgs)
             }
 
+//            PADGROUP_LIST -> {
+//                Log.d(TAG, "delete_padgroup_list: " + selection + " - " + Arrays.toString(selectionArgs))
+//                db!!.delete(RELATION_TABLE_NAME, _ID_GROUP + " =?", selectionArgs)
+//                count = db!!.delete(PADGROUP_TABLE_NAME, selection, selectionArgs)
+//            }
             PADGROUP_LIST -> {
                 Log.d(TAG, "delete_padgroup_list: " + selection + " - " + Arrays.toString(selectionArgs))
-                db!!.delete(RELATION_TABLE_NAME, _ID_GROUP + " =?", selectionArgs)
-                count = db!!.delete(PADGROUP_TABLE_NAME, selection, selectionArgs)
+                count = PadListDatabase.getInstance(context).padGroupDao().deleteBy(selectionArgs)
             }
 
+//            PADGROUP_ID -> {
+//                Log.d(TAG, "delete_padgroup_id: " + selection + " - " + Arrays.toString(selectionArgs))
+//                id = uri.pathSegments[1]
+//                query = ArrayList(selectionArgs?.let { listOf(*it) }!!)
+//                query.add(0, id)
+//                db!!.delete(RELATION_TABLE_NAME, _ID_GROUP + " = ?", arrayOfNulls(0))
+//                count = db!!.delete(PADGROUP_TABLE_NAME, _ID + " = ?" + if (!TextUtils.isEmpty(selection)) " AND (?)" else "", query.toTypedArray())
+//            }
             PADGROUP_ID -> {
-                Log.d(TAG, "delete_padgroup_id: " + selection + " - " + Arrays.toString(selectionArgs))
-                id = uri.pathSegments[1]
-                query = ArrayList(selectionArgs?.let { listOf(*it) }!!)
-                query.add(0, id)
-                db!!.delete(RELATION_TABLE_NAME, _ID_GROUP + " = ?", arrayOfNulls(0))
-                count = db!!.delete(PADGROUP_TABLE_NAME, _ID + " = ?" + if (!TextUtils.isEmpty(selection)) " AND (?)" else "", query.toTypedArray())
+//                Log.d(TAG, "delete_padgroup_id: " + selection + " - " + Arrays.toString(selectionArgs))
+                count = PadListDatabase.getInstance(context).padGroupDao().deleteBy(selectionArgs)
             }
 
             else -> throw IllegalArgumentException("Unknown URI $uri")
         }
-        context!!.contentResolver.notifyChange(uri, null)
+        context.contentResolver.notifyChange(uri, null)
         return count
     }
 
@@ -93,19 +139,35 @@ open class PadContentProvider : ContentProvider() {
         val count: Int
         val id: String
         val query: ArrayList<String?>
-        when (uriMatcher!!.match(uri)) {
-            PADLIST -> count = db!!.update(PAD_TABLE_NAME, values, selection, selectionArgs)
-            PAD_ID -> {
-                id = uri.pathSegments[1]
-                query = ArrayList(selectionArgs?.let { listOf(*it) }!!)
-                query.add(0, id)
-                count = db!!.update(PAD_TABLE_NAME,
-                        values,
-                        _ID + " = ?" + if (!TextUtils.isEmpty(selection)) " AND (?)" else "",
-                        query.toTypedArray())
-            }
+        val context = context ?: return 0
+        val pad: MutableLiveData<Pad> = values?.let { Pad.fromContentValues(it) }!!
+        runBlocking {
+            when (uriMatcher!!.match(uri)) {
+//            PADLIST -> count = db!!.update(PAD_TABLE_NAME, values, selection, selectionArgs)
+                PADLIST -> {
+                    count = PadListDatabase.getInstance(context).padDao()
+                        .update(pad.value!!)
+                }
+//            PAD_ID -> {
+//                id = uri.pathSegments[1]
+//                query = ArrayList(selectionArgs?.let { listOf(*it) }!!)
+//                query.add(0, id)
+//                count = db!!.update(PAD_TABLE_NAME,
+//                        values,
+//                        _ID + " = ?" + if (!TextUtils.isEmpty(selection)) " AND (?)" else "",
+//                        query.toTypedArray())
+//            }
+                PAD_ID -> {
+//                id = uri.pathSegments[1]
+//                query = ArrayList(selectionArgs?.let { listOf(*it) }!!)
+//                query.add(0, id)
 
-            else -> throw IllegalArgumentException("Unknown URI $uri")
+                    count = PadListDatabase.getInstance(context).padDao()
+                        .update(pad.value!!)
+                }
+
+                else -> throw IllegalArgumentException("Unknown URI $uri")
+            }
         }
         context!!.contentResolver.notifyChange(uri, null)
         return count
@@ -121,6 +183,15 @@ open class PadContentProvider : ContentProvider() {
             default:
                 throw new IllegalArgumentException("Unsupported URI: " + uri);
         }*/
+
+//        return when (uriMatcher!!.match(uri)) {
+//            PADLIST -> "vnd.android.cursor.dir/$AUTHORITY.pad"
+//            PAD_ID-> "vnd.android.cursor.item/$AUTHORITY.pad"
+//            PADGROUP_LIST-> "vnd.android.cursor.item/$AUTHORITY.padgroup"
+//            PADGROUP_ID-> "vnd.android.cursor.item/$AUTHORITY.padgroup"
+//            PADLIST_PADGROUP_ID-> "vnd.android.cursor.item/$AUTHORITY.padlist_padgroup"
+//            else -> throw IllegalArgumentException("Unknown URI: $uri")
+//        }
         return null
     }
 
@@ -134,20 +205,36 @@ open class PadContentProvider : ContentProvider() {
         /**
          * Add a new record
          */
-        val rowID: Long
+        var rowID: Long = 0
         val _uri: Uri? = null
-        when (uriMatcher!!.match(uri)) {
-            PADLIST -> {
-                rowID = db!!.insert(PAD_TABLE_NAME, "", values)
-                ContentUris.withAppendedId(PADLIST_CONTENT_URI, rowID)
-            }
+        val context = context ?: throw Exception("No context provided")
+        runBlocking {
+            when (uriMatcher!!.match(uri)) {
+                //            PADLIST -> {
+                //                rowID = db!!.insert(PAD_TABLE_NAME, "", values)
+                //                ContentUris.withAppendedId(PADLIST_CONTENT_URI, rowID)
+                //            }
+                PADLIST -> {
+                    val pad: MutableLiveData<Pad> = values?.let { Pad.fromContentValues(it) }!!
+                    rowID = PadListDatabase.getInstance(context).padDao().insert(pad.value!!)
+                    ContentUris.withAppendedId(PADLIST_CONTENT_URI, rowID)
+                }
 
-            PADGROUP_LIST -> {
-                rowID = db!!.insert(PADGROUP_TABLE_NAME, "", values)
-                ContentUris.withAppendedId(PADGROUPS_CONTENT_URI, rowID)
-            }
+                //            PADGROUP_LIST -> {
+                //                rowID = db!!.insert(PADGROUP_TABLE_NAME, "", values)
+                //                ContentUris.withAppendedId(PADGROUPS_CONTENT_URI, rowID)
+                //            }
+                PADGROUP_LIST -> {
+                    val padgroup: MutableLiveData<PadGroup> =
+                        values?.let { PadGroup.fromContentValues(it) }!!
 
-            else -> throw IllegalArgumentException("Unknown URI $uri")
+                    val rowIDs = PadListDatabase.getInstance(context).padGroupDao()
+                        .insertAll(padgroup.value!!)
+                    ContentUris.withAppendedId(PADGROUPS_CONTENT_URI, rowIDs[0])
+                }
+
+                else -> throw IllegalArgumentException("Unknown URI $uri")
+            }
         }
         /**
          * If record is added successfully
@@ -171,36 +258,62 @@ open class PadContentProvider : ContentProvider() {
     override fun query(uri: Uri, projection: Array<String>?, selection: String?, selectionArgs: Array<String>?, sortOrder: String?): Cursor? {
         var order = sortOrder
         val qb = SQLiteQueryBuilder()
+        val context = context ?: return null
+        val cursor: Cursor
         when (uriMatcher!!.match(uri)) {
+//            PADLIST -> {
+//                qb.tables = PAD_TABLE_NAME
+//                qb.projectionMap = PROJECTION_MAP
+//            }
+//            PAD_ID -> {
+//                qb.tables = PAD_TABLE_NAME
+//                qb.appendWhere(_ID + "=" + DatabaseUtils.sqlEscapeString(uri.pathSegments[1]))
+//            }
             PADLIST -> {
-                qb.tables = PAD_TABLE_NAME
-                qb.projectionMap = PROJECTION_MAP
+                val padDao: PadDao = PadListDatabase.getInstance(context).padDao()
+                cursor = if (selectionArgs === null || selectionArgs.isEmpty()) {
+                    padDao.getAllCursor()
+                } else {
+                    padDao.getByUrlCursor(selectionArgs[0])
+                }
+                cursor.setNotificationUri(context.contentResolver, uri)
             }
-
             PAD_ID -> {
-                qb.tables = PAD_TABLE_NAME
-                qb.appendWhere(_ID + "=" + DatabaseUtils.sqlEscapeString(uri.pathSegments[1]))
+                val padDao: PadDao = PadListDatabase.getInstance(context).padDao()
+                cursor = padDao.getByIdCursor(ContentUris.parseId(uri))
             }
 
+//            PADGROUP_LIST -> {
+//                qb.tables = PADGROUP_TABLE_NAME
+//                qb.projectionMap = PROJECTION_MAP
+//            }
             PADGROUP_LIST -> {
-                qb.tables = PADGROUP_TABLE_NAME
-                qb.projectionMap = PROJECTION_MAP
+                val padGroupDao: PadGroupDao = PadListDatabase.getInstance(context).padGroupDao()
+                cursor = if (selectionArgs === null || selectionArgs.isEmpty()) {
+                    padGroupDao.getAllCursor()
+                } else {
+                    padGroupDao.getByIdCursor(selectionArgs[0].toLong())
+                }
+                cursor.setNotificationUri(context.contentResolver, uri)
             }
 
             else -> throw IllegalArgumentException("Unknown URI $uri")
         }
-        if (order.isNullOrEmpty()) {
-            /**
-             * By default sort
-             */
-            order = "$LAST_USED_DATE DESC "
-        }
-        val c = qb.query(db, projection, selection, selectionArgs, null, null, order)
+//        if (order.isNullOrEmpty()) {
+//            /**
+//             * By default sort
+//             */
+//            order = "$LAST_USED_DATE DESC "
+//        }
+//        val c = qb.query(db, projection, selection, selectionArgs, null, null, order)
         /**
          * register to watch a content URI for changes
          */
-        c.setNotificationUri(context!!.contentResolver, uri)
-        return c
+//        c.setNotificationUri(context!!.contentResolver, uri)
+//        return c
+
+        cursor.setNotificationUri(context.contentResolver, uri)
+        return cursor
     }
 
     /**
@@ -208,14 +321,15 @@ open class PadContentProvider : ContentProvider() {
      * @return
      */
     override fun onCreate(): Boolean {
-        val context = context
-        val dbHelper = PadlandDbHelper(context)
+//        val context = context
+//        val dbHelper = PadlandDbHelper(context)
         /**
-         * Create a write able database which will trigger its
+         * Create a writeable database which will trigger its
          * creation if it doesn't already exist.
          */
-        db = dbHelper.writableDatabase
-        return db != null
+//        db = dbHelper.writableDatabase
+//        return db != null
+        return context != null
     }
 
     companion object {
@@ -224,7 +338,7 @@ open class PadContentProvider : ContentProvider() {
         private const val AUTHORITY = "content://$PROVIDER_NAME/"
         val PADLIST_CONTENT_URI: Uri = Uri.parse(AUTHORITY + "padlist")
         val PADGROUPS_CONTENT_URI: Uri = Uri.parse(AUTHORITY + "padgroups")
-        const val DATABASE_VERSION = 8
+        const val DATABASE_VERSION = 9
         const val _ID = "_id"
         const val LOCAL_NAME = "local_name" // Alias of the pad
         const val SERVER = "server" // server, might contain the suffix

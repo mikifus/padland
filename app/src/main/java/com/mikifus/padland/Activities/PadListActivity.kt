@@ -40,7 +40,6 @@ import com.mikifus.padland.Database.PadGroupModel.PadGroupsAndPadList
 import com.mikifus.padland.Database.PadGroupModel.PadGroupsWithPadList
 import com.mikifus.padland.Database.PadModel.Pad
 import com.mikifus.padland.Database.PadModel.PadViewModel
-import com.mikifus.padland.NewPadActivity
 import com.mikifus.padland.R
 import com.mikifus.padland.Adapters.DragAndDropListener.IDragAndDropListener
 import com.mikifus.padland.Adapters.PadSelectionTracker.IMakesPadSelectionTracker
