@@ -1,6 +1,7 @@
 package com.mikifus.padland.Dialogs
 
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import android.view.View.OnClickListener
@@ -14,6 +15,7 @@ import java.util.regex.Pattern
 interface IFormDialog {
     var positiveButtonCallback: OnClickListener?
     var negativeButtonCallback: OnClickListener?
+    var onDismissCallback: (() -> Unit)?
     var toolbar: Toolbar?
     fun setPositiveButtonCallback(callback: (Map<String, Any>) -> Unit)
     fun setNegativeButtonCallback(callback: () -> Unit)
@@ -28,6 +30,7 @@ interface IFormDialog {
 open class FormDialog: DialogFragment(), IFormDialog {
     override var positiveButtonCallback: OnClickListener? = null
     override var negativeButtonCallback: OnClickListener? = null
+    override var onDismissCallback: (() -> Unit)? = null
     override var toolbar: Toolbar? = null
 
     private var onResumeCallback: (() -> Unit)? = null
@@ -90,6 +93,11 @@ open class FormDialog: DialogFragment(), IFormDialog {
     override fun onResume() {
         super.onResume()
         onResumeCallback?.let { it() }
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        onDismissCallback?.let { it() }
     }
 
     companion object {

@@ -152,7 +152,10 @@ class PadViewActivity :
                 val deferred = CompletableDeferred<Boolean>()
                 showWhitelistServerDialog(this@PadViewActivity, url,
                     { dialogUrl ->
-                        showNewServerDialog(this@PadViewActivity, dialogUrl)
+                        showNewServerDialog(this@PadViewActivity, dialogUrl) {
+                            whitelistUrl(dialogUrl)
+                            loadUrl(dialogUrl)
+                        }
                         deferred.complete(true)
                     },
                     { dialogUrl ->
@@ -290,7 +293,10 @@ class PadViewActivity :
         if (!WhiteListMatcher.isValidHost(url, webViewClient!!.hostsWhitelist)) {
             showWhitelistServerDialog(this, url,
                 { dialogUrl ->
-                    showNewServerDialog(this, dialogUrl)
+                    showNewServerDialog(this, dialogUrl){
+                        whitelistUrl(dialogUrl)
+                        loadUrl(dialogUrl)
+                    }
                 },
                 { dialogUrl ->
                     whitelistUrl(dialogUrl)
