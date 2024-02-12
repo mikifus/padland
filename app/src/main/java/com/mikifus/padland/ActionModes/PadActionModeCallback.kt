@@ -9,7 +9,6 @@ import androidx.lifecycle.lifecycleScope
 import com.mikifus.padland.Activities.PadListActivity
 import com.mikifus.padland.Database.PadGroupModel.PadGroupViewModel
 import com.mikifus.padland.Database.PadModel.PadViewModel
-import com.mikifus.padland.Dialog.FormDialog
 import com.mikifus.padland.Dialogs.Managers.IManagesDeletePadDialog
 import com.mikifus.padland.Dialogs.Managers.IManagesEditPadDialog
 import com.mikifus.padland.Dialogs.Managers.IManagesGroupPadDialog
@@ -23,7 +22,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class PadActionModeCallback(activity: PadListActivity): ActionMode.Callback,
-    FormDialog.FormDialogCallBack,
     IManagesEditPadDialog by ManagesEditPadDialog(),
     IManagesDeletePadDialog by ManagesDeletePadDialog(),
     IManagesGroupPadDialog by ManagesGroupPadDialog() {
@@ -150,13 +148,5 @@ class PadActionModeCallback(activity: PadListActivity): ActionMode.Callback,
             padActionMode = null
             padListActivity.onDestroyPadActionMode()
         }
-    }
-
-    override fun onDialogDismiss() {
-        TODO("Not yet implemented")
-    }
-
-    override fun onDialogSuccess() {
-        TODO("Not yet implemented")
     }
 }

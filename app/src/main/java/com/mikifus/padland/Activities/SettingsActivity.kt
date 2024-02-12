@@ -74,31 +74,7 @@ class SettingsActivity : AppCompatActivity() {
             } else super.onDisplayPreferenceDialog(preference)
         }
 
-        override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
-//            val preference: Preference? = key?.let { findPreference(it) }
-//            if (preference is ListPreference) {
-//                val listPreference: ListPreference = preference as ListPreference
-//                val prefIndex: Int =
-//                    listPreference.findIndexOfValue(sharedPreferences.getString(key, ""))
-//                if (prefIndex >= 0) {
-//                    preference.setSummary(listPreference.entries[prefIndex])
-//                }
-//            } else if (preference is SwitchPreferenceCompat) {
-//                val switchPreference: SwitchPreferenceCompat = preference
-////                val prefIndex: Int =
-////                    switchPreference.findIndexOfValue(sharedPreferences.getString(key, ""))
-////                if (prefIndex >= 0) {
-////                    preference.setSummary(switchPreference.entries[prefIndex])
-////                }
-//            } else {
-//                preference?.summary = sharedPreferences.getString(key, "")
-//            }
-        }
-
-        override fun onConfigurationChanged(newConfig: Configuration) {
-            super.onConfigurationChanged(newConfig)
-            (findPreference("padland_default_color") as ColorPickerListPreference?)?.reload()
-        }
+        override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {}
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
