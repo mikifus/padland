@@ -22,12 +22,16 @@ public class PadLandContentProvider: ContentProvider() {
     companion object {
         /** The authority of this content provider.  */
         const val AUTHORITY = "com.mikifus.padland.padlandcontentprovider"
-        /** The URI for the companyTM table.  */
+
+        /** The URI for the tables.  */
         val URI_PAD_LIST = Uri.parse(
             "content://$AUTHORITY/padlist"
         )
         val URI_PAD_GROUP_LIST = Uri.parse(
             "content://$AUTHORITY/padgroups"
+        )
+        val URI_PAD_LIST_PAD_GROUP = Uri.parse(
+            "content://$AUTHORITY/pad_list_pad_group_id"
         )
 
         private const val PAD_LIST = 1
@@ -44,7 +48,7 @@ public class PadLandContentProvider: ContentProvider() {
             MATCHER.addURI(AUTHORITY, "padlist/#", PAD_ID)
             MATCHER.addURI(AUTHORITY, "padgroups", PAD_GROUP_LIST)
             MATCHER.addURI(AUTHORITY, "padgroups/#", PAD_GROUP_ID)
-            MATCHER.addURI(AUTHORITY, "padlist_pad_group_id/#", PAD_LIST_PAD_GROUP_ID)
+            MATCHER.addURI(AUTHORITY, "pad_list_pad_group_id/#", PAD_LIST_PAD_GROUP_ID)
         }
     }
 
@@ -154,7 +158,7 @@ public class PadLandContentProvider: ContentProvider() {
         }
 
         return when (MATCHER.match(uri)) {
-            PAD_LIST-> throw IllegalArgumentException("Invalid URI, cannot update without ID$uri")
+            PAD_LIST-> throw IllegalArgumentException("Invalid URI, cannot update without ID [$uri]")
             PAD_ID-> {
                 val context = context ?: return 0
                 val db = database.openHelper.writableDatabase
@@ -180,7 +184,7 @@ public class PadLandContentProvider: ContentProvider() {
         }
 
         return when (MATCHER.match(uri)) {
-            PAD_LIST-> throw IllegalArgumentException("Invalid URI, cannot update without ID$uri")
+            PAD_LIST-> throw IllegalArgumentException("Invalid URI, cannot update without ID [$uri]")
             PAD_ID-> {
                 val context = context ?: return 0
                 val db = database.openHelper.writableDatabase

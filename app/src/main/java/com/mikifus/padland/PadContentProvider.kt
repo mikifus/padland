@@ -17,8 +17,6 @@ import com.mikifus.padland.Database.PadGroupModel.PadGroupDao
 import com.mikifus.padland.Database.PadListDatabase
 import com.mikifus.padland.Database.PadModel.Pad
 import com.mikifus.padland.Database.PadModel.PadDao
-import com.mikifus.padland.Models.PadGroupModel
-import com.mikifus.padland.Models.PadModel
 import kotlinx.coroutines.runBlocking
 import java.util.Arrays
 import java.util.Date
@@ -36,28 +34,28 @@ open class PadContentProvider : ContentProvider() {
      */
 //    private var db: SQLiteDatabase? = null
 
-    private fun getCursorFromLiveData(liveData: LiveData<List<Pad>>): Cursor {
-        val cursor = MatrixCursor(padFieldsList)
-        if(liveData.value == null || liveData.value!!.isEmpty()) {
-            return cursor
-        }
-//        val columnNames = liveData.value!![0].javaClass.declaredFields.map { it.name }.toTypedArray()
-//        val cursor = MatrixCursor(columnNames)
-
-        liveData.value?.forEach { item -> cursor.addRow(item.javaClass.declaredFields.map{it as Object}) }
-
-        return cursor
-    }
-    private fun getCursorFromLiveDataGroup(liveData: LiveData<List<PadGroup>>): Cursor {
-        val cursor = MatrixCursor(padFieldsList)
-        if(liveData.value == null || liveData.value!!.isEmpty()) {
-            return cursor
-        }
-
-        liveData.value?.forEach { item -> cursor.addRow(item.javaClass.declaredFields.map{it as Object}) }
-
-        return cursor
-    }
+//    private fun getCursorFromLiveData(liveData: LiveData<List<Pad>>): Cursor {
+//        val cursor = MatrixCursor(padFieldsList)
+//        if(liveData.value == null || liveData.value!!.isEmpty()) {
+//            return cursor
+//        }
+////        val columnNames = liveData.value!![0].javaClass.declaredFields.map { it.name }.toTypedArray()
+////        val cursor = MatrixCursor(columnNames)
+//
+//        liveData.value?.forEach { item -> cursor.addRow(item.javaClass.declaredFields.map{it as Object}) }
+//
+//        return cursor
+//    }
+//    private fun getCursorFromLiveDataGroup(liveData: LiveData<List<PadGroup>>): Cursor {
+//        val cursor = MatrixCursor(padFieldsList)
+//        if(liveData.value == null || liveData.value!!.isEmpty()) {
+//            return cursor
+//        }
+//
+//        liveData.value?.forEach { item -> cursor.addRow(item.javaClass.declaredFields.map{it as Object}) }
+//
+//        return cursor
+//    }
 
     /**
      * Deletes a document from the db
@@ -365,30 +363,30 @@ open class PadContentProvider : ContentProvider() {
         }
 
         const val PAD_TABLE_NAME = "padlist"
-        val PAD_TABLE_CREATE_QUERY = " CREATE TABLE " + PAD_TABLE_NAME +
-                " (" + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                " " + PadModel.Companion.NAME + " TEXT NOT NULL, " +
-                " " + LOCAL_NAME + " TEXT, " +
-                " " + SERVER + " TEXT NOT NULL, " +
-                " " + PadModel.Companion.URL + " TEXT NOT NULL, " +
-                " " + LAST_USED_DATE + " INTEGER NOT NULL DEFAULT (strftime('%s','now')), " +
-                " " + CREATE_DATE + " INTEGER NOT NULL DEFAULT (strftime('%s','now'))," +
-                " " + ACCESS_COUNT + " INTEGER NOT NULL DEFAULT 0 " +
-                ");"
+//        val PAD_TABLE_CREATE_QUERY = " CREATE TABLE " + PAD_TABLE_NAME +
+//                " (" + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+//                " " + PadModel.Companion.NAME + " TEXT NOT NULL, " +
+//                " " + LOCAL_NAME + " TEXT, " +
+//                " " + SERVER + " TEXT NOT NULL, " +
+//                " " + PadModel.Companion.URL + " TEXT NOT NULL, " +
+//                " " + LAST_USED_DATE + " INTEGER NOT NULL DEFAULT (strftime('%s','now')), " +
+//                " " + CREATE_DATE + " INTEGER NOT NULL DEFAULT (strftime('%s','now'))," +
+//                " " + ACCESS_COUNT + " INTEGER NOT NULL DEFAULT 0 " +
+//                ");"
         const val PADGROUP_TABLE_NAME = "padgroups"
-        val PADGROUP_TABLE_CREATE_QUERY = " CREATE TABLE " + PADGROUP_TABLE_NAME +
-                " (" + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                " " + PadModel.Companion.NAME + " TEXT NOT NULL, " +
-                " " + PadGroupModel.Companion.POSITION + " INTEGER DEFAULT 0, " +
-                " " + LAST_USED_DATE + " INTEGER NOT NULL DEFAULT (strftime('%s','now')), " +
-                " " + CREATE_DATE + " INTEGER NOT NULL DEFAULT (strftime('%s','now'))," +
-                " " + ACCESS_COUNT + " INTEGER NOT NULL DEFAULT 0 " +
-                ");"
+//        val PADGROUP_TABLE_CREATE_QUERY = " CREATE TABLE " + PADGROUP_TABLE_NAME +
+//                " (" + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+//                " " + PadModel.Companion.NAME + " TEXT NOT NULL, " +
+//                " " + PadGroupModel.Companion.POSITION + " INTEGER DEFAULT 0, " +
+//                " " + LAST_USED_DATE + " INTEGER NOT NULL DEFAULT (strftime('%s','now')), " +
+//                " " + CREATE_DATE + " INTEGER NOT NULL DEFAULT (strftime('%s','now'))," +
+//                " " + ACCESS_COUNT + " INTEGER NOT NULL DEFAULT 0 " +
+//                ");"
         const val RELATION_TABLE_NAME = "padlist_padgroups"
-        const val RELATION_TABLE_CREATE_QUERY = " CREATE TABLE " + RELATION_TABLE_NAME +
-                " (" + _ID_GROUP + " INTEGER NOT NULL, " +
-                " " + _ID_PAD + " INTEGER NOT NULL " +
-                ");"
+//        const val RELATION_TABLE_CREATE_QUERY = " CREATE TABLE " + RELATION_TABLE_NAME +
+//                " (" + _ID_GROUP + " INTEGER NOT NULL, " +
+//                " " + _ID_PAD + " INTEGER NOT NULL " +
+//                ");"
 
         /**
          * Gets the current time in the format that the database uses.
@@ -397,24 +395,24 @@ open class PadContentProvider : ContentProvider() {
          */
         val nowDate: Long
             get() = Date().time / 1000
-        val padFieldsList: Array<String>
-            get() = arrayOf<String>(
-                    _ID,
-                    PadModel.Companion.NAME,
-                    LOCAL_NAME,
-                    SERVER,
-                    PadModel.Companion.URL,
-                    LAST_USED_DATE,
-                    CREATE_DATE,
-                    ACCESS_COUNT
-            )
-        val padgroupFieldsList: Array<String>
-            get() = arrayOf<String>(
-                    _ID,
-                    PadModel.Companion.NAME,
-                    LAST_USED_DATE,
-                    CREATE_DATE,
-                    ACCESS_COUNT
-            )
+//        val padFieldsList: Array<String>
+//            get() = arrayOf<String>(
+//                    _ID,
+//                    PadModel.Companion.NAME,
+//                    LOCAL_NAME,
+//                    SERVER,
+//                    PadModel.Companion.URL,
+//                    LAST_USED_DATE,
+//                    CREATE_DATE,
+//                    ACCESS_COUNT
+//            )
+//        val padgroupFieldsList: Array<String>
+//            get() = arrayOf<String>(
+//                    _ID,
+//                    PadModel.Companion.NAME,
+//                    LAST_USED_DATE,
+//                    CREATE_DATE,
+//                    ACCESS_COUNT
+//            )
     }
 }
