@@ -135,12 +135,9 @@
             android:enabled="true"
             android:exported="false"
             android:grantUriPermissions="true"
-            android:permission="android.permission.MANAGE_DOCUMENTS" >
-            <intent-filter>
-                <action android:name="android.content.action.DOCUMENTS_PROVIDER"/>
-            </intent-filter>
+            android:readPermission="com.mikifus.padland.PADLAND_READ"
+            android:writePermission="com.mikifus.padland.PADLAND_WRITE">
         </provider>
-
     </application>
 
 </manifest>

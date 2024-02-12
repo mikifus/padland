@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.RoomDatabase.Builder
 import androidx.room.TypeConverters
 import com.mikifus.padland.Database.Migrations.MIGRATION_8_9
 import com.mikifus.padland.Database.PadGroupModel.PadGroup
@@ -38,9 +39,25 @@ abstract class PadListDatabase : RoomDatabase() {
         }
 
         private fun buildDatabase(context: Context): PadListDatabase {
+            return getDatabaseBuilder(context).build()
+        }
+
+        private fun getDatabaseBuilder(context: Context): Builder<PadListDatabase> {
             return Room.databaseBuilder(context, PadListDatabase::class.java, "padlist")
                 .addMigrations(MIGRATION_8_9)
-                .build()
+        }
+
+        /**
+         * WARNING: Use only for tests
+         */
+        fun getMainThreadInstance(context: Context): PadListDatabase {
+            return INSTANCE?: synchronized(this){
+                val instance = getDatabaseBuilder(context)
+                    .allowMainThreadQueries()
+                    .build()
+                INSTANCE = instance
+                instance
+            }
         }
     }
 
