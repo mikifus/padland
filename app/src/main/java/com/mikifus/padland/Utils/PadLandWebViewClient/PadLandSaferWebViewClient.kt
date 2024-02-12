@@ -13,13 +13,13 @@ import java.io.ByteArrayInputStream
 
 /**
  * Implements whitelisting on host name
- * 
+ *
  */
-open class SaferWebViewClient(private var hostsWhitelist: List<String?>) : WebViewClient() {
+open class PadLandSaferWebViewClient(var hostsWhitelist: List<String>) : WebViewClient() {
 
     private val webResourceResponseFromString: WebResourceResponse
         get() {
-            Log.w("SaferWebViewClient", "Blocked a JS request to an external domain.")
+//            Log.w("SaferWebViewClient", "Blocked a JS request to an external domain.")
             return getUtf8EncodedWebResourceResponse(ByteArrayInputStream("".toByteArray()))
         }
 
@@ -67,9 +67,11 @@ open class SaferWebViewClient(private var hostsWhitelist: List<String?>) : WebVi
 
     private fun isValidHost(url: String?): Boolean {
         if(URLUtil.isHttpUrl(url)) {
-            // TODO: Recognise no-ssl urls and notify the user
+            onUnsafeUrlProtocol(url)
         }
 
         return WhiteListMatcher.isValidHost(url, hostsWhitelist)
     }
+
+    private fun onUnsafeUrlProtocol(url: String?) {}
 }

@@ -5,6 +5,7 @@ import android.webkit.SslErrorHandler
 import android.webkit.WebView
 
 interface PadLandWebClientCallbacks {
+
     fun onStartLoading()
     fun onStopLoading()
     suspend fun onUnsafeUrlProtocol(url: String): Boolean
