@@ -1,5 +1,6 @@
 package com.mikifus.padland.Utils.PadLandWebViewClient;
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.net.http.SslError
 import android.os.Build
@@ -97,9 +98,8 @@ public class PadLandWebViewClient(hostsWhitelist: List<String>, private val call
         return false
     }
 
+    @SuppressLint("WebViewClientOnReceivedSslError")
     override fun onReceivedSslError(view: WebView, handler: SslErrorHandler, error: SslError) {
-        super.onReceivedSslError(view, handler, error)
-
         val message = when (error.primaryError) {
             SslError.SSL_EXPIRED -> view.context.getString(R.string.error_ssl_expired)
             SslError.SSL_IDMISMATCH -> view.context.getString(R.string.error_ssl_id_mismatch)
@@ -111,6 +111,12 @@ public class PadLandWebViewClient(hostsWhitelist: List<String>, private val call
 
         Log.e(PadViewActivity.TAG, "SSL Error received: " + error.primaryError + " - " + message)
 
-        callbacks.onReceivedSslError(message)
+        callbacks.onReceivedSslError(handler, error.url, message)
+    }
+    override suspend fun onUnsafeUrlProtocol(url: String): Boolean {
+        // WARNING: Runs blocking, it seems to work as expected
+        return runBlocking {
+            callbacks.onUnsafeUrlProtocol(url)
+        }
     }
 }

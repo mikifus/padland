@@ -181,5 +181,6 @@
     <string name="ignore">Ignore</string>
     <string name="whitelist_server_dialog_open_browser">Open with browser</string>
     <string name="whitelist_server_dialog_title">Host not allowed</string>
+    <string name="ssl_error_dialog_unsafe">An unsafe HTTP request without SSL was detected. If you cancel the document will close.</string>
 
 </resources>
