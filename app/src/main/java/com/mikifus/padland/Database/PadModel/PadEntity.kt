@@ -12,7 +12,7 @@ import com.mikifus.padland.Database.PadGroupModel.PadGroup
 import com.mikifus.padland.Utils.PadServer
 import java.sql.Date
 
-@Entity(tableName = "padlist")
+@Entity(tableName = Pad.TABLE_NAME)
 data class Pad(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "_id") val mId: Long,
@@ -39,6 +39,7 @@ data class Pad(
     )
 
     companion object {
+        const val TABLE_NAME = "padlist"
 
         fun withOnlyId(id: Long): MutableLiveData<Pad> {
             return MutableLiveData(Pad().copy(mId = id))
@@ -49,8 +50,12 @@ data class Pad(
 
 //            contentValues.valueSet().forEach { item.value = item.value?.copy(contentValues.getAsString(it.key)) }
 //            item.value = item.value?.copy(mId=contentValues.getAsLong(Pad::mId::class.java.canonicalName))
-            if(contentValues.containsKey("name")) item.value = item.value!!.copy(mName = contentValues.getAsString("name"))
-            if(contentValues.containsKey("url")) item.value = item.value!!.copy(mUrl = contentValues.getAsString("url"))
+            if(contentValues.containsKey("name")) {
+                item.value = item.value!!.copy(mName = contentValues.getAsString("name"))
+            }
+            if(contentValues.containsKey("url")) {
+                item.value = item.value!!.copy(mUrl = contentValues.getAsString("url"))
+            }
 
             return item
         }

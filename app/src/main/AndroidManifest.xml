@@ -120,12 +120,6 @@
         </activity>
 
         <activity
-            android:name=".PadLandDataActivity"
-            android:label="@string/title_activity_pad_land_data"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
-        </activity>
-
-        <activity
             android:name=".Activities.ServerListActivity"
             android:label="@string/title_activity_server_list"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
@@ -136,10 +130,15 @@
         </activity>
 
         <provider
-            android:name="com.mikifus.padland.PadContentProvider"
+            android:name="com.mikifus.padland.PadLandContentProvider"
             android:authorities="com.mikifus.padland.padlandcontentprovider"
             android:enabled="true"
-            android:exported="false" >
+            android:exported="false"
+            android:grantUriPermissions="true"
+            android:permission="android.permission.MANAGE_DOCUMENTS" >
+            <intent-filter>
+                <action android:name="android.content.action.DOCUMENTS_PROVIDER"/>
+            </intent-filter>
         </provider>
 
     </application>

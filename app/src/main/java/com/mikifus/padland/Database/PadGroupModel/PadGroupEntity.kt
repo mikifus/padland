@@ -7,7 +7,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.sql.Date
 
-@Entity(tableName = "padgroups")
+@Entity(tableName = PadGroup.TABLE_NAME )
 data class PadGroup(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "_id") val mId: Long,
@@ -28,6 +28,7 @@ data class PadGroup(
     )
 
     companion object {
+        const val TABLE_NAME = "padgroups"
 
         fun withOnlyId(id: Long): MutableLiveData<PadGroup> {
             return MutableLiveData(PadGroup().copy(mId = id))
