@@ -85,7 +85,7 @@ class PadUrl private constructor(builder: Builder) {
                     .append("=")
                     .append(URLEncoder.encode(username, Xml.Encoding.UTF_8.name))
             }
-            if(color != null) {
+            if(color != null && color != 0) {
                 val colorString = "#" + Integer.toHexString(color).substring(0, 6)
                 queryParams
                     .append('&')
