@@ -12,7 +12,6 @@ import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import androidx.annotation.RequiresApi
-import com.mikifus.padland.PadViewActivity
 import com.mikifus.padland.R
 import com.mikifus.padland.SaferWebView.PadLandSaferWebViewClient
 import com.mikifus.padland.Utils.WhiteListMatcher

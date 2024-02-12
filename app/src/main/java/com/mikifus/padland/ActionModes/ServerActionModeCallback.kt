@@ -35,7 +35,7 @@ class ServerActionModeCallback(activity: ServerListActivity):
         // Inflate a menu resource providing context menu items
         if(mode != null) {
             val inflater = mode.menuInflater
-            inflater.inflate(R.menu.server_list, menu)
+            inflater.inflate(R.menu.server_action_mode_menu, menu)
             padGrupActionMode = mode
         }
         return true

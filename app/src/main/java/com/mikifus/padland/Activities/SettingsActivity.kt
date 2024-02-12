@@ -13,7 +13,6 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import com.mikifus.padland.Database.ServerModel.ServerViewModel
 import com.mikifus.padland.R
-import com.mikifus.padland.Utils.ColorPickerListPreference
 import com.rarepebble.colorpicker.ColorPreference
 
 
