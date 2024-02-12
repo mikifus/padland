@@ -23,14 +23,18 @@ class ManagesWhitelistServerDialog: IManagesWhitelistServerDialog {
                                            url: String,
                                            onAddCallback: (dialogUrl: String) -> Unit,
                                            onIgnoreCallback: (dialogUrl: String) -> Unit) {
-        initViewModels(activity)
-        initEvents(activity, url, onAddCallback, onIgnoreCallback)
-
         dialog.setTitle(activity.getString(R.string.whitelist_server_dialog_title))
         dialog.setMessage(activity.getString(R.string.padview_toast_blacklist_url))
         dialog.positiveButtonText = activity.getString(R.string.serverlist_dialog_new_server_title)
         dialog.negativeButtonText = activity.getString(R.string.whitelist_server_dialog_open_browser)
         dialog.neutralButtonText = activity.getString(R.string.ignore)
+
+//        if(dialog.isAdded || activity.supportFragmentManager.isDestroyed) {
+//            return
+//        }
+
+        initViewModels(activity)
+        initEvents(activity, url, onAddCallback, onIgnoreCallback)
 
         dialog.show(activity.supportFragmentManager, DIALOG_TAG)
     }

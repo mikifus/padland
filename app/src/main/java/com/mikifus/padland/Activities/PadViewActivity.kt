@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.View
 import android.webkit.CookieManager
 import android.webkit.HttpAuthHandler
+import android.webkit.SslErrorHandler
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.widget.ProgressBar
@@ -16,15 +17,16 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import com.mikifus.padland.Database.PadModel.Pad
 import com.mikifus.padland.Database.PadModel.PadViewModel
 import com.mikifus.padland.Database.ServerModel.ServerViewModel
 import com.mikifus.padland.Dialogs.Managers.IManagesNewServerDialog
 import com.mikifus.padland.Dialogs.Managers.IManagesPadViewAuthDialog
+import com.mikifus.padland.Dialogs.Managers.IManagesSslErrorDialog
 import com.mikifus.padland.Dialogs.Managers.IManagesWhitelistServerDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesNewServerDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesPadViewAuthDialog
+import com.mikifus.padland.Dialogs.Managers.ManagesSslErrorDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesWhitelistServerDialog
 import com.mikifus.padland.R
 import com.mikifus.padland.Utils.PadLandWebViewClient.PadLandWebClientCallbacks
@@ -32,9 +34,7 @@ import com.mikifus.padland.Utils.PadLandWebViewClient.PadLandWebViewClient
 import com.mikifus.padland.Utils.PadUrl
 import com.mikifus.padland.Utils.WhiteListMatcher
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.net.URL
 
@@ -42,7 +42,8 @@ class PadViewActivity :
     AppCompatActivity(),
     IManagesPadViewAuthDialog by ManagesPadViewAuthDialog(),
     IManagesWhitelistServerDialog by ManagesWhitelistServerDialog(),
-    IManagesNewServerDialog by ManagesNewServerDialog() {
+    IManagesNewServerDialog by ManagesNewServerDialog() ,
+    IManagesSslErrorDialog by ManagesSslErrorDialog() {
 
     private var padViewModel: PadViewModel? = null
     override var serverViewModel: ServerViewModel? = null
@@ -108,7 +109,6 @@ class PadViewActivity :
 
         loadProgress()
         showProgress()
-
         initViewModels()
     }
 
@@ -130,8 +130,22 @@ class PadViewActivity :
                 hideProgress()
             }
 
-            override fun onUnsafeUrlProtocol(url: String?) {
-                TODO("Not yet implemented")
+            override suspend fun onUnsafeUrlProtocol(url: String): Boolean {
+                val deferred = CompletableDeferred<Boolean>()
+                showSslErrorDialog(this@PadViewActivity,
+                    url,
+                    getString(R.string.ssl_error_dialog_unsafe),
+                    {
+                        webView?.destroy()
+                        finish()
+                        deferred.complete(false)
+                    },
+                    {
+                        deferred.complete(true)
+                    }
+                )
+
+                return deferred.await()
             }
 
             override suspend fun onExternalHostUrlLoad(url: String): Boolean {
@@ -149,21 +163,15 @@ class PadViewActivity :
                 return deferred.await()
             }
 
-            override fun onReceivedSslError(message: String) {
-    //        val builder = AlertDialog.Builder(this@PadViewActivity)
-    //        builder.setTitle(R.string.ssl_error)
-    //        builder.setMessage(message)
-    //        builder.setPositiveButton(R.string.ok) { dialogInterface, i ->
-    //            dialogInterface.dismiss()
-    //            finish()
-    //        }
-    //        builder.setNegativeButton(R.string.ssl_learn_more) { dialogInterface, i ->
-    //            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.ssl_learn_more_link)))
-    //            startActivity(browserIntent)
-    //        }
-    //        val alertDialog: Dialog = builder.create()
-    //        alertDialog.setCanceledOnTouchOutside(true)
-    //        alertDialog.show()
+            override fun onReceivedSslError(handler: SslErrorHandler, url: String, message: String) {
+                showSslErrorDialog(this@PadViewActivity, url, message,
+                    {
+                        handler.cancel()
+                    },
+                    {
+                        handler.proceed()
+                    }
+                )
             }
 
             override fun onReceivedHttpAuthRequestCallback(
