@@ -68,7 +68,7 @@
             android:summary="@string/launch_intro" >
             <intent
                 android:targetPackage="com.mikifus.padland"
-                android:targetClass="com.mikifus.padland.IntroActivity"/>
+                android:targetClass="com.mikifus.padland.Activities.IntroActivity"/>
         </PreferenceScreen>
 
     </PreferenceCategory>
