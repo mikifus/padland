@@ -60,6 +60,10 @@ class ManagesPadViewAuthDialog: IManagesPadViewAuthDialog {
                 dialog.showSslWarning()
             }
         }
+        dialog.onDismissCallback = {
+            handler.cancel()
+            this.webView?.clearCache(true)
+        }
     }
 
     companion object {

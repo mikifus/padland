@@ -14,20 +14,24 @@ import kotlinx.coroutines.launch
 
 interface IManagesNewServerDialog {
     var serverViewModel: ServerViewModel?
-    fun showNewServerDialog(activity: AppCompatActivity, url: String? = null)
+    fun showNewServerDialog(activity: AppCompatActivity,
+                            url: String? = null,
+                            onDismissCallBack: (() -> Unit)? = null)
 }
 
 class ManagesNewServerDialog: IManagesNewServerDialog {
 
     override var serverViewModel: ServerViewModel? = null
 
-    override fun showNewServerDialog(activity: AppCompatActivity, url: String?) {
+    override fun showNewServerDialog(activity: AppCompatActivity,
+                                     url: String?,
+                                     onDismissCallBack: (() -> Unit)?) {
         if(dialog.isAdded || activity.supportFragmentManager.isDestroyed) {
             return
         }
 
         initViewModels(activity)
-        initEvents(activity)
+        initEvents(activity, onDismissCallBack)
         url?.let { onSetInitialUrl(url) }
 
         val transaction = activity.supportFragmentManager.beginTransaction()
@@ -47,11 +51,13 @@ class ManagesNewServerDialog: IManagesNewServerDialog {
         }
     }
 
-    private fun initEvents(activity: AppCompatActivity) {
+    private fun initEvents(activity: AppCompatActivity,
+                           onDismissCallBack: (() -> Unit)?) {
         dialog.setPositiveButtonCallback { data ->
             saveNewServerDialog(activity, data)
             dialog.clearForm()
         }
+        onDismissCallBack?.let { dialog.onDismissCallback = onDismissCallBack }
     }
 
     private fun onSetInitialUrl(url: String) {
