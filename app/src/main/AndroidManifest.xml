@@ -93,10 +93,9 @@
         </activity>
 
         <activity
-            android:name=".About"
+            android:name=".Activities.AboutActivity"
             android:label="@string/title_activity_about" >
 
-            <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.SettingsActivity" />
@@ -131,7 +130,6 @@
             android:label="@string/title_activity_server_list"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
 
-            <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.SettingsActivity" />
