@@ -11,6 +11,7 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.children
 import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.RecyclerView
@@ -82,10 +83,10 @@ class PadAdapter(
         holder.padId = current.mId
 
         onTouchListener?.let {
-            // Set on layout and children
-            holder.itemLayout.setOnTouchListener(onTouchListener)
-            holder.content.setOnTouchListener(onTouchListener)
-            holder.buttonCopy.setOnTouchListener(onTouchListener)
+            // Set on layout children
+            holder.itemLayout.children.forEach {
+                it.setOnTouchListener(onTouchListener)
+            }
         }
         onClickListener?.let {
             holder.content.setOnClickListener(onClickListener)
