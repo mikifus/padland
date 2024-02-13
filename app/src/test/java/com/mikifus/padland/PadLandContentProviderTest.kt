@@ -52,24 +52,6 @@ class PadLandContentProviderTest {
         put("name", "AAAAA GROUP")
     }
 
-//    companion object {
-//        // Defines a handle to the Room database
-////        private lateinit var database: PadListDatabase
-//
-////        @JvmStatic
-////        @BeforeClass
-////        fun setup() {
-////            database = PadListDatabase
-////                .getMainThreadInstance(ApplicationProvider.getApplicationContext())
-////        }
-//
-//        @JvmStatic
-//        @AfterClass
-//        fun cleanup(): Unit {
-//            database.close()
-//        }
-//    }
-
     @Before
     fun setupBefore() {
         database = PadListDatabase

@@ -6,7 +6,7 @@ import androidx.room.testing.MigrationTestHelper
 import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.mikifus.padland.Database.Migrations.MIGRATION_8_9
+import com.mikifus.padland.Database.Migrations.MIGRATION_BEFORE_ROOM
 import com.mikifus.padland.Database.PadListDatabase
 import org.junit.Rule
 import org.junit.Test
@@ -18,7 +18,7 @@ class DbMigrationTest {
     private val TEST_DB = "padlist"
 
     // Array of all migrations.
-    private val ALL_MIGRATIONS = arrayOf(MIGRATION_8_9)
+    private val ALL_MIGRATIONS = arrayOf(MIGRATION_BEFORE_ROOM)
 
     @get:Rule
     val helper: MigrationTestHelper = MigrationTestHelper(

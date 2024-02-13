@@ -3,10 +3,20 @@ package com.mikifus.padland.Activities
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import com.mikifus.padland.Database.PadListDatabase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class InitialActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Force Room DB migration
+        lifecycleScope.launch(Dispatchers.Main) {
+            PadListDatabase.migrateBeforeRoom(this@InitialActivity)
+        }
+
         launchNext()
     }
 
