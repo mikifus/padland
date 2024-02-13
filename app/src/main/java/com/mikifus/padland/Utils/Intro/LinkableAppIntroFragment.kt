@@ -1,4 +1,4 @@
-package com.mikifus.padland.Intro
+package com.mikifus.padland.Utils.Intro
 
 import android.os.Build
 import android.os.Bundle
