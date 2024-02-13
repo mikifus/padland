@@ -55,10 +55,10 @@ class EditPadDialog: FormDialog() {
 
     private fun applyFormData() {
         data?.get("name")?.let {
-            mNameEditText!!.text = Editable.Factory.getInstance().newEditable(it.toString())
+            mNameEditText?.text = Editable.Factory.getInstance().newEditable(it.toString())
         }
         data?.get("local_name")?.let {
-            mAliasEditText!!.text = Editable.Factory.getInstance().newEditable(it.toString())
+            mAliasEditText?.text = Editable.Factory.getInstance().newEditable(it.toString())
         }
         data?.get("server")?.let {
             val index = serverSpinnerData?.indexOfFirst { it.second == data!!["server"] }!!
