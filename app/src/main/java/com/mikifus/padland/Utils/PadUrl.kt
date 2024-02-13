@@ -78,7 +78,7 @@ class PadUrl private constructor(builder: Builder) {
 
             val queryParams = StringBuilder(uri.query.orEmpty())
 
-            if(username?.isNotEmpty() == true) {
+            if(username?.isBlank() == false) {
                 queryParams
                     .append('&')
                     .append(URLEncoder.encode("userName", Xml.Encoding.UTF_8.name))

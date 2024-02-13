@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 8,
-    "identityHash": "39a5019da16f60b550719c4920a23967",
+    "identityHash": "88826e676b70460097af165e5eee2679",
     "entities": [
       {
         "tableName": "padlist",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `local_name` TEXT NOT NULL, `server` TEXT NOT NULL, `url` TEXT NOT NULL, `last_used_date` INTEGER, `create_date` INTEGER NOT NULL, `access_count` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `local_name` TEXT NOT NULL, `server` TEXT NOT NULL, `url` TEXT NOT NULL, `last_used_date` INTEGER NOT NULL DEFAULT (strftime('%s','now')), `create_date` INTEGER NOT NULL DEFAULT (strftime('%s','now')), `access_count` INTEGER NOT NULL DEFAULT 0)",
         "fields": [
           {
             "fieldPath": "mId",
@@ -42,19 +42,22 @@
             "fieldPath": "mLastUsedDate",
             "columnName": "last_used_date",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true,
+            "defaultValue": "(strftime('%s','now'))"
           },
           {
             "fieldPath": "mCreateDate",
             "columnName": "create_date",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "(strftime('%s','now'))"
           },
           {
             "fieldPath": "mAccessCount",
             "columnName": "access_count",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "0"
           }
         ],
         "primaryKey": {
@@ -68,7 +71,7 @@
       },
       {
         "tableName": "padgroups",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `position` INTEGER NOT NULL, `last_used_date` INTEGER, `create_date` INTEGER NOT NULL, `access_count` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `position` INTEGER NOT NULL DEFAULT 0, `last_used_date` INTEGER NOT NULL DEFAULT (strftime('%s','now')), `create_date` INTEGER NOT NULL DEFAULT (strftime('%s','now')), `access_count` INTEGER NOT NULL DEFAULT 0)",
         "fields": [
           {
             "fieldPath": "mId",
@@ -86,25 +89,29 @@
             "fieldPath": "mPosition",
             "columnName": "position",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "0"
           },
           {
             "fieldPath": "mLastUsedDate",
             "columnName": "last_used_date",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true,
+            "defaultValue": "(strftime('%s','now'))"
           },
           {
             "fieldPath": "mCreateDate",
             "columnName": "create_date",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "(strftime('%s','now'))"
           },
           {
             "fieldPath": "mAccessCount",
             "columnName": "access_count",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "0"
           }
         ],
         "primaryKey": {
@@ -118,7 +125,7 @@
       },
       {
         "tableName": "padland_servers",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER NOT NULL, `name` TEXT NOT NULL, `url` TEXT NOT NULL, `padprefix` TEXT NOT NULL, `position` INTEGER NOT NULL, `jquery` INTEGER NOT NULL, `enabled` INTEGER NOT NULL, `create_date` INTEGER NOT NULL, PRIMARY KEY(`_id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `url` TEXT NOT NULL, `padprefix` TEXT NOT NULL, `position` INTEGER NOT NULL DEFAULT 0, `jquery` INTEGER NOT NULL DEFAULT 0, `enabled` INTEGER NOT NULL DEFAULT 1)",
         "fields": [
           {
             "fieldPath": "mId",
@@ -148,29 +155,26 @@
             "fieldPath": "mPosition",
             "columnName": "position",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "0"
           },
           {
             "fieldPath": "mJquery",
             "columnName": "jquery",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "0"
           },
           {
             "fieldPath": "mEnabled",
             "columnName": "enabled",
             "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "mCreateDate",
-            "columnName": "create_date",
-            "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "1"
           }
         ],
         "primaryKey": {
-          "autoGenerate": false,
+          "autoGenerate": true,
           "columnNames": [
             "_id"
           ]
@@ -232,7 +236,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '39a5019da16f60b550719c4920a23967')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '88826e676b70460097af165e5eee2679')"
     ]
   }
 }

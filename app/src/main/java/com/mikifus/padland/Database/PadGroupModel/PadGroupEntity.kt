@@ -12,10 +12,10 @@ data class PadGroup(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "_id") val mId: Long,
     @ColumnInfo(name = "name") var mName: String,
-    @ColumnInfo(name = "position") val mPosition: Int,
-    @ColumnInfo(name = "last_used_date") val mLastUsedDate: Date?,
-    @ColumnInfo(name = "create_date") val mCreateDate: Date,
-    @ColumnInfo(name = "access_count") val mAccessCount: Long,
+    @ColumnInfo(name = "position", defaultValue = "0") val mPosition: Int,
+    @ColumnInfo(name = "last_used_date", defaultValue = "(strftime('%s','now'))") val mLastUsedDate: Date,
+    @ColumnInfo(name = "create_date", defaultValue = "(strftime('%s','now'))") val mCreateDate: Date,
+    @ColumnInfo(name = "access_count", defaultValue = "0") val mAccessCount: Long,
 )
 {
     constructor() : this(

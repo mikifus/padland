@@ -5,9 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.mikifus.padland.Database.PadGroupModel.PadGroup
-import com.mikifus.padland.Database.PadModel.Pad
-import java.sql.Date
 
 @Entity(tableName = "padland_servers")
 data class Server(
@@ -16,10 +13,10 @@ data class Server(
     @ColumnInfo(name = "name") val mName: String,
     @ColumnInfo(name = "url") val mUrl: String,
     @ColumnInfo(name = "padprefix") val mPadprefix: String,
-    @ColumnInfo(name = "position") val mPosition: Long,
-    @ColumnInfo(name = "jquery") val mJquery: Boolean,
-    @ColumnInfo(name = "enabled") val mEnabled: Boolean,
-    @ColumnInfo(name = "create_date") val mCreateDate: Date
+    @ColumnInfo(name = "position", defaultValue = "0") val mPosition: Long,
+    @ColumnInfo(name = "jquery", defaultValue = "0") val mJquery: Boolean,
+    @ColumnInfo(name = "enabled", defaultValue = "1") val mEnabled: Boolean,
+//    @ColumnInfo(name = "create_date", defaultValue = "(strftime('%s','now'))") val mCreateDate: Date
 )
 {
     constructor() : this(
@@ -30,7 +27,7 @@ data class Server(
         0,
         true,
         true,
-        Date(System.currentTimeMillis())
+//        Date(System.currentTimeMillis())
     )
 
     companion object {
