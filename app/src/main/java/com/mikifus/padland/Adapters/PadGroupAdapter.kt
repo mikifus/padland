@@ -55,15 +55,12 @@ class PadGroupAdapter(context: Context,
              * the top recyclerview from managing the event. Then, when
              * the user stops interacting (or changes interaction), we
              * release the block.
+             *
+             * Condition applies to children of the pad item layout.
              */
             when(motionEvent.action) {
                 MotionEvent.ACTION_DOWN -> {
                     if(
-                        // Case for touch on list item layout
-                        view.parent?.parent?.parent?.parent !== null
-                        && view.parent?.parent?.parent?.parent is RecyclerView
-                        && (view.parent.parent.parent.parent as RecyclerView).tag == "recyclerview_padgroups"
-                        ||
                         // Case for touch on list item direct children
                         view.parent?.parent?.parent?.parent?.parent !== null
                         && view.parent?.parent?.parent?.parent?.parent is RecyclerView
