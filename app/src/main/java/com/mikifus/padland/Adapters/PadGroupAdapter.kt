@@ -58,9 +58,17 @@ class PadGroupAdapter(context: Context,
              */
             when(motionEvent.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    if(view.parent?.parent?.parent?.parent !== null
+                    if(
+                        // Case for touch on list item layout
+                        view.parent?.parent?.parent?.parent !== null
                         && view.parent?.parent?.parent?.parent is RecyclerView
-                        && (view.parent.parent.parent.parent as RecyclerView).tag == "recyclerview_padgroups")
+                        && (view.parent.parent.parent.parent as RecyclerView).tag == "recyclerview_padgroups"
+                        ||
+                        // Case for touch on list item direct children
+                        view.parent?.parent?.parent?.parent?.parent !== null
+                        && view.parent?.parent?.parent?.parent?.parent is RecyclerView
+                        && (view.parent.parent.parent.parent.parent as RecyclerView).tag == "recyclerview_padgroups"
+                        )
                         view.parent.parent.parent.parent.requestDisallowInterceptTouchEvent(true)
                 }
                 else -> view.parent.parent.parent.parent.requestDisallowInterceptTouchEvent(false)

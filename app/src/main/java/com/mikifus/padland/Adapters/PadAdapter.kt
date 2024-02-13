@@ -1,5 +1,6 @@
 package com.mikifus.padland.Adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -68,6 +69,7 @@ class PadAdapter(
         return PadViewHolder(itemView)
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: PadViewHolder, position: Int) {
         val current: Pad = data[position]
         holder.name.text = current.mLocalName.ifBlank { current.mName }
@@ -80,7 +82,10 @@ class PadAdapter(
         holder.padId = current.mId
 
         onTouchListener?.let {
+            // Set on layout and children
             holder.itemLayout.setOnTouchListener(onTouchListener)
+            holder.content.setOnTouchListener(onTouchListener)
+            holder.buttonCopy.setOnTouchListener(onTouchListener)
         }
         onClickListener?.let {
             holder.content.setOnClickListener(onClickListener)
