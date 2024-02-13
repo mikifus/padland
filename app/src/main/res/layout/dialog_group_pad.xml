@@ -38,7 +38,7 @@
                 android:layout_marginVertical="@dimen/activity_vertical_margin"
                 android:hint="@string/padlist_group_select_dialog">
 
-                <com.mikifus.padland.Views.Helpers.SpinnerHelper
+                <com.mikifus.padland.Utils.Views.Helpers.SpinnerHelper
                     android:id="@+id/spinner_pad_pad_group"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

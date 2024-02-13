@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.github.appintro.AppIntro
 import com.github.appintro.AppIntroFragment
-import com.mikifus.padland.Intro.LinkableAppIntroFragment
+import com.mikifus.padland.Utils.Intro.LinkableAppIntroFragment
 import com.mikifus.padland.R
 
 /**
@@ -34,7 +34,8 @@ class IntroActivity : AppIntro() {
                 getString(R.string.intro_fourth_desc),
                 R.drawable.intro_image4,
                 backgroundColorRes=R.color.intro_first_background))
-        addSlide(LinkableAppIntroFragment.createInstance(
+        addSlide(
+            LinkableAppIntroFragment.createInstance(
             getString(R.string.intro_fifth_title),
             getString(R.string.intro_fifth_desc),
             R.drawable.intro_image5,

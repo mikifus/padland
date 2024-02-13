@@ -18,7 +18,7 @@ import com.mikifus.padland.Database.PadGroupModel.PadGroupViewModel
 import com.mikifus.padland.Database.ServerModel.ServerViewModel
 import com.mikifus.padland.R
 import com.mikifus.padland.Utils.PadUrl
-import com.mikifus.padland.Views.Helpers.SpinnerHelper
+import com.mikifus.padland.Utils.Views.Helpers.SpinnerHelper
 import java.lang.Exception
 
 
