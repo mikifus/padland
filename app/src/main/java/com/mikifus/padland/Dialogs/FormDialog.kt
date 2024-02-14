@@ -69,8 +69,6 @@ open class FormDialog: DialogFragment(), IFormDialog {
 
     override fun initToolBar() {
         toolbar!!.title = getString(R.string.edit)
-//        toolbar!!.setNavigationIcon(R.drawable.ic_arrow_back_white)
-//        toolbar!!.setNavigationIcon(R.drawable.close)
         toolbar!!.setNavigationOnClickListener(
             if(negativeButtonCallback != null) negativeButtonCallback
             else OnClickListener {

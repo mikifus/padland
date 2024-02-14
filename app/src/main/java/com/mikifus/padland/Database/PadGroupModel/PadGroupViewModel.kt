@@ -71,9 +71,7 @@ class PadGroupViewModel(application: Application): AndroidViewModel(application)
     }
 
     suspend fun deletePadGroupsAndPadList(padId: Long) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.deletePadGroupsAndPadList(padId)
-        }
+        repository.deletePadGroupsAndPadList(padId)
     }
 
 }
