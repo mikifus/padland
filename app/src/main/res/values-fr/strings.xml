@@ -85,7 +85,7 @@
     <string name="padlist_group_select_dialog">Sélectionnez le groupe</string>
 
     <string name="padview_toast_invalid_url" >L\'URL semble être invalide.</string>
-    <string name="padview_toast_blacklist_url" >L\'hôte de votre URL ne figure pas dans la liste blanche. Ajoutez un nouveau serveur dans les paramètres de Padland ou choisissez une autre application.</string>
+    <string name="padview_toast_blacklist_url" >%s\n\nL\'hôte de votre URL ne figure pas dans la liste blanche. Ajoutez un nouveau serveur dans les paramètres de Padland ou choisissez une autre application.</string>
     <string name="padview_dialog_basicatuh_title" >Identification requise</string>
     <string name="padview_dialog_basicatuh_username" >Identifiant</string>
     <string name="padview_dialog_basicatuh_password" >Mot de passe</string>

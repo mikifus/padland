@@ -70,7 +70,7 @@
     <string name="padview_dialog_basicatuh_title">Autenticación requerida</string>
     <string name="padview_dialog_basicatuh_username">Nombre de usuario</string>
     <string name="no_custom_servers">Sin servidores añadidos.</string>
-    <string name="padview_toast_blacklist_url">La dirección del servidor no se encuentra en la lista blanca. Añade un nuevo servidor en la configuración o utiliza otra aplicación.</string>
+    <string name="padview_toast_blacklist_url">%s\n\nLa dirección del servidor no se encuentra en la lista blanca. Añade un nuevo servidor en la configuración o utiliza otra aplicación.</string>
     <string name="padview_toast_invalid_url">La dirección no parece válida.</string>
     <string name="pref_server_list_summary">Añade tus servidores de etherpad preferidos.</string>
     <string name="title_activity_server_list">Lista de servidores</string>

@@ -1,11 +1,9 @@
 package com.mikifus.padland.Dialogs.Managers;
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.mikifus.padland.Database.ServerModel.ServerViewModel
-import com.mikifus.padland.Dialogs.ConfirmDialog
 import com.mikifus.padland.Dialogs.EditServerDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -86,7 +86,7 @@
     <string name="padview_dialog_basicatuh_password">Contrasenya</string>
     <string name="padview_dialog_basicatuh_title">Autenticació requerida</string>
     <string name="padview_dialog_basicatuh_username">Nom d\'usuari</string>
-    <string name="padview_toast_blacklist_url">L\'adreça del servidor no es troba a la llista blanca. Afegeix un nou servidor a la configuració o utilitza una altra aplicació.</string>
+    <string name="padview_toast_blacklist_url">%s\n\nL\'adreça del servidor no es troba a la llista blanca. Afegeix un nou servidor a la configuració o utilitza una altra aplicació.</string>
     <string name="padview_toast_invalid_url">L\'adreça no sembla vàlida.</string>
     <string name="pref_server_list_summary">Afegeix els teus servidors d\'etherpad preferits.</string>
     <string name="title_activity_server_list">Llista de servidors</string>

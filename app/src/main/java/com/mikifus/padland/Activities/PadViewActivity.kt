@@ -6,6 +6,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.View
 import android.webkit.CookieManager
 import android.webkit.HttpAuthHandler
@@ -149,21 +150,19 @@ class PadViewActivity :
             }
 
             override suspend fun onExternalHostUrlLoad(url: String): Boolean {
-                val deferred = CompletableDeferred<Boolean>()
                 showWhitelistServerDialog(this@PadViewActivity, url,
                     { dialogUrl ->
                         showNewServerDialog(this@PadViewActivity, dialogUrl) {
                             whitelistUrl(dialogUrl)
                             loadUrl(dialogUrl)
                         }
-                        deferred.complete(true)
                     },
                     { dialogUrl ->
-                        deferred.complete(true)
+                        whitelistUrl(dialogUrl)
+                        loadUrl(dialogUrl)
                     }
                 )
-
-                return deferred.await()
+                return false
             }
 
             override fun onReceivedSslError(handler: SslErrorHandler, url: String, message: String) {
@@ -324,6 +323,14 @@ class PadViewActivity :
         webViewClient!!.hostsWhitelist += urlObject.host
     }
 
+//    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+//        if (keyCode == KeyEvent.KEYCODE_BACK && webView?.canGoBack() == true) {
+//            webView!!.goBack()
+//            return true
+//        }
+//        return super.onKeyDown(keyCode, event)
+//    }
+
     /**
      * Creates the options menu.
      *
@@ -377,5 +384,20 @@ class PadViewActivity :
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             cookieManager.setAcceptThirdPartyCookies(webView, true)
         }
+
+        webView!!.setOnKeyListener(object : View.OnKeyListener {
+            override fun onKey(view: View, keyCode: Int, keyEvent: KeyEvent): Boolean {
+                if (keyEvent.action == KeyEvent.ACTION_DOWN) {
+                    val webView = view as WebView
+                    when (keyCode) {
+                        KeyEvent.KEYCODE_BACK -> if (webView.canGoBack()) {
+                            webView.goBack()
+                            return true
+                        }
+                    }
+                }
+                return false
+            }
+        })
     }
 }

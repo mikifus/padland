@@ -1,22 +1,16 @@
 package com.mikifus.padland.Dialogs
 
-import android.app.Dialog
-import android.content.Context
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import android.view.View.OnClickListener
-import android.view.Window
 import android.widget.Button
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.DialogFragment
-import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.color.MaterialColors
-import com.google.android.material.shape.MaterialShapeDrawable
 import com.mikifus.padland.R
 import java.util.regex.Pattern
 
 interface IFormDialog {
+    var dismissed: Boolean
     var positiveButtonCallback: OnClickListener?
     var negativeButtonCallback: OnClickListener?
     var onDismissCallback: (() -> Unit)?
@@ -32,12 +26,15 @@ interface IFormDialog {
 }
 
 open class FormDialog: DialogFragment(), IFormDialog {
+    override var dismissed = false
+
+    override var toolbar: Toolbar? = null
     override var positiveButtonCallback: OnClickListener? = null
     override var negativeButtonCallback: OnClickListener? = null
     override var onDismissCallback: (() -> Unit)? = null
-    override var toolbar: Toolbar? = null
 
     private var onResumeCallback: (() -> Unit)? = null
+
 
     override fun getTheme(): Int {
         return R.style.DialogStyleWhenLarge
@@ -54,6 +51,7 @@ open class FormDialog: DialogFragment(), IFormDialog {
     override fun setNegativeButtonCallback(callback: () -> Unit) {
         negativeButtonCallback = OnClickListener { view ->
             callback()
+            dismissed = true
             dismiss()
         }
     }
@@ -70,8 +68,9 @@ open class FormDialog: DialogFragment(), IFormDialog {
     override fun initToolBar() {
         toolbar!!.title = getString(R.string.edit)
         toolbar!!.setNavigationOnClickListener(
-            if(negativeButtonCallback != null) negativeButtonCallback
-            else OnClickListener {
+            if(negativeButtonCallback != null) {
+                negativeButtonCallback
+            } else OnClickListener {
                 dismiss()
             }
         )
@@ -89,14 +88,13 @@ open class FormDialog: DialogFragment(), IFormDialog {
         onResumeCallback?.let { it() }
     }
 
-//    override fun onDismiss(dialog: DialogInterface) {
-//        super.onDismiss(dialog)
-//        onDismissCallback?.let { it() }
-//
-//        if(activity?.supportFragmentManager?.isDestroyed == true) {
-//            activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
-//        }
-//    }
+    override fun onDestroy() {
+        super.onDestroy()
+        if(!dismissed) {
+            onDismissCallback?.let { it() }
+        }
+        dismissed = false
+    }
 
     companion object {
         val NAME_VALIDATION: Pattern = Pattern.compile(

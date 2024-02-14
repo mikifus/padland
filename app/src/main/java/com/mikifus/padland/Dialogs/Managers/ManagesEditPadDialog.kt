@@ -7,7 +7,6 @@ import androidx.lifecycle.lifecycleScope
 import com.mikifus.padland.Database.PadGroupModel.PadGroupViewModel
 import com.mikifus.padland.Database.PadGroupModel.PadGroupsAndPadList
 import com.mikifus.padland.Database.PadModel.PadViewModel
-import com.mikifus.padland.Dialogs.ConfirmDialog
 import com.mikifus.padland.Dialogs.EditPadDialog
 import com.mikifus.padland.Utils.PadServer
 import kotlinx.coroutines.Dispatchers

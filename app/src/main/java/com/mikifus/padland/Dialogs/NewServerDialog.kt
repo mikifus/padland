@@ -1,7 +1,5 @@
 package com.mikifus.padland.Dialogs
 
-import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.text.Editable
 import android.view.LayoutInflater
@@ -12,7 +10,6 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.core.widget.NestedScrollView
 import androidx.core.widget.addTextChangedListener
 import com.mikifus.padland.R
 import java.lang.Exception
