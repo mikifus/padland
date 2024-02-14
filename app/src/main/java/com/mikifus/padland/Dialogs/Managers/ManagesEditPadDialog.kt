@@ -7,6 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import com.mikifus.padland.Database.PadGroupModel.PadGroupViewModel
 import com.mikifus.padland.Database.PadGroupModel.PadGroupsAndPadList
 import com.mikifus.padland.Database.PadModel.PadViewModel
+import com.mikifus.padland.Dialogs.ConfirmDialog
 import com.mikifus.padland.Dialogs.EditPadDialog
 import com.mikifus.padland.Utils.PadServer
 import kotlinx.coroutines.Dispatchers
@@ -18,29 +19,19 @@ interface IManagesEditPadDialog {
     fun showEditPadDialog(activity: AppCompatActivity, id: Long)
 }
 
-public class ManagesEditPadDialog: IManagesEditPadDialog {
+public class ManagesEditPadDialog: ManagesDialog(), IManagesEditPadDialog {
+    override val DIALOG_TAG: String = "DIALOG_EDIT_PAD"
+
+    override val dialog by lazy { EditPadDialog() }
 
     override var padViewModel: PadViewModel? = null
     override var padGroupViewModel: PadGroupViewModel? = null
 
     override fun showEditPadDialog(activity: AppCompatActivity, id: Long) {
-        if(dialog.isAdded || activity.supportFragmentManager.isDestroyed) {
-            return
-        }
-
+        showDialog(activity)
         initViewModels(activity)
         initEvents(activity, id)
         setData(activity, id)
-
-        val transaction = activity.supportFragmentManager.beginTransaction()
-
-        // For a polished look, specify a transition animation.
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-
-        // Add to back stack
-        transaction.addToBackStack(DIALOG_TAG)
-
-        dialog.show(transaction, DIALOG_TAG)
     }
 
     private fun setData(activity: AppCompatActivity, id: Long) {
@@ -86,6 +77,7 @@ public class ManagesEditPadDialog: IManagesEditPadDialog {
         dialog.setPositiveButtonCallback { data ->
             saveEditPadDialog(activity, id, data)
             dialog.clearForm()
+            closeDialog(activity)
         }
     }
 
@@ -112,12 +104,5 @@ public class ManagesEditPadDialog: IManagesEditPadDialog {
                 )
             }
         }
-        dialog.dismiss()
-    }
-
-    companion object {
-        private const val DIALOG_TAG: String = "DIALOG_EDIT_PAD"
-
-        private val dialog by lazy { EditPadDialog() }
     }
 }

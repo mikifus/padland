@@ -15,6 +15,8 @@ class AboutActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_about)
+        setSupportActionBar(findViewById(R.id.activity_toolbar))
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         // text2 has links specified by putting <a> tags in the string
         // resource.  By default these links will appear but not

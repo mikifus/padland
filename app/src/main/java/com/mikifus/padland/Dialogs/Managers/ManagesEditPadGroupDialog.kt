@@ -8,6 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import com.mikifus.padland.Activities.PadListActivity
 import com.mikifus.padland.Database.PadGroupModel.PadGroup
 import com.mikifus.padland.Database.PadGroupModel.PadGroupViewModel
+import com.mikifus.padland.Dialogs.ConfirmDialog
 import com.mikifus.padland.Dialogs.EditPadGroupDialog
 import com.mikifus.padland.Dialogs.NewPadGroupDialog
 import kotlinx.coroutines.CoroutineScope
@@ -20,28 +21,18 @@ interface IManagesEditPadGroupDialog {
     fun showEditPadGroupDialog(activity: AppCompatActivity, id: Long)
 }
 
-public class ManagesEditPadGroupDialog: IManagesEditPadGroupDialog {
+public class ManagesEditPadGroupDialog: ManagesDialog(), IManagesEditPadGroupDialog {
+    override val DIALOG_TAG: String = "DIALOG_EDIT_PADGROUP"
+
+    override val dialog by lazy { EditPadGroupDialog() }
 
     override var padGroupViewModel: PadGroupViewModel? = null
 
     override fun showEditPadGroupDialog(activity: AppCompatActivity, id: Long) {
-        if(dialog.isAdded || activity.supportFragmentManager.isDestroyed) {
-            return
-        }
-
+        showDialog(activity)
         initViewModels(activity)
         initEvents(activity, id)
         setData(activity, id)
-
-        val transaction = activity.supportFragmentManager.beginTransaction()
-
-        // For a polished look, specify a transition animation.
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-
-        // Add to back stack
-        transaction.addToBackStack(DIALOG_TAG)
-
-        dialog.show(transaction, DIALOG_TAG)
     }
 
     private fun setData(activity: AppCompatActivity, id: Long) {
@@ -69,6 +60,7 @@ public class ManagesEditPadGroupDialog: IManagesEditPadGroupDialog {
         dialog.setPositiveButtonCallback { data ->
             saveEditPadgroupDialog(activity, id, data["name"].toString())
             dialog.clearForm()
+            closeDialog(activity)
         }
     }
 
@@ -82,12 +74,5 @@ public class ManagesEditPadGroupDialog: IManagesEditPadGroupDialog {
                 padGroupViewModel!!.updatePadGroup(padGroup)
             }
         }
-        dialog.dismiss()
-    }
-
-    companion object {
-        private const val DIALOG_TAG: String = "DIALOG_EDIT_PADGROUP"
-
-        private val dialog by lazy { EditPadGroupDialog() }
     }
 }

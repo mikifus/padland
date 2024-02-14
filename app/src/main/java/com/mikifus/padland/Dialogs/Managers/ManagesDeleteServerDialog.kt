@@ -16,7 +16,10 @@ interface IManagesDeleteServerDialog {
     fun showDeleteServerDialog(activity: AppCompatActivity, ids: List<Long>)
 }
 
-class ManagesDeleteServerDialog: IManagesDeleteServerDialog {
+class ManagesDeleteServerDialog: ManagesDialog(), IManagesDeleteServerDialog {
+    override val DIALOG_TAG: String = "DIALOG_DELETE_SERVER"
+
+    override val dialog by lazy { ConfirmDialog() }
     override var serverViewModel: ServerViewModel? = null
     override var ids: List<Long> = listOf()
 
@@ -51,11 +54,5 @@ class ManagesDeleteServerDialog: IManagesDeleteServerDialog {
             serverViewModel!!.deleteServer(ids)
         }
         dialog.dismiss()
-    }
-
-    companion object {
-        private const val DIALOG_TAG: String = "DIALOG_DELETE_SERVER"
-
-        private val dialog by lazy { ConfirmDialog() }
     }
 }

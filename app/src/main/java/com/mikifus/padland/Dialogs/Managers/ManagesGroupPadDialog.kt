@@ -17,29 +17,18 @@ interface IManagesGroupPadDialog {
     fun showGroupPadDialog(activity: AppCompatActivity, ids: List<Long>)
 }
 
-public class ManagesGroupPadDialog: IManagesGroupPadDialog {
+public class ManagesGroupPadDialog: ManagesDialog(), IManagesGroupPadDialog {
+    override val DIALOG_TAG: String = "DIALOG_EDIT_PAD"
 
+    override  val dialog by lazy { GroupPadDialog() }
     override var padViewModel: PadViewModel? = null
     override var padGroupViewModel: PadGroupViewModel? = null
 
     override fun showGroupPadDialog(activity: AppCompatActivity, ids: List<Long>) {
-        if(dialog.isAdded || activity.supportFragmentManager.isDestroyed) {
-            return
-        }
-
+        showDialog(activity)
         initViewModels(activity)
         initEvents(activity, ids)
         setData(activity, ids)
-
-        val transaction = activity.supportFragmentManager.beginTransaction()
-
-        // For a polished look, specify a transition animation.
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-
-        // Add to back stack
-        transaction.addToBackStack(DIALOG_TAG)
-
-        dialog.show(transaction, DIALOG_TAG)
     }
 
     private fun setData(activity: AppCompatActivity, ids: List<Long>) {
@@ -73,6 +62,7 @@ public class ManagesGroupPadDialog: IManagesGroupPadDialog {
         dialog.setPositiveButtonCallback { data ->
             saveGroupPadDialog(activity, ids, data)
             dialog.clearForm()
+            closeDialog(activity)
         }
     }
 
@@ -91,12 +81,5 @@ public class ManagesGroupPadDialog: IManagesGroupPadDialog {
                 }
             }
         }
-        dialog.dismiss()
-    }
-
-    companion object {
-        private const val DIALOG_TAG: String = "DIALOG_EDIT_PAD"
-
-        private val dialog by lazy { GroupPadDialog() }
     }
 }

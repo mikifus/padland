@@ -16,7 +16,10 @@ interface IManagesWhitelistServerDialog {
                                   onAddCallback: (dialogUrl: String) -> Unit,
                                   onIgnoreCallback: (dialogUrl: String) -> Unit)
 }
-class ManagesWhitelistServerDialog: IManagesWhitelistServerDialog {
+class ManagesWhitelistServerDialog: ManagesDialog(), IManagesWhitelistServerDialog {
+    override val DIALOG_TAG: String = "DIALOG_WHITELIST_SERVER"
+
+    override val dialog by lazy { ConfirmDialog() }
     override var serverViewModel: ServerViewModel? = null
 
     override fun showWhitelistServerDialog(activity: AppCompatActivity,
@@ -68,12 +71,6 @@ class ManagesWhitelistServerDialog: IManagesWhitelistServerDialog {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         activity.startActivity(intent)
         activity.finish()
-    }
-
-    companion object {
-        private const val DIALOG_TAG: String = "DIALOG_WHITELIST_SERVER"
-
-        private val dialog by lazy { ConfirmDialog() }
     }
 
 }

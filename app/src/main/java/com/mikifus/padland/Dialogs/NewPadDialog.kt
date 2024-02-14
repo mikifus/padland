@@ -12,7 +12,9 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.color.DynamicColors
 import com.mikifus.padland.Database.PadGroupModel.PadGroup
 import com.mikifus.padland.Database.PadGroupModel.PadGroupViewModel
 import com.mikifus.padland.Database.ServerModel.ServerViewModel
@@ -38,12 +40,6 @@ class NewPadDialog: FormDialog() {
 
     private var padGroupsSpinnerData: List<PadGroup>? = listOf()
     private var serverSpinnerData: List<Pair<String, String>>? = listOf()
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState)
-        dialog.setTitle(R.string.title_activity_new_pad)
-        return dialog
-    }
 
     private fun initViewModels() {
         if(padGroupViewModel == null) {
@@ -171,10 +167,10 @@ class NewPadDialog: FormDialog() {
     }
 
     override fun clearForm() {
-        mNameEditText!!.text = null
-        mAliasEditText!!.text = null
-        mPadGroupSpinner!!.setSelection(0)
-        mServerSpinner!!.setSelection(0)
+        mNameEditText?.text = null
+        mAliasEditText?.text = null
+        mPadGroupSpinner?.setSelection(0)
+        mServerSpinner?.setSelection(0)
     }
 
     override fun onStart() {
@@ -192,14 +188,6 @@ class NewPadDialog: FormDialog() {
         super.onCreateView(inflater, container, savedInstanceState)
 
         return inflater.inflate(R.layout.dialog_new_pad, container, false)
-    }
-
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
-
-        if(activity?.supportFragmentManager?.isDestroyed == true) {
-            activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
-        }
     }
 
     override fun initToolBar() {

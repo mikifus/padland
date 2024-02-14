@@ -1,11 +1,15 @@
 package com.mikifus.padland.Dialogs.Managers
 
+import android.os.Build
+import android.webkit.CookieManager
 import android.webkit.HttpAuthHandler
 import android.webkit.URLUtil
 import android.webkit.WebView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
+import com.mikifus.padland.Dialogs.ConfirmDialog
 import com.mikifus.padland.Dialogs.PadViewAuthDialog
+import com.mikifus.padland.R
 
 interface IManagesPadViewAuthDialog {
     fun showPadViewAuthDialog(
@@ -14,39 +18,34 @@ interface IManagesPadViewAuthDialog {
         handler: HttpAuthHandler
     )
 }
-class ManagesPadViewAuthDialog: IManagesPadViewAuthDialog {
+class ManagesPadViewAuthDialog: ManagesDialog(), IManagesPadViewAuthDialog {
+    override val DIALOG_TAG: String = "DIALOG_BASIC_AUTH"
 
+    override val dialog by lazy { PadViewAuthDialog() }
     private var webView: WebView? = null
     private var lastLoginUrl: String? = null
 
     override fun showPadViewAuthDialog(activity: AppCompatActivity, view: WebView, handler: HttpAuthHandler) {
-        if(dialog.isAdded || activity.supportFragmentManager.isDestroyed) {
-            return
-        }
         this.webView = view
-
-        initEvents(handler)
-
-        val transaction = activity.supportFragmentManager.beginTransaction()
-
-        // For a polished look, specify a transition animation.
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-
-        // Add to back stack
-        transaction.addToBackStack(DIALOG_TAG)
-
-        dialog.show(transaction, DIALOG_TAG)
+        showDialog(activity)
+        initEvents(activity, handler)
     }
 
-    private fun initEvents(handler: HttpAuthHandler) {
+    private fun initEvents(activity: AppCompatActivity, handler: HttpAuthHandler) {
         dialog.setPositiveButtonCallback { data ->
             handler.proceed(data["user"].toString(), data["password"].toString())
-//            this.webView?.clearCache(true) // No effect?
-            dialog.dismiss()
+            webView?.clearCache(true) // No effect?
+            dialog.clearForm()
+            closeDialog(activity)
         }
         dialog.setNegativeButtonCallback {
             handler.cancel()
-            this.webView?.clearCache(true)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                CookieManager.getInstance().removeAllCookies(null)
+            } else {
+                @Suppress("DEPRECATION")
+                CookieManager.getInstance().removeAllCookie()
+            }
         }
         dialog.setOnResumeCallback {
             if(lastLoginUrl == webView?.url) {
@@ -62,13 +61,12 @@ class ManagesPadViewAuthDialog: IManagesPadViewAuthDialog {
         }
         dialog.onDismissCallback = {
             handler.cancel()
-            this.webView?.clearCache(true)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                CookieManager.getInstance().removeAllCookies(null)
+            } else {
+                @Suppress("DEPRECATION")
+                CookieManager.getInstance().removeAllCookie()
+            }
         }
-    }
-
-    companion object {
-        private const val DIALOG_TAG: String = "DIALOG_BASIC_AUTH"
-
-        private val dialog by lazy { PadViewAuthDialog() }
     }
 }

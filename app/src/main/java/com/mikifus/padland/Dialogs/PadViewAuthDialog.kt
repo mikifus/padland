@@ -23,12 +23,6 @@ class PadViewAuthDialog: FormDialog() {
     private var mAuthErrorMessage: MaterialTextView? = null
     private var mAuthSslMessage: MaterialTextView? = null
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState)
-        dialog.setTitle(R.string.padview_dialog_basicatuh_title)
-        return dialog
-    }
-
     override fun validateForm(): Boolean { return true }
 
     override fun getFormData(): Map<String, Any> {
@@ -60,6 +54,12 @@ class PadViewAuthDialog: FormDialog() {
         mUserEditText?.requestFocus()
     }
 
+    override fun initToolBar() {
+        super.initToolBar()
+
+        toolbar!!.title = getString(R.string.padview_dialog_basicatuh_title)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
         return inflater.inflate(R.layout.dialog_auth, container, false)
@@ -82,13 +82,5 @@ class PadViewAuthDialog: FormDialog() {
         mAuthSslMessage?.visibility = View.GONE
     }
 
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
-        if(activity?.supportFragmentManager?.isDestroyed == true) {
-            activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
-        }
-        clearForm()
-    }
-
-    override fun getTheme(): Int = R.style.Theme_MaterialComponents_Dialog_MinWidth
+    override fun getTheme(): Int = R.style.DialogStyleMinWidth
 }

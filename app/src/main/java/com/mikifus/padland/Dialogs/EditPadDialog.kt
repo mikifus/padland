@@ -42,12 +42,6 @@ class EditPadDialog: FormDialog() {
     private var padGroupsSpinnerData: List<PadGroup>? = listOf()
     private var serverSpinnerData: List<Pair<String, String>>? = listOf()
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState)
-        dialog.setTitle(R.string.padlist_dialog_edit_pad_title)
-        return dialog
-    }
-
     override fun setFormData(data: HashMap<String, Any>) {
         this.data = data
         applyFormData()
@@ -207,14 +201,6 @@ class EditPadDialog: FormDialog() {
         super.onCreateView(inflater, container, savedInstanceState)
 
         return inflater.inflate(R.layout.dialog_edit_pad, container, false)
-    }
-
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
-
-        if(activity?.supportFragmentManager?.isDestroyed == true) {
-            activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
-        }
     }
 
     override fun initToolBar() {

@@ -1,6 +1,7 @@
 package com.mikifus.padland.Dialogs
 
 import android.app.Dialog
+import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
@@ -9,6 +10,9 @@ import android.view.Window
 import android.widget.Button
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.color.MaterialColors
+import com.google.android.material.shape.MaterialShapeDrawable
 import com.mikifus.padland.R
 import java.util.regex.Pattern
 
@@ -36,9 +40,7 @@ open class FormDialog: DialogFragment(), IFormDialog {
     private var onResumeCallback: (() -> Unit)? = null
 
     override fun getTheme(): Int {
-        return if (activity?.resources!!.getBoolean(R.bool.large_layout))
-            R.style.Theme_MaterialComponents_Dialog_MinWidth
-        else R.style.Theme_MaterialComponents_DialogWhenLarge
+        return R.style.DialogStyleWhenLarge
     }
 
     override fun setPositiveButtonCallback(callback: (Map<String, Any>) -> Unit) {
@@ -76,13 +78,6 @@ open class FormDialog: DialogFragment(), IFormDialog {
         )
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        return dialog
-    }
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         toolbar = view.findViewById(R.id.dialog_toolbar)
@@ -95,10 +90,14 @@ open class FormDialog: DialogFragment(), IFormDialog {
         onResumeCallback?.let { it() }
     }
 
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
-        onDismissCallback?.let { it() }
-    }
+//    override fun onDismiss(dialog: DialogInterface) {
+//        super.onDismiss(dialog)
+//        onDismissCallback?.let { it() }
+//
+//        if(activity?.supportFragmentManager?.isDestroyed == true) {
+//            activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
+//        }
+//    }
 
     companion object {
         val NAME_VALIDATION: Pattern = Pattern.compile(

@@ -12,6 +12,7 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.core.widget.NestedScrollView
 import androidx.core.widget.addTextChangedListener
 import com.mikifus.padland.R
 import java.lang.Exception
@@ -34,12 +35,6 @@ open class NewServerDialog: FormDialog() {
     var initialName: String? = null
     var initialUrl: String? = null
     var initialPrefix: String? = null
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState)
-        dialog.setTitle(R.string.serverlist_dialog_new_server_title)
-        return dialog
-    }
 
     override fun validateForm(): Boolean {
         val name = mNameEditText!!.text.toString()
@@ -135,13 +130,6 @@ open class NewServerDialog: FormDialog() {
         return inflater.inflate(R.layout.dialog_edit_server, container, false)
     }
 
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
-        if(activity?.supportFragmentManager?.isDestroyed == true) {
-            activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
-        }
-    }
-
     override fun initToolBar() {
         super.initToolBar()
         toolbar!!.title = getString(R.string.serverlist_dialog_new_server_title)
@@ -155,6 +143,11 @@ open class NewServerDialog: FormDialog() {
                 View.VISIBLE
             } else{
                 View.GONE
+            }
+            if(mAdvancedLayout?.visibility == View.VISIBLE) {
+                // Will scroll a bit down to reveal the new content.
+                // Will incidentally focus the input on that content which is ok.
+                mAdvancedLayout!!.requestFocus()
             }
         }
         mPadPrefixEditText?.addTextChangedListener { padprefix ->

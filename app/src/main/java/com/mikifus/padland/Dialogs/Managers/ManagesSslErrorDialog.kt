@@ -14,7 +14,10 @@ interface IManagesSslErrorDialog {
                            onCancelCallback: (() -> Unit)? = {},
                            onIgnoreCallback: (() -> Unit)? = {})
 }
-class ManagesSslErrorDialog: IManagesSslErrorDialog {
+class ManagesSslErrorDialog: ManagesDialog(), IManagesSslErrorDialog {
+    override val DIALOG_TAG: String = "DIALOG_SSL_ERROR"
+
+    override val dialog by lazy { ConfirmDialog() }
 
     override fun showSslErrorDialog(activity: AppCompatActivity,
                                     url: String,
@@ -57,12 +60,6 @@ class ManagesSslErrorDialog: IManagesSslErrorDialog {
     private fun confirmBrowser(activity: AppCompatActivity, url: String) {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         activity.startActivity(intent)
-    }
-
-    companion object {
-        private const val DIALOG_TAG: String = "DIALOG_WHITELIST_SERVER"
-
-        private val dialog by lazy { ConfirmDialog() }
     }
 
 }
