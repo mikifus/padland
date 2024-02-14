@@ -27,12 +27,6 @@ class GroupPadDialog: FormDialog() {
 
     private var padGroupsSpinnerData: List<PadGroup>? = listOf()
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState)
-        dialog.setTitle(R.string.padlist_group_select_dialog)
-        return dialog
-    }
-
     override fun setFormData(data: HashMap<String, Any>) {
         this.data = data
         applyFormData()
@@ -94,14 +88,6 @@ class GroupPadDialog: FormDialog() {
         return inflater.inflate(R.layout.dialog_group_pad, container, false)
     }
 
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
-
-        if(activity?.supportFragmentManager?.isDestroyed == true) {
-            activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
-        }
-    }
-
     override fun initToolBar() {
         super.initToolBar()
 
@@ -121,5 +107,6 @@ class GroupPadDialog: FormDialog() {
         super.onResume()
         initViewModels()
     }
-    override fun getTheme(): Int = R.style.Theme_MaterialComponents_Dialog_MinWidth
+
+    override fun getTheme(): Int = R.style.DialogStyleMinWidth
 }

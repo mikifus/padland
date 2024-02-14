@@ -18,12 +18,6 @@ class NewPadGroupDialog: FormDialog() {
 
     private var mEditText: EditText? = null
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState)
-        dialog.setTitle(R.string.padlist_dialog_new_padgroup_title)
-        return dialog
-    }
-
     override fun validateForm(): Boolean {
         val text = mEditText!!.text.toString()
 
@@ -59,14 +53,6 @@ class NewPadGroupDialog: FormDialog() {
         super.onCreateView(inflater, container, savedInstanceState)
 
         return inflater.inflate(R.layout.dialog_new_padgroup, container, false)
-    }
-
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
-
-        if(activity?.supportFragmentManager?.isDestroyed == true) {
-            activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
-        }
     }
 
     override fun initToolBar() {

@@ -19,7 +19,11 @@ interface IManagesDeletePadDialog {
     fun showDeletePadDialog(activity: AppCompatActivity, ids: List<Long>)
 }
 
-class ManagesDeletePadDialog: IManagesDeletePadDialog {
+class ManagesDeletePadDialog: ManagesDialog(), IManagesDeletePadDialog {
+    override val DIALOG_TAG: String = "DIALOG_DELETE_PAD"
+
+    override val dialog by lazy { ConfirmDialog() }
+
     override var padGroupViewModel: PadGroupViewModel? = null
     override var padViewModel: PadViewModel? = null
     override var ids: List<Long> = listOf()
@@ -63,11 +67,5 @@ class ManagesDeletePadDialog: IManagesDeletePadDialog {
             }
         }
         dialog.dismiss()
-    }
-
-    companion object {
-        private const val DIALOG_TAG: String = "DIALOG_DELETE_PAD"
-
-        private val dialog by lazy { ConfirmDialog() }
     }
 }

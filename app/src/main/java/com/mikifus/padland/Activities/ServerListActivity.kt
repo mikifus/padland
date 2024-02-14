@@ -32,6 +32,8 @@ class ServerListActivity: AppCompatActivity(),
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_server_list)
+        setSupportActionBar(findViewById(R.id.activity_toolbar))
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         serverViewModel = ViewModelProvider(this)[ServerViewModel::class.java]
         serverAdapter = ServerAdapter(this, getOnItemClickListener())

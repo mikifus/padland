@@ -15,14 +15,14 @@ import com.mikifus.padland.R
  *
  * WARNING: setAdapter() will only work properly if called in onResume()
  *
- * @see https://rmirabelle.medium.com/there-is-no-material-design-spinner-for-android-3261b7c77da8
+ * See: https://rmirabelle.medium.com/there-is-no-material-design-spinner-for-android-3261b7c77da8
  */
 class SpinnerHelper @JvmOverloads constructor(context: Context,
                                               attributeSet: AttributeSet? = null,
                                               defStyleAttr: Int = R.attr.autoCompleteTextViewStyle)
     : MaterialAutoCompleteTextView(context, attributeSet, defStyleAttr) {
 
-    var selectedItemPosition: Int = 0
+    private var selectedItemPosition: Int = 0
         /**
          * On setting this the input will display
          * the text for the selected position.

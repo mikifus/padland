@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.mikifus.padland.Database.ServerModel.Server
 import com.mikifus.padland.Database.ServerModel.ServerViewModel
+import com.mikifus.padland.Dialogs.ConfirmDialog
 import com.mikifus.padland.Dialogs.NewServerDialog
 import com.mikifus.padland.Utils.PadServer
 import com.mikifus.padland.Utils.PadUrl
@@ -19,30 +20,20 @@ interface IManagesNewServerDialog {
                             onDismissCallBack: (() -> Unit)? = null)
 }
 
-class ManagesNewServerDialog: IManagesNewServerDialog {
+class ManagesNewServerDialog: ManagesDialog(), IManagesNewServerDialog {
+    override val DIALOG_TAG: String = "DIALOG_NEW_SERVER"
 
+    override val dialog by lazy { NewServerDialog() }
     override var serverViewModel: ServerViewModel? = null
 
     override fun showNewServerDialog(activity: AppCompatActivity,
                                      url: String?,
                                      onDismissCallBack: (() -> Unit)?) {
-        if(dialog.isAdded || activity.supportFragmentManager.isDestroyed) {
-            return
-        }
-
+        showDialog(activity)
         initViewModels(activity)
         initEvents(activity, onDismissCallBack)
+
         url?.let { onSetInitialUrl(url) }
-
-        val transaction = activity.supportFragmentManager.beginTransaction()
-
-        // For a polished look, specify a transition animation.
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-
-        // Add to back stack
-        transaction.addToBackStack(DIALOG_TAG)
-
-        dialog.show(transaction, DIALOG_TAG)
     }
 
     private fun initViewModels(activity: AppCompatActivity) {
@@ -56,6 +47,7 @@ class ManagesNewServerDialog: IManagesNewServerDialog {
         dialog.setPositiveButtonCallback { data ->
             saveNewServerDialog(activity, data)
             dialog.clearForm()
+            closeDialog(activity)
         }
         onDismissCallBack?.let { dialog.onDismissCallback = onDismissCallBack }
     }
@@ -81,12 +73,5 @@ class ManagesNewServerDialog: IManagesNewServerDialog {
 
             serverViewModel!!.insertServer(updateServer)
         }
-        dialog.dismiss()
-    }
-
-    companion object {
-        private const val DIALOG_TAG: String = "DIALOG_EDIT_SERVER"
-
-        private val dialog by lazy { NewServerDialog() }
     }
 }

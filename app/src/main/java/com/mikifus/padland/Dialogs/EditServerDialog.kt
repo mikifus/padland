@@ -9,12 +9,6 @@ class EditServerDialog: NewServerDialog() {
 
     private var data: Map<String, Any>? = null
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState)
-        dialog.setTitle(R.string.edit)
-        return dialog
-    }
-
     override fun setFormData(data: HashMap<String, Any>) {
         this.data = data
         applyFormData()

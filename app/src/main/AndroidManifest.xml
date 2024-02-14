@@ -11,7 +11,7 @@
         android:icon="@drawable/ic_launcher"
         android:logo="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppBaseTheme"
+        android:theme="@style/PadLandAppTheme"
         android:usesCleartextTraffic="true">
 
         <!-- Privacy please -->
@@ -27,8 +27,7 @@
         </activity>
 
         <activity android:name=".Activities.IntroActivity"
-            android:label="@string/title_activity_intro"
-            android:theme="@style/splashScreenTheme" />
+            android:label="@string/title_activity_intro" />
 
         <activity
             android:name=".Activities.PadListActivity"
@@ -51,10 +50,8 @@
             android:name=".Activities.PadViewActivity"
             android:label="@string/title_activity_pad_view"
             android:parentActivityName=".Activities.PadListActivity"
-            android:theme="@style/splashScreenTheme"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            android:exported="false"
-            tools:ignore="AppLinkUrlError">
+            android:exported="true">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
@@ -74,7 +71,7 @@
             <!-- Intent filter to catch some arbitrary etherpad services' URLs -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
+                <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:scheme="https" />
@@ -83,7 +80,7 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
+                <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:scheme="https" />

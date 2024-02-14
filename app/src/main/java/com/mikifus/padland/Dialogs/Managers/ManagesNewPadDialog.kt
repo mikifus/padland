@@ -2,7 +2,6 @@ package com.mikifus.padland.Dialogs.Managers;
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.mikifus.padland.Activities.PadViewActivity
@@ -20,28 +19,17 @@ interface IManagesNewPadDialog {
     fun showNewPadDialog(activity: AppCompatActivity)
 }
 
-public class ManagesNewPadDialog: IManagesNewPadDialog {
+public class ManagesNewPadDialog: ManagesDialog(), IManagesNewPadDialog {
+    override val DIALOG_TAG: String = "DIALOG_NEW_PAD"
 
+    override val dialog by lazy { NewPadDialog() }
     override var padViewModel: PadViewModel? = null
     override var padGroupViewModel: PadGroupViewModel? = null
 
     override fun showNewPadDialog(activity: AppCompatActivity) {
-        if(dialog.isAdded || activity.supportFragmentManager.isDestroyed) {
-            return
-        }
-
+        showDialog(activity)
         initViewModels(activity)
         initEvents(activity)
-
-        val transaction = activity.supportFragmentManager.beginTransaction()
-
-        // For a polished look, specify a transition animation.
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-
-        // Add to back stack
-        transaction.addToBackStack(DIALOG_TAG)
-
-        dialog.show(transaction, DIALOG_TAG)
     }
 
     private fun initViewModels(activity: AppCompatActivity) {
@@ -63,6 +51,7 @@ public class ManagesNewPadDialog: IManagesNewPadDialog {
                 activity.startActivity(padViewIntent)
             }
             dialog.clearForm()
+            closeDialog(activity)
         }
     }
 
@@ -86,12 +75,5 @@ public class ManagesNewPadDialog: IManagesNewPadDialog {
                 activity.startActivity(padViewIntent)
             }
         }
-        dialog.dismiss()
-    }
-
-    companion object {
-        private const val DIALOG_TAG: String = "DIALOG_NEW_PAD"
-
-        private val dialog by lazy { NewPadDialog() }
     }
 }

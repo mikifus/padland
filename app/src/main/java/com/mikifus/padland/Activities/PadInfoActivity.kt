@@ -44,6 +44,7 @@ class PadInfoActivity: AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pad_info)
+        setSupportActionBar(findViewById(R.id.activity_toolbar))
 
         mPadViewButton = findViewById(R.id.button_pad_view)
         mCopyButton = findViewById(R.id.button_copy)

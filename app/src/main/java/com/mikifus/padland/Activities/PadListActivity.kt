@@ -83,8 +83,9 @@ class PadListActivity: AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pad_list)
+        setSupportActionBar(findViewById(R.id.activity_toolbar))
 
-        //initializing all the UI elements
+        //initializing all the content UI elements
         recyclerView = findViewById(R.id.recyclerview_padgroups)
         recyclerViewUnclassified = findViewById(R.id.recyclerview_unclassified)
 

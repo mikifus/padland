@@ -20,13 +20,6 @@ class EditPadGroupDialog: FormDialog() {
     private var mEditText: EditText? = null
     private var data: Map<String, Any?> = mapOf()
 
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState)
-        dialog.setTitle(R.string.edit)
-        return dialog
-    }
-
     override fun validateForm(): Boolean {
         val text = mEditText!!.text.toString()
 
@@ -73,13 +66,6 @@ class EditPadGroupDialog: FormDialog() {
         super.onCreateView(inflater, container, savedInstanceState)
 
         return inflater.inflate(R.layout.dialog_new_padgroup, container, false)
-    }
-
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
-        if(activity?.supportFragmentManager?.isDestroyed == true) {
-            activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
-        }
     }
 
     override fun initToolBar() {

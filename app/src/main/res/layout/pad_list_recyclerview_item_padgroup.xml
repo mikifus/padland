@@ -24,7 +24,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="?android:attr/listSeparatorTextViewStyle"
-            android:foreground="?attr/selectableItemBackground"
             >
 
             <TextView
@@ -32,7 +31,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:background="@drawable/background_selector"
                 android:gravity="start|center"
                 android:paddingTop="8dp"
                 android:paddingBottom="6dp"
@@ -53,7 +51,7 @@
                 android:layout_gravity="center_vertical|end"
                 android:background="@android:color/transparent"
                 android:src="@drawable/group_button_selector"
-                app:tint="@color/design_default_color_secondary"
+                app:tint="?attr/colorOnSurface"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"

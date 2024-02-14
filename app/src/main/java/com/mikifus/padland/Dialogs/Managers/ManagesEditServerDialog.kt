@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.mikifus.padland.Database.ServerModel.ServerViewModel
+import com.mikifus.padland.Dialogs.ConfirmDialog
 import com.mikifus.padland.Dialogs.EditServerDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -14,28 +15,18 @@ interface IManagesEditServerDialog {
     fun showEditServerDialog(activity: AppCompatActivity, id: Long)
 }
 
-public class ManagesEditServerDialog: IManagesEditServerDialog {
+public class ManagesEditServerDialog: ManagesDialog(), IManagesEditServerDialog {
+    override val DIALOG_TAG: String = "DIALOG_EDIT_SERVER"
+
+    override val dialog by lazy { EditServerDialog() }
 
     override var serverViewModel: ServerViewModel? = null
 
     override fun showEditServerDialog(activity: AppCompatActivity, id: Long) {
-        if(dialog.isAdded || activity.supportFragmentManager.isDestroyed) {
-            return
-        }
-
+        showDialog(activity)
         initViewModels(activity)
         initEvents(activity, id)
         setData(activity, id)
-
-        val transaction = activity.supportFragmentManager.beginTransaction()
-
-        // For a polished look, specify a transition animation.
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-
-        // Add to back stack
-        transaction.addToBackStack(DIALOG_TAG)
-
-        dialog.show(transaction, DIALOG_TAG)
     }
 
     private fun setData(activity: AppCompatActivity, id: Long) {
@@ -72,6 +63,7 @@ public class ManagesEditServerDialog: IManagesEditServerDialog {
         dialog.setPositiveButtonCallback { data ->
             saveEditServerDialog(activity, id, data)
             dialog.clearForm()
+            closeDialog(activity)
         }
     }
 
@@ -90,12 +82,5 @@ public class ManagesEditServerDialog: IManagesEditServerDialog {
                 serverViewModel!!.updateServer(updateServer)
             }
         }
-        dialog.dismiss()
-    }
-
-    companion object {
-        private const val DIALOG_TAG: String = "DIALOG_EDIT_SERVER"
-
-        private val dialog by lazy { EditServerDialog() }
     }
 }

@@ -362,9 +362,6 @@ class PadViewActivity :
         // Enable Javascript
         webSettings.javaScriptEnabled = true
 
-        // remove a weird white line on the right size
-//        webView!!.scrollBarStyle = WebView.SCROLLBARS_OUTSIDE_OVERLAY
-
         // Other options
         webSettings.useWideViewPort = true
         webSettings.setSupportZoom(true)
