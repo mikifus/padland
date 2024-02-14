@@ -21,6 +21,14 @@ class PadLandWebViewClient(hostsWhitelist: List<String>, private val callbacks: 
     PadLandWebClientCallbacks by callbacks {
 
     private var webViewHttpConnections = 0
+        set(value) {
+            var finalValue = value
+            if(finalValue < 0) {
+                finalValue = 0
+            }
+            isLoading = finalValue != 0
+            field = finalValue
+        }
     private var isLoading: Boolean = false
         set(value) {
             // Callback on start or stop loading
@@ -34,7 +42,6 @@ class PadLandWebViewClient(hostsWhitelist: List<String>, private val callbacks: 
     override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
         super.onPageStarted(view, url, favicon)
         ++webViewHttpConnections
-        isLoading = true
         Log.d(TAG, "Added connection $webViewHttpConnections")
     }
 
@@ -43,24 +50,17 @@ class PadLandWebViewClient(hostsWhitelist: List<String>, private val callbacks: 
         super.onPageFinished(view, url)
         --webViewHttpConnections
         Log.d(TAG, "Removed connection $webViewHttpConnections")
-        if(webViewHttpConnections == 0) {
-            isLoading = false
-        }
     }
 
     override fun onPageCommitVisible(view: WebView?, url: String?) {
         super.onPageCommitVisible(view, url)
         --webViewHttpConnections
         Log.d(TAG, "Removed connection $webViewHttpConnections")
-        if(webViewHttpConnections == 0) {
-            isLoading = false
-        }
     }
 
     override fun onReceivedError(view: WebView, request: WebResourceRequest, error: WebResourceError) {
         super.onReceivedError(view, request, error)
         --webViewHttpConnections
-        isLoading = false
         Log.e(TAG, "WebView Error $error, Request: $request")
     }
 
@@ -69,7 +69,6 @@ class PadLandWebViewClient(hostsWhitelist: List<String>, private val callbacks: 
         @Suppress("DEPRECATION")
         super.onReceivedError(view, errorCode, description, failingUrl)
         --webViewHttpConnections
-        isLoading = false
         Log.e(TAG, "WebView Error ($errorCode) $description, Request: $failingUrl")
     }
 
