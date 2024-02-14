@@ -14,7 +14,12 @@ import android.webkit.WebView
 import androidx.annotation.RequiresApi
 import com.mikifus.padland.R
 import com.mikifus.padland.Utils.WhiteListMatcher
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 class PadLandWebViewClient(hostsWhitelist: List<String>, private val callbacks: PadLandWebClientCallbacks) :
     PadLandSaferWebViewClient(hostsWhitelist),
@@ -87,9 +92,9 @@ class PadLandWebViewClient(hostsWhitelist: List<String>, private val callbacks: 
         if ((URLUtil.isHttpUrl(url) || URLUtil.isHttpsUrl(url)) &&
             !WhiteListMatcher.isValidHost(url, hostsWhitelist)) {
 
-            // WARNING: Runs blocking, it seems to work as expected
+            // WARNING: Runs blocking, try to not block the UI on the callback
             return runBlocking {
-                onExternalHostUrlLoad(url)
+                return@runBlocking onExternalHostUrlLoad(url)
             }
         }
         return false

@@ -10,7 +10,6 @@ import com.mikifus.padland.Dialogs.ConfirmDialog
 import com.mikifus.padland.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 interface IManagesDeletePadDialog {
     var padGroupViewModel: PadGroupViewModel?
@@ -60,9 +59,7 @@ class ManagesDeletePadDialog: ManagesDialog(), IManagesDeletePadDialog {
     private fun confirmDeletePadDialog(activity: AppCompatActivity) {
         activity.lifecycleScope.launch(Dispatchers.IO) {
             ids.forEach {
-                runBlocking {
-                    padGroupViewModel!!.deletePadGroupsAndPadList(it)
-                }
+                padGroupViewModel!!.deletePadGroupsAndPadList(it)
                 padViewModel!!.deletePad(it)
             }
         }
