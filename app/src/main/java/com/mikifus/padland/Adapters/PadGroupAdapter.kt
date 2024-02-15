@@ -20,7 +20,9 @@ import androidx.transition.TransitionManager
 import com.google.android.material.textview.MaterialTextView
 import com.mikifus.padland.Activities.PadListActivity
 import com.mikifus.padland.Adapters.DragAndDropListener.IDragAndDropListener
+import com.mikifus.padland.Database.PadGroupModel.PadGroup
 import com.mikifus.padland.Database.PadGroupModel.PadGroupsWithPadList
+import com.mikifus.padland.Database.PadModel.Pad
 import com.mikifus.padland.R
 
 
@@ -31,9 +33,14 @@ class PadGroupAdapter(context: Context,
     RecyclerView.Adapter<PadGroupAdapter.PadGroupViewHolder>() {
 
     private val activityContext: Context
-
     private val mInflater: LayoutInflater
     var data: List<PadGroupsWithPadList> = listOf()
+        set(value) {
+            val oldValue = data.toList()
+            field = value
+            computeDataSetChanged(oldValue, value)
+        }
+
     private var padAdapterTouchListener: OnTouchListener? = null
     var tracker: SelectionTracker<Long>? = null
 
@@ -165,7 +172,7 @@ class PadGroupAdapter(context: Context,
         holder.padAdapter.data = current.padList
         holder.padAdapter.onTouchListener = padAdapterTouchListener
 
-        holder.padAdapter.notifyDataSetChanged()
+//        holder.padAdapter.notifyDataSetChanged()
 
         tracker?.let {
             holder.itemLayout.isSelected = it.isSelected(current.padGroup.mId)
@@ -182,5 +189,27 @@ class PadGroupAdapter(context: Context,
         return data.size
     }
 
+    private fun computeDataSetChanged(oldValue: List<PadGroupsWithPadList>, newValue: List<PadGroupsWithPadList>) {
+        for (newPadGroup in newValue) {
+            if (oldValue.any { it.padGroup.mId == newPadGroup.padGroup.mId }) {
+//                val coincidence = oldValue.find { it.padGroup.mId == newPadGroup.padGroup.mId }!!
+//                if(coincidence.padGroup.mName != newPadGroup.padGroup.mName ||
+//                    coincidence.padList != newPadGroup.padList
+//                ) {
+//                    notifyItemChanged(oldValue.indexOf(coincidence))
+//                }
+                notifyDataSetChanged()
+                return
+            } else {
+                notifyItemInserted(newValue.indexOf(newPadGroup))
+            }
+        }
+
+        for (oldPadGroup in oldValue) {
+            if (!newValue.any { it.padGroup.mId == oldPadGroup.padGroup.mId }) {
+                notifyItemRemoved(oldValue.indexOf(oldPadGroup))
+            }
+        }
+    }
 
 }
