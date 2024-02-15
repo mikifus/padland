@@ -19,9 +19,9 @@ class NewPadGroupDialog: FormDialog() {
     private var mEditText: EditText? = null
 
     override fun validateForm(): Boolean {
-        val text = mEditText!!.text.toString()
+        val name = mEditText!!.text.toString()
 
-        if(!NAME_VALIDATION.matcher(text).matches()) {
+        if (name.isEmpty()) {
             Toast.makeText(context, getString(R.string.padlist_dialog_new_padgroup_invalid), Toast.LENGTH_LONG).show()
             return false
         }
