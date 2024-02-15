@@ -56,7 +56,7 @@ class ManagesNewServerDialog: ManagesDialog(), IManagesNewServerDialog {
         val padUrl = PadServer.Builder().padUrl(url)
 
         dialog.initialName = padUrl.host
-        dialog.initialUrl = padUrl.baseUrl
+        dialog.initialUrl = padUrl.server
         dialog.initialPrefix = padUrl.prefix
     }
 
