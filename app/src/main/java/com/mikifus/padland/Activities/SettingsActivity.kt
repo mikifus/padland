@@ -1,9 +1,10 @@
 package com.mikifus.padland.Activities
 
 import android.content.SharedPreferences
-import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NavUtils
 import androidx.lifecycle.ViewModelProvider
@@ -13,7 +14,15 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import com.mikifus.padland.Database.ServerModel.ServerViewModel
 import com.mikifus.padland.R
+import com.mikifus.padland.Utils.Export.ExportHelper
+import com.mikifus.padland.Utils.Export.IExportHelper
+import com.mikifus.padland.Utils.Export.IImportHelper
+import com.mikifus.padland.Utils.Export.ImportHelper
 import com.rarepebble.colorpicker.ColorPreference
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
 
 
 class SettingsActivity : AppCompatActivity() {
@@ -38,6 +47,9 @@ class SettingsActivity : AppCompatActivity() {
 
         private var sharedPreferences: SharedPreferences? = null
         var serverViewModel: ServerViewModel? = null
+        private var exportHelper: IExportHelper? = null
+        private var importHelper: IImportHelper? = null
+
 
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             addPreferencesFromResource(R.xml.preferences)
@@ -46,6 +58,8 @@ class SettingsActivity : AppCompatActivity() {
             sharedPreferences!!.registerOnSharedPreferenceChangeListener(this)
 
             initDefaultServerPreference()
+            initExportPreference()
+            initImportPreference()
         }
 
         private fun initDefaultServerPreference() {
@@ -68,6 +82,51 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
+        private fun initExportPreference() {
+            val preference = findPreference<Preference>("padland_export")
+            preference?.setOnPreferenceClickListener {
+                val formatter: DateFormat = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
+                        requireContext().resources.configuration.locales.get(0))
+                } else {
+                    @Suppress("DEPRECATION")
+                    SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
+                        requireContext().resources.configuration.locale)
+                }
+
+                val now: Date = Calendar.getInstance().time
+                exportHelper?.launcher?.launch("Padland-export-${formatter.format(now)}.json")
+
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.export_exporting_file),
+                    Toast.LENGTH_LONG
+                ).show()
+
+                true
+            }
+
+            initExportHelper()
+        }
+
+        private fun initImportPreference() {
+            val preference = findPreference<Preference>("padland_import")
+            preference?.setOnPreferenceClickListener {
+                val now: Date = Calendar.getInstance().time
+                importHelper?.launcher?.launch(arrayOf("text/*"))
+
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.import_importing_file),
+                    Toast.LENGTH_LONG
+                ).show()
+
+                true
+            }
+
+            initImportHelper()
+        }
+
         override fun onDisplayPreferenceDialog(preference: Preference) {
             if (preference is ColorPreference) {
                 preference.showDialog(this, 0)
@@ -75,6 +134,42 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {}
+
+        private fun initExportHelper() {
+            exportHelper = ExportHelper(requireActivity()) { result ->
+                if(result) {
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.export_exporting_success),
+                        Toast.LENGTH_LONG
+                    ).show()
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.export_exporting_failed),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
+
+        private fun initImportHelper() {
+            importHelper = ImportHelper(requireActivity()) { done, result ->
+                if(done) {
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.import_importing_success, result?.size.toString()),
+                        Toast.LENGTH_LONG
+                    ).show()
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.import_importing_failed),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

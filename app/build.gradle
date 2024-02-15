@@ -76,6 +76,7 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:2.0.4'
     implementation "androidx.preference:preference-ktx:1.2.1"
     implementation 'com.github.martin-stone:hsv-alpha-color-picker-android:3.1.0'
+    implementation 'com.google.code.gson:gson:2.10'
 
     // Room database
     def room_version = "2.6.1"

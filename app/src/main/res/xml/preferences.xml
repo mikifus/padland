@@ -53,6 +53,18 @@
     <PreferenceCategory
         android:title="@string/settings_miscellaneous">
 
+        <Preference
+            android:key="padland_export"
+            android:title="@string/preference_export_database"
+            android:summary="@string/preference_export_database_summary"
+            />
+
+        <Preference
+            android:key="padland_import"
+            android:title="@string/preference_import_database"
+            android:summary="@string/preference_import_database_summary"
+            />
+
         <PreferenceScreen
             android:key="padland_about"
             android:title="@string/about"

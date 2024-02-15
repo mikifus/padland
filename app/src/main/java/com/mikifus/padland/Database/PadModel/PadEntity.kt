@@ -36,6 +36,7 @@ data class Pad(
 
     companion object {
         const val TABLE_NAME = "padlist"
+        val PKEY = Pad::mId.name
 
         fun withOnlyId(id: Long): MutableLiveData<Pad> {
             return MutableLiveData(Pad().copy(mId = id))
