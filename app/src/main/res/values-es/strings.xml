@@ -139,5 +139,15 @@
     <string name="whitelist_server_dialog_title">Dirección no permitida</string>
     <string name="ssl_error_dialog_unsafe">Se ha detectado una petición insegura HTTP sin SSL. Si cancelas se cerrará el documento.</string>
     <string name="padgroup_empty_no_pads">Este grupo no tiene documentos. Puedes seleccionar uno y arrastrarlo aquí.</string>
+    <string name="export_exporting_file">Selecciona donde guardar…</string>
+    <string name="export_exporting_success">Exportación finalizada</string>
+    <string name="export_exporting_failed">No se ha podido exportar el fichero</string>
+    <string name="import_importing_file">Selecciona el fichero…</string>
+    <string name="import_importing_success">Importación finalizada (resultado: %s)</string>
+    <string name="import_importing_failed">La importación ha fallado</string>
+    <string name="preference_export_database">Exportar base de datos</string>
+    <string name="preference_export_database_summary">Exportar a un fichero JSON.</string>
+    <string name="preference_import_database">Importar base de datos</string>
+    <string name="preference_import_database_summary">Importar desde un fichero JSON.</string>
 
 </resources>

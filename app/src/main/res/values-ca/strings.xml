@@ -143,5 +143,15 @@
     <string name="whitelist_server_dialog_title">Adreça no permesa</string>
     <string name="ssl_error_dialog_unsafe">S\'ha detectat una petició insegura HTTP sense SSL. Si cancel·les es tancarà el document.</string>
     <string name="padgroup_empty_no_pads">Aquest grup no té cap document. Pots seleccionar-ne un i arrosegar-lo aquí.</string>
+    <string name="export_exporting_file">Selecciona on guardar…</string>
+    <string name="export_exporting_success">Exportació finalitzada</string>
+    <string name="export_exporting_failed">No s\'ha pogut exportar el fitxer</string>
+    <string name="import_importing_file">Selecciona el fitxer…</string>
+    <string name="import_importing_success">Importació finalitzada (resultat: %s)</string>
+    <string name="import_importing_failed">L\'importació ha fallat</string>
+    <string name="preference_export_database">Exporta la base de dades</string>
+    <string name="preference_export_database_summary">Exporta a un fitxer JSON.</string>
+    <string name="preference_import_database">Importa la base de dades</string>
+    <string name="preference_import_database_summary">Importa des d\'un fitxer JSON.</string>
 
 </resources>
