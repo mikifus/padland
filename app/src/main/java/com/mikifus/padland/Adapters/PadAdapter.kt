@@ -124,6 +124,7 @@ class PadAdapter(
 //                    notifyItemChanged(oldValue.indexOf(coincidence))
 //                }
                 notifyDataSetChanged()
+                return
             } else {
                 notifyItemInserted(newValue.indexOf(newPad))
             }
