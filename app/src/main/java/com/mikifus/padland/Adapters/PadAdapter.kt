@@ -108,5 +108,4 @@ class PadAdapter(
     fun getDragInstance(): DragAndDropListener {
         return DragAndDropListener(dragAndDropListener)
     }
-
 }
