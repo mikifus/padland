@@ -22,6 +22,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -30,6 +31,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.AutoTransition
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mikifus.padland.Adapters.PadAdapter
 import com.mikifus.padland.Adapters.PadGroupAdapter
@@ -76,6 +78,8 @@ class PadListActivity: AppCompatActivity(),
     private var recyclerView: RecyclerView? = null
     private var recyclerViewUnclassified: RecyclerView? = null
     private var titleViewUnclassified: View? = null
+    private var mEmptyLayout: LinearLayoutCompat? = null
+    private var mEmptyButton: MaterialButton? = null
 
     private var adapter: PadGroupAdapter? = null
     private var padAdapter: PadAdapter? = null
@@ -88,6 +92,8 @@ class PadListActivity: AppCompatActivity(),
         //initializing all the content UI elements
         recyclerView = findViewById(R.id.recyclerview_padgroups)
         recyclerViewUnclassified = findViewById(R.id.recyclerview_unclassified)
+        mEmptyLayout = findViewById(android.R.id.empty)
+        mEmptyButton = findViewById(R.id.empty_button_createnew)
 
         padGroupViewModel = ViewModelProvider(this)[PadGroupViewModel::class.java]
         adapter = PadGroupAdapter(this, this,
@@ -142,6 +148,7 @@ class PadListActivity: AppCompatActivity(),
             mainList = currentList ?: listOf()
             adapter!!.data = mainList!!
             adapter!!.notifyDataSetChanged()
+            showHideEmpty()
         }
 
         padGroupViewModel!!.getPadsWithoutGroup.observe(this) { currentList ->
@@ -149,6 +156,7 @@ class PadListActivity: AppCompatActivity(),
             padAdapter!!.data = unclassifiedList!!
             padAdapter!!.notifyDataSetChanged()
             showHideUnclassified()
+            showHideEmpty()
         }
     }
 
@@ -168,6 +176,9 @@ class PadListActivity: AppCompatActivity(),
             showNewPadDialog(this@PadListActivity)
         }
 
+        mEmptyButton?.setOnClickListener {
+            showNewPadDialog(this@PadListActivity)
+        }
 
         titleViewUnclassified!!.isActivated = true
         titleViewUnclassified!!.setOnClickListener {
@@ -201,6 +212,14 @@ class PadListActivity: AppCompatActivity(),
         } else {
             titleViewUnclassified?.visibility = View.VISIBLE
             recyclerViewUnclassified?.visibility = View.VISIBLE
+        }
+    }
+
+    private fun showHideEmpty() {
+        if(unclassifiedList?.size == 0 && mainList?.size == 0) {
+            mEmptyLayout?.visibility = View.VISIBLE
+        } else {
+            mEmptyLayout?.visibility = View.GONE
         }
     }
 

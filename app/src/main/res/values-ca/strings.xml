@@ -24,7 +24,7 @@
     <string name="action_newpad">Afegir document</string>
     <string name="action_settings">Preferències</string>
     <string name="activity_padlist_implicitintent_text_copied">El text s\'ha copiat at portaretalls. Enganxa\'l per utilitzar-lo.</string>
-    <string name="cancel">Cancel·lar</string>
+    <string name="cancel">Cancel·la</string>
     <string name="choose_a_server">Escull un servidor (opcional):</string>
     <string name="choose_default_pad_server">Escull un servidor de documents per defecte al crear-ne de nous.</string>
     <string name="default_pad_server">Servidor per defecte</string>
@@ -46,7 +46,8 @@
     <string name="padlist_dialog_new_padgroup_label">Introdueix un nom per al grup</string>
     <string name="padlist_dialog_new_padgroup_title">Nou grup</string>
     <string name="padlist_document_deleted">Document eliminat</string>
-    <string name="padlist_empty_createnew">Crear un nou document</string>
+    <string name="padlist_empty_no_pads">Encara no tens cap document.</string>
+    <string name="padlist_empty_createnew">Crea un nou document</string>
     <string name="padlist_group_deleted">Grup seleccionat</string>
     <string name="padlist_group_select_dialog">Escull un grup</string>
     <string name="padlist_group_unclassified_name">Sense classificar</string>
@@ -82,7 +83,7 @@
     <string name="settings_default_username_dialog_title">Entra el nom d\'usuari</string>
     <string name="basic_auth_error">L\'autenticació ha fallat</string>
     <string name="basic_auth_warning">Les credencials s\'enviaràn sense encriptació SSL. Es recomana evitar-ho. Procura utilitzar el protocol HTTPS si es troba disponible.</string>
-    <string name="no_custom_servers">No s\'han afegit servidors.</string>
+    <string name="server_list_empty_no_servers">No s\'han afegit servidors.</string>
     <string name="padview_dialog_basicatuh_password">Contrasenya</string>
     <string name="padview_dialog_basicatuh_title">Autenticació requerida</string>
     <string name="padview_dialog_basicatuh_username">Nom d\'usuari</string>

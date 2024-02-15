@@ -29,6 +29,7 @@
     <string name="padlist_dialog_new_padgroup_label">Introduce el nombre para el grupo </string>
     <string name="padlist_dialog_new_padgroup_title">Nuevo grupo</string>
     <string name="padlist_document_deleted">Documento eliminado</string>
+    <string name="padlist_empty_no_pads">No tienes documentos todavía.</string>
     <string name="padlist_empty_createnew">Crear un nuevo documento</string>
     <string name="padlist_group_deleted">Grupo seleccionado</string>
     <string name="padlist_group_select_dialog">Elige un grupo</string>
@@ -69,7 +70,7 @@
     <string name="padview_dialog_basicatuh_password">Contraseña</string>
     <string name="padview_dialog_basicatuh_title">Autenticación requerida</string>
     <string name="padview_dialog_basicatuh_username">Nombre de usuario</string>
-    <string name="no_custom_servers">Sin servidores añadidos.</string>
+    <string name="server_list_empty_no_servers">Sin servidores añadidos.</string>
     <string name="padview_toast_blacklist_url">%s\n\nLa dirección del servidor no se encuentra en la lista blanca. Añade un nuevo servidor en la configuración o utiliza otra aplicación.</string>
     <string name="padview_toast_invalid_url">La dirección no parece válida.</string>
     <string name="pref_server_list_summary">Añade tus servidores de etherpad preferidos.</string>

@@ -92,6 +92,7 @@
     <string name="newpad_url_name_success">Detected url for known server.</string>
     <string name="newpad_url_name_warning">Warning: Pad name is a URL but no compatible server has been found.</string>
 
+    <string name="padlist_empty_no_pads">You have no documents yet.</string>
     <string name="padlist_empty_createnew">Create a new document</string>
     <string name="padlist_document_deleted">The selected documents have been deleted</string>
     <string name="padlist_group_deleted">Group deleted</string>
@@ -126,7 +127,7 @@
 
     <string name="title_activity_server_list">Server list</string>
     <string name="pref_server_list_summary">Add your custom etherpad servers.</string>
-    <string name="no_custom_servers">No servers added.</string>
+    <string name="server_list_empty_no_servers">No servers added.</string>
 
     <string name="serverlist_dialog_new_server_title">New server</string>
     <string name="serverlist_dialog_edit_server_title">Edit server</string>
