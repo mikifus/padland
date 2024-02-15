@@ -159,6 +159,7 @@ class NewPadDialog: FormDialog() {
         data["name"] = name
         data["local_name"] = localName
         data["url"] = url.string
+        data["server"] = server.second
         data["group_id"] = groupId
 
         data["save_pad"] = mSaveCheckBox?.isChecked!!
