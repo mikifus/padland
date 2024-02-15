@@ -138,5 +138,6 @@
     <string name="whitelist_server_dialog_open_browser">Abrir en navegador</string>
     <string name="whitelist_server_dialog_title">Dirección no permitida</string>
     <string name="ssl_error_dialog_unsafe">Se ha detectado una petición insegura HTTP sin SSL. Si cancelas se cerrará el documento.</string>
+    <string name="padgroup_empty_no_pads">Este grupo no tiene documentos. Puedes seleccionar uno y arrastrarlo aquí.</string>
 
 </resources>

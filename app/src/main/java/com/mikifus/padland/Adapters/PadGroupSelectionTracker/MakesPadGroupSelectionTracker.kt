@@ -61,23 +61,23 @@ class MakesPadGroupSelectionTracker: IMakesPadGroupSelectionTracker,
                 }
                 return@withOnItemActivatedListener false
             }
-            .withOnDragInitiatedListener {
-                val view = recyclerView.findChildViewUnder(it.x, it.y)!!
-                val item = ClipData.Item(view.tag.toString())
-                val data = ClipData(
-                    view.tag.toString(),
-                    arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN),
-                    item
-                )
-                val shadowBuilder = View.DragShadowBuilder(view)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    view.startDragAndDrop(data, shadowBuilder, view, 0)
-                } else {
-                    @Suppress("DEPRECATION")
-                    view.startDrag(data, shadowBuilder, view, 0)
-                }
-                return@withOnDragInitiatedListener true
-            }
+//            .withOnDragInitiatedListener {
+//                val view = recyclerView.findChildViewUnder(it.x, it.y)!!
+//                val item = ClipData.Item(view.tag.toString())
+//                val data = ClipData(
+//                    view.tag.toString(),
+//                    arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN),
+//                    item
+//                )
+//                val shadowBuilder = View.DragShadowBuilder(view)
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                    view.startDragAndDrop(data, shadowBuilder, view, 0)
+//                } else {
+//                    @Suppress("DEPRECATION")
+//                    view.startDrag(data, shadowBuilder, view, 0)
+//                }?
+//                return@withOnDragInitiatedListener true
+//            }
             .build()
 
         padGroupSelectionTracker!!.addObserver(object : SelectionTracker.SelectionObserver<Long>() {

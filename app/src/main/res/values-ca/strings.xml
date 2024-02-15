@@ -142,5 +142,6 @@
     <string name="whitelist_server_dialog_open_browser">Obre al navegador</string>
     <string name="whitelist_server_dialog_title">Adreça no permesa</string>
     <string name="ssl_error_dialog_unsafe">S\'ha detectat una petició insegura HTTP sense SSL. Si cancel·les es tancarà el document.</string>
+    <string name="padgroup_empty_no_pads">Aquest grup no té cap document. Pots seleccionar-ne un i arrosegar-lo aquí.</string>
 
 </resources>

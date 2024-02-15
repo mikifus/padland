@@ -9,7 +9,6 @@ import android.view.View.OnClickListener
 import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.SelectionTracker
@@ -18,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.AutoTransition
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
+import com.google.android.material.textview.MaterialTextView
 import com.mikifus.padland.Activities.PadListActivity
 import com.mikifus.padland.Adapters.DragAndDropListener.IDragAndDropListener
 import com.mikifus.padland.Database.PadGroupModel.PadGroupsWithPadList
@@ -84,7 +84,8 @@ class PadGroupAdapter(context: Context,
         RecyclerView.ViewHolder(itemView) {
         val titleTextView: TextView
         val itemLayout: ConstraintLayout
-        private val padListRecyclerView: RecyclerView
+        private val mPadListRecyclerView: RecyclerView
+        val mEmptyView: MaterialTextView
 
         val padAdapter: PadAdapter
 
@@ -92,22 +93,23 @@ class PadGroupAdapter(context: Context,
 
         init {
             titleTextView = itemView.findViewById(R.id.text_recyclerview_item_name)
-            padListRecyclerView = itemView.findViewById(R.id.recyclerview_padgroup)
+            mPadListRecyclerView = itemView.findViewById(R.id.recyclerview_padgroup_padlist)
+            mEmptyView = itemView.findViewById(R.id.recyclerview_padgroup_empty)
             itemLayout = itemView.findViewById(R.id.pad_list_recyclerview_item_padgroup)
             itemLayout.isActivated = true
-            padListRecyclerView.layoutManager = LinearLayoutManager(context)
+            mPadListRecyclerView.layoutManager = LinearLayoutManager(context)
             padAdapter = PadAdapter(context, listener, onClickListener, onClickInfoListener)
 
             initListView()
-            padAdapter.tracker = (context as PadListActivity).makePadSelectionTracker(context, padListRecyclerView, padAdapter)
+            padAdapter.tracker = (context as PadListActivity).makePadSelectionTracker(context, mPadListRecyclerView, padAdapter)
 
             initEvents()
         }
 
         private fun initListView() {
             itemView.setOnDragListener(padAdapter.getDragInstance())
-            padListRecyclerView.setOnDragListener(padAdapter.getDragInstance())
-            padListRecyclerView.adapter = padAdapter
+            mPadListRecyclerView.setOnDragListener(padAdapter.getDragInstance())
+            mPadListRecyclerView.adapter = padAdapter
         }
 
         private fun initEvents() {
@@ -119,13 +121,20 @@ class PadGroupAdapter(context: Context,
         private fun toggle() {
             val transition: Transition = AutoTransition()
             transition.duration = 400
-            transition.addTarget(padListRecyclerView)
-            TransitionManager.beginDelayedTransition(padListRecyclerView.rootView as ViewGroup, transition)
+            transition.addTarget(mPadListRecyclerView)
+            transition.addTarget(mEmptyView)
+            TransitionManager.beginDelayedTransition(mPadListRecyclerView.rootView as ViewGroup, transition)
+            TransitionManager.beginDelayedTransition(mEmptyView.rootView as ViewGroup, transition)
 
-            itemLayout.isActivated = !itemLayout.isActivated
-            padListRecyclerView.visibility = if (itemLayout.isActivated){
+            itemLayout.isActivated = itemLayout.isActivated.not()
+            mPadListRecyclerView.visibility = if (itemLayout.isActivated){
                 View.VISIBLE
             } else{
+                View.GONE
+            }
+            mEmptyView.visibility = if (padAdapter.data.isEmpty() && itemLayout.isActivated) {
+                View.VISIBLE
+            } else {
                 View.GONE
             }
         }
@@ -160,6 +169,12 @@ class PadGroupAdapter(context: Context,
 
         tracker?.let {
             holder.itemLayout.isSelected = it.isSelected(current.padGroup.mId)
+        }
+
+        holder.mEmptyView.visibility = if (current.padList.isEmpty()){
+            View.VISIBLE
+        } else{
+            View.GONE
         }
     }
 

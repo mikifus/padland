@@ -33,58 +33,67 @@
                 app:layout_constraintVertical_bias="0" />
 
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/unclassified_title"
+            <LinearLayout
+                android:id="@+id/unclassified_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="?android:attr/listSeparatorTextViewStyle"
-                android:foreground="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:animateLayoutChanges="true" >
+                android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/unclassified_title"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:gravity="start|center"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="6dp"
-                    android:textAlignment="viewStart"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    app:layout_constraintEnd_toStartOf="@id/text_unclassified_button"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="UnusedAttribute"
-                    android:text="@string/padlist_group_unclassified_name" />
+                    style="?android:attr/listSeparatorTextViewStyle"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:animateLayoutChanges="true" >
 
-                <ImageButton
-                    android:id="@+id/text_unclassified_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical|end"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/group_button_selector"
-                    app:tint="?attr/colorOnSurface"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:gravity="start|center"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="6dp"
+                        android:textAlignment="viewStart"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        app:layout_constraintEnd_toStartOf="@id/text_unclassified_button"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="UnusedAttribute"
+                        android:text="@string/padlist_group_unclassified_name" />
+
+                    <ImageButton
+                        android:id="@+id/text_unclassified_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical|end"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/group_button_selector"
+                        app:tint="?attr/colorOnSurface"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:contentDescription="TODO" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerview_unclassified"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:clickable="false"
-                    android:focusable="false"
-                    android:contentDescription="TODO" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/recyclerview_padgroup_padlist" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerview_unclassified"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/recyclerview_padgroup" />
+            </LinearLayout>
 
         </LinearLayout>
+
     </androidx.core.widget.NestedScrollView>
 
     <androidx.appcompat.widget.LinearLayoutCompat

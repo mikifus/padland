@@ -17,12 +17,15 @@ package com.mikifus.padland.Activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.DragEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -76,6 +79,7 @@ class PadListActivity: AppCompatActivity(),
     private var unclassifiedList: List<Pad>? = null
 
     private var recyclerView: RecyclerView? = null
+    private var unclassifiedContainer: LinearLayout? = null
     private var recyclerViewUnclassified: RecyclerView? = null
     private var titleViewUnclassified: View? = null
     private var mEmptyLayout: LinearLayoutCompat? = null
@@ -111,9 +115,11 @@ class PadListActivity: AppCompatActivity(),
 
         recyclerViewUnclassified!!.adapter = padAdapter
         recyclerViewUnclassified!!.layoutManager = LinearLayoutManager(this)
-        recyclerViewUnclassified!!.setOnDragListener(padAdapter!!.getDragInstance())
         ViewCompat.setNestedScrollingEnabled(recyclerViewUnclassified!!, false)
 
+        // Unclassified container
+        unclassifiedContainer = findViewById(R.id.unclassified_container)
+        unclassifiedContainer!!.setOnDragListener(padAdapter!!.getDragInstance())
         // Unclassified list title
         titleViewUnclassified = findViewById(R.id.unclassified_title)
 
@@ -168,15 +174,18 @@ class PadListActivity: AppCompatActivity(),
     private fun initEvents() {
         val newPadGroupButton = findViewById<FloatingActionButton>(R.id.new_pad_group_button)
         newPadGroupButton.setOnClickListener {
+            finishAllActionModes()
             showNewPadGroupDialog(this@PadListActivity)
         }
 
         val newPadButton = findViewById<FloatingActionButton>(R.id.new_pad_button)
         newPadButton.setOnClickListener {
+            finishAllActionModes()
             showNewPadDialog(this@PadListActivity)
         }
 
         mEmptyButton?.setOnClickListener {
+            finishAllActionModes()
             showNewPadDialog(this@PadListActivity)
         }
 
@@ -207,11 +216,13 @@ class PadListActivity: AppCompatActivity(),
 
     private fun showHideUnclassified() {
         if(unclassifiedList?.size == 0) {
-            titleViewUnclassified?.visibility = View.GONE
-            recyclerViewUnclassified?.visibility = View.GONE
+            unclassifiedContainer?.visibility = View.GONE
+//            titleViewUnclassified?.visibility = View.GONE
+//            recyclerViewUnclassified?.visibility = View.GONE
         } else {
-            titleViewUnclassified?.visibility = View.VISIBLE
-            recyclerViewUnclassified?.visibility = View.VISIBLE
+            unclassifiedContainer?.visibility = View.VISIBLE
+//            titleViewUnclassified?.visibility = View.VISIBLE
+//            recyclerViewUnclassified?.visibility = View.VISIBLE
         }
     }
 
@@ -247,14 +258,25 @@ class PadListActivity: AppCompatActivity(),
         return true
     }
 
-    override fun setEmptyListTop(visibility: Boolean) {
-        TODO("Not yet implemented")
+    /**
+     * Selection Trackers
+     */
+    override fun getSelectionBlock(): Boolean {
+        return isSelectionBlocked
     }
 
-    override fun setEmptyListBottom(visibility: Boolean) {
-        TODO("Not yet implemented")
+    override fun setSelectionBlock(value: Boolean) {
+        isSelectionBlocked = value
     }
 
+    fun finishAllActionModes() {
+        padActionMode?.finish()
+        padGroupActionMode?.finish()
+    }
+
+    /**
+     * Drag and drop listener.
+     */
     override fun notifyChange(padGroupId: Long, padId: Long, position: Int) {
         lifecycleScope.launch(Dispatchers.IO) {
             padGroupViewModel!!.deletePadGroupsAndPadList(padId)
@@ -270,12 +292,11 @@ class PadListActivity: AppCompatActivity(),
         }
     }
 
-    override fun getSelectionBlock(): Boolean {
-        return isSelectionBlocked
+    override fun onEnteredView(view: View, event: DragEvent) {
+        view.background = ContextCompat.getDrawable(this, R.drawable.dashed_border)
     }
 
-    override fun setSelectionBlock(value: Boolean) {
-        isSelectionBlocked = value
+    override fun onExitedView(view: View, event: DragEvent) {
+        view.background = ContextCompat.getDrawable(this, R.drawable.background_selector)
     }
-
 }
