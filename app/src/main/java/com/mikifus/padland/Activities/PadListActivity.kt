@@ -148,6 +148,7 @@ class PadListActivity: AppCompatActivity(),
             unclassifiedList = currentList ?: listOf()
             padAdapter!!.data = unclassifiedList!!
             padAdapter!!.notifyDataSetChanged()
+            showHideUnclassified()
         }
     }
 
@@ -190,6 +191,16 @@ class PadListActivity: AppCompatActivity(),
             } else {
                 View.GONE
             }
+        }
+    }
+
+    private fun showHideUnclassified() {
+        if(unclassifiedList?.size == 0) {
+            titleViewUnclassified?.visibility = View.GONE
+            recyclerViewUnclassified?.visibility = View.GONE
+        } else {
+            titleViewUnclassified?.visibility = View.VISIBLE
+            recyclerViewUnclassified?.visibility = View.VISIBLE
         }
     }
 

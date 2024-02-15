@@ -44,4 +44,8 @@ class PadGroupRepository(private val padGroupDao: PadGroupDao) {
     suspend fun deletePadGroupsAndPadList(padId: Long) {
         padGroupDao.deletePadGroupsAndPadList(padId)
     }
+
+    suspend fun deletePadGroupsAndPadListByPadGroupId(padId: Long): Int {
+        return padGroupDao.deletePadGroupsAndPadListByPadGroupId(padId)
+    }
 }
