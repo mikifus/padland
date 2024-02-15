@@ -17,6 +17,7 @@ interface IManagesWhitelistServerDialog {
     fun showWhitelistServerDialog(activity: AppCompatActivity,
                                   url: String,
                                   onAddCallback: (dialogUrl: String) -> Unit,
+                                  onNegativeCallback: (dialogUrl: String) -> Unit,
                                   onIgnoreCallback: (dialogUrl: String) -> Unit)
 }
 class ManagesWhitelistServerDialog: ManagesDialog(), IManagesWhitelistServerDialog {
@@ -28,9 +29,10 @@ class ManagesWhitelistServerDialog: ManagesDialog(), IManagesWhitelistServerDial
     override fun showWhitelistServerDialog(activity: AppCompatActivity,
                                            url: String,
                                            onAddCallback: (dialogUrl: String) -> Unit,
+                                           onNegativeCallback: (dialogUrl: String) -> Unit,
                                            onIgnoreCallback: (dialogUrl: String) -> Unit) {
         initViewModels(activity)
-        initEvents(activity, url, onAddCallback, onIgnoreCallback)
+        initEvents(activity, url, onAddCallback, onNegativeCallback, onIgnoreCallback)
 
         dialog.setTitle(activity.getString(R.string.whitelist_server_dialog_title))
         dialog.setMessage(activity.getString(
@@ -68,26 +70,19 @@ class ManagesWhitelistServerDialog: ManagesDialog(), IManagesWhitelistServerDial
     private fun initEvents(activity: AppCompatActivity,
                            url: String,
                            onAddCallback: (dialogUrl: String) -> Unit,
+                           onNegativeCallback: (dialogUrl: String) -> Unit,
                            onIgnoreCallback: (dialogUrl: String) -> Unit) {
         dialog.neutralButtonCallback = DialogInterface.OnClickListener { dialog, which ->
             dialog.dismiss()
             onIgnoreCallback(url)
         }
         dialog.negativeButtonCallback = DialogInterface.OnClickListener { dialog, which ->
-            confirmBrowser(activity, url)
+            dialog.dismiss()
+            onNegativeCallback(url)
         }
         dialog.positiveButtonCallback = DialogInterface.OnClickListener { dialog, which ->
             onAddCallback(url)
         }
         dialog.isCancelable = false
     }
-
-    private fun confirmBrowser(activity: AppCompatActivity, url: String) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        activity.startActivity(intent)
-        activity.finish()
-    }
-
 }
