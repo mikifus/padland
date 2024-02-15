@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@color/material_dynamic_secondary0" />
+        android:background="?colorSurface" />
 
     <RelativeLayout
         android:layout_width="match_parent"
