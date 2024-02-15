@@ -178,7 +178,7 @@ class PadGroupAdapter(context: Context,
             holder.itemLayout.isSelected = it.isSelected(current.padGroup.mId)
         }
 
-        holder.mEmptyView.visibility = if (current.padList.isEmpty()){
+        holder.mEmptyView.visibility = if (current.padList.isEmpty() && holder.itemLayout.isActivated){
             View.VISIBLE
         } else{
             View.GONE
