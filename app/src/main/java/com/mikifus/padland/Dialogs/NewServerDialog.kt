@@ -42,10 +42,10 @@ open class NewServerDialog: FormDialog() {
             Toast.makeText(context, getString(R.string.serverlist_dialog_new_server_name_invalid), Toast.LENGTH_LONG).show()
             return false
         }
-        if(!NAME_VALIDATION.matcher(name).matches()) {
-            Toast.makeText(context, getString(R.string.serverlist_dialog_new_server_name_invalid), Toast.LENGTH_LONG).show()
-            return false
-        }
+//        if(!NAME_VALIDATION.matcher(name).matches()) {
+//            Toast.makeText(context, getString(R.string.serverlist_dialog_new_server_name_invalid), Toast.LENGTH_LONG).show()
+//            return false
+//        }
 
         // Build URL, it will throw an exception if not correct
         try {
