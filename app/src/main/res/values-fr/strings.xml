@@ -109,7 +109,7 @@
 
     <string name="title_activity_server_list">Liste des serveurs</string>
     <string name="pref_server_list_summary">Ajoutez votre propre serveur etherpad</string>
-    <string name="no_custom_servers">Aucun serveur ajouté.</string>
+    <string name="server_list_empty_no_servers">Aucun serveur ajouté.</string>
 
     <string name="serverlist_dialog_new_server_title">Nouveau serveur</string>
     <string name="serverlist_dialog_edit_server_title">Modifier le serveur</string>
