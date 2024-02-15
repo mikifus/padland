@@ -51,7 +51,10 @@ class ManagesDeletePadGroupDialog: ManagesDialog(), IManagesDeletePadGroupDialog
 
     private fun confirmDeletePadGroupDialog(activity: AppCompatActivity) {
         activity.lifecycleScope.launch(Dispatchers.IO) {
-            padGroupViewModel!!.deletePadGroup(ids)
+            ids.forEach {
+                padGroupViewModel!!.deletePadGroupsAndPadListByPadGroupId(it)
+            }
+            padGroupViewModel!!.deletePadGroups(ids)
         }
         dialog.dismiss()
     }

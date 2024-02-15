@@ -14,15 +14,16 @@ import com.mikifus.padland.Database.PadModel.Pad
 @Dao
 interface PadGroupDao {
     @Insert
-    fun insertAll(vararg pads: PadGroup): List<Long>
+    fun insertAll(vararg padGroups: PadGroup): List<Long>
 
     @Update
-    fun update(vararg pads: PadGroup)
+    fun update(vararg padGroups: PadGroup)
 
     @Delete
-    fun delete(pad: PadGroup)
+    suspend fun delete(padGroup: PadGroup)
+
     @Delete
-    fun delete(pad: List<PadGroup>)
+    suspend fun delete(padGroups: List<PadGroup>)
 
     @Query("SELECT * FROM padgroups")
     fun getAll(): LiveData<List<PadGroup>>
@@ -50,6 +51,9 @@ interface PadGroupDao {
 
     @Query("DELETE FROM padlist_padgroups WHERE _id_pad = :padId")
     fun deletePadGroupsAndPadList(padId: Long)
+
+    @Query("DELETE FROM padlist_padgroups WHERE _id_group = :padId")
+    fun deletePadGroupsAndPadListByPadGroupId(padId: Long): Int
 
     @Query("SELECT * FROM padlist WHERE _id NOT IN" +
             "(SELECT _id_pad FROM padlist_padgroups)")

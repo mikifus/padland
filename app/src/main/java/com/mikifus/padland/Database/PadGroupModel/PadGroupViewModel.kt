@@ -9,6 +9,7 @@ import com.mikifus.padland.Database.PadListDatabase
 import com.mikifus.padland.Database.PadModel.Pad
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PadGroupViewModel(application: Application): AndroidViewModel(application) {
 
@@ -42,18 +43,18 @@ class PadGroupViewModel(application: Application): AndroidViewModel(application)
         viewModelScope.launch(Dispatchers.IO) { repository.updatePadGroup(padGroup) }
     }
 
-    fun deletePadGroup(id: Long) {
-        val padGroup = PadGroup.withOnlyId(id).value!!
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.deletePadGroup(padGroup)
+    suspend fun deletePadGroups(id: Long) {
+        val padGroup = withContext(Dispatchers.Main) {
+            PadGroup.withOnlyId(id).value!!
         }
+        repository.deletePadGroup(padGroup)
     }
 
-    fun deletePadGroup(ids: List<Long>)=viewModelScope.launch {
-        val padGroups = ids.map { PadGroup.withOnlyId(it).value!! }
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.deletePadGroups(padGroups)
+    suspend fun deletePadGroups(ids: List<Long>) {
+        val padGroups: List<PadGroup> = withContext(Dispatchers.Main) {
+            ids.map { PadGroup.withOnlyId(it).value!! }
         }
+        repository.deletePadGroups(padGroups)
     }
 
     suspend fun getByPadId(id: Long): PadGroup {
@@ -65,13 +66,15 @@ class PadGroupViewModel(application: Application): AndroidViewModel(application)
     }
 
     suspend fun insertPadGroupsAndPadList(padGroupsAndPadList: PadGroupsAndPadList) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.insertPadGroupWithPadlist(padGroupsAndPadList)
-        }
+        repository.insertPadGroupWithPadlist(padGroupsAndPadList)
     }
 
     suspend fun deletePadGroupsAndPadList(padId: Long) {
         repository.deletePadGroupsAndPadList(padId)
+    }
+
+    suspend fun deletePadGroupsAndPadListByPadGroupId(padGroupId: Long): Int {
+        return repository.deletePadGroupsAndPadListByPadGroupId(padGroupId)
     }
 
 }
