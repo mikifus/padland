@@ -2,8 +2,10 @@ package com.mikifus.padland.Activities
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.KeyEvent
@@ -32,11 +34,13 @@ import com.mikifus.padland.Dialogs.Managers.ManagesWhitelistServerDialog
 import com.mikifus.padland.R
 import com.mikifus.padland.Utils.PadLandWebViewClient.PadLandWebClientCallbacks
 import com.mikifus.padland.Utils.PadLandWebViewClient.PadLandWebViewClient
+import com.mikifus.padland.Utils.PadServer
 import com.mikifus.padland.Utils.PadUrl
 import com.mikifus.padland.Utils.WhiteListMatcher
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.net.URL
 
 class PadViewActivity :
@@ -156,6 +160,14 @@ class PadViewActivity :
                             whitelistUrl(dialogUrl)
                             loadUrl(dialogUrl)
                         }
+                    },{
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                        startActivity(intent)
+                        if(webView?.canGoBack() == true) {
+                            webView!!.goBack()
+                        } else {
+                            finish()
+                        }
                     },
                     { dialogUrl ->
                         whitelistUrl(dialogUrl)
@@ -209,50 +221,83 @@ class PadViewActivity :
     }
 
     private fun loadOrSavePad() {
-        intent.extras?.containsKey("padId")?.let {
-            lifecycleScope.launch(Dispatchers.IO) {
-                val pad = padViewModel?.getById(intent!!.extras!!.getLong("padId"))
-
-                if(pad != null) {
-                    currentPadUrl = pad.mUrl
-                    updateViewedPad(pad)
-                } else {
-                    lifecycleScope.launch {
-                        Toast.makeText(
-                            applicationContext,
-                            getString(R.string.unexpected_error),
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-                }
-            }
+        if(intent.extras?.containsKey("padId") == true) {
+            loadPadById(intent!!.extras!!.getLong("padId"))
             return
         }
 
-        intent.extras?.containsKey("padUrl")?.let {
-            if(!it) return
+        val padUrl = intent.extras!!.getString("android.intent.extra.TEXT")
 
-            val padUrl = intent.extras!!.getString("padUrl")!!
+        if(padUrl.isNullOrBlank()) {
+            Toast.makeText(
+                applicationContext,
+                getString(R.string.unexpected_error),
+                Toast.LENGTH_LONG
+            ).show()
+            finish()
+            return
+        }
 
-            currentPadUrl = padUrl
+        val userDetails =
+            getSharedPreferences(packageName + "_preferences", MODE_PRIVATE)
+        var save = userDetails.getBoolean("auto_save_new_pads", true)
+        if(intent.extras?.containsKey("padUrlDontSave") == true
+            && intent.extras!!.getBoolean("padUrlDontSave")) {
+            save = false
+        }
 
-            val userDetails =
-                getSharedPreferences(packageName + "_preferences", MODE_PRIVATE)
-            if(userDetails.getBoolean("auto_save_new_pads", true)) {
-                lifecycleScope.launch(Dispatchers.IO) {
-                    val pad = padViewModel?.getByUrl(padUrl)
+        currentPadUrl = padUrl
 
-                    if(pad == null) {
-                        val newPad = Pad.fromUrl(padUrl).value!!
+        if(save) {
+            savePadFromUrl(padUrl)
+        }
+    }
 
-                        lifecycleScope.launch(Dispatchers.IO) {
-                            padViewModel!!.insertPad(newPad)
-                            updateViewedPad(newPad)
+    private fun loadPadById(id: Long) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val pad = padViewModel?.getById(id)
 
-                            Toast.makeText(applicationContext, getString(R.string.padview_pad_save_success), Toast.LENGTH_SHORT)
-                                .show()
-                        }
-                    }
+            if (pad != null) {
+                currentPadUrl = pad.mUrl
+                updateViewedPad(pad)
+            } else {
+                lifecycleScope.launch {
+                    Toast.makeText(
+                        applicationContext,
+                        getString(R.string.unexpected_error),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
+    }
+
+    private fun savePadFromUrl(padUrl: String) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val pad = withContext(Dispatchers.IO){
+                padViewModel?.getByUrl(padUrl)
+            }
+
+            if(pad == null &&
+                webViewClient!!.hostsWhitelist.contains(
+                    PadServer.Builder().padUrl(padUrl).host
+                )) {
+
+                val newPad = withContext(Dispatchers.Main){
+                    Pad.fromUrl(padUrl).value!!
+                }
+
+                withContext(Dispatchers.IO){
+                    padViewModel!!.insertPad(newPad)
+                    updateViewedPad(newPad)
+                }
+
+                withContext(Dispatchers.Main){
+                    Toast.makeText(
+                        applicationContext,
+                        getString(R.string.padview_pad_save_success),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
@@ -298,6 +343,15 @@ class PadViewActivity :
                     }
                 },
                 { dialogUrl ->
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(dialogUrl))
+                    startActivity(intent)
+                    if(webView?.canGoBack() == true) {
+                        webView!!.goBack()
+                    } else {
+                        finish()
+                    }
+                },
+                { dialogUrl ->
                     whitelistUrl(dialogUrl)
                     loadUrl(dialogUrl)
                 }
@@ -322,14 +376,6 @@ class PadViewActivity :
         val urlObject = URL(url)
         webViewClient!!.hostsWhitelist += urlObject.host
     }
-
-//    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-//        if (keyCode == KeyEvent.KEYCODE_BACK && webView?.canGoBack() == true) {
-//            webView!!.goBack()
-//            return true
-//        }
-//        return super.onKeyDown(keyCode, event)
-//    }
 
     /**
      * Creates the options menu.

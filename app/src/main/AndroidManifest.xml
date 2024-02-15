@@ -15,36 +15,28 @@
         android:usesCleartextTraffic="true">
 
         <!-- Privacy please -->
-        <meta-data android:name="android.webkit.WebView.MetricsOptOut" android:value="true" />
+        <meta-data
+            android:name="android.webkit.WebView.MetricsOptOut"
+            android:value="true" />
 
         <activity
             android:name=".Activities.InitialActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".Activities.IntroActivity"
+        <activity
+            android:name=".Activities.IntroActivity"
             android:label="@string/title_activity_intro" />
 
         <activity
             android:name=".Activities.PadListActivity"
             android:label="@string/title_activity_padlist"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            android:exported="true">
-            <intent-filter android:scheme="http"
-                tools:ignore="AppLinkUrlError">
-                <action android:name="android.intent.action.VIEW" />
-                <!-- To put shared data into a pad -->
-                <action android:name="android.intent.action.SEND" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="text/plain" />
-            </intent-filter>
-        </activity>
+            android:exported="true" />
 
         <activity
             android:name=".Activities.PadViewActivity"
@@ -53,45 +45,24 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:exported="true">
 
-            <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.PadListActivity" />
 
-            <!-- Intent filter to catch all URLs -->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.VIEW" />-->
-                <!--<category android:name="android.intent.category.DEFAULT" />-->
-                <!--<category android:name="android.intent.category.BROWSABLE" />-->
-                <!--<data android:scheme="http" />-->
-                <!--<data android:scheme="https" />-->
-                <!--<data android:host="*" />-->
-            <!--</intent-filter>-->
-
-            <!-- Intent filter to catch some arbitrary etherpad services' URLs -->
-            <intent-filter>
+            <intent-filter android:scheme="http" tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.SEND" />
 
-                <data android:scheme="https" />
-                <data android:host="pad.riseup.net"/>
-                <data android:pathPrefix="/p/"/>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="https" />
-                <data android:host="framapad.org"/>
-                <data android:pathPrefix="/p/"/>
+                <data android:mimeType="text/*" />
             </intent-filter>
         </activity>
 
         <activity
             android:name=".Activities.AboutActivity"
-            android:label="@string/title_activity_about" >
+            android:label="@string/title_activity_about">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -101,7 +72,7 @@
         <activity
             android:name=".Activities.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.PadListActivity" />
@@ -110,7 +81,7 @@
         <activity
             android:name=".Activities.PadInfoActivity"
             android:label="@string/title_activity_pad_info"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.PadListActivity" />
@@ -119,7 +90,7 @@
         <activity
             android:name=".Activities.ServerListActivity"
             android:label="@string/title_activity_server_list"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -133,8 +104,7 @@
             android:exported="false"
             android:grantUriPermissions="true"
             android:readPermission="com.mikifus.padland.PADLAND_READ"
-            android:writePermission="com.mikifus.padland.PADLAND_WRITE">
-        </provider>
+            android:writePermission="com.mikifus.padland.PADLAND_WRITE" />
     </application>
 
 </manifest>

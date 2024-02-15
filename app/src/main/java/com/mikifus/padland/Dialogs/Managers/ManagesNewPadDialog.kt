@@ -1,6 +1,7 @@
 package com.mikifus.padland.Dialogs.Managers;
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -47,7 +48,9 @@ public class ManagesNewPadDialog: ManagesDialog(), IManagesNewPadDialog {
                 saveNewPadDialog(activity, data)
             } else {
                 val padViewIntent = Intent(activity, PadViewActivity::class.java)
-                padViewIntent.putExtra("padUrl", data["url"].toString())
+                padViewIntent.data = Uri.parse(data["url"].toString())
+                padViewIntent.putExtra("android.intent.extra.TEXT", data["url"].toString())
+                padViewIntent.putExtra("padUrlDontSave", true)
                 activity.startActivity(padViewIntent)
             }
             dialog.clearForm()

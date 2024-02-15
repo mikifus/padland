@@ -7,7 +7,6 @@ class PadServer private constructor(builder: PadServer.Builder) {
     val host: String?
     val prefix: String?
     val padName: String?
-    val baseUrl: String?
 
     override fun toString(): String {
         return server?: ""
@@ -18,7 +17,6 @@ class PadServer private constructor(builder: PadServer.Builder) {
         host = builder.host
         prefix = builder.prefix
         padName = builder.padName
-        baseUrl = builder.baseUrl
     }
 
     class Builder {
@@ -33,12 +31,16 @@ class PadServer private constructor(builder: PadServer.Builder) {
             val urlObject = URL(url)
             this.url = url
             this.host = urlObject.host.toString()
-            this.padName = urlObject.file.toString()
-            this.server = url.substring(0, url.lastIndexOf("/") + 1)
-            this.baseUrl = urlObject.protocol + "://" + urlObject.host;
+            this.padName = urlObject.file.substring(
+                urlObject.file.lastIndexOf("/") + 1
+            )
+            this.server = urlObject.protocol + "://" + urlObject.authority
             this.prefix = url
                 .substring(0, url.lastIndexOf("/") + 1)
-                .substring(this.baseUrl!!.length)
+                .substring(this.server!!.length)
+            if(prefix == "/") {
+                prefix = ""
+            }
 
             return this
         }
