@@ -10,7 +10,7 @@ import androidx.room.Update
 @Dao
 interface ServerDao {
     @Insert
-    fun insertAll(vararg pads: Server)
+    fun insertAll(vararg pads: Server): List<Long>
 
     @Update
     fun update(vararg pads: Server)

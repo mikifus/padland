@@ -189,7 +189,7 @@
     <string name="export_exporting_failed">The file could not be exported</string>
     <string name="import_importing_file">Select the file…</string>
     <string name="import_importing_success">Import finished (result size: %s)</string>
-    <string name="import_importing_failed">Import failed</string>
+    <string name="import_importing_failed">Import cancelled</string>
     <string name="preference_export_database">Export database</string>
     <string name="preference_export_database_summary">Export to a JSON file.</string>
     <string name="preference_import_database">Import database</string>

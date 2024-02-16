@@ -148,7 +148,7 @@
     <string name="export_exporting_failed">No s\'ha pogut exportar el fitxer</string>
     <string name="import_importing_file">Selecciona el fitxer…</string>
     <string name="import_importing_success">Importació finalitzada (resultat: %s)</string>
-    <string name="import_importing_failed">L\'importació ha fallat</string>
+    <string name="import_importing_failed">L\'importació s\'ha cancel·lat</string>
     <string name="preference_export_database">Exporta la base de dades</string>
     <string name="preference_export_database_summary">Exporta a un fitxer JSON.</string>
     <string name="preference_import_database">Importa la base de dades</string>

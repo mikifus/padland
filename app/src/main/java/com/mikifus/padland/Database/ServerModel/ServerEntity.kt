@@ -31,6 +31,7 @@ data class Server(
     )
 
     companion object {
+        const val TABLE_NAME = "padland_servers"
 
         fun fromFormContentValues(contentValues: ContentValues): MutableLiveData<Server> {
             val item = MutableLiveData<Server>(Server())

@@ -144,7 +144,7 @@
     <string name="export_exporting_failed">No se ha podido exportar el fichero</string>
     <string name="import_importing_file">Selecciona el fichero…</string>
     <string name="import_importing_success">Importación finalizada (resultado: %s)</string>
-    <string name="import_importing_failed">La importación ha fallado</string>
+    <string name="import_importing_failed">Importación cancelada</string>
     <string name="preference_export_database">Exportar base de datos</string>
     <string name="preference_export_database_summary">Exportar a un fichero JSON.</string>
     <string name="preference_import_database">Importar base de datos</string>

@@ -7,7 +7,7 @@ import com.mikifus.padland.Database.PadModel.Pad
 
 class IgnoreEntityIdStrategy: ExclusionStrategy {
     override fun shouldSkipField(field: FieldAttributes): Boolean {
-//        field.declaredClass // TODO: Search for PKEY in any class requested
+        // TODO: Search for PKEY in any class requested
         return field.name == Pad.PKEY
     }
 
