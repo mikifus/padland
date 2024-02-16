@@ -6,10 +6,12 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import com.mikifus.padland.Database.PadGroupModel.PadGroupRepository
 import com.mikifus.padland.Database.PadListDatabase
-import com.mikifus.padland.Database.PadModel.Pad
 import com.mikifus.padland.Database.PadModel.PadRepository
+import com.mikifus.padland.Database.ServerModel.ServerRepository
 import com.mikifus.padland.Utils.Export.ExclusionStrategies.IgnoreEntityIdStrategy
+import com.mikifus.padland.Utils.Export.Maps.DatabaseMap
 import com.mikifus.padland.Utils.Export.TypeAdapters.SqlDateTypeAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,7 +26,7 @@ interface IImportHelper {
 }
 class ImportHelper(
     override val activity: FragmentActivity,
-    callback: ((done: Boolean, result: List<Long>?) -> Unit) = {_,_->})
+    callback: ((done: Boolean, result: String?) -> Unit) = {_,_->})
     : IImportHelper {
 
     override val launcher =
@@ -42,7 +44,10 @@ class ImportHelper(
                 ?: "[]"
 
             val database = PadListDatabase.getInstance(activity)
-            val repository = PadRepository(database.padDao())
+
+            val serverRepository = ServerRepository(database.serverDao())
+            val padGroupRepository = PadGroupRepository(database.padGroupDao())
+            val padRepository = PadRepository(database.padDao())
 
             val gson = GsonBuilder()
                 .setVersion(database.openHelper.readableDatabase.version.toDouble())
@@ -53,11 +58,23 @@ class ImportHelper(
                 .setPrettyPrinting()
                 .create()
 
-            val listType: Type = object : TypeToken<List<Pad>>() {}.type
-            val pads: List<Pad> = gson.fromJson(jsonString, listType)
+            val listType: Type = object : TypeToken<DatabaseMap>() {}.type
+            val dataMap: DatabaseMap = gson.fromJson(jsonString, listType)
 
             activity.lifecycleScope.launch(Dispatchers.IO) {
-                val insertedResult = repository.insertPads(pads)
+                var size = 0
+                dataMap.padland_servers?.let { it ->
+                    size += serverRepository.insertServers(it).size
+                }
+                dataMap.padgroups?.let { it ->
+                    size += padGroupRepository.insertPadGroups(it).size
+                }
+                dataMap.padlist?.let { it ->
+                    size += padRepository.insertPads(it).size
+                }
+
+                val insertedResult = "$size"
+
                 withContext(Dispatchers.Main) {
                     callback(true, insertedResult)
                 }

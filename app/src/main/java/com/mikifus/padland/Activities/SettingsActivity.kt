@@ -158,7 +158,7 @@ class SettingsActivity : AppCompatActivity() {
                 if(done) {
                     Toast.makeText(
                         requireContext(),
-                        getString(R.string.import_importing_success, result?.size.toString()),
+                        getString(R.string.import_importing_success, result.toString()),
                         Toast.LENGTH_LONG
                     ).show()
                 } else {
