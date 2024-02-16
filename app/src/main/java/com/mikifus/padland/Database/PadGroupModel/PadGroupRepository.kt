@@ -6,14 +6,17 @@ import com.mikifus.padland.Database.PadModel.Pad
 class PadGroupRepository(private val padGroupDao: PadGroupDao) {
 
     val getAll: LiveData<List<PadGroup>> = padGroupDao.getAll()
-    val getPadGroupsWithPadList: LiveData<List<PadGroupsWithPadList>> = padGroupDao.getPadGroupsWithPadList()
+    val getPadGroupsWithPadList: LiveData<List<PadGroupsWithPadList>> =
+        padGroupDao.getPadGroupsWithPadList()
     val getPadsWithoutGroup: LiveData<List<Pad>> = padGroupDao.getPadsWithoutGroup()
+    val getAllPadGroupsWithPadlistRelString: LiveData<List<PadGroupsWithPadlistByRelString>> =
+        padGroupDao.getAllPadGroupsWithPadlistRelString()
 
-    suspend fun insertPadGroup(padGroup: PadGroup) {
+    fun insertPadGroup(padGroup: PadGroup) {
         padGroupDao.insertAll(padGroup)
     }
 
-    suspend fun insertPadGroups(padGroups: List<PadGroup>): List<Long> {
+    fun insertPadGroups(padGroups: List<PadGroup>): List<Long> {
         return padGroupDao.insertAll(*padGroups.toTypedArray())
     }
 
@@ -25,7 +28,7 @@ class PadGroupRepository(private val padGroupDao: PadGroupDao) {
         return padGroupDao.getByPadId(id)
     }
 
-    suspend fun getPadGroupsAndPadListByPadIds(padIds: List<Long>): List<PadGroupsAndPadList> {
+    fun getPadGroupsAndPadListByPadIds(padIds: List<Long>): List<PadGroupsAndPadList> {
         return padGroupDao.getPadGroupsAndPadListByPadIds(padIds)
     }
 
@@ -45,11 +48,21 @@ class PadGroupRepository(private val padGroupDao: PadGroupDao) {
         padGroupDao.insertPadGroupWithPadlist(padGroupsAndPadList)
     }
 
-    suspend fun deletePadGroupsAndPadList(padId: Long) {
+    fun deletePadGroupsAndPadList(padId: Long) {
         padGroupDao.deletePadGroupsAndPadList(padId)
     }
 
-    suspend fun deletePadGroupsAndPadListByPadGroupId(padId: Long): Int {
+    fun deletePadGroupsAndPadListByPadGroupId(padId: Long): Int {
         return padGroupDao.deletePadGroupsAndPadListByPadGroupId(padId)
+    }
+
+    fun insertPadGroupWithPadlistByRelString(relations: List<PadGroupsWithPadlistByRelString>): List<Long> {
+        val result = mutableListOf<Long>()
+        relations.forEach {
+            result.add(
+                padGroupDao.insertPadGroupWithPadlistByRelString(it.mPadGroupRelString, it.mPadRelString)
+            )
+        }
+        return result
     }
 }

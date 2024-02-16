@@ -53,8 +53,8 @@ class ManagesDeletePadGroupDialog: ManagesDialog(), IManagesDeletePadGroupDialog
         activity.lifecycleScope.launch(Dispatchers.IO) {
             ids.forEach {
                 padGroupViewModel!!.deletePadGroupsAndPadListByPadGroupId(it)
+                padGroupViewModel!!.deletePadGroups(it)
             }
-            padGroupViewModel!!.deletePadGroups(ids)
         }
         dialog.dismiss()
     }

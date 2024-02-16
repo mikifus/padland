@@ -8,6 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.gson.GsonBuilder
 import com.mikifus.padland.Database.PadGroupModel.PadGroup
 import com.mikifus.padland.Database.PadGroupModel.PadGroupRepository
+import com.mikifus.padland.Database.PadGroupModel.PadGroupsAndPadList
 import com.mikifus.padland.Database.PadListDatabase
 import com.mikifus.padland.Database.PadModel.Pad
 import com.mikifus.padland.Database.PadModel.PadRepository
@@ -58,30 +59,37 @@ class ExportHelper(
                     "version" to database.openHelper.readableDatabase.version.toDouble()
                 )
             )
-            dataMap.addSource(serverRepository.getAll) { value1 ->
+            dataMap.addSource(serverRepository.getAll) { list ->
                 val currentValue = dataMap.value ?: emptyMap()
                 val updatedValue = currentValue.toMutableMap().apply {
-                    put(Server.TABLE_NAME, value1)
+                    put(Server.TABLE_NAME, list)
                 }
                 dataMap.value = updatedValue
             }
-            dataMap.addSource(padGroupRepository.getAll) { value1 ->
+            dataMap.addSource(padGroupRepository.getAll) { list ->
                 val currentValue = dataMap.value ?: emptyMap()
                 val updatedValue = currentValue.toMutableMap().apply {
-                    put(PadGroup.TABLE_NAME, value1)
+                    put(PadGroup.TABLE_NAME, list)
                 }
                 dataMap.value = updatedValue
             }
-            dataMap.addSource(padRepository.getAll) { value1 ->
+            dataMap.addSource(padRepository.getAll) { list ->
                 val currentValue = dataMap.value ?: emptyMap()
                 val updatedValue = currentValue.toMutableMap().apply {
-                    put(Pad.TABLE_NAME, value1)
+                    put(Pad.TABLE_NAME, list)
+                }
+                dataMap.value = updatedValue
+            }
+            dataMap.addSource(padGroupRepository.getAllPadGroupsWithPadlistRelString) { list ->
+                val currentValue = dataMap.value ?: emptyMap()
+                val updatedValue = currentValue.toMutableMap().apply {
+                    put(PadGroupsAndPadList.TABLE_NAME, list)
                 }
                 dataMap.value = updatedValue
             }
 
             dataMap.observe(activity) { map ->
-                if(map.size < 6) {
+                if(map.size < 7) {
                     return@observe
                 }
                 val json = gson.toJson(map)

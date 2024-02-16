@@ -62,4 +62,18 @@ interface PadGroupDao {
     @Query("SELECT * FROM padgroups WHERE _id IN" +
             "(SELECT _id_group FROM padlist_padgroups WHERE _id_pad = :id)")
     suspend fun getByPadId(id: Long): PadGroup
+
+    @Query("SELECT padlist.url as mPadRelString, padgroups.name as mPadGroupRelString" +
+            " FROM padlist_padgroups" +
+            "   JOIN padlist ON padlist._id=padlist_padgroups._id_pad" +
+            "   JOIN padgroups ON padgroups._id=padlist_padgroups._id_group")
+    fun getAllPadGroupsWithPadlistRelString(): LiveData<List<PadGroupsWithPadlistByRelString>>
+
+    @Query("INSERT OR REPLACE INTO padlist_padgroups (_id_group, _id_pad) " +
+            " SELECT DISTINCT padgroups._id, padlist._id" +
+            " FROM padgroups" +
+            " JOIN padlist ON padlist.url=:mPadRelString" +
+            " WHERE padgroups.name=:mPadGroupRelString"
+    )
+    fun insertPadGroupWithPadlistByRelString(mPadGroupRelString: String, mPadRelString: String): Long
 }
