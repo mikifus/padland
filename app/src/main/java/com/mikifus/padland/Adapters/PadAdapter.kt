@@ -115,26 +115,26 @@ class PadAdapter(
     }
 
     private fun computeDataSetChanged(oldValue: List<Pad>, newValue: List<Pad>) {
-        notifyDataSetChanged()
-//        for (newPad in newValue) {
-//            if (oldValue.any { it.mId == newPad.mId }) {
-////                val coincidence = oldValue.find { it.mId == newPad.mId }!!
-////                if(coincidence.mName != newPad.mName ||
-////                    coincidence.mUrl != newPad.mUrl ||
-////                    coincidence.mLocalName != newPad.mLocalName) {
-////                    notifyItemChanged(oldValue.indexOf(coincidence))
-////                }
-//                notifyDataSetChanged()
-//                return
-//            } else {
-//                notifyItemInserted(newValue.indexOf(newPad))
-//            }
-//        }
-//
-//        for (oldPad in oldValue) {
-//            if (!newValue.any { it.mId == oldPad.mId }) {
-//                notifyItemRemoved(oldValue.indexOf(oldPad))
-//            }
-//        }
+//        notifyDataSetChanged()
+        for (newPad in newValue) {
+            if (oldValue.any { it.mId == newPad.mId }) {
+//                val coincidence = oldValue.find { it.mId == newPad.mId }!!
+//                if(coincidence.mName != newPad.mName ||
+//                    coincidence.mUrl != newPad.mUrl ||
+//                    coincidence.mLocalName != newPad.mLocalName) {
+//                    notifyItemChanged(oldValue.indexOf(coincidence))
+//                }
+                notifyDataSetChanged()
+                return@computeDataSetChanged
+            } else {
+                notifyItemInserted(newValue.indexOf(newPad))
+            }
+        }
+
+        for (oldPad in oldValue) {
+            if (!newValue.any { it.mId == oldPad.mId }) {
+                notifyItemRemoved(oldValue.indexOf(oldPad))
+            }
+        }
     }
 }

@@ -62,7 +62,7 @@ class ImportHelper(
             val dataMap: DatabaseMap = gson.fromJson(jsonString, listType)
 
             activity.lifecycleScope.launch(Dispatchers.IO) {
-                var size = 0
+                var size = 0L
                 dataMap.padland_servers?.let { it ->
                     size += serverRepository.insertServers(it).size
                 }
@@ -71,6 +71,9 @@ class ImportHelper(
                 }
                 dataMap.padlist?.let { it ->
                     size += padRepository.insertPads(it).size
+                }
+                dataMap.padlist_padgroups?.let { it ->
+                    size += padGroupRepository.insertPadGroupWithPadlistByRelString(it).size
                 }
 
                 val insertedResult = "$size"
