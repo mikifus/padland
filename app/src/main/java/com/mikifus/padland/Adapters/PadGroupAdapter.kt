@@ -190,26 +190,33 @@ class PadGroupAdapter(context: Context,
     }
 
     private fun computeDataSetChanged(oldValue: List<PadGroupsWithPadList>, newValue: List<PadGroupsWithPadList>) {
-        for (newPadGroup in newValue) {
-            if (oldValue.any { it.padGroup.mId == newPadGroup.padGroup.mId }) {
-//                val coincidence = oldValue.find { it.padGroup.mId == newPadGroup.padGroup.mId }!!
-//                if(coincidence.padGroup.mName != newPadGroup.padGroup.mName ||
-//                    coincidence.padList != newPadGroup.padList
-//                ) {
-//                    notifyItemChanged(oldValue.indexOf(coincidence))
-//                }
-                notifyDataSetChanged()
-                return
-            } else {
-                notifyItemInserted(newValue.indexOf(newPadGroup))
-            }
-        }
-
-        for (oldPadGroup in oldValue) {
-            if (!newValue.any { it.padGroup.mId == oldPadGroup.padGroup.mId }) {
-                notifyItemRemoved(oldValue.indexOf(oldPadGroup))
-            }
-        }
+        notifyDataSetChanged()
+//        var tmpRange = oldValue.size
+//        newValue.forEachIndexed { index, padGroup ->
+//            if (oldValue.any { it.padGroup.mId == padGroup.padGroup.mId }) {
+////                val coincidence = oldValue.find { it.padGroup.mId == newPadGroup.padGroup.mId }!!
+////                if(coincidence.padGroup.mName != newPadGroup.padGroup.mName ||
+////                    coincidence.padList != newPadGroup.padList
+////                ) {
+////                    notifyItemChanged(oldValue.indexOf(coincidence))
+////                }
+//                notifyDataSetChanged()
+//                return@computeDataSetChanged
+//            } else {
+//                notifyItemInserted(index)
+//                tmpRange += 1
+//                notifyItemRangeInserted(index, tmpRange)
+//            }
+//
+//        }
+//
+//        oldValue.forEachIndexed { index, padGroup ->
+//            if (!newValue.any { it.padGroup.mId == padGroup.padGroup.mId }) {
+//                notifyItemRemoved(index)
+//                tmpRange -= 1
+//                notifyItemRangeInserted(index, tmpRange)
+//            }
+//        }
     }
 
 }
