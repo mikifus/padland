@@ -153,11 +153,7 @@ class PadGroupAdapter(private val activity: AppCompatActivity,
             } else{
                 View.GONE
             }
-            mEmptyView.visibility = if (padAdapter.itemCount == 0 && itemLayout.isActivated) {
-                View.VISIBLE
-            } else {
-                View.GONE
-            }
+            bindEmptyViewVisibilty(padAdapter.itemCount == 0)
         }
 
         fun getItem(): ItemDetailsLookup.ItemDetails<Long> =
@@ -172,16 +168,19 @@ class PadGroupAdapter(private val activity: AppCompatActivity,
 
         fun bindPadList(padList: List<Pad>) {
             padAdapter.data = padList
-
-            mEmptyView.visibility = if (padList.isEmpty() && itemLayout.isActivated){
-                View.VISIBLE
-            } else{
-                View.GONE
-            }
+            bindEmptyViewVisibilty(padList.isEmpty())
         }
 
         fun bindSelected(selected: Boolean) {
             itemLayout.isSelected = selected
+        }
+
+        fun bindEmptyViewVisibilty(isEmpty: Boolean) {
+            mEmptyView.visibility = if (isEmpty && itemLayout.isActivated){
+                View.VISIBLE
+            } else{
+                View.GONE
+            }
         }
     }
 
