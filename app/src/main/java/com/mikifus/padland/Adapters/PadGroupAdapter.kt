@@ -1,7 +1,6 @@
 package com.mikifus.padland.Adapters
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -9,9 +8,12 @@ import android.view.View.OnClickListener
 import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.SelectionTracker
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.AutoTransition
@@ -19,36 +21,48 @@ import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import com.google.android.material.textview.MaterialTextView
 import com.mikifus.padland.Activities.PadListActivity
+import com.mikifus.padland.Adapters.DiffUtilCallbacks.Payloads.PadGroupPayload
 import com.mikifus.padland.Adapters.DragAndDropListener.IDragAndDropListener
-import com.mikifus.padland.Database.PadGroupModel.PadGroup
 import com.mikifus.padland.Database.PadGroupModel.PadGroupsWithPadList
 import com.mikifus.padland.Database.PadModel.Pad
 import com.mikifus.padland.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
-class PadGroupAdapter(context: Context,
+class PadGroupAdapter(private val activity: AppCompatActivity,
                       private val dragAndDropListener: IDragAndDropListener,
                       private val onClickListener: OnClickListener,
                       private val onClickInfoListener: OnClickListener? = null):
     RecyclerView.Adapter<PadGroupAdapter.PadGroupViewHolder>() {
 
-    private val activityContext: Context
-    private val mInflater: LayoutInflater
-    var data: List<PadGroupsWithPadList> = listOf()
-        set(value) {
-            val oldValue = data.toList()
-            field = value
-            computeDataSetChanged(oldValue, value)
-        }
-
+    private val mInflater: LayoutInflater = LayoutInflater.from(activity)
     private var padAdapterTouchListener: OnTouchListener? = null
     var tracker: SelectionTracker<Long>? = null
 
-    init {
-        mInflater = LayoutInflater.from(context)
-        activityContext = context
+    var data: List<PadGroupsWithPadList> = listOf()
+        set(value) {
+            activity.lifecycleScope.launch(Dispatchers.IO) {
+                val diffResult = computeDataSetChanged(field, value)
+                withContext(Dispatchers.Main) {
+                    field = value
+                    diffResult.dispatchUpdatesTo(this@PadGroupAdapter)
+                }
+            }
+        }
 
+    init {
+        setHasStableIds(true)
         initEvents()
+    }
+
+    override fun getItemCount(): Int {
+        return data.size
+    }
+
+    override fun getItemId(position: Int): Long {
+        return data[position].padGroup.mId
     }
 
     @SuppressLint("ClickableViewAccessibility") // See the onTouchListener
@@ -83,7 +97,7 @@ class PadGroupAdapter(context: Context,
 
     class PadGroupViewHolder(
         itemView: View,
-        context: Context,
+        activity: AppCompatActivity,
         listener: IDragAndDropListener,
         onClickListener: OnClickListener?,
         onClickInfoListener: OnClickListener?
@@ -104,11 +118,11 @@ class PadGroupAdapter(context: Context,
             mEmptyView = itemView.findViewById(R.id.recyclerview_padgroup_empty)
             itemLayout = itemView.findViewById(R.id.pad_list_recyclerview_item_padgroup)
             itemLayout.isActivated = true
-            mPadListRecyclerView.layoutManager = LinearLayoutManager(context)
-            padAdapter = PadAdapter(context, listener, onClickListener, onClickInfoListener)
+            mPadListRecyclerView.layoutManager = LinearLayoutManager(activity)
+            padAdapter = PadAdapter(activity, listener, onClickListener, onClickInfoListener)
 
             initListView()
-            padAdapter.tracker = (context as PadListActivity).makePadSelectionTracker(context, mPadListRecyclerView, padAdapter)
+            padAdapter.tracker = (activity as PadListActivity).makePadSelectionTracker(activity, mPadListRecyclerView, padAdapter)
 
             initEvents()
         }
@@ -127,7 +141,7 @@ class PadGroupAdapter(context: Context,
 
         private fun toggle() {
             val transition: Transition = AutoTransition()
-            transition.duration = 400
+            transition.duration = 200
             transition.addTarget(mPadListRecyclerView)
             transition.addTarget(mEmptyView)
             TransitionManager.beginDelayedTransition(mPadListRecyclerView.rootView as ViewGroup, transition)
@@ -139,7 +153,7 @@ class PadGroupAdapter(context: Context,
             } else{
                 View.GONE
             }
-            mEmptyView.visibility = if (padAdapter.data.isEmpty() && itemLayout.isActivated) {
+            mEmptyView.visibility = if (padAdapter.itemCount == 0 && itemLayout.isActivated) {
                 View.VISIBLE
             } else {
                 View.GONE
@@ -151,72 +165,107 @@ class PadGroupAdapter(context: Context,
                 override fun getPosition(): Int = bindingAdapterPosition
                 override fun getSelectionKey(): Long = padGroupId
             }
+
+        fun bindTitle(title: String) {
+            titleTextView.text = title
+        }
+
+        fun bindPadList(padList: List<Pad>) {
+            padAdapter.data = padList
+
+            mEmptyView.visibility = if (padList.isEmpty() && itemLayout.isActivated){
+                View.VISIBLE
+            } else{
+                View.GONE
+            }
+        }
+
+        fun bindSelected(selected: Boolean) {
+            itemLayout.isSelected = selected
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PadGroupViewHolder {
         val itemView: View = mInflater.inflate(R.layout.pad_list_recyclerview_item_padgroup, parent, false)
-        return PadGroupViewHolder(itemView, activityContext, dragAndDropListener, onClickListener, onClickInfoListener)
+        return PadGroupViewHolder(itemView, activity, dragAndDropListener, onClickListener, onClickInfoListener)
     }
 
     override fun onBindViewHolder(holder: PadGroupViewHolder, position: Int) {
         val current: PadGroupsWithPadList = data[position]
-        holder.titleTextView.text = activityContext.getString(
-            R.string.show_padgroup_title,
-            current.padList.size,
-            current.padGroup.mName
-        )
+        holder.bindTitle(makeGroupTitle(current))
         holder.itemLayout.tag = current.padGroup.mId
         holder.padGroupId = current.padGroup.mId
 
         holder.padAdapter.padGroupId = current.padGroup.mId
-        holder.padAdapter.data = current.padList
         holder.padAdapter.onTouchListener = padAdapterTouchListener
-
-//        holder.padAdapter.notifyDataSetChanged()
+        holder.bindPadList(current.padList)
 
         tracker?.let {
-            holder.itemLayout.isSelected = it.isSelected(current.padGroup.mId)
-        }
-
-        holder.mEmptyView.visibility = if (current.padList.isEmpty() && holder.itemLayout.isActivated){
-            View.VISIBLE
-        } else{
-            View.GONE
+            holder.bindSelected(it.isSelected(current.padGroup.mId))
         }
     }
 
-    override fun getItemCount(): Int {
-        return data.size
+    override fun onBindViewHolder(
+        holder: PadGroupViewHolder,
+        position: Int,
+        payloads: MutableList<Any>
+    ) {
+        if(payloads.isEmpty()) {
+            super.onBindViewHolder(holder, position, payloads)
+            return
+        }
+
+        when (val latestPayload = payloads.lastOrNull()) {
+            is PadGroupPayload.Title -> holder.bindTitle(latestPayload.title)
+            is PadGroupPayload.TitlePadList -> {
+                holder.bindTitle(latestPayload.title)
+                holder.bindPadList(latestPayload.padList)
+            }
+            "Selection-Changed" -> holder.bindSelected(
+                tracker?.isSelected(holder.padGroupId) == true)
+            else -> onBindViewHolder(holder, position)
+        }
     }
 
-    private fun computeDataSetChanged(oldValue: List<PadGroupsWithPadList>, newValue: List<PadGroupsWithPadList>) {
-//        notifyDataSetChanged()
-        var tmpRange = oldValue.size
-        newValue.forEachIndexed { index, padGroup ->
-            if (oldValue.any { it.padGroup.mId == padGroup.padGroup.mId }) {
-//                val coincidence = oldValue.find { it.padGroup.mId == newPadGroup.padGroup.mId }!!
-//                if(coincidence.padGroup.mName != newPadGroup.padGroup.mName ||
-//                    coincidence.padList != newPadGroup.padList
-//                ) {
-//                    notifyItemChanged(oldValue.indexOf(coincidence))
-//                }
-                notifyDataSetChanged()
-                return@computeDataSetChanged
-            } else {
-                notifyItemInserted(index)
-                tmpRange += 1
-                notifyItemRangeInserted(index, tmpRange)
+    private fun computeDataSetChanged(
+        oldValue: List<PadGroupsWithPadList>,
+        newValue: List<PadGroupsWithPadList>): DiffUtil.DiffResult {
+
+        return DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+            override fun getOldListSize(): Int = oldValue.size
+            override fun getNewListSize(): Int = newValue.size
+
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return oldValue[oldItemPosition].padGroup.mId == newValue[newItemPosition].padGroup.mId
             }
 
-        }
-
-        oldValue.forEachIndexed { index, padGroup ->
-            if (!newValue.any { it.padGroup.mId == padGroup.padGroup.mId }) {
-                notifyItemRemoved(index)
-                tmpRange -= 1
-                notifyItemRangeInserted(index, tmpRange)
+            override fun areContentsTheSame(
+                oldItemPosition: Int,
+                newItemPosition: Int
+            ): Boolean {
+                return !oldValue[oldItemPosition].isPartiallyDifferentFrom(newValue[newItemPosition])
             }
-        }
+
+            override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any {
+                return when {
+                    oldValue[oldItemPosition].padGroup.mName != newValue[newItemPosition].padGroup.mName -> {
+                        PadGroupPayload.Title(makeGroupTitle(newValue[newItemPosition]))
+                    }
+                    else -> {
+                        PadGroupPayload.TitlePadList(
+                            makeGroupTitle(newValue[newItemPosition]),
+                            newValue[newItemPosition].padList)
+                    }
+                }
+            }
+        }, true)
     }
 
+    fun makeGroupTitle(current: PadGroupsWithPadList): String {
+        return activity.getString(
+            R.string.show_padgroup_title,
+            current.padList.size,
+            current.padGroup.mName
+        )
+    }
 }

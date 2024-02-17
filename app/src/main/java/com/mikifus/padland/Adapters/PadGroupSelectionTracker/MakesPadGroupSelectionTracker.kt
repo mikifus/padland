@@ -15,6 +15,7 @@ import com.mikifus.padland.ActionModes.IAnyActionModeActive
 import com.mikifus.padland.ActionModes.PadGroupActionModeCallback
 import com.mikifus.padland.Activities.PadListActivity
 import com.mikifus.padland.Adapters.PadGroupAdapter
+import com.mikifus.padland.Adapters.RecyclerViewKeyProvider
 import com.mikifus.padland.R
 
 interface IMakesPadGroupSelectionTracker {
@@ -37,7 +38,7 @@ class MakesPadGroupSelectionTracker: IMakesPadGroupSelectionTracker,
         padGroupSelectionTracker = SelectionTracker.Builder(
             "padGroupSelectionTracker",
             recyclerView,
-            PadGroupKeyProvider(padGroupAdapter),
+            RecyclerViewKeyProvider(recyclerView),
             PadGroupDetailsLookup(recyclerView),
             StorageStrategy.createLongStorage()
         )
