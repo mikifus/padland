@@ -138,6 +138,7 @@
         android:layout_gravity="bottom|start"
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
         app:useCompatPadding="true"
+        android:transitionName="dialog_transition"
         />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -147,6 +148,7 @@
         android:src="@drawable/ic_document_add"
         android:layout_gravity="bottom|end"
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
-        app:useCompatPadding="true" />
+        app:useCompatPadding="true"
+        android:transitionName="dialog_transition" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

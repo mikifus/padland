@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:layout_gravity="top"
     android:orientation="vertical"
-    android:background="?attr/colorSurface">
+    android:background="?attr/colorSurface"
+    android:transitionName="dialog_transition">
 
     <include
         android:id="@+id/include"
