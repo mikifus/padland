@@ -10,7 +10,8 @@
         android:id="@+id/include"
         layout="@layout/header_activity" />
 
-    <androidx.core.widget.NestedScrollView
+    <com.mikifus.padland.Utils.Views.Helpers.ResizeableNestedScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
@@ -26,7 +27,6 @@
                 android:tag="recyclerview_padgroups"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 app:layout_constraintEnd_toStartOf="@id/recyclerview_unclassified"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -92,9 +92,13 @@
 
             </LinearLayout>
 
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"/>
+
         </LinearLayout>
 
-    </androidx.core.widget.NestedScrollView>
+    </com.mikifus.padland.Utils.Views.Helpers.ResizeableNestedScrollView>
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/empty"

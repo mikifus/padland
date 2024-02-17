@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.core.view.ViewCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -42,6 +43,7 @@ class ServerListActivity: AppCompatActivity(),
         recyclerView = findViewById(R.id.recyclerview)
         recyclerView!!.layoutManager = LinearLayoutManager(this)
         recyclerView!!.adapter = serverAdapter
+        ViewCompat.setNestedScrollingEnabled(recyclerView!!, false)
 
         mNewServerButton = findViewById(R.id.button_new_server)
 

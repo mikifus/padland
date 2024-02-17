@@ -8,14 +8,31 @@
         android:id="@+id/include"
         layout="@layout/header_activity" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview"
+    <com.mikifus.padland.Utils.Views.Helpers.ResizeableNestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"/>
+
+        </LinearLayout>
+
+    </com.mikifus.padland.Utils.Views.Helpers.ResizeableNestedScrollView>
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/empty"
