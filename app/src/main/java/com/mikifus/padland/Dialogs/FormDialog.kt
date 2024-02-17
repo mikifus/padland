@@ -6,8 +6,10 @@ import android.view.View.OnClickListener
 import android.widget.Button
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.transition.MaterialContainerTransform
 import com.mikifus.padland.R
 import java.util.regex.Pattern
+
 
 interface IFormDialog {
     var dismissed: Boolean
@@ -34,7 +36,6 @@ open class FormDialog: DialogFragment(), IFormDialog {
     override var onDismissCallback: (() -> Unit)? = null
 
     private var onResumeCallback: (() -> Unit)? = null
-
 
     override fun getTheme(): Int {
         return R.style.DialogStyleWhenLarge
@@ -78,6 +79,9 @@ open class FormDialog: DialogFragment(), IFormDialog {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // init animations
+        sharedElementEnterTransition = MaterialContainerTransform()
+
         toolbar = view.findViewById(R.id.dialog_toolbar)
         initToolBar()
         initEvents()
@@ -90,6 +94,21 @@ open class FormDialog: DialogFragment(), IFormDialog {
 
     override fun onDestroy() {
         super.onDestroy()
+        runDismissCallback()
+    }
+
+    override fun dismiss() {
+        super.dismiss()
+
+        requireActivity().supportFragmentManager.beginTransaction().apply {
+            remove(this@FormDialog)
+            commit()
+        }.runOnCommit {
+            runDismissCallback()
+        }
+    }
+
+    private fun runDismissCallback() {
         if(!dismissed) {
             onDismissCallback?.let { it() }
         }
