@@ -25,6 +25,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.ViewModelProvider
@@ -34,6 +35,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.AutoTransition
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
+import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mikifus.padland.Adapters.PadAdapter
@@ -154,6 +156,7 @@ class PadListActivity: AppCompatActivity(),
             mainList = currentList ?: listOf()
             adapter!!.data = mainList!!
             showHideEmpty()
+            showFabs(true)
         }
 
         padGroupViewModel!!.getPadsWithoutGroup.observe(this) { currentList ->
@@ -161,6 +164,7 @@ class PadListActivity: AppCompatActivity(),
             padAdapter!!.data = unclassifiedList!!
             showHideUnclassified()
             showHideEmpty()
+            showFabs(true)
         }
     }
 
@@ -209,18 +213,15 @@ class PadListActivity: AppCompatActivity(),
             } else {
                 View.GONE
             }
+            showFabs(true)
         }
     }
 
     private fun showHideUnclassified() {
         if(unclassifiedList?.size == 0) {
             unclassifiedContainer?.visibility = View.GONE
-//            titleViewUnclassified?.visibility = View.GONE
-//            recyclerViewUnclassified?.visibility = View.GONE
         } else {
             unclassifiedContainer?.visibility = View.VISIBLE
-//            titleViewUnclassified?.visibility = View.VISIBLE
-//            recyclerViewUnclassified?.visibility = View.VISIBLE
         }
     }
 
@@ -267,10 +268,33 @@ class PadListActivity: AppCompatActivity(),
         isSelectionBlocked = value
     }
 
-    fun finishAllActionModes() {
+    private fun finishAllActionModes() {
         padActionMode?.finish()
         padGroupActionMode?.finish()
     }
+
+    /**
+     * Coordinator Layout
+     */
+    private fun showFabs(setVisible: Boolean) {
+        listOf(
+            findViewById<FloatingActionButton>(R.id.new_pad_group_button),
+            findViewById<FloatingActionButton>(R.id.new_pad_button)
+        ).forEach {
+            val layoutParams: ViewGroup.LayoutParams = it.layoutParams
+            if (layoutParams is CoordinatorLayout.LayoutParams) {
+                val behavior = layoutParams.behavior
+                if (behavior is HideBottomViewOnScrollBehavior) {
+                    if (setVisible) {
+                        behavior.slideUp(it)
+                    } else {
+                        behavior.slideDown(it)
+                    }
+                }
+            }
+        }
+    }
+
 
     /**
      * Drag and drop listener.
@@ -288,6 +312,7 @@ class PadListActivity: AppCompatActivity(),
 //                padViewModel!!.updatePadPosition(padId, position)
             }
         }
+        showFabs(true)
     }
 
     override fun onEnteredView(view: View, event: DragEvent) {
