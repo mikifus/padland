@@ -49,4 +49,11 @@ data class PadGroup(
             return item
         }
     }
+
+    fun isPartiallyDifferentFrom(padGroup: PadGroup): Boolean {
+        return (
+            mName != padGroup.mName ||
+            mPosition != padGroup.mPosition
+        )
+    }
 }

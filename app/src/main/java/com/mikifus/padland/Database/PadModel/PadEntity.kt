@@ -80,4 +80,12 @@ data class Pad(
             return item
         }
     }
+
+    fun isPartiallyDifferentFrom(pad: Pad): Boolean {
+        return (
+            mName != pad.mName ||
+            mUrl != pad.mUrl ||
+            mLocalName != pad.mLocalName
+        )
+    }
 }

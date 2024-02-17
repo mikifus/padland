@@ -15,6 +15,8 @@ import androidx.core.view.children
 import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SortedList
+import androidx.recyclerview.widget.SortedListAdapterCallback
 import com.mikifus.padland.Adapters.DragAndDropListener.DragAndDropListener
 import com.mikifus.padland.Adapters.DragAndDropListener.IDragAndDropListener
 import com.mikifus.padland.Database.PadModel.Pad
@@ -29,19 +31,42 @@ class PadAdapter(
     RecyclerView.Adapter<PadAdapter.PadViewHolder>() {
 
     private val mInflater: LayoutInflater
-    var data: List<Pad> = listOf()
-        set(value) {
-            val oldValue = data.toList()
-            field = value
-            computeDataSetChanged(oldValue, value)
-        }
-
     var padGroupId: Long = 0
     var tracker: SelectionTracker<Long>? = null
     var onTouchListener: OnTouchListener? = null
 
+    private var sortedData: SortedList<Pad> = SortedList(Pad::class.java,
+        object: SortedListAdapterCallback<Pad>(this@PadAdapter) {
+            override fun compare(o1: Pad, o2: Pad): Int {
+                return o1.mId.toInt() - o2.mId.toInt()
+            }
+
+            override fun areItemsTheSame(item1: Pad?, item2: Pad?): Boolean {
+                return item1?.mId == item2?.mId
+            }
+
+            override fun areContentsTheSame(oldItem: Pad, newItem: Pad): Boolean {
+                return !oldItem.isPartiallyDifferentFrom(newItem)
+            }
+        })
+
     init {
         mInflater = LayoutInflater.from(context)
+        setHasStableIds(true)
+    }
+
+    override fun getItemId(position: Int): Long {
+        return sortedData.get(position).mId
+    }
+
+    override fun getItemCount(): Int {
+        return sortedData.size()
+    }
+
+    fun setData(pads: List<Pad>) {
+        sortedData.beginBatchedUpdates()
+        sortedData.replaceAll(pads)
+        sortedData.endBatchedUpdates()
     }
 
     class PadViewHolder(itemView: View) :
@@ -78,7 +103,7 @@ class PadAdapter(
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: PadViewHolder, position: Int) {
-        val current: Pad = data[position]
+        val current: Pad = sortedData.get(position)
         holder.name.text = current.mLocalName.ifBlank { current.mName }
         holder.url.text = current.mUrl
 
@@ -106,35 +131,34 @@ class PadAdapter(
         }
     }
 
-    override fun getItemCount(): Int {
-        return data.size
-    }
-
     fun getDragInstance(): DragAndDropListener {
         return DragAndDropListener(dragAndDropListener)
     }
 
-    private fun computeDataSetChanged(oldValue: List<Pad>, newValue: List<Pad>) {
-//        notifyDataSetChanged()
-        for (newPad in newValue) {
-            if (oldValue.any { it.mId == newPad.mId }) {
-//                val coincidence = oldValue.find { it.mId == newPad.mId }!!
-//                if(coincidence.mName != newPad.mName ||
-//                    coincidence.mUrl != newPad.mUrl ||
-//                    coincidence.mLocalName != newPad.mLocalName) {
+//    private fun computeDataSetChanged(oldValue: List<Pad>, newValue: List<Pad>) {
+////        notifyDataSetChanged()
+//        var tmpRange = oldValue.size
+//        newValue.forEachIndexed { index, pad ->
+//            if (oldValue.any { it.mId == pad.mId }) {
+//                val coincidence = oldValue.find { it.mId == pad.mId }!!
+//                if(
+//                    coincidence.isPartiallyDifferentFrom(pad)
+//                    ) {
 //                    notifyItemChanged(oldValue.indexOf(coincidence))
 //                }
-                notifyDataSetChanged()
-                return@computeDataSetChanged
-            } else {
-                notifyItemInserted(newValue.indexOf(newPad))
-            }
-        }
-
-        for (oldPad in oldValue) {
-            if (!newValue.any { it.mId == oldPad.mId }) {
-                notifyItemRemoved(oldValue.indexOf(oldPad))
-            }
-        }
-    }
+////                notifyDataSetChanged()
+////                return@computeDataSetChanged
+//            } else {
+//                notifyItemInserted(index)
+//                notifyItemRangeInserted(index, tmpRange++)
+//            }
+//        }
+//
+//        oldValue.forEachIndexed { index, pad ->
+//            if (!newValue.any { it.mId == pad.mId }) {
+//                notifyItemRemoved(oldValue.indexOf(pad))
+//                notifyItemRangeRemoved(index, tmpRange--)
+//            }
+//        }
+//    }
 }

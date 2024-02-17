@@ -14,13 +14,14 @@ import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SortedList
+import androidx.recyclerview.widget.SortedListAdapterCallback
 import androidx.transition.AutoTransition
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import com.google.android.material.textview.MaterialTextView
 import com.mikifus.padland.Activities.PadListActivity
 import com.mikifus.padland.Adapters.DragAndDropListener.IDragAndDropListener
-import com.mikifus.padland.Database.PadGroupModel.PadGroup
 import com.mikifus.padland.Database.PadGroupModel.PadGroupsWithPadList
 import com.mikifus.padland.Database.PadModel.Pad
 import com.mikifus.padland.R
@@ -34,21 +35,52 @@ class PadGroupAdapter(context: Context,
 
     private val activityContext: Context
     private val mInflater: LayoutInflater
-    var data: List<PadGroupsWithPadList> = listOf()
-        set(value) {
-            val oldValue = data.toList()
-            field = value
-            computeDataSetChanged(oldValue, value)
-        }
+//    var data: List<PadGroupsWithPadList> = listOf()
+//        set(value) {
+//            val oldValue = data.toList()
+//            field = value
+//            computeDataSetChanged(oldValue, value)
+//        }
 
     private var padAdapterTouchListener: OnTouchListener? = null
     var tracker: SelectionTracker<Long>? = null
 
+    private var sortedData: SortedList<PadGroupsWithPadList> = SortedList(
+        PadGroupsWithPadList::class.java,
+        object: SortedListAdapterCallback<PadGroupsWithPadList>(this@PadGroupAdapter) {
+            override fun compare(o1: PadGroupsWithPadList, o2: PadGroupsWithPadList): Int {
+                return o1.padGroup.mId.toInt() - o2.padGroup.mId.toInt()
+            }
+
+            override fun areItemsTheSame(item1: PadGroupsWithPadList?, item2: PadGroupsWithPadList?): Boolean {
+                return item1?.padGroup?.mId == item2?.padGroup?.mId
+            }
+
+            override fun areContentsTheSame(oldItem: PadGroupsWithPadList, newItem: PadGroupsWithPadList): Boolean {
+                return !oldItem.isPartiallyDifferentFrom(newItem)
+            }
+        })
+
     init {
         mInflater = LayoutInflater.from(context)
         activityContext = context
+        setHasStableIds(true)
 
         initEvents()
+    }
+
+    override fun getItemId(position: Int): Long {
+        return sortedData.get(position).padGroup.mId
+    }
+
+    override fun getItemCount(): Int {
+        return sortedData.size()
+    }
+
+    fun setData(padGroups: List<PadGroupsWithPadList>) {
+        sortedData.beginBatchedUpdates()
+        sortedData.replaceAll(padGroups)
+        sortedData.endBatchedUpdates()
     }
 
     @SuppressLint("ClickableViewAccessibility") // See the onTouchListener
@@ -139,7 +171,7 @@ class PadGroupAdapter(context: Context,
             } else{
                 View.GONE
             }
-            mEmptyView.visibility = if (padAdapter.data.isEmpty() && itemLayout.isActivated) {
+            mEmptyView.visibility = if (padAdapter.itemCount == 0 && itemLayout.isActivated) {
                 View.VISIBLE
             } else {
                 View.GONE
@@ -159,7 +191,7 @@ class PadGroupAdapter(context: Context,
     }
 
     override fun onBindViewHolder(holder: PadGroupViewHolder, position: Int) {
-        val current: PadGroupsWithPadList = data[position]
+        val current: PadGroupsWithPadList = sortedData.get(position)
         holder.titleTextView.text = activityContext.getString(
             R.string.show_padgroup_title,
             current.padList.size,
@@ -169,7 +201,7 @@ class PadGroupAdapter(context: Context,
         holder.padGroupId = current.padGroup.mId
 
         holder.padAdapter.padGroupId = current.padGroup.mId
-        holder.padAdapter.data = current.padList
+        holder.padAdapter.setData(current.padList)
         holder.padAdapter.onTouchListener = padAdapterTouchListener
 
 //        holder.padAdapter.notifyDataSetChanged()
@@ -185,38 +217,31 @@ class PadGroupAdapter(context: Context,
         }
     }
 
-    override fun getItemCount(): Int {
-        return data.size
-    }
-
-    private fun computeDataSetChanged(oldValue: List<PadGroupsWithPadList>, newValue: List<PadGroupsWithPadList>) {
-//        notifyDataSetChanged()
-        var tmpRange = oldValue.size
-        newValue.forEachIndexed { index, padGroup ->
-            if (oldValue.any { it.padGroup.mId == padGroup.padGroup.mId }) {
-//                val coincidence = oldValue.find { it.padGroup.mId == newPadGroup.padGroup.mId }!!
-//                if(coincidence.padGroup.mName != newPadGroup.padGroup.mName ||
-//                    coincidence.padList != newPadGroup.padList
-//                ) {
-//                    notifyItemChanged(oldValue.indexOf(coincidence))
-//                }
-                notifyDataSetChanged()
-                return@computeDataSetChanged
-            } else {
-                notifyItemInserted(index)
-                tmpRange += 1
-                notifyItemRangeInserted(index, tmpRange)
-            }
-
-        }
-
-        oldValue.forEachIndexed { index, padGroup ->
-            if (!newValue.any { it.padGroup.mId == padGroup.padGroup.mId }) {
-                notifyItemRemoved(index)
-                tmpRange -= 1
-                notifyItemRangeInserted(index, tmpRange)
-            }
-        }
-    }
-
+//    private fun computeDataSetChanged(oldValue: List<PadGroupsWithPadList>, newValue: List<PadGroupsWithPadList>) {
+////        notifyDataSetChanged()
+//        var tmpRange = oldValue.size
+//        newValue.forEachIndexed { index, padGroup ->
+//            if (oldValue.any { it.padGroup.mId == padGroup.padGroup.mId }) {
+////                val coincidence = oldValue.find { it.padGroup.mId == newPadGroup.padGroup.mId }!!
+////                if(coincidence.padGroup.mName != newPadGroup.padGroup.mName ||
+////                    coincidence.padList != newPadGroup.padList
+////                ) {
+////                    notifyItemChanged(oldValue.indexOf(coincidence))
+////                }
+//                notifyDataSetChanged()
+//                return@computeDataSetChanged
+//            } else {
+//                notifyItemInserted(index)
+//                notifyItemRangeInserted(index, tmpRange++)
+//            }
+//
+//        }
+//
+//        oldValue.forEachIndexed { index, padGroup ->
+//            if (!newValue.any { it.padGroup.mId == padGroup.padGroup.mId }) {
+//                notifyItemRemoved(index)
+//                notifyItemRangeRemoved(index, tmpRange--)
+//            }
+//        }
+//    }
 }

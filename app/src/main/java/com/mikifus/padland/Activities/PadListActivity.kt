@@ -75,8 +75,8 @@ class PadListActivity: AppCompatActivity(),
     override var padGroupViewModel: PadGroupViewModel? = null
     override var padViewModel: PadViewModel? = null
 
-    private var mainList: List<PadGroupsWithPadList>? = null
-    private var unclassifiedList: List<Pad>? = null
+    private var padGroupList: List<PadGroupsWithPadList> = listOf()
+    private var unclassifiedPadList: List<Pad> = listOf()
 
     private var recyclerView: RecyclerView? = null
     private var unclassifiedContainer: LinearLayout? = null
@@ -151,14 +151,14 @@ class PadListActivity: AppCompatActivity(),
         initSelectionTrackers()
 
         padGroupViewModel!!.getPadGroupsWithPadList.observe(this) { currentList ->
-            mainList = currentList ?: listOf()
-            adapter!!.data = mainList!!
+            padGroupList = currentList ?: listOf()
+            adapter!!.setData(padGroupList)
             showHideEmpty()
         }
 
         padGroupViewModel!!.getPadsWithoutGroup.observe(this) { currentList ->
-            unclassifiedList = currentList ?: listOf()
-            padAdapter!!.data = unclassifiedList!!
+            unclassifiedPadList = currentList ?: listOf()
+            padAdapter!!.setData(unclassifiedPadList)
             showHideUnclassified()
             showHideEmpty()
         }
@@ -213,7 +213,7 @@ class PadListActivity: AppCompatActivity(),
     }
 
     private fun showHideUnclassified() {
-        if(unclassifiedList?.size == 0) {
+        if(unclassifiedPadList?.size == 0) {
             unclassifiedContainer?.visibility = View.GONE
 //            titleViewUnclassified?.visibility = View.GONE
 //            recyclerViewUnclassified?.visibility = View.GONE
@@ -225,7 +225,7 @@ class PadListActivity: AppCompatActivity(),
     }
 
     private fun showHideEmpty() {
-        if(unclassifiedList?.size == 0 && mainList?.size == 0) {
+        if(unclassifiedPadList?.size == 0 && padGroupList?.size == 0) {
             mEmptyLayout?.visibility = View.VISIBLE
         } else {
             mEmptyLayout?.visibility = View.GONE

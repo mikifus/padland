@@ -5,7 +5,6 @@ import android.content.ClipDescription
 import android.os.Build
 import android.view.View
 import androidx.appcompat.view.ActionMode
-import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.RecyclerView
@@ -14,6 +13,7 @@ import com.mikifus.padland.ActionModes.IAnyActionModeActive
 import com.mikifus.padland.ActionModes.PadActionModeCallback
 import com.mikifus.padland.Activities.PadListActivity
 import com.mikifus.padland.Adapters.PadAdapter
+import com.mikifus.padland.Adapters.RecyclerViewKeyProvider
 import com.mikifus.padland.R
 
 interface IMakesPadSelectionTracker {
@@ -37,7 +37,7 @@ class MakesPadSelectionTracker: IMakesPadSelectionTracker,
         val padSelectionTracker: SelectionTracker<Long> = SelectionTracker.Builder(
             "padSelectionTracker",
             recyclerView,
-            PadKeyProvider(padAdapter),
+            RecyclerViewKeyProvider(recyclerView),
             PadDetailsLookup(recyclerView),
             StorageStrategy.createLongStorage()
         )

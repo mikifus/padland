@@ -20,4 +20,13 @@ data class PadGroupsWithPadList(
         )
     )
     val padList: List<Pad>
-)
+) {
+    fun isPartiallyDifferentFrom(padGroupsWithPadList: PadGroupsWithPadList): Boolean {
+        return padGroup.isPartiallyDifferentFrom(padGroupsWithPadList.padGroup) ||
+//                padGroup.isPartiallyDifferentFrom(padGroupsWithPadList.padGroup)
+            padList.size != padGroupsWithPadList.padList.size
+//            padList.any {
+//                it.isPartiallyDifferentFrom(padGroupsWithPadList.padList.indexOf())
+//            }
+    }
+}
