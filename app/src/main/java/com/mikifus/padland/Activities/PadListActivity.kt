@@ -196,7 +196,7 @@ class PadListActivity: AppCompatActivity(),
     private fun toggleUnclassifiedRecyclerView() {
         if(recyclerViewUnclassified != null) {
             val transition: Transition = AutoTransition()
-            transition.duration = 400
+            transition.duration = 200
             transition.addTarget(recyclerViewUnclassified!!)
             TransitionManager.beginDelayedTransition(
                 recyclerViewUnclassified!!.rootView as ViewGroup,

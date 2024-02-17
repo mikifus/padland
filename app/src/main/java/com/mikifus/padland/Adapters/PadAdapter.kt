@@ -1,7 +1,6 @@
 package com.mikifus.padland.Adapters
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
@@ -10,44 +9,64 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.children
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.SelectionTracker
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.mikifus.padland.Adapters.DiffUtilCallbacks.PadAdapterDiffUtilCallback
+import com.mikifus.padland.Adapters.DiffUtilCallbacks.Payloads.PadPayload
 import com.mikifus.padland.Adapters.DragAndDropListener.DragAndDropListener
 import com.mikifus.padland.Adapters.DragAndDropListener.IDragAndDropListener
 import com.mikifus.padland.Database.PadModel.Pad
 import com.mikifus.padland.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class PadAdapter(
-    context: Context,
+    private val activity: AppCompatActivity,
     private val dragAndDropListener: IDragAndDropListener,
     private val onClickListener: OnClickListener? = null,
     private val onClickInfoListener: OnClickListener? = null):
     RecyclerView.Adapter<PadAdapter.PadViewHolder>() {
 
-    private val mInflater: LayoutInflater
-    var data: List<Pad> = listOf()
-        set(value) {
-            val oldValue = data.toList()
-            field = value
-            computeDataSetChanged(oldValue, value)
-        }
-
+    private val mInflater: LayoutInflater = LayoutInflater.from(activity)
     var padGroupId: Long = 0
     var tracker: SelectionTracker<Long>? = null
     var onTouchListener: OnTouchListener? = null
 
+    var data: List<Pad> = listOf()
+        set(value) {
+            activity.lifecycleScope.launch(Dispatchers.IO) {
+                val diffResult = computeDataSetChanged(field, value)
+                withContext(Dispatchers.Main) {
+                    field = value
+                    diffResult.dispatchUpdatesTo(this@PadAdapter)
+                }
+            }
+        }
+
     init {
-        mInflater = LayoutInflater.from(context)
+        setHasStableIds(true)
+    }
+
+    override fun getItemCount(): Int {
+        return data.size
+    }
+
+    override fun getItemId(position: Int): Long {
+        return data[position].mId
     }
 
     class PadViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
-        val name: TextView
-        val url: TextView
+        val nameTextView: TextView
+        val urlTextView: TextView
         val content: LinearLayout
         val buttonCopy: ImageButton
         val itemLayout: ConstraintLayout
@@ -56,8 +75,8 @@ class PadAdapter(
         var padGroupId: Long = 0
 
         init {
-            name = itemView.findViewById(R.id.text_recyclerview_item_name)
-            url = itemView.findViewById(R.id.text_recyclerview_item_url)
+            nameTextView = itemView.findViewById(R.id.text_recyclerview_item_name)
+            urlTextView = itemView.findViewById(R.id.text_recyclerview_item_url)
             content = itemView.findViewById(R.id.content)
             buttonCopy = itemView.findViewById(R.id.button_copy)
             itemLayout = itemView.findViewById(R.id.pad_list_recyclerview_item_pad)
@@ -69,6 +88,16 @@ class PadAdapter(
                 override fun getSelectionKey(): Long = padId
             }
 
+        fun bindName(name: String) {
+            nameTextView.text = name
+        }
+        fun bindUrl(url: String) {
+            urlTextView.text = url
+        }
+
+        fun bindSelected(selected: Boolean) {
+            itemLayout.isSelected = selected
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PadViewHolder {
@@ -79,8 +108,8 @@ class PadAdapter(
     @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: PadViewHolder, position: Int) {
         val current: Pad = data[position]
-        holder.name.text = current.mLocalName.ifBlank { current.mName }
-        holder.url.text = current.mUrl
+        holder.bindName(current.mLocalName.ifBlank { current.mName })
+        holder.bindUrl(current.mUrl)
 
         holder.padGroupId = padGroupId
         holder.itemLayout.tag = current.mId
@@ -102,39 +131,54 @@ class PadAdapter(
         }
 
         tracker?.let {
-            holder.itemLayout.isSelected = it.isSelected(current.mId)
+            holder.bindSelected(it.isSelected(current.mId))
         }
     }
 
-    override fun getItemCount(): Int {
-        return data.size
+    override fun onBindViewHolder(
+        holder: PadViewHolder,
+        position: Int,
+        payloads: MutableList<Any>
+    ) {
+        if(payloads.isEmpty()) {
+            super.onBindViewHolder(holder, position, payloads)
+            return
+        }
+
+        when (val latestPayload = payloads.lastOrNull()) {
+            is PadPayload.NameUrl -> {
+                holder.bindName(latestPayload.name)
+                holder.bindUrl(latestPayload.url)
+            }
+            is PadPayload.Url -> holder.bindUrl(latestPayload.url)
+            "Selection-Changed" -> holder.bindSelected(
+                tracker?.isSelected(holder.padId) == true)
+            else -> onBindViewHolder(holder, position)
+        }
+    }
+
+    private fun computeDataSetChanged(oldValue: List<Pad>, newValue: List<Pad>): DiffUtil.DiffResult {
+        return DiffUtil.calculateDiff(object: PadAdapterDiffUtilCallback(oldValue, newValue) {
+            override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
+                return when {
+                    oldValue[oldItemPosition].mName != newValue[newItemPosition].mName ||
+                            oldValue[oldItemPosition].mLocalName != newValue[newItemPosition].mLocalName
+                    -> {
+                        PadPayload.NameUrl(
+                            newValue[newItemPosition].mLocalName.ifBlank { newValue[newItemPosition].mName },
+                            newValue[newItemPosition].mUrl
+                        )
+                    }
+                    oldValue[oldItemPosition].mUrl != newValue[newItemPosition].mUrl -> {
+                        PadPayload.Url(newValue[newItemPosition].mUrl)
+                    }
+                    else -> super.getChangePayload(oldItemPosition, newItemPosition)
+                }
+            }
+        }, true)
     }
 
     fun getDragInstance(): DragAndDropListener {
         return DragAndDropListener(dragAndDropListener)
-    }
-
-    private fun computeDataSetChanged(oldValue: List<Pad>, newValue: List<Pad>) {
-//        notifyDataSetChanged()
-        for (newPad in newValue) {
-            if (oldValue.any { it.mId == newPad.mId }) {
-//                val coincidence = oldValue.find { it.mId == newPad.mId }!!
-//                if(coincidence.mName != newPad.mName ||
-//                    coincidence.mUrl != newPad.mUrl ||
-//                    coincidence.mLocalName != newPad.mLocalName) {
-//                    notifyItemChanged(oldValue.indexOf(coincidence))
-//                }
-                notifyDataSetChanged()
-                return@computeDataSetChanged
-            } else {
-                notifyItemInserted(newValue.indexOf(newPad))
-            }
-        }
-
-        for (oldPad in oldValue) {
-            if (!newValue.any { it.mId == oldPad.mId }) {
-                notifyItemRemoved(oldValue.indexOf(oldPad))
-            }
-        }
     }
 }

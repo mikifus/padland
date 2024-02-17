@@ -1,5 +1,6 @@
 package com.mikifus.padland.Database.PadGroupModel
 
+import androidx.recyclerview.widget.DiffUtil
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.Junction
@@ -20,4 +21,16 @@ data class PadGroupsWithPadList(
         )
     )
     val padList: List<Pad>
-)
+) {
+    fun isPartiallyDifferentFrom(padGroupsWithPadList: PadGroupsWithPadList): Boolean {
+        return padGroup.isPartiallyDifferentFrom(padGroupsWithPadList.padGroup) ||
+//                padGroup.isPartiallyDifferentFrom(padGroupsWithPadList.padGroup)
+                padList.size != padGroupsWithPadList.padList.size ||
+                padList.withIndex().any { it ->
+                    it.value.isPartiallyDifferentFrom(padGroupsWithPadList.padList[it.index])
+                }
+//                padList.any { //TODO: Use diffutil here?
+//                    it.isPartiallyDifferentFrom(padGroupsWithPadList.padList.indexOf())
+//                })
+    }
+}
