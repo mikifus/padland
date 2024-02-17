@@ -58,7 +58,7 @@
                     android:inputType="textUri"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:imeOptions="actionNext" />
+                    android:imeOptions="actionDone" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
