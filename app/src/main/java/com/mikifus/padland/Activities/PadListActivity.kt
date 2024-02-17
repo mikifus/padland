@@ -98,7 +98,7 @@ class PadListActivity: AppCompatActivity(),
         //initializing all the content UI elements
         recyclerView = findViewById(R.id.recyclerview_padgroups)
         recyclerViewUnclassified = findViewById(R.id.recyclerview_unclassified)
-        mEmptyLayout = findViewById(android.R.id.empty)
+        mEmptyLayout = findViewById(R.id.empty)
         mEmptyButton = findViewById(R.id.empty_button_createnew)
 
         padGroupViewModel = ViewModelProvider(this)[PadGroupViewModel::class.java]

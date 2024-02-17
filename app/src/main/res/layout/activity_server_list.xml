@@ -18,12 +18,13 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@android:id/empty"
+        android:id="@+id/empty"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="visible"
         android:gravity="center">
 
         <com.google.android.material.textview.MaterialTextView

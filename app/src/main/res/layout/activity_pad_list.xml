@@ -97,7 +97,7 @@
     </androidx.core.widget.NestedScrollView>
 
     <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@android:id/empty"
+        android:id="@+id/empty"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
@@ -133,7 +133,8 @@
         app:layout_anchorGravity="start"
         android:layout_gravity="bottom|start"
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
-        app:useCompatPadding="true"/>
+        app:useCompatPadding="true"
+        />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/new_pad_button"

@@ -38,7 +38,7 @@ class ServerListActivity: AppCompatActivity(),
         serverViewModel = ViewModelProvider(this)[ServerViewModel::class.java]
         serverAdapter = ServerAdapter(this, getOnItemClickListener())
 
-        mEmptyLayout = findViewById(android.R.id.empty)
+        mEmptyLayout = findViewById(R.id.empty)
         recyclerView = findViewById(R.id.recyclerview)
         recyclerView!!.layoutManager = LinearLayoutManager(this)
         recyclerView!!.adapter = serverAdapter
@@ -58,8 +58,7 @@ class ServerListActivity: AppCompatActivity(),
 
         serverViewModel!!.getAll.observe(this) { serverList ->
             serverAdapter!!.data = serverList
-            serverAdapter!!.notifyDataSetChanged()
-            onAdapterDataSetChanged()
+            showHideEmpty(serverList.isEmpty())
         }
     }
 
@@ -79,12 +78,12 @@ class ServerListActivity: AppCompatActivity(),
         }
     }
 
-    private fun onAdapterDataSetChanged() {
+    private fun showHideEmpty(visible: Boolean) {
         if(mEmptyLayout != null) {
-            mEmptyLayout!!.visibility = if (serverAdapter?.data?.size!! > 0) {
-                View.GONE
-            } else {
+            mEmptyLayout!!.visibility = if (visible) {
                 View.VISIBLE
+            } else {
+                View.GONE
             }
         }
     }
