@@ -25,9 +25,9 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.LinearLayoutCompat
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
+import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,7 +35,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.AutoTransition
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
-import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mikifus.padland.Adapters.PadAdapter
@@ -145,10 +144,6 @@ class PadListActivity: AppCompatActivity(),
         }
     }
 
-    /*
-    This method shall be used to initialize the list view using observer,
-    here onChanged shall be triggered realtime as the data changes
-     */
     private fun initListView() {
         initSelectionTrackers()
 
@@ -156,7 +151,6 @@ class PadListActivity: AppCompatActivity(),
             mainList = currentList ?: listOf()
             adapter!!.data = mainList!!
             showHideEmpty()
-            showFabs(true)
         }
 
         padGroupViewModel!!.getPadsWithoutGroup.observe(this) { currentList ->
@@ -164,7 +158,6 @@ class PadListActivity: AppCompatActivity(),
             padAdapter!!.data = unclassifiedList!!
             showHideUnclassified()
             showHideEmpty()
-            showFabs(true)
         }
     }
 
@@ -174,13 +167,15 @@ class PadListActivity: AppCompatActivity(),
     }
 
     private fun initEvents() {
+        val scrollView = findViewById<NestedScrollView>(R.id.scroll_view)
         val newPadGroupButton = findViewById<FloatingActionButton>(R.id.new_pad_group_button)
+        val newPadButton = findViewById<FloatingActionButton>(R.id.new_pad_button)
+
         newPadGroupButton.setOnClickListener {
             finishAllActionModes()
             showNewPadGroupDialog(this@PadListActivity)
         }
 
-        val newPadButton = findViewById<FloatingActionButton>(R.id.new_pad_button)
         newPadButton.setOnClickListener {
             finishAllActionModes()
             showNewPadDialog(this@PadListActivity)
@@ -213,7 +208,6 @@ class PadListActivity: AppCompatActivity(),
             } else {
                 View.GONE
             }
-            showFabs(true)
         }
     }
 
@@ -234,7 +228,6 @@ class PadListActivity: AppCompatActivity(),
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.pad_list, menu)
         return true
     }
@@ -273,28 +266,6 @@ class PadListActivity: AppCompatActivity(),
         padGroupActionMode?.finish()
     }
 
-    /**
-     * Coordinator Layout
-     */
-    private fun showFabs(setVisible: Boolean) {
-        listOf(
-            findViewById<FloatingActionButton>(R.id.new_pad_group_button),
-            findViewById<FloatingActionButton>(R.id.new_pad_button)
-        ).forEach {
-            val layoutParams: ViewGroup.LayoutParams = it.layoutParams
-            if (layoutParams is CoordinatorLayout.LayoutParams) {
-                val behavior = layoutParams.behavior
-                if (behavior is HideBottomViewOnScrollBehavior) {
-                    if (setVisible) {
-                        behavior.slideUp(it)
-                    } else {
-                        behavior.slideDown(it)
-                    }
-                }
-            }
-        }
-    }
-
 
     /**
      * Drag and drop listener.
@@ -312,7 +283,6 @@ class PadListActivity: AppCompatActivity(),
 //                padViewModel!!.updatePadPosition(padId, position)
             }
         }
-        showFabs(true)
     }
 
     override fun onEnteredView(view: View, event: DragEvent) {
