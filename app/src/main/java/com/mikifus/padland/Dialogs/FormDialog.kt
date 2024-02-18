@@ -1,11 +1,20 @@
 package com.mikifus.padland.Dialogs
 
+
+import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.Button
+import androidx.annotation.StyleableRes
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.DialogFragment
+import androidx.transition.Slide
+import androidx.transition.Transition
+import com.google.android.material.color.DynamicColors
+import com.google.android.material.transition.MaterialArcMotion
 import com.google.android.material.transition.MaterialContainerTransform
 import com.mikifus.padland.R
 import java.util.regex.Pattern
@@ -79,9 +88,6 @@ open class FormDialog: DialogFragment(), IFormDialog {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // init animations
-        sharedElementEnterTransition = MaterialContainerTransform()
-
         toolbar = view.findViewById(R.id.dialog_toolbar)
         initToolBar()
         initEvents()
@@ -113,6 +119,41 @@ open class FormDialog: DialogFragment(), IFormDialog {
             onDismissCallback?.let { it() }
         }
         dismissed = false
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        // init animations
+        val dynamicColorContext: Context = DynamicColors.wrapContextIfAvailable(
+            context,
+            com.mikifus.padland.R.style.Theme_Material3_DynamicColors_DayNight
+        )
+        val typedArray = dynamicColorContext.obtainStyledAttributes(intArrayOf(
+            R.attr.colorSecondary,
+            R.attr.colorSurface,
+        ))
+        @StyleableRes
+        var i = 0
+        val secondary = typedArray.getColor(i++, 0)
+        val surface = typedArray.getColor(i, 0)
+        typedArray.recycle() // recycle TypedArray
+
+        enterTransition = MaterialContainerTransform().apply {
+            drawingViewId = android.R.id.content
+            startView = requireActivity().findViewById<View>(R.id.new_pad_button)
+            endView = view
+            duration = resources.getInteger(R.integer.material_motion_duration_long_1).toLong()*2
+            scrimColor = Color.TRANSPARENT
+            containerColor = Color.TRANSPARENT
+            startContainerColor = Color.TRANSPARENT
+            endContainerColor = surface
+//            setPathMotion(MaterialArcMotion())
+            isElevationShadowEnabled = true
+        }
+        returnTransition = Slide().apply {
+            duration = resources.getInteger(R.integer.material_motion_duration_long_1).toLong()
+            addTarget(R.id.dialog_layout)
+        }
     }
 
     companion object {
