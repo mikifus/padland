@@ -6,10 +6,7 @@ import android.webkit.HttpAuthHandler
 import android.webkit.URLUtil
 import android.webkit.WebView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentTransaction
-import com.mikifus.padland.Dialogs.ConfirmDialog
 import com.mikifus.padland.Dialogs.PadViewAuthDialog
-import com.mikifus.padland.R
 
 interface IManagesPadViewAuthDialog {
     fun showPadViewAuthDialog(
@@ -59,7 +56,7 @@ class ManagesPadViewAuthDialog: ManagesDialog(), IManagesPadViewAuthDialog {
                 dialog.showSslWarning()
             }
         }
-        dialog.onDismissCallback = {
+        dialog.dismissCallback = {
             handler.cancel()
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 CookieManager.getInstance().removeAllCookies(null)

@@ -76,7 +76,7 @@ class ServerListActivity: AppCompatActivity(),
 
     private fun getOnItemClickListener(): View.OnClickListener {
         return View.OnClickListener{ view: View ->
-            showEditServerDialog(this, view.tag as Long)
+            showEditServerDialog(this, view.tag as Long, view)
         }
     }
 

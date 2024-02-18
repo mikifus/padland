@@ -4,7 +4,6 @@ package com.mikifus.padland.Dialogs
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.Button
@@ -12,9 +11,7 @@ import androidx.annotation.StyleableRes
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.DialogFragment
 import androidx.transition.Slide
-import androidx.transition.Transition
 import com.google.android.material.color.DynamicColors
-import com.google.android.material.transition.MaterialArcMotion
 import com.google.android.material.transition.MaterialContainerTransform
 import com.mikifus.padland.R
 import java.util.regex.Pattern
@@ -24,7 +21,9 @@ interface IFormDialog {
     var dismissed: Boolean
     var positiveButtonCallback: OnClickListener?
     var negativeButtonCallback: OnClickListener?
-    var onDismissCallback: (() -> Unit)?
+    var dismissCallback: (() -> Unit)?
+    var resumeCallback: (() -> Unit)?
+    var animationOriginView: View?
     var toolbar: Toolbar?
     fun setPositiveButtonCallback(callback: (Map<String, Any>) -> Unit)
     fun setNegativeButtonCallback(callback: () -> Unit)
@@ -40,11 +39,11 @@ open class FormDialog: DialogFragment(), IFormDialog {
     override var dismissed = false
 
     override var toolbar: Toolbar? = null
+    override var animationOriginView: View? = null
     override var positiveButtonCallback: OnClickListener? = null
     override var negativeButtonCallback: OnClickListener? = null
-    override var onDismissCallback: (() -> Unit)? = null
-
-    private var onResumeCallback: (() -> Unit)? = null
+    override var dismissCallback: (() -> Unit)? = null
+    override var resumeCallback: (() -> Unit)? = null
 
     override fun getTheme(): Int {
         return R.style.DialogStyleWhenLarge
@@ -67,7 +66,7 @@ open class FormDialog: DialogFragment(), IFormDialog {
     }
 
     fun setOnResumeCallback(callback: () -> Unit) {
-        onResumeCallback = callback
+        resumeCallback = callback
     }
 
     override fun initEvents() {
@@ -95,7 +94,7 @@ open class FormDialog: DialogFragment(), IFormDialog {
 
     override fun onResume() {
         super.onResume()
-        onResumeCallback?.let { it() }
+        resumeCallback?.let { it() }
     }
 
     override fun onDestroy() {
@@ -116,7 +115,7 @@ open class FormDialog: DialogFragment(), IFormDialog {
 
     private fun runDismissCallback() {
         if(!dismissed) {
-            onDismissCallback?.let { it() }
+            dismissCallback?.let { it() }
         }
         dismissed = false
     }
@@ -139,16 +138,19 @@ open class FormDialog: DialogFragment(), IFormDialog {
         typedArray.recycle() // recycle TypedArray
 
         enterTransition = MaterialContainerTransform().apply {
-            drawingViewId = android.R.id.content
-            startView = requireActivity().findViewById<View>(R.id.new_pad_button)
-            endView = view
-            duration = resources.getInteger(R.integer.material_motion_duration_long_1).toLong()*2
-            scrimColor = Color.TRANSPARENT
-            containerColor = Color.TRANSPARENT
-            startContainerColor = Color.TRANSPARENT
-            endContainerColor = surface
+            animationOriginView?.let {
+//                drawingViewId = android.R.id.content
+                startView = animationOriginView
+                endView = view
+                duration =
+                resources.getInteger(R.integer.material_motion_duration_long_1).toLong() * 2
+                scrimColor = Color.TRANSPARENT
+                containerColor = Color.TRANSPARENT
+                startContainerColor = Color.TRANSPARENT
+                endContainerColor = surface
 //            setPathMotion(MaterialArcMotion())
-            isElevationShadowEnabled = true
+                isElevationShadowEnabled = true
+            }
         }
         returnTransition = Slide().apply {
             duration = resources.getInteger(R.integer.material_motion_duration_long_1).toLong()

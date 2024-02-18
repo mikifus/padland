@@ -5,7 +5,6 @@ import android.content.ClipDescription
 import android.os.Build
 import android.view.View
 import androidx.appcompat.view.ActionMode
-import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +18,7 @@ import com.mikifus.padland.R
 
 interface IMakesPadSelectionTracker {
     var padSelectionTrackers: MutableList<SelectionTracker<Long>>?
+    var lastSelectedPadView: View?
     var padActionMode: ActionMode?
     fun makePadSelectionTracker(activity: PadListActivity, recyclerView: RecyclerView, padAdapter: PadAdapter): SelectionTracker<Long>
     fun getPadSelection(): List<Long>
@@ -26,10 +26,12 @@ interface IMakesPadSelectionTracker {
     fun getSelectionBlock(): Boolean
     fun setSelectionBlock(value: Boolean)
 }
+
 class MakesPadSelectionTracker: IMakesPadSelectionTracker,
     IAnyActionModeActive by AnyActionModeActive() {
 
     override var padSelectionTrackers: MutableList<SelectionTracker<Long>>? = null
+    override var lastSelectedPadView: View? = null
     override var padActionMode: ActionMode? = null
     var activity: PadListActivity? = null
 
@@ -94,6 +96,13 @@ class MakesPadSelectionTracker: IMakesPadSelectionTracker,
                 val selectionCount = getPadSelection().size
                 if (selectionCount > 0) {
                     padActionMode?.title = "$selectionCount " + activity.getString(R.string.model_pad)
+
+                    recyclerView
+                        .findViewHolderForItemId(
+                            getPadSelection().last()
+                        )?.let {
+                            lastSelectedPadView = (it as PadAdapter.PadViewHolder).itemLayout
+                        }
                 } else if(padActionMode != null) {
                     finishActionMode()
                 }

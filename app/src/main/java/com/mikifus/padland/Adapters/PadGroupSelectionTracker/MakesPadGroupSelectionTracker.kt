@@ -1,12 +1,7 @@
 package com.mikifus.padland.Adapters.PadGroupSelectionTracker
 
-import android.content.ClipData
-import android.content.ClipDescription
-import android.os.Build
 import android.view.View
-import androidx.annotation.NonNull
 import androidx.appcompat.view.ActionMode
-import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.RecyclerView
@@ -14,12 +9,14 @@ import com.mikifus.padland.ActionModes.AnyActionModeActive
 import com.mikifus.padland.ActionModes.IAnyActionModeActive
 import com.mikifus.padland.ActionModes.PadGroupActionModeCallback
 import com.mikifus.padland.Activities.PadListActivity
+import com.mikifus.padland.Adapters.PadAdapter
 import com.mikifus.padland.Adapters.PadGroupAdapter
 import com.mikifus.padland.Adapters.RecyclerViewKeyProvider
 import com.mikifus.padland.R
 
 interface IMakesPadGroupSelectionTracker {
     var padGroupSelectionTracker: SelectionTracker<Long>?
+    var lastSelectedPadGroupView: View?
     var padGroupActionMode: ActionMode?
     fun makePadGroupSelectionTracker(activity: PadListActivity, recyclerView: RecyclerView, padGroupAdapter: PadGroupAdapter): SelectionTracker<Long>
     fun getPadGroupSelection(): List<Long>
@@ -27,9 +24,12 @@ interface IMakesPadGroupSelectionTracker {
     fun getSelectionBlock(): Boolean
     fun setSelectionBlock(value: Boolean)
 }
+
 class MakesPadGroupSelectionTracker: IMakesPadGroupSelectionTracker,
     IAnyActionModeActive by AnyActionModeActive() {
+
     override var padGroupSelectionTracker: SelectionTracker<Long>? = null
+    override var lastSelectedPadGroupView: View? = null
     override var padGroupActionMode: ActionMode? = null
     var activity: PadListActivity? = null
 
@@ -94,6 +94,13 @@ class MakesPadGroupSelectionTracker: IMakesPadGroupSelectionTracker,
                 val selectionCount = getPadGroupSelection().size
                 if (selectionCount > 0) {
                     padGroupActionMode?.title = "$selectionCount " + activity.getString(R.string.model_padgroup)
+
+                    recyclerView
+                        .findViewHolderForItemId(
+                            getPadGroupSelection().last()
+                        )?.let {
+                            lastSelectedPadGroupView = (it as PadGroupAdapter.PadGroupViewHolder).itemLayout
+                        }
                 } else if(padGroupActionMode != null) {
                     finishActionMode()
                 }

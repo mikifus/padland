@@ -15,10 +15,6 @@ abstract class ManagesDialog {
         }
 
         activity.supportFragmentManager.beginTransaction().apply {
-//            transitionView?.let {
-//                addSharedElement(it, "dialog_fragment")
-//            }
-//            setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
             add(android.R.id.content, dialog, DIALOG_TAG)
             addToBackStack(null)
             commit()

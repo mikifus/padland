@@ -129,11 +129,11 @@
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/new_pad_group_button"
+        android:id="@+id/button_new_pad_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_group_add"
-        app:layout_anchor="@id/new_pad_button"
+        app:layout_anchor="@id/button_new_pad"
         app:layout_anchorGravity="start"
         android:layout_gravity="bottom|start"
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
@@ -142,7 +142,7 @@
         />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/new_pad_button"
+        android:id="@+id/button_new_pad"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_document_add"

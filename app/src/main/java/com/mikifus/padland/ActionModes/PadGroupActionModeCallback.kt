@@ -63,8 +63,10 @@ class PadGroupActionModeCallback(activity: PadListActivity):
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menuitem_edit -> {
-//                menuEdit(padListActivity.getPadGroupSelection())
-                showEditPadGroupDialog(padListActivity, padListActivity.getPadGroupSelection()[0])
+                showEditPadGroupDialog(
+                    padListActivity,
+                    padListActivity.getPadGroupSelection().last(),
+                    padListActivity.lastSelectedPadGroupView)
                 mode?.finish()
                 true
             }

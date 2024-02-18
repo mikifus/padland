@@ -11,6 +11,7 @@ import com.mikifus.padland.Database.PadGroupModel.PadGroupsAndPadList
 import com.mikifus.padland.Database.PadModel.Pad
 import com.mikifus.padland.Database.PadModel.PadViewModel
 import com.mikifus.padland.Dialogs.NewPadDialog
+import com.mikifus.padland.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -31,6 +32,7 @@ public class ManagesNewPadDialog: ManagesDialog(), IManagesNewPadDialog {
         showDialog(activity)
         initViewModels(activity)
         initEvents(activity)
+        initAnimations(activity)
     }
 
     private fun initViewModels(activity: AppCompatActivity) {
@@ -56,6 +58,10 @@ public class ManagesNewPadDialog: ManagesDialog(), IManagesNewPadDialog {
             dialog.clearForm()
             closeDialog(activity)
         }
+    }
+
+    private fun initAnimations(activity: AppCompatActivity) {
+        dialog.animationOriginView = activity.findViewById(R.id.button_new_pad)
     }
 
     private fun saveNewPadDialog(activity: AppCompatActivity, data: Map<String, Any>) {

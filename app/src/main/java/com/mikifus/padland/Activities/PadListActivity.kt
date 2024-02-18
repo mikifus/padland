@@ -168,8 +168,8 @@ class PadListActivity: AppCompatActivity(),
 
     private fun initEvents() {
         val scrollView = findViewById<NestedScrollView>(R.id.scroll_view)
-        val newPadGroupButton = findViewById<FloatingActionButton>(R.id.new_pad_group_button)
-        val newPadButton = findViewById<FloatingActionButton>(R.id.new_pad_button)
+        val newPadGroupButton = findViewById<FloatingActionButton>(R.id.button_new_pad_group)
+        val newPadButton = findViewById<FloatingActionButton>(R.id.button_new_pad)
 
         newPadGroupButton.setOnClickListener {
             finishAllActionModes()

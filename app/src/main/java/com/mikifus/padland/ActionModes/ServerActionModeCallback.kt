@@ -63,7 +63,10 @@ class ServerActionModeCallback(activity: ServerListActivity):
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menuitem_edit -> {
-                showEditServerDialog(serverListActivity, serverListActivity.getServerSelection()[0])
+                showEditServerDialog(
+                    serverListActivity,
+                    serverListActivity.getServerSelection().last(),
+                    serverListActivity.lastSelectedServerView)
                 mode?.finish()
                 true
             }

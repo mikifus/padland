@@ -1,5 +1,6 @@
 package com.mikifus.padland.Dialogs.Managers;
 
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
@@ -18,7 +19,9 @@ import kotlinx.coroutines.launch
 
 interface IManagesEditPadGroupDialog {
     var padGroupViewModel: PadGroupViewModel?
-    fun showEditPadGroupDialog(activity: AppCompatActivity, id: Long)
+    fun showEditPadGroupDialog(activity: AppCompatActivity,
+                               id: Long,
+                               animationOriginView: View? = null)
 }
 
 public class ManagesEditPadGroupDialog: ManagesDialog(), IManagesEditPadGroupDialog {
@@ -28,10 +31,13 @@ public class ManagesEditPadGroupDialog: ManagesDialog(), IManagesEditPadGroupDia
 
     override var padGroupViewModel: PadGroupViewModel? = null
 
-    override fun showEditPadGroupDialog(activity: AppCompatActivity, id: Long) {
+    override fun showEditPadGroupDialog(activity: AppCompatActivity,
+                                        id: Long,
+                                        animationOriginView: View?) {
         showDialog(activity)
         initViewModels(activity)
         initEvents(activity, id)
+        initAnimations(animationOriginView)
         setData(activity, id)
     }
 
@@ -61,6 +67,12 @@ public class ManagesEditPadGroupDialog: ManagesDialog(), IManagesEditPadGroupDia
             saveEditPadgroupDialog(activity, id, data["name"].toString())
             dialog.clearForm()
             closeDialog(activity)
+        }
+    }
+
+    private fun initAnimations(animationOriginView: View?) {
+        animationOriginView.let {
+            dialog.animationOriginView = animationOriginView
         }
     }
 
