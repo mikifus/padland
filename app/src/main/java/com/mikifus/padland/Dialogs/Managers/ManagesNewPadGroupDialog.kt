@@ -6,6 +6,7 @@ import androidx.lifecycle.lifecycleScope
 import com.mikifus.padland.Database.PadGroupModel.PadGroup
 import com.mikifus.padland.Database.PadGroupModel.PadGroupViewModel
 import com.mikifus.padland.Dialogs.NewPadGroupDialog
+import com.mikifus.padland.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -24,6 +25,7 @@ public class ManagesNewPadGroupDialog: ManagesDialog(), IManagesNewPadGroupDialo
         showDialog(activity)
         initViewModels(activity)
         initEvents(activity)
+        initAnimations(activity)
     }
 
     private fun initViewModels(activity: AppCompatActivity) {
@@ -38,6 +40,10 @@ public class ManagesNewPadGroupDialog: ManagesDialog(), IManagesNewPadGroupDialo
             dialog.clearForm()
             closeDialog(activity)
         }
+    }
+
+    private fun initAnimations(activity: AppCompatActivity) {
+        dialog.animationOriginView = activity.findViewById(R.id.button_new_pad_group)
     }
 
     private fun saveNewPadgroupDialog(activity: AppCompatActivity, name: String) {

@@ -1,5 +1,6 @@
 package com.mikifus.padland.Dialogs.Managers;
 
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -10,7 +11,9 @@ import kotlinx.coroutines.launch
 
 interface IManagesEditServerDialog {
     var serverViewModel: ServerViewModel?
-    fun showEditServerDialog(activity: AppCompatActivity, id: Long)
+    fun showEditServerDialog(activity: AppCompatActivity,
+                             id: Long,
+                             animationOriginView: View? = null)
 }
 
 public class ManagesEditServerDialog: ManagesDialog(), IManagesEditServerDialog {
@@ -20,11 +23,20 @@ public class ManagesEditServerDialog: ManagesDialog(), IManagesEditServerDialog 
 
     override var serverViewModel: ServerViewModel? = null
 
-    override fun showEditServerDialog(activity: AppCompatActivity, id: Long) {
+    override fun showEditServerDialog(activity: AppCompatActivity,
+                                      id: Long,
+                                      animationOriginView: View?) {
         showDialog(activity)
         initViewModels(activity)
         initEvents(activity, id)
+        initAnimations(animationOriginView)
         setData(activity, id)
+    }
+
+    private fun initAnimations(animationOriginView: View?) {
+        animationOriginView.let {
+            dialog.animationOriginView = animationOriginView
+        }
     }
 
     private fun setData(activity: AppCompatActivity, id: Long) {

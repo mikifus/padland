@@ -123,7 +123,9 @@ class PadInfoActivity: AppCompatActivity(),
                 sharePad()
             }
             R.id.menuitem_edit -> {
-                showEditPadDialog(this, padViewModel!!.pad.value!!.mId)
+                showEditPadDialog(this,
+                    padViewModel!!.pad.value!!.mId,
+                    findViewById(R.id.menuitem_edit))
             }
             R.id.menuitem_delete -> {
                 showDeletePadDialog(this, listOf(padViewModel!!.pad.value!!.mId))

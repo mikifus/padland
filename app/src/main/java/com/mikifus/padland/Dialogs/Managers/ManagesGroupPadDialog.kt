@@ -1,5 +1,6 @@
 package com.mikifus.padland.Dialogs.Managers;
 
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -13,7 +14,9 @@ import kotlinx.coroutines.launch
 interface IManagesGroupPadDialog {
     var padViewModel: PadViewModel?
     var padGroupViewModel: PadGroupViewModel?
-    fun showGroupPadDialog(activity: AppCompatActivity, ids: List<Long>)
+    fun showGroupPadDialog(activity: AppCompatActivity,
+                           ids: List<Long>,
+                           animationOriginView: View? = null)
 }
 
 public class ManagesGroupPadDialog: ManagesDialog(), IManagesGroupPadDialog {
@@ -23,11 +26,20 @@ public class ManagesGroupPadDialog: ManagesDialog(), IManagesGroupPadDialog {
     override var padViewModel: PadViewModel? = null
     override var padGroupViewModel: PadGroupViewModel? = null
 
-    override fun showGroupPadDialog(activity: AppCompatActivity, ids: List<Long>) {
+    override fun showGroupPadDialog(activity: AppCompatActivity,
+                                    ids: List<Long>,
+                                    animationOriginView: View?) {
         showDialog(activity)
         initViewModels(activity)
         initEvents(activity, ids)
+        initAnimations(animationOriginView)
         setData(activity, ids)
+    }
+
+    private fun initAnimations(animationOriginView: View?) {
+        animationOriginView.let {
+            dialog.animationOriginView = animationOriginView
+        }
     }
 
     private fun setData(activity: AppCompatActivity, ids: List<Long>) {

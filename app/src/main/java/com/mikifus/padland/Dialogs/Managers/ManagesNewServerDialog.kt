@@ -1,15 +1,13 @@
 package com.mikifus.padland.Dialogs.Managers
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.mikifus.padland.Database.ServerModel.Server
 import com.mikifus.padland.Database.ServerModel.ServerViewModel
-import com.mikifus.padland.Dialogs.ConfirmDialog
 import com.mikifus.padland.Dialogs.NewServerDialog
+import com.mikifus.padland.R
 import com.mikifus.padland.Utils.PadServer
-import com.mikifus.padland.Utils.PadUrl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -32,6 +30,7 @@ class ManagesNewServerDialog: ManagesDialog(), IManagesNewServerDialog {
         showDialog(activity)
         initViewModels(activity)
         initEvents(activity, onDismissCallBack)
+        initAnimations(activity)
 
         url?.let { onSetInitialUrl(url) }
     }
@@ -49,7 +48,11 @@ class ManagesNewServerDialog: ManagesDialog(), IManagesNewServerDialog {
             dialog.clearForm()
             closeDialog(activity)
         }
-        onDismissCallBack?.let { dialog.onDismissCallback = onDismissCallBack }
+        onDismissCallBack?.let { dialog.dismissCallback = onDismissCallBack }
+    }
+
+    private fun initAnimations(activity: AppCompatActivity) {
+        dialog.animationOriginView = activity.findViewById(R.id.button_new_server)
     }
 
     private fun onSetInitialUrl(url: String) {
