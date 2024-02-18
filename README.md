@@ -36,14 +36,15 @@ The user can now share an URL to the app in order to open it. Keep in mind that 
 3.0
 
 ### v3.0
-- Migrated database to Room
+- Migrated database to Room.
 - Better implementation of Material Design.
 - Extreme refactoring keeping the same features and adding some minor ones.
+- Export and import data.
 
 ### v2.0
 - Migrated code to Kotlin.
 - Implemented AndroidX and Material Design.
-- Theme dark/light follows device
+- Theme dark/light follows device.
 
 ### v1.9
 - Fixed a vulnerability.
