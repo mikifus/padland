@@ -151,7 +151,7 @@ class PadAdapter(
                 holder.bindUrl(latestPayload.url)
             }
             is PadPayload.Url -> holder.bindUrl(latestPayload.url)
-            "Selection-Changed" -> holder.bindSelected(
+            SelectionTracker.SELECTION_CHANGED_MARKER -> holder.bindSelected(
                 tracker?.isSelected(holder.padId) == true)
             else -> onBindViewHolder(holder, position)
         }

@@ -220,7 +220,7 @@ class PadGroupAdapter(private val activity: AppCompatActivity,
                 holder.bindTitle(latestPayload.title)
                 holder.bindPadList(latestPayload.padList)
             }
-            "Selection-Changed" -> holder.bindSelected(
+            SelectionTracker.SELECTION_CHANGED_MARKER -> holder.bindSelected(
                 tracker?.isSelected(holder.padGroupId) == true)
             else -> onBindViewHolder(holder, position)
         }

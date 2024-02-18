@@ -121,7 +121,7 @@ class ServerAdapter (
         when (val latestPayload = payloads.lastOrNull()) {
             is ServerPayload.Name -> holder.bindName(latestPayload.name)
             is ServerPayload.Url -> holder.bindUrl(latestPayload.url)
-            "Selection-Changed" -> holder.bindSelected(
+            SelectionTracker.SELECTION_CHANGED_MARKER -> holder.bindSelected(
                 tracker?.isSelected(holder.serverId) == true)
             else -> onBindViewHolder(holder, position)
         }
