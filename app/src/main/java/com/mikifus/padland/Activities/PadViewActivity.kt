@@ -224,6 +224,11 @@ class PadViewActivity :
     }
 
     private fun loadOrSavePad() {
+        if(!isNetworkAvailable) {
+            finish()
+            return
+        }
+
         if(intent.extras?.containsKey("padId") == true) {
             loadPadById(intent!!.extras!!.getLong("padId"))
             return
@@ -248,7 +253,6 @@ class PadViewActivity :
             && intent.extras!!.getBoolean("padUrlDontSave")) {
             save = false
         }
-
         currentPadUrl = padUrl
 
         if(save) {
