@@ -1,0 +1,4 @@
+- Migrated database to Room.
+- Better implementation of Material Design.
+- Extreme refactoring keeping the same features and adding some minor ones.
+- Export and import data.

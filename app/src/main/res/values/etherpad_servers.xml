@@ -2,36 +2,78 @@
 <resources>
     <string-array name="etherpad_servers_name" translatable="false">
         <item>RiseUp.net</item>
-        <item>Mozilla Etherpad</item>
         <item>Framapad.org</item>
+        <item>Wikimedia</item>
+        <item>La Quadrature du Net</item>
+        <item>Disroot</item>
+        <item>Maadix Demo</item>
+        <item>Piratensommer</item>
+        <item>Peer 2 Peer University</item>
+        <item>France Université Numérique</item>
+        <item>ZUM</item>
+        <item>Caminho das Águas</item>
+        <item>systemli.org</item>
+        <item>Picasoft</item>
+        <item>Ouvaton.coop</item>
+        <item>CHATONS</item>
     </string-array>
 
     <string-array name="etherpad_servers_url_home" translatable="false">
         <item>https://pad.riseup.net</item>
-        <item>https://public.etherpad-mozilla.org</item>
         <item>https://mensuel.framapad.org</item>
+        <item>https://etherpad.wikimedia.org</item>
+        <item>https://pad.lqdn.fr</item>
+        <item>https://pad.disroot.org</item>
+        <item>https://demo.maadix.org/etherpad</item>
+        <item>https://pad.piratensommer.de</item>
+        <item>https://etherpad.p2pu.org</item>
+        <item>https://pad.education</item>
+        <item>https://pad.zum.de</item>
+        <item>https://pad.aguas.cc</item>
+        <item>https://pad.systemli.org</item>
+        <item>https://pad.picasoft.net</item>
+        <item>https://pad.ouvaton.coop</item>
+        <item>https://pad.infini.fr</item>
     </string-array>
 
     <string-array name="etherpad_servers_url_padprefix" translatable="false">
         <item>https://pad.riseup.net/p/</item>
-        <item>http://public.etherpad-mozilla.org/p/</item>
         <item>https://mensuel.framapad.org/p/</item>
+        <item>https://etherpad.wikimedia.org/p/</item>
+        <item>https://pad.lqdn.fr/p/</item>
+        <item>https://pad.disroot.org/p/</item>
+        <item>https://demo.maadix.org/etherpad/pads/</item>
+        <item>https://pad.piratensommer.de/p/</item>
+        <item>https://etherpad.p2pu.org/p/</item>
+        <item>https://pad.education/p/</item>
+        <item>https://pad.zum.de/p/</item>
+        <item>https://pad.systemli.org/p/</item>
+        <item>https://pad.picasoft.net/p/</item>
+        <item>https://pad.ouvaton.coop/</item>
+        <item>https://pad.infini.fr/p/</item>
     </string-array>
 
     <string-array name="etherpad_servers_whitelist" translatable="false">
         <item>pad.riseup.net</item>
-        <item>public.etherpad-mozilla.org</item>
         <item>quotidien.framapad.org</item>
         <item>hebdo.framapad.org</item>
         <item>mensuel.framapad.org</item>
         <item>bimestriel.framapad.org</item>
         <item>semestriel.framapad.org</item>
         <item>annuel.framapad.org</item>
-    </string-array>
-
-    <string-array name="etherpad_servers_supports_jquery" translatable="false">
-        <item>pad.riseup.net</item>
-        <item>public.etherpad-mozilla.org</item>
-        <item>mensuel.framapad.org</item>
+        <item>pad.lqdn.fr</item>
+        <item>etherpad.wikimedia.org</item>
+        <item>pad.disroot.org</item>
+        <item>demo.maadix.org</item>
+        <item>pad.piratensommer.de</item>
+        <item>etherpad.p2pu.org</item>
+        <item>pad.education</item>
+        <item>zumpad.zum.de</item>
+        <item>pad.zum.de</item>
+        <item>pad.aguas.cc</item>
+        <item>pad.systemli.org</item>
+        <item>pad.picasoft.net</item>
+        <item>pad.ouvaton.coop</item>
+        <item>pad.infini.fr</item>
     </string-array>
 </resources>

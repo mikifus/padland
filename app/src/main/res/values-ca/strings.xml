@@ -24,7 +24,7 @@
     <string name="action_newpad">Afegir document</string>
     <string name="action_settings">Preferències</string>
     <string name="activity_padlist_implicitintent_text_copied">El text s\'ha copiat at portaretalls. Enganxa\'l per utilitzar-lo.</string>
-    <string name="cancel">Cancel·lar</string>
+    <string name="cancel">Cancel·la</string>
     <string name="choose_a_server">Escull un servidor (opcional):</string>
     <string name="choose_default_pad_server">Escull un servidor de documents per defecte al crear-ne de nous.</string>
     <string name="default_pad_server">Servidor per defecte</string>
@@ -46,7 +46,8 @@
     <string name="padlist_dialog_new_padgroup_label">Introdueix un nom per al grup</string>
     <string name="padlist_dialog_new_padgroup_title">Nou grup</string>
     <string name="padlist_document_deleted">Document eliminat</string>
-    <string name="padlist_empty_createnew">Crear un nou document</string>
+    <string name="padlist_empty_no_pads">Encara no tens cap document.</string>
+    <string name="padlist_empty_createnew">Crea un nou document</string>
     <string name="padlist_group_deleted">Grup seleccionat</string>
     <string name="padlist_group_select_dialog">Escull un grup</string>
     <string name="padlist_group_unclassified_name">Sense classificar</string>
@@ -67,6 +68,7 @@
     <string name="share_document">Compartir document</string>
     <string name="sure_to_delete_group">Vols eliminar el grup seleccionat?</string>
     <string name="sure_to_delete_pad">Segur que vols eliminar els documents seleccionats?</string>
+    <string name="save_pad_explanation">Sense marcar, obrirà el document sense afegir-lo a la llista.</string>
     <string name="title_activity_about">Quant a PadLand</string>
     <string name="title_activity_new_pad">Crear document</string>
     <string name="title_activity_pad_info">Informació del document</string>
@@ -80,18 +82,18 @@
     <string name="pref_header_general">Preferències</string>
     <string name="settings_default_username_dialog_title">Entra el nom d\'usuari</string>
     <string name="basic_auth_error">L\'autenticació ha fallat</string>
-    <string name="basic_auth_warning">Les credencials s\'enviaràn sense encriptació SSL. Es recomana evitar això. Procura utilitzar el protocol HTTPS si es troba disponible.</string>
-    <string name="no_custom_servers">No s\'han afegit servidors.</string>
+    <string name="basic_auth_warning">Les credencials s\'enviaràn sense encriptació SSL. Es recomana evitar-ho. Procura utilitzar el protocol HTTPS si es troba disponible.</string>
+    <string name="server_list_empty_no_servers">No s\'han afegit servidors.</string>
     <string name="padview_dialog_basicatuh_password">Contrasenya</string>
     <string name="padview_dialog_basicatuh_title">Autenticació requerida</string>
     <string name="padview_dialog_basicatuh_username">Nom d\'usuari</string>
-    <string name="padview_toast_blacklist_url">L\'adreça del servidor no es troba a la llista blanca. Afegeix un nou servidor a la configuració o utilitza una altra aplicació.</string>
+    <string name="padview_toast_blacklist_url">%s\n\nL\'adreça del servidor no es troba a la llista blanca. Afegeix un nou servidor a la configuració o utilitza una altra aplicació.</string>
     <string name="padview_toast_invalid_url">L\'adreça no sembla vàlida.</string>
     <string name="pref_server_list_summary">Afegeix els teus servidors d\'etherpad preferits.</string>
     <string name="title_activity_server_list">Llista de servidors</string>
     <string name="serverlist_dialog_delete_server_deleted">Els servidors seleccionats s\'han eliminat</string>
 
-    <string name="new_pad_local_name">Posa un alias al document opcionalment.</string>
+    <string name="new_pad_local_name">Alias del document</string>
     <string name="write_pad_local_name">Alias del document (opcional)</string>
     <string name="new_pad_name_invalid">El nom del document conté caracters invàlids.</string>
     <string name="new_pad_wrong_server">El servidor no està permès. No es pot continuar. Mira la configuració dels teus servidors i prova de nou.</string>
@@ -110,7 +112,7 @@
     <string name="serverlist_dialog_new_server_padprefix_label">En servidors nous (Etherpad Lite) hi ha un segment de la url entre el domini i el nom del document. Per defecte és \"p/\".</string>
     <string name="serverlist_dialog_new_server_padprefix_title">Prefixe a la url del pad</string>
     <string name="serverlist_dialog_new_server_title">Nou servidor</string>
-    <string name="serverlist_dialog_new_server_url_invalid">Adreça no vàlida</string>
+    <string name="validation_url_invalid">Adreça no vàlida</string>
     <string name="serverlist_dialog_new_server_url_label">L\'adreça on s\'accedeix al servidor. Afegeix https:// si és possible.</string>
     <string name="serverlist_dialog_new_server_url_title">Adreça del servidor</string>
     <string name="error_ssl_date_invalid">La data del certificat SSL és invàlida</string>
@@ -127,4 +129,29 @@
     <string name="edit_pad_local_name">Alias del pad</string>
     <string name="edit_pad_name">Nom del pad (URL)</string>
     <string name="padlist_dialog_edit_pad_title">Edita el pad</string>
+    <string name="add_padgroup_name">Nom del grup</string>
+
+    <string name="model_padgroup">Grups</string>
+    <string name="model_pad">Documents</string>
+    <string name="model_server">Servidors</string>
+    <string name="new_pad_local_name_explanation">Opcionalment indica un alias local per al document.</string>
+    <string name="padview_pad_save_success">El document s\'ha afegit a la llista.</string>
+    <string name="validation_url_invalid_remove">L\'adreça (URL) del no és vàlida.</string>
+    <string name="none">Cap</string>
+    <string name="ignore">Ignora</string>
+    <string name="whitelist_server_dialog_open_browser">Obre al navegador</string>
+    <string name="whitelist_server_dialog_title">Adreça no permesa</string>
+    <string name="ssl_error_dialog_unsafe">S\'ha detectat una petició insegura HTTP sense SSL. Si cancel·les es tancarà el document.</string>
+    <string name="padgroup_empty_no_pads">Aquest grup no té cap document. Pots seleccionar-ne un i arrosegar-lo aquí.</string>
+    <string name="export_exporting_file">Selecciona on guardar…</string>
+    <string name="export_exporting_success">Exportació finalitzada</string>
+    <string name="export_exporting_failed">No s\'ha pogut exportar el fitxer</string>
+    <string name="import_importing_file">Selecciona el fitxer…</string>
+    <string name="import_importing_success">Importació finalitzada (resultat: %s)</string>
+    <string name="import_importing_failed">L\'importació s\'ha cancel·lat</string>
+    <string name="preference_export_database">Exporta la base de dades</string>
+    <string name="preference_export_database_summary">Exporta a un fitxer JSON.</string>
+    <string name="preference_import_database">Importa la base de dades</string>
+    <string name="preference_import_database_summary">Importa des d\'un fitxer JSON.</string>
+
 </resources>

@@ -29,6 +29,7 @@
     <string name="new_pad_explanation">Introduce the pad name. If it does not exist it will be created, otherwise it will take you to the pad.</string>
     <string name="save_pad">Save pad</string>
     <string name="download_pad">Save pad</string>
+    <string name="save_pad_explanation">If unchecked, will open the document without saving it to the list.</string>
     <string name="title_activity_about">About Padland</string>
     <string name="about">About</string>
     <string name="about_text">
@@ -91,6 +92,7 @@
     <string name="newpad_url_name_success">Detected url for known server.</string>
     <string name="newpad_url_name_warning">Warning: Pad name is a URL but no compatible server has been found.</string>
 
+    <string name="padlist_empty_no_pads">You have no documents yet.</string>
     <string name="padlist_empty_createnew">Create a new document</string>
     <string name="padlist_document_deleted">The selected documents have been deleted</string>
     <string name="padlist_group_deleted">Group deleted</string>
@@ -101,7 +103,7 @@
     <string name="padlist_group_select_dialog">Select group</string>
 
     <string name="padview_toast_invalid_url" >The URL seems invalid.</string>
-    <string name="padview_toast_blacklist_url" >The host of your URL is not in the whitelist. Add a new server in Padland\'s settings or choose another app.</string>
+    <string name="padview_toast_blacklist_url" >%s\n\nThe host of this address is not in the whitelist. Add a new server in Padland\'s settings or choose another app.</string>
     <string name="padview_dialog_basicatuh_title" >Authentication required</string>
     <string name="padview_dialog_basicatuh_username" >User name</string>
     <string name="padview_dialog_basicatuh_password" >Password</string>
@@ -125,7 +127,7 @@
 
     <string name="title_activity_server_list">Server list</string>
     <string name="pref_server_list_summary">Add your custom etherpad servers.</string>
-    <string name="no_custom_servers">No servers added.</string>
+    <string name="server_list_empty_no_servers">No servers added.</string>
 
     <string name="serverlist_dialog_new_server_title">New server</string>
     <string name="serverlist_dialog_edit_server_title">Edit server</string>
@@ -136,7 +138,7 @@
 
     <string name="serverlist_dialog_new_server_url_title">Server url</string>
     <string name="serverlist_dialog_new_server_url_label">The url where the server is accessible. Add https:// if available.</string>
-    <string name="serverlist_dialog_new_server_url_invalid">Invalid server url</string>
+    <string name="validation_url_invalid">Invalid server url</string>
 
     <string name="serverlist_dialog_new_server_lite_title">Runs Etherpad Lite</string>
     <string name="serverlist_dialog_new_server_lite_label">I know that this server uses Etherpad Lite.</string>
@@ -145,13 +147,14 @@
     <string name="serverlist_dialog_new_server_padprefix_label">New servers (Etherpad Lite) have an url segment between the server domain and the pad name. By default it is \"/p/\". Change it here if it is different.</string>
     <string name="serverlist_dialog_new_server_padprefix_invalid">Invalid pad prefix.</string>
 
-    <string name="serverlist_dialog_new_server_jquery_title">Embedding options</string>
+    <string name="serverlist_dialog_new_server_jquery_title">Compatible with jQuery</string>
     <string name="serverlist_dialog_new_server_jquery_label">Server is supported by client-side \"etherpad-lite-jquery-plugin\".</string>
 
     <string name="serverlist_dialog_delete_sure_to_delete">Are you sure you want to delete the selected servers?</string>
     <string name="serverlist_dialog_delete_server_deleted">The selected servers have been removed</string>
 
-    <string name="new_pad_local_name">Optionally set a pad Alias.</string>
+    <string name="new_pad_local_name">Pad Alias</string>
+    <string name="new_pad_local_name_explanation">Optionally set a pad Alias.</string>
     <string name="write_pad_local_name">Pad Alias (optional)</string>
     <string name="new_pad_name_invalid">The pad name contains invalid characters.</string>
     <string name="new_pad_wrong_server">The server is not allowed. The operation cannot continue. Check your server settings and try again.</string>
@@ -165,5 +168,31 @@
     <string name="edit_pad_group">Select group</string>
     <string name="edit">Edit</string>
     <string name="copy_copied">Copied to clipboard</string>
+    <string name="add_padgroup_name">Group name</string>
+
+    <string name="show_padgroup_title" translatable="false">(%d) %s</string>
+    <string name="default_pad_prefix" translatable="false">/p/</string>
+
+    <string name="model_padgroup">Groups</string>
+    <string name="model_pad">Documents</string>
+    <string name="model_server">Servers</string>
+    <string name="padview_pad_save_success">The document has been added to the list.</string>
+    <string name="validation_url_invalid_remove">The address (URL) is invalid.</string>
+    <string name="none">None</string>
+    <string name="ignore">Ignore</string>
+    <string name="whitelist_server_dialog_open_browser">Open with browser</string>
+    <string name="whitelist_server_dialog_title">Host not allowed</string>
+    <string name="ssl_error_dialog_unsafe">An unsafe HTTP request without SSL was detected. If you cancel the document will close.</string>
+    <string name="padgroup_empty_no_pads">This group has no documents. You can select one and drag it here.</string>
+    <string name="export_exporting_file">Select file location…</string>
+    <string name="export_exporting_success">File export finished</string>
+    <string name="export_exporting_failed">The file could not be exported</string>
+    <string name="import_importing_file">Select the file…</string>
+    <string name="import_importing_success">Import finished (result size: %s)</string>
+    <string name="import_importing_failed">Import cancelled</string>
+    <string name="preference_export_database">Export database</string>
+    <string name="preference_export_database_summary">Export to a JSON file.</string>
+    <string name="preference_import_database">Import database</string>
+    <string name="preference_import_database_summary">Import from a JSON file.</string>
 
 </resources>

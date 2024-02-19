@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+            android:title="@string/pref_header_general">
+
+        <SwitchPreferenceCompat
+            android:key="auto_save_new_pads"
+                android:title="@string/settings_save_new_pads_title"
+                android:summary="@string/settings_save_new_pads_desc"
+                android:defaultValue="true"
+                />
+
+        <PreferenceScreen
+            android:key="padland_server_list"
+            android:title="@string/title_activity_server_list"
+            android:summary="@string/pref_server_list_summary" >
+            <intent
+                android:targetPackage="com.mikifus.padland"
+                android:targetClass="com.mikifus.padland.Activities.ServerListActivity"/>
+        </PreferenceScreen>
+
+        <ListPreference
+            android:title="@string/default_pad_server"
+            android:summary="@string/choose_default_pad_server"
+            android:key="padland_default_server" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/user_preferences">
+
+        <EditTextPreference
+            android:key="padland_default_username"
+            android:title="@string/settings_default_username"
+            android:summary="@string/settings_default_username_explanation"
+            android:dialogTitle="@string/settings_default_username_dialog_title"
+            android:dialogMessage=""
+            android:defaultValue="" />
+
+        <com.rarepebble.colorpicker.ColorPreference
+            android:key="padland_default_color"
+            android:title="@string/settings_default_color"
+            android:summary="@string/settings_default_color_explanation"
+            app:colorpicker_selectNoneButtonText="@string/none"
+            app:colorpicker_showAlpha="false"
+            />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/settings_miscellaneous">
+
+        <Preference
+            android:key="padland_export"
+            android:title="@string/preference_export_database"
+            android:summary="@string/preference_export_database_summary"
+            />
+
+        <Preference
+            android:key="padland_import"
+            android:title="@string/preference_import_database"
+            android:summary="@string/preference_import_database_summary"
+            />
+
+        <PreferenceScreen
+            android:key="padland_about"
+            android:title="@string/about"
+            android:summary="@string/about" >
+            <intent
+                android:targetPackage="com.mikifus.padland"
+                android:targetClass="com.mikifus.padland.Activities.AboutActivity"/>
+        </PreferenceScreen>
+
+        <PreferenceScreen
+            android:key="padland_intro"
+            android:title="@string/title_activity_intro"
+            android:summary="@string/launch_intro" >
+            <intent
+                android:targetPackage="com.mikifus.padland"
+                android:targetClass="com.mikifus.padland.Activities.IntroActivity"/>
+        </PreferenceScreen>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

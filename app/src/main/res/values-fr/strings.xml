@@ -85,7 +85,7 @@
     <string name="padlist_group_select_dialog">Sélectionnez le groupe</string>
 
     <string name="padview_toast_invalid_url" >L\'URL semble être invalide.</string>
-    <string name="padview_toast_blacklist_url" >L\'hôte de votre URL ne figure pas dans la liste blanche. Ajoutez un nouveau serveur dans les paramètres de Padland ou choisissez une autre application.</string>
+    <string name="padview_toast_blacklist_url" >%s\n\nL\'hôte de votre URL ne figure pas dans la liste blanche. Ajoutez un nouveau serveur dans les paramètres de Padland ou choisissez une autre application.</string>
     <string name="padview_dialog_basicatuh_title" >Identification requise</string>
     <string name="padview_dialog_basicatuh_username" >Identifiant</string>
     <string name="padview_dialog_basicatuh_password" >Mot de passe</string>
@@ -109,7 +109,7 @@
 
     <string name="title_activity_server_list">Liste des serveurs</string>
     <string name="pref_server_list_summary">Ajoutez votre propre serveur etherpad</string>
-    <string name="no_custom_servers">Aucun serveur ajouté.</string>
+    <string name="server_list_empty_no_servers">Aucun serveur ajouté.</string>
 
     <string name="serverlist_dialog_new_server_title">Nouveau serveur</string>
     <string name="serverlist_dialog_edit_server_title">Modifier le serveur</string>
@@ -121,7 +121,7 @@
     <string name="serverlist_dialog_new_server_url_title">URL du serveur</string>
     <string name="serverlist_dialog_new_server_url_label">L\'URL du serveur hébergeant Etherpad.\n
  Ajoutez https:// si les connexions sécurisées sont disponibles.</string>
-    <string name="serverlist_dialog_new_server_url_invalid">URL du serveur invalide</string>
+    <string name="validation_url_invalid">URL du serveur invalide</string>
 
     <string name="serverlist_dialog_new_server_lite_title">Etherpad Lite</string>
     <string name="serverlist_dialog_new_server_lite_label">Je sais que ce serveur utilise Etherpad Lite.</string>
@@ -139,5 +139,10 @@
     <!-- Titanpad notice -->
     <string name="titanpad_deprecated_title">Attention : Titanpad.com est obsolète</string>
     <string name="titanpad_deprecated_text">Les documents sont en lecture seule depuis mai 2017. Le 31 décembre 2017, Titanpad.com sera fermé. Prévoyez de sauvegarder vos documents ailleurs, et n\'en créez pas de nouveaux.</string>
+
+   <string name="model_padgroup">Groupes</string>
+   <string name="model_pad">Documents</string>
+   <string name="model_server">Serveurs</string>
+   <string name="none">Aucun</string>
 
 </resources>

@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<!--    <color name="app_theme_color_background">#ffbebebe</color>-->
-<!--    <color name="icon_inverted_color">@android:color/white</color>-->
-<!--    <color name="error_message_color">#ff0000</color>-->
-<!--    <color name="actionbar_primary_dark">@android:color/black</color>-->
-<!--    <color name="actionbar_primary">#ff212121</color>-->
-
-    <color name="intro_first_background">@android:color/black</color>
-    <color name="intro_second_background">#ffeea90a</color>
-    <color name="intro_third_background">#ffb01510</color>
-    <color name="intro_fourth_background">#ff168731</color>
-    <color name="intro_fifth_background">#ff166cb3</color>
-<!--    <color name="intro_link_color">#ffdedede</color>-->
+    <!--  Intro  -->
+<!--    <color name="intro_first_background">@android:color/black</color>-->
+<!--    <color name="intro_second_background">#ffeea90a</color>-->
+<!--    <color name="intro_third_background">#ffb01510</color>-->
+<!--    <color name="intro_fourth_background">#ff168731</color>-->
+<!--    <color name="intro_fifth_background">#ff166cb3</color>-->
 </resources>
+
