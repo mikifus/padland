@@ -29,12 +29,6 @@ Padland is a tool to manage, share, remember and read collaborative documents ba
   </picture>
 </p>
 
-<!--![Introduction screenshot 1](fastlane/metadata/android/en-US/images/phoneScreenshots/1.png)
-![Introduction screenshot 2](fastlane/metadata/android/en-US/images/phoneScreenshots/2.png)
-![Introduction screenshot 3](fastlane/metadata/android/en-US/images/phoneScreenshots/3.png)
-![Introduction screenshot 4](fastlane/metadata/android/en-US/images/phoneScreenshots/4.png)
-![Introduction screenshot 5](fastlane/metadata/android/en-US/images/phoneScreenshots/5.png)-->
-
 ## Translations
 Thanks to all the volunteers that already contributed!
 More translations are still needed as well as spell checking and keeping the current ones up to date.
