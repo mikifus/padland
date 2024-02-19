@@ -2,6 +2,7 @@ package com.mikifus.padland.Dialogs.Managers;
 
 import android.content.Intent
 import android.net.Uri
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -18,7 +19,8 @@ import kotlinx.coroutines.launch
 interface IManagesNewPadDialog {
     var padViewModel: PadViewModel?
     var padGroupViewModel: PadGroupViewModel?
-    fun showNewPadDialog(activity: AppCompatActivity)
+    fun showNewPadDialog(activity: AppCompatActivity,
+                         animationOriginView: View? = null)
 }
 
 public class ManagesNewPadDialog: ManagesDialog(), IManagesNewPadDialog {
@@ -28,11 +30,12 @@ public class ManagesNewPadDialog: ManagesDialog(), IManagesNewPadDialog {
     override var padViewModel: PadViewModel? = null
     override var padGroupViewModel: PadGroupViewModel? = null
 
-    override fun showNewPadDialog(activity: AppCompatActivity) {
+    override fun showNewPadDialog(activity: AppCompatActivity,
+                                  animationOriginView: View?) {
         showDialog(activity)
         initViewModels(activity)
         initEvents(activity)
-        initAnimations(activity)
+        initAnimations(animationOriginView)
     }
 
     private fun initViewModels(activity: AppCompatActivity) {
@@ -60,8 +63,8 @@ public class ManagesNewPadDialog: ManagesDialog(), IManagesNewPadDialog {
         }
     }
 
-    private fun initAnimations(activity: AppCompatActivity) {
-        dialog.animationOriginView = activity.findViewById(R.id.button_new_pad)
+    private fun initAnimations(animationOriginView: View?) {
+        dialog.animationOriginView = animationOriginView
     }
 
     private fun saveNewPadDialog(activity: AppCompatActivity, data: Map<String, Any>) {
