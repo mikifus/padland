@@ -43,6 +43,7 @@
             android:label="@string/title_activity_pad_view"
             android:parentActivityName=".Activities.PadListActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:hardwareAccelerated="true"
             android:exported="true">
 
             <meta-data
