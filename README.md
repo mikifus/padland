@@ -12,20 +12,20 @@ Padland is a tool to manage, share, remember and read collaborative documents ba
 </p>
 
 <p align="center" style="text-align:center;">
-  <img alt='Padland Logo' src='./metadata/en-US/images/padland_foreground.png'  height="90" />
+  <img alt='Padland Logo' src='./metadata/en-US/images/icon.png'  height="90" />
 </p>
 
 <p align="center" style="text-align:center;">
   <picture>
-    <source media="(prefers-color-scheme: light)" srcset="./metadata/en-US/images/phoneScreenshots/screen1.png">
-    <source media="(prefers-color-scheme: dark)" srcset="./metadata/en-US/images/phoneScreenshots/screen2.png">
-    <img alt="Screenshot 1" src="./metadata/en-US/images/phoneScreenshots/screen1.png" width="150">
+    <source media="(prefers-color-scheme: light)" srcset="./metadata/en-US/images/phoneScreenshots/1.png">
+    <source media="(prefers-color-scheme: dark)" srcset="./metadata/en-US/images/phoneScreenshots/2.png">
+    <img alt="Screenshot 1" src="./metadata/en-US/images/phoneScreenshots/1.png" width="150">
   </picture>
 
   <picture>
-    <source media="(prefers-color-scheme: light)" srcset="./metadata/en-US/images/phoneScreenshots/screen3.png">
-    <source media="(prefers-color-scheme: dark)" srcset="./metadata/en-US/images/phoneScreenshots/screen4.png">
-    <img alt="Screenshot 2" src="./metadata/en-US/images/phoneScreenshots/screen3.png" width="150">
+    <source media="(prefers-color-scheme: light)" srcset="./metadata/en-US/images/phoneScreenshots/3.png">
+    <source media="(prefers-color-scheme: dark)" srcset="./metadata/en-US/images/phoneScreenshots/4.png">
+    <img alt="Screenshot 2" src="./metadata/en-US/images/phoneScreenshots/3.png" width="150">
   </picture>
 </p>
 
