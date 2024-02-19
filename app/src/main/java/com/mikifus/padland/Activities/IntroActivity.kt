@@ -20,26 +20,21 @@ class IntroActivity : AppIntro() {
         // Just set a title, description, background and image. AppIntro will do the rest.
         addSlide(AppIntroFragment.createInstance(getString(R.string.intro_first_title),
                 getString(R.string.intro_first_desc),
-                R.drawable.intro_image1,
-                backgroundColorRes=R.color.intro_first_background))
+                R.drawable.intro_image1))
         addSlide(AppIntroFragment.createInstance(getString(R.string.intro_second_title),
                 getString(R.string.intro_second_desc),
-                R.drawable.intro_image2,
-                backgroundColorRes=R.color.intro_first_background))
+                R.drawable.intro_image2))
         addSlide(AppIntroFragment.createInstance(getString(R.string.intro_third_title),
                 getString(R.string.intro_third_desc),
-                R.drawable.intro_image3,
-                backgroundColorRes=R.color.intro_first_background))
+                R.drawable.intro_image3))
         addSlide(AppIntroFragment.createInstance(getString(R.string.intro_fourth_title),
                 getString(R.string.intro_fourth_desc),
-                R.drawable.intro_image4,
-                backgroundColorRes=R.color.intro_first_background))
+                R.drawable.intro_image4))
         addSlide(
             LinkableAppIntroFragment.createInstance(
             getString(R.string.intro_fifth_title),
             getString(R.string.intro_fifth_desc),
-            R.drawable.intro_image5,
-            R.color.intro_fifth_background))
+            R.mipmap.ic_launcher))
 
         // OPTIONAL METHODS
         // Override bar/separator color.
