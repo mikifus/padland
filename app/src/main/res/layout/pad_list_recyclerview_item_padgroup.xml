@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/pad_list_recyclerview_item_padgroup"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:animateLayoutChanges="true"
+    android:descendantFocusability="afterDescendants">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_selector"
+            style="?android:attr/listSeparatorTextViewStyle"
+            >
+
+            <TextView
+                android:id="@+id/text_recyclerview_item_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:gravity="start|center"
+                android:paddingTop="8dp"
+                android:paddingBottom="6dp"
+                android:textAlignment="viewStart"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                app:layout_constraintEnd_toStartOf="@id/text_recyclerview_item_button"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:clickable="false"
+                android:focusable="false"
+                tools:ignore="UnusedAttribute" />
+
+            <ImageButton
+                android:id="@+id/text_recyclerview_item_button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical|end"
+                android:background="@android:color/transparent"
+                android:src="@drawable/group_button_selector"
+                app:tint="?attr/colorOnSurface"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:clickable="false"
+                android:focusable="false"
+                android:contentDescription="TODO" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview_padgroup_padlist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/text_recyclerview_item_name"
+            app:layout_constraintTop_toBottomOf="@+id/text_recyclerview_item_name" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/recyclerview_padgroup_empty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="@dimen/activity_vertical_margin"
+            android:gravity="center"
+            android:visibility="gone"
+            android:text="@string/padgroup_empty_no_pads" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,7 +13,7 @@ object WhiteListMatcher {
      * Performs a wildcard matching for the text and pattern
      * provided.
      *
-     * @param text the text to be tested for matches.
+     * @param compareText the text to be tested for matches.
      *
      * @param pattern the pattern to be matched for.
      * This can contain the wildcard character '*' (asterisk).
@@ -23,10 +23,10 @@ object WhiteListMatcher {
      *
      * @url http://www.adarshr.com/simple-implementation-of-wildcard-text-matching-using-java
      */
-    private fun wildCardMatch(text: String, pattern: String?): Boolean {
+    private fun wildCardMatch(compareText: String, pattern: String?): Boolean {
         // Create the cards by splitting using a RegEx. If more speed
         // is desired, a simpler character based splitting can be done.
-        var text = text
+        var text = compareText
         val cards = pattern!!.split("\\*".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
         // Iterate over the cards.
@@ -52,10 +52,10 @@ object WhiteListMatcher {
      * @param hostsWhitelist
      * @return
      */
-    fun isValidHost(url: String?, hostsWhitelist: Array<String?>): Boolean {
+    fun isValidHost(url: String?, hostsWhitelist: List<String?>): Boolean {
         if (!TextUtils.isEmpty(url)) {
             val host = Uri.parse(url).host ?: return false
-            for (whitelistedHost in hostsWhitelist!!) {
+            for (whitelistedHost in hostsWhitelist) {
                 if (wildCardMatch(host, whitelistedHost)) {
                     return true
                 }

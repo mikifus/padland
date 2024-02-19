@@ -87,7 +87,7 @@
 
     <string name="title_activity_server_list">Lista dei server</string>
     <string name="pref_server_list_summary">Aggiungi il tuo server di Etherpad</string>
-    <string name="no_custom_servers">Nessun server aggiunto.</string>
+    <string name="server_list_empty_no_servers">Nessun server aggiunto.</string>
 
     <string name="serverlist_dialog_new_server_title">Nuovo server</string>
 
@@ -97,7 +97,7 @@
 
     <string name="serverlist_dialog_new_server_url_title">URL del server</string>
     <string name="serverlist_dialog_new_server_url_label">L\'URL da dove il server è accessibile</string>
-    <string name="serverlist_dialog_new_server_url_invalid">URL del server non valido.</string>
+    <string name="validation_url_invalid">URL del server non valido.</string>
 
     <string name="serverlist_dialog_new_server_lite_title">Avvia Etherpad Lite</string>
     <string name="serverlist_dialog_new_server_lite_label">Controlla se sul server gira Etherpad Lite (puoi ignorare questa opzione).</string>
@@ -108,5 +108,9 @@
 
     <string name="serverlist_dialog_new_server_jquery_title">Supporta jQuery</string>
     <string name="serverlist_dialog_new_server_jquery_label">Controlla se il server supporta \"etherpad-lite-jquery-plugin\" (Etherpad Lite).</string>
+
+    <string name="model_padgroup">Gruppi</string>
+    <string name="model_pad">Documenti</string>
+    <string name="none">Nessuno</string>
 
 </resources>

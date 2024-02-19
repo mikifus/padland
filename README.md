@@ -1,17 +1,33 @@
 # Padland
 Padland is a tool to manage, share, remember and read collaborative documents based on the Etherpad technology in Android.
 
-<a href="https://f-droid.org/repository/browse/?fdid=com.mikifus.padland" target="_blank">
-<img src="https://f-droid.org/badge/get-it-on.png" height="90"/></a>
+<p align="center" style="text-align:center;">
+  <a href="https://f-droid.org/repository/browse/?fdid=com.mikifus.padland" alt='Download from F-Droid' target="_blank">
+    <img src="https://f-droid.org/badge/get-it-on.png" height="90"/>
+  </a>
 
-<a href='https://play.google.com/store/apps/details?id=com.mikifus.padland'>
-<img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'  height="90" /></a>
+  <a href='https://play.google.com/store/apps/details?id=com.mikifus.padland'>
+    <img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'  height="90" />
+  </a>
+</p>
 
-![Introduction screenshot 1](fastlane/metadata/android/en-US/images/phoneScreenshots/1.png)
-![Introduction screenshot 2](fastlane/metadata/android/en-US/images/phoneScreenshots/2.png)
-![Introduction screenshot 3](fastlane/metadata/android/en-US/images/phoneScreenshots/3.png)
-![Introduction screenshot 4](fastlane/metadata/android/en-US/images/phoneScreenshots/4.png)
-![Introduction screenshot 5](fastlane/metadata/android/en-US/images/phoneScreenshots/5.png)
+<p align="center" style="text-align:center;">
+  <img alt='Padland Logo' src='./metadata/en-US/images/icon.png'  height="90" />
+</p>
+
+<p align="center" style="text-align:center;">
+  <picture>
+    <source media="(prefers-color-scheme: light)" srcset="./metadata/en-US/images/phoneScreenshots/1.png">
+    <source media="(prefers-color-scheme: dark)" srcset="./metadata/en-US/images/phoneScreenshots/2.png">
+    <img alt="Screenshot 1" src="./metadata/en-US/images/phoneScreenshots/1.png" width="150">
+  </picture>
+
+  <picture>
+    <source media="(prefers-color-scheme: light)" srcset="./metadata/en-US/images/phoneScreenshots/3.png">
+    <source media="(prefers-color-scheme: dark)" srcset="./metadata/en-US/images/phoneScreenshots/4.png">
+    <img alt="Screenshot 2" src="./metadata/en-US/images/phoneScreenshots/3.png" width="150">
+  </picture>
+</p>
 
 ## Translations
 Thanks to all the volunteers that already contributed!
@@ -30,16 +46,21 @@ To try your new server create a new pad and choose it. You can make it the defau
 
 ## Opening a URL
 
-The user can now share an URL to the app in order to open it. Keep in mind that the host server must be previously added, otherwise the URL will be considered unsafe. 
+The user can now share a URL to the app in order to open it. Keep in mind that the host server must be previously added, otherwise the URL will be considered unsafe.
 
 ## Current version
-2.0
+3.0
 
-## 
+### v3.0
+- Migrated database to Room.
+- Better implementation of Material Design.
+- Extreme refactoring keeping the same features and adding some minor ones.
+- Export and import data.
+
 ### v2.0
 - Migrated code to Kotlin.
 - Implemented AndroidX and Material Design.
-- Theme dark/light follows device
+- Theme dark/light follows device.
 
 ### v1.9
 - Fixed a vulnerability.

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<selector xmlns:android="http://schemas.android.com/apk/res/android">-->
+<!--    <item android:drawable="?attr/colorAccent" android:state_selected="true" />-->
+<!--</selector>-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/material_on_surface_stroke" android:state_selected="true" />
+</selector>

@@ -29,6 +29,7 @@
     <string name="padlist_dialog_new_padgroup_label">Introduce el nombre para el grupo </string>
     <string name="padlist_dialog_new_padgroup_title">Nuevo grupo</string>
     <string name="padlist_document_deleted">Documento eliminado</string>
+    <string name="padlist_empty_no_pads">No tienes documentos todavía.</string>
     <string name="padlist_empty_createnew">Crear un nuevo documento</string>
     <string name="padlist_group_deleted">Grupo seleccionado</string>
     <string name="padlist_group_select_dialog">Elige un grupo</string>
@@ -49,6 +50,7 @@
     <string name="share_document">Compartir documento</string>
     <string name="sure_to_delete_group">¿Quieres eliminar el grupo seleccionado?</string>
     <string name="sure_to_delete_pad">¿Seguro que quieres eliminar los documentos seleccionados?</string>
+    <string name="save_pad_explanation">Sin marcar, abrirá el documento sin añadirlo a la lista.</string>
     <string name="title_activity_about">Acerca de Padland</string>
     <string name="title_activity_new_pad">Crear documento</string>
     <string name="title_activity_pad_info">Información del documento</string>
@@ -64,18 +66,18 @@
     <string name="pref_header_general">Preferencias</string>
     <string name="settings_default_username_dialog_title">Introduce el nombre de ususario</string>
     <string name="basic_auth_error">Fallo de autenticación</string>
-    <string name="basic_auth_warning">Las credenciales se enviarán sin encriptación SSL. Se recomienda evitar esto. Procura utilizar el protocolo HTTPS si está disponible.</string>
+    <string name="basic_auth_warning">Las credenciales se enviarán sin encriptación SSL. Se recomienda evitarlo. Procura utilizar el protocolo HTTPS si está disponible.</string>
     <string name="padview_dialog_basicatuh_password">Contraseña</string>
     <string name="padview_dialog_basicatuh_title">Autenticación requerida</string>
     <string name="padview_dialog_basicatuh_username">Nombre de usuario</string>
-    <string name="no_custom_servers">Sin servidores añadidos.</string>
-    <string name="padview_toast_blacklist_url">La dirección del servidor no se encuentra en la lista blanca. Añade un nuevo servidor en la configuración o utiliza otra aplicación.</string>
+    <string name="server_list_empty_no_servers">Sin servidores añadidos.</string>
+    <string name="padview_toast_blacklist_url">%s\n\nLa dirección del servidor no se encuentra en la lista blanca. Añade un nuevo servidor en la configuración o utiliza otra aplicación.</string>
     <string name="padview_toast_invalid_url">La dirección no parece válida.</string>
     <string name="pref_server_list_summary">Añade tus servidores de etherpad preferidos.</string>
     <string name="title_activity_server_list">Lista de servidores</string>
     <string name="serverlist_dialog_delete_server_deleted">Los servidores seleccionados han sido eliminados</string>
 
-    <string name="new_pad_local_name">Pon un alias al documento opcionalmente.</string>
+    <string name="new_pad_local_name">Alias del documento</string>
     <string name="write_pad_local_name">Alias del documento (opcional)</string>
     <string name="new_pad_name_invalid">El nombre del documento contiene carácteres invalidos.</string>
     <string name="new_pad_wrong_server">El servidor no está permitido. No se puede continuar. Mira la configuración de tus servidores y prueba de nuevo.</string>
@@ -94,7 +96,7 @@
     <string name="serverlist_dialog_new_server_padprefix_label">En servidores nuevos (Etherpad Lite) hay un segmento de url entre el dominio y el nombre del documento. Por defecto es \"p/\".</string>
     <string name="serverlist_dialog_new_server_padprefix_title">Prefijo en la url del pad</string>
     <string name="serverlist_dialog_new_server_title">Nuevo servidor</string>
-    <string name="serverlist_dialog_new_server_url_invalid">Dirección no válida</string>
+    <string name="validation_url_invalid">La dirección (URL) no es válida.</string>
     <string name="serverlist_dialog_new_server_url_label">La dirección para acceder al servidor. Añade https:// si es posible.</string>
     <string name="serverlist_dialog_new_server_url_title">Dirección del servidor</string>
     <string name="title_activity_intro">Introducción</string>
@@ -124,4 +126,28 @@
     <string name="edit_pad_group">Seleccionar grupo</string>
     <string name="edit_pad_local_name">Alias del pad</string>
     <string name="edit_pad_name">Nombre del pad (URL)</string>
+    <string name="add_padgroup_name">Nombre del grupo</string>
+
+    <string name="model_padgroup">Grupos</string>
+    <string name="model_pad">Documentos</string>
+    <string name="model_server">Servidores</string>
+    <string name="new_pad_local_name_explanation">Opcionalmente indica un alias local para el documento.</string>
+    <string name="padview_pad_save_success">El documento se ha añadido a la lista.</string>
+    <string name="none">Ninguno</string>
+    <string name="ignore">Ignorar</string>
+    <string name="whitelist_server_dialog_open_browser">Abrir en navegador</string>
+    <string name="whitelist_server_dialog_title">Dirección no permitida</string>
+    <string name="ssl_error_dialog_unsafe">Se ha detectado una petición insegura HTTP sin SSL. Si cancelas se cerrará el documento.</string>
+    <string name="padgroup_empty_no_pads">Este grupo no tiene documentos. Puedes seleccionar uno y arrastrarlo aquí.</string>
+    <string name="export_exporting_file">Selecciona donde guardar…</string>
+    <string name="export_exporting_success">Exportación finalizada</string>
+    <string name="export_exporting_failed">No se ha podido exportar el fichero</string>
+    <string name="import_importing_file">Selecciona el fichero…</string>
+    <string name="import_importing_success">Importación finalizada (resultado: %s)</string>
+    <string name="import_importing_failed">Importación cancelada</string>
+    <string name="preference_export_database">Exportar base de datos</string>
+    <string name="preference_export_database_summary">Exportar a un fichero JSON.</string>
+    <string name="preference_import_database">Importar base de datos</string>
+    <string name="preference_import_database_summary">Importar desde un fichero JSON.</string>
+
 </resources>
