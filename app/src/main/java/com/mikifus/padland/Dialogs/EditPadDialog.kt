@@ -55,7 +55,9 @@ class EditPadDialog: FormDialog() {
             mAliasEditText?.text = Editable.Factory.getInstance().newEditable(it.toString())
         }
         data?.get("server")?.let {
-            val index = serverSpinnerData?.indexOfFirst { it.second == data!!["server"] }!!
+            val index = serverSpinnerData?.indexOfFirst {
+                it.second == data!!["server"]
+            }!!
             mServerSpinner?.selectedItemPosition = if(index > -1) index else 0
         }
         data?.get("group_id")?.let {

@@ -15,6 +15,7 @@ import com.mikifus.padland.Database.PadGroupModel.PadGroup
 import com.mikifus.padland.Database.PadGroupModel.PadGroupViewModel
 import com.mikifus.padland.Database.ServerModel.ServerViewModel
 import com.mikifus.padland.R
+import com.mikifus.padland.Utils.PadServer
 import com.mikifus.padland.Utils.PadUrl
 import com.mikifus.padland.Utils.Views.Helpers.SpinnerHelper
 import java.lang.Exception
@@ -63,7 +64,9 @@ class NewPadDialog: FormDialog() {
 
         serverViewModel!!.getAll.observe(this) { servers ->
             // Get DB servers
-            serverSpinnerData = servers.map { Pair(it.mName, it.mUrl + it.mPadprefix) }
+            serverSpinnerData = servers.map {
+                Pair(it.mName, PadServer.Builder().padUrl(it.mUrl + it.mPadprefix).build().baseUrl!!)
+            }
 
             // Get hardcoded servers
             serverSpinnerData = serverSpinnerData!! + resources.getStringArray(R.array.etherpad_servers_name)
