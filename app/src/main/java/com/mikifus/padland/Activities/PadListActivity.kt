@@ -84,7 +84,6 @@ class PadListActivity: AppCompatActivity(),
     private var recyclerViewUnclassified: RecyclerView? = null
     private var titleViewUnclassified: View? = null
     private var mEmptyLayout: LinearLayoutCompat? = null
-    private var mEmptyButton: MaterialButton? = null
 
     private var adapter: PadGroupAdapter? = null
     private var padAdapter: PadAdapter? = null
@@ -98,7 +97,6 @@ class PadListActivity: AppCompatActivity(),
         recyclerView = findViewById(R.id.recyclerview_padgroups)
         recyclerViewUnclassified = findViewById(R.id.recyclerview_unclassified)
         mEmptyLayout = findViewById(R.id.empty)
-        mEmptyButton = findViewById(R.id.empty_button_createnew)
 
         padGroupViewModel = ViewModelProvider(this)[PadGroupViewModel::class.java]
         adapter = PadGroupAdapter(this, this,
@@ -170,20 +168,21 @@ class PadListActivity: AppCompatActivity(),
         val scrollView = findViewById<NestedScrollView>(R.id.scroll_view)
         val newPadGroupButton = findViewById<FloatingActionButton>(R.id.button_new_pad_group)
         val newPadButton = findViewById<FloatingActionButton>(R.id.button_new_pad)
+        val emptyButton = findViewById<MaterialButton>(R.id.empty_button_createnew)
 
         newPadGroupButton.setOnClickListener {
             finishAllActionModes()
-            showNewPadGroupDialog(this@PadListActivity)
+            showNewPadGroupDialog(this@PadListActivity, newPadGroupButton)
         }
 
         newPadButton.setOnClickListener {
             finishAllActionModes()
-            showNewPadDialog(this@PadListActivity)
+            showNewPadDialog(this@PadListActivity, newPadButton)
         }
 
-        mEmptyButton?.setOnClickListener {
+        emptyButton?.setOnClickListener {
             finishAllActionModes()
-            showNewPadDialog(this@PadListActivity)
+            showNewPadDialog(this@PadListActivity, emptyButton)
         }
 
         titleViewUnclassified!!.isActivated = true
