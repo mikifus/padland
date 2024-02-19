@@ -11,7 +11,6 @@ import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.mikifus.padland.Adapters.DiffUtilCallbacks.Payloads.PadGroupPayload
 import com.mikifus.padland.Adapters.DiffUtilCallbacks.Payloads.ServerPayload
 import com.mikifus.padland.Database.ServerModel.Server
 import com.mikifus.padland.R
@@ -119,7 +118,10 @@ class ServerAdapter (
         }
 
         when (val latestPayload = payloads.lastOrNull()) {
-            is ServerPayload.Name -> holder.bindName(latestPayload.name)
+            is ServerPayload.NameUrl -> {
+                holder.bindName(latestPayload.name)
+                holder.bindUrl(latestPayload.url)
+            }
             is ServerPayload.Url -> holder.bindUrl(latestPayload.url)
             SelectionTracker.SELECTION_CHANGED_MARKER -> holder.bindSelected(
                 tracker?.isSelected(holder.serverId) == true)
@@ -148,7 +150,9 @@ class ServerAdapter (
             override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any {
                 return when {
                     oldValue[oldItemPosition].mName != newValue[newItemPosition].mName -> {
-                        ServerPayload.Name(newValue[newItemPosition].mName)
+                        ServerPayload.NameUrl(
+                            newValue[newItemPosition].mName,
+                            newValue[newItemPosition].mUrl)
                     }
                     else -> {
                         ServerPayload.Url(newValue[newItemPosition].mUrl)
