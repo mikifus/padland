@@ -50,11 +50,8 @@ public class ManagesEditPadDialog: ManagesDialog(), IManagesEditPadDialog {
             pad?.mLocalName?.let {
                 data["local_name"] = it
             }
-//            pad?.mServer?.let {
-//                data["server"] = it
-//            }
             pad?.mUrl?.let {
-                data["server"] = PadServer.Builder().padUrl(it).build().server!!
+                data["server"] = PadServer.Builder().padUrl(it).build().baseUrl!!
             }
 
             data["group_id"] = 0
