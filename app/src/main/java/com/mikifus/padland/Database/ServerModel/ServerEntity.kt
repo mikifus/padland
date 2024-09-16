@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.mikifus.padland.Database.PadModel.Pad
 
 @Entity(tableName = "padland_servers")
 data class Server(
