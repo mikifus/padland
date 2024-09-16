@@ -109,7 +109,7 @@
     <string name="serverlist_dialog_new_server_name_label">Introdueix com vols anomenar el servidor (o res).</string>
     <string name="serverlist_dialog_new_server_name_title">Nom del servidor</string>
     <string name="serverlist_dialog_new_server_padprefix_invalid">Prefixe invàlid</string>
-    <string name="serverlist_dialog_new_server_padprefix_label">En servidors nous (Etherpad Lite) hi ha un segment de la url entre el domini i el nom del document. Per defecte és \"p/\".</string>
+    <string name="serverlist_dialog_new_server_padprefix_label">En servidors nous hi ha un segment de la url entre el domini i el nom del document. Per defecte és \"p/\".</string>
     <string name="serverlist_dialog_new_server_padprefix_title">Prefixe a la url del pad</string>
     <string name="serverlist_dialog_new_server_title">Nou servidor</string>
     <string name="validation_url_invalid">Adreça no vàlida</string>

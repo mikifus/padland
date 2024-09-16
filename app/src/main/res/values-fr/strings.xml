@@ -127,7 +127,7 @@
     <string name="serverlist_dialog_new_server_lite_label">Je sais que ce serveur utilise Etherpad Lite.</string>
 
     <string name="serverlist_dialog_new_server_padprefix_title">Préfixe de l\'URL du pad</string>
-    <string name="serverlist_dialog_new_server_padprefix_label">Les nouveaux serveurs (Etherpad Lite) ont des URL segment entre le domaine du serveur et le nom du pad. La valeur par défaut est : \"p/\". Modifiez le ici s\'il est différent.</string>
+    <string name="serverlist_dialog_new_server_padprefix_label">Les nouveaux serveurs ont des URL segment entre le domaine du serveur et le nom du pad. La valeur par défaut est : \"p/\". Modifiez le ici s\'il est différent.</string>
     <string name="serverlist_dialog_new_server_padprefix_invalid">Préfixe de pad invalide.</string>
 
     <string name="serverlist_dialog_new_server_jquery_title">Options d\'intégration</string>
