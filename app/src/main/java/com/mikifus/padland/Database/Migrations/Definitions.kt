@@ -81,27 +81,25 @@ abstract class CompatibilityMigration: Migration(-1, 8) {
             }
 
             // Let's use this opportunity to update also the changed color preference
-            if(context != null) {
-                val userDetails =
-                    context!!.getSharedPreferences(
-                        context!!.packageName + "_preferences",
-                        AppCompatActivity.MODE_PRIVATE
-                    )
-                var oldPreference = userDetails.getString("padland_default_color", "")
-                if(!oldPreference.isNullOrBlank()) {
-                    if (oldPreference.length == 4) { // #XXX
-                        oldPreference = oldPreference.replace(
-                            Pattern.compile(
-                                "#([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])"
-                            ).toRegex(),
-                            "#$1$1$2$2$3$3")
-                    }
-                    val colorInt: Int = Color.parseColor(oldPreference)
-                    userDetails.edit().remove("padland_default_color").apply()
-                    userDetails.edit().putInt("padland_default_color", colorInt).apply()
-                } else {
-                    userDetails.edit().remove("padland_default_color").apply()
+            val userDetails =
+                context.getSharedPreferences(
+                    context.packageName + "_preferences",
+                    AppCompatActivity.MODE_PRIVATE
+                )
+            var oldPreference = userDetails.getString("padland_default_color", "")
+            if(!oldPreference.isNullOrBlank()) {
+                if (oldPreference.length == 4) { // #XXX
+                    oldPreference = oldPreference.replace(
+                        Pattern.compile(
+                            "#([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])"
+                        ).toRegex(),
+                        "#$1$1$2$2$3$3")
                 }
+                val colorInt: Int = Color.parseColor(oldPreference)
+                userDetails.edit().remove("padland_default_color").apply()
+                userDetails.edit().putInt("padland_default_color", colorInt).apply()
+            } else {
+                userDetails.edit().remove("padland_default_color").apply()
             }
         }
     }
