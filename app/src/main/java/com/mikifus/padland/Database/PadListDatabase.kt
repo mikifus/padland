@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -27,11 +28,10 @@ import com.mikifus.padland.Database.TypeConverters.DateConverter
         Server::class,
         PadGroupsAndPadList::class
    ],
-    version = 8,
-//    version = 9,
-//    autoMigrations = [
-//        AutoMigration(from=8, to=9)
-//    ]
+    version = 9,
+    autoMigrations = [
+        AutoMigration(from=8, to=9)
+    ]
 )
 @TypeConverters(DateConverter::class)
 abstract class PadListDatabase : RoomDatabase() {
@@ -60,7 +60,7 @@ abstract class PadListDatabase : RoomDatabase() {
 
         private fun getDatabaseBuilder(context: Context): Builder<PadListDatabase> {
             return Room.databaseBuilder(context, PadListDatabase::class.java, "padlist")
-                .addMigrations(MIGRATION_BEFORE_ROOM)
+                .addMigrations(MIGRATION_BEFORE_ROOM/*, MIGRATION_8_9*/)
         }
 
         /**
