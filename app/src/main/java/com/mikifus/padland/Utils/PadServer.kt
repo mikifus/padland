@@ -37,18 +37,21 @@ class PadServer private constructor(builder: PadServer.Builder) {
                 urlObject.file.lastIndexOf("/") + 1
             )
             this.server = urlObject.protocol + "://" + urlObject.authority
-            this.prefix = url
-                .substring(0, url.lastIndexOf("/") + 1)
-                .substring(this.server!!.length)
+            this.prefix = getPrefixFromUrl(url)
             if(this.prefix == "/") {
                 this.prefix = ""
             }
             this.baseUrl = this.server + this.prefix
             if(!this.baseUrl!!.endsWith("/")) {
-                this.baseUrl = this.baseUrl + "/"
+                this.baseUrl += "/"
             }
 
             return this
+        }
+
+        private fun getPrefixFromUrl(url: String): String {
+            val cutUrl =  url.substring(this.server!!.length)
+            return cutUrl.substring(0, cutUrl.lastIndexOf("/") + 1)
         }
 
         fun build(): PadServer {
