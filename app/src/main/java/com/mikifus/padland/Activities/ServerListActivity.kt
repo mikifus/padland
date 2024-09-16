@@ -70,6 +70,7 @@ class ServerListActivity: AppCompatActivity(),
 
     private fun initEvents() {
         mNewServerButton?.setOnClickListener {
+            finishAllActionModes()
             showNewServerDialog(this)
         }
     }
@@ -88,5 +89,9 @@ class ServerListActivity: AppCompatActivity(),
                 View.GONE
             }
         }
+    }
+
+    private fun finishAllActionModes() {
+        serverActionMode?.finish()
     }
 }
