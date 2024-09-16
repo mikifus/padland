@@ -112,3 +112,9 @@ val MIGRATION_BEFORE_ROOM = object : CompatibilityMigration() {
         // Empty implementation, because the schema isn't changing.
     }
 }
+
+//val MIGRATION_8_9 = object : Migration(8, 9) {
+//    override fun migrate(database: SupportSQLiteDatabase) {
+//        database.execSQL("ALTER TABLE padland_servers ADD COLUMN 'cryptpad' INTEGER NOT NULL DEFAULT 0")
+//    }
+//}

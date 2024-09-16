@@ -16,6 +16,7 @@ data class Server(
     @ColumnInfo(name = "padprefix") val mPadprefix: String,
     @ColumnInfo(name = "position", defaultValue = "0") val mPosition: Long,
     @ColumnInfo(name = "jquery", defaultValue = "0") val mJquery: Boolean,
+    @ColumnInfo(name = "cryptpad", defaultValue = "0") val mCryptPad: Boolean,
     @ColumnInfo(name = "enabled", defaultValue = "1") val mEnabled: Boolean,
 //    @ColumnInfo(name = "create_date", defaultValue = "(strftime('%s','now'))") val mCreateDate: Date
 )
@@ -26,6 +27,7 @@ data class Server(
         "",
         "",
         0,
+        true,
         true,
         true,
 //        Date(System.currentTimeMillis())
@@ -43,6 +45,7 @@ data class Server(
             if(contentValues.containsKey("prefix")) item.value = item.value!!.copy(mPadprefix = contentValues.getAsString("uprefix"))
             if(contentValues.containsKey("url")) item.value = item.value!!.copy(mUrl = contentValues.getAsString("url"))
             if(contentValues.containsKey("jquery")) item.value = item.value!!.copy(mJquery = contentValues.getAsBoolean("jquery"))
+            if(contentValues.containsKey("cryptpad")) item.value = item.value!!.copy(mCryptPad = contentValues.getAsBoolean("cryptpad"))
             if(contentValues.containsKey("enabled")) item.value = item.value!!.copy(mEnabled = contentValues.getAsBoolean("enabled"))
 
             return item
