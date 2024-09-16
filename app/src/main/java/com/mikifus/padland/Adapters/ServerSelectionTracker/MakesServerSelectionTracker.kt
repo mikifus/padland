@@ -9,7 +9,6 @@ import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.RecyclerView
 import com.mikifus.padland.ActionModes.ServerActionModeCallback
 import com.mikifus.padland.Activities.ServerListActivity
-import com.mikifus.padland.Adapters.PadAdapter
 import com.mikifus.padland.Adapters.ServerAdapter
 import com.mikifus.padland.R
 
