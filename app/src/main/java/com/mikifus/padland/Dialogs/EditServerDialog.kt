@@ -10,6 +10,7 @@ class EditServerDialog: NewServerDialog() {
     private var data: Map<String, Any>? = null
 
     override fun setFormData(data: HashMap<String, Any>) {
+        isNew = false
         this.data = data
         applyFormData()
     }
@@ -29,6 +30,9 @@ class EditServerDialog: NewServerDialog() {
             if(!it) {
                 mLiteCheckbox?.isChecked = false
             }
+        }
+        data?.get("cryptpad")?.let {
+            mCryptPadCheckbox?.isChecked = it as Boolean
         }
     }
 
