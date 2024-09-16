@@ -144,7 +144,7 @@
     <string name="serverlist_dialog_new_server_lite_label">I know that this server uses Etherpad Lite.</string>
 
     <string name="serverlist_dialog_new_server_padprefix_title">Url pad prefix</string>
-    <string name="serverlist_dialog_new_server_padprefix_label">New servers (Etherpad Lite) have an url segment between the server domain and the pad name. By default it is \"/p/\". Change it here if it is different.</string>
+    <string name="serverlist_dialog_new_server_padprefix_label">New servers have an url segment between the server domain and the pad name. By default it is \"/p/\". Change it here if it is different.</string>
     <string name="serverlist_dialog_new_server_padprefix_invalid">Invalid pad prefix.</string>
 
     <string name="serverlist_dialog_new_server_jquery_title">Compatible with jQuery</string>

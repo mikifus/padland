@@ -93,7 +93,7 @@
     <string name="serverlist_dialog_new_server_name_label">Introduce el nombre deseado para el servidor (o nada).</string>
     <string name="serverlist_dialog_new_server_name_title">Nombre del servidor</string>
     <string name="serverlist_dialog_new_server_padprefix_invalid">Prefijo inválido</string>
-    <string name="serverlist_dialog_new_server_padprefix_label">En servidores nuevos (Etherpad Lite) hay un segmento de url entre el dominio y el nombre del documento. Por defecto es \"p/\".</string>
+    <string name="serverlist_dialog_new_server_padprefix_label">En servidores nuevos hay un segmento de url entre el dominio y el nombre del documento. Por defecto es \"p/\".</string>
     <string name="serverlist_dialog_new_server_padprefix_title">Prefijo en la url del pad</string>
     <string name="serverlist_dialog_new_server_title">Nuevo servidor</string>
     <string name="validation_url_invalid">La dirección (URL) no es válida.</string>
