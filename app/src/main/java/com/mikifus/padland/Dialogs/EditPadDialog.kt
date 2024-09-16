@@ -1,26 +1,17 @@
 package com.mikifus.padland.Dialogs
 
-import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.URLUtil
 import android.widget.ArrayAdapter
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.mikifus.padland.Database.PadGroupModel.PadGroup
 import com.mikifus.padland.Database.PadGroupModel.PadGroupViewModel
 import com.mikifus.padland.Database.ServerModel.ServerViewModel
 import com.mikifus.padland.R
-import com.mikifus.padland.Utils.PadUrl
 import com.mikifus.padland.Utils.Views.Helpers.SpinnerHelper
-import java.lang.Exception
 
 
 /**
@@ -46,11 +37,15 @@ class EditPadDialog: NewPadDialog() {
             val index = serverSpinnerData?.indexOfFirst {
                 it.second == data!!["server"]
             }!!
-            mServerSpinner?.selectedItemPosition = if(index > -1) index else 0
+            if(index > -1) {
+                mServerSpinner?.selectedItemPosition = index
+            }
         }
         data?.get("group_id")?.let {
             val index = padGroupsSpinnerData?.indexOfFirst { it.mId == data!!["group_id"] }!!
-            mPadGroupSpinner?.selectedItemPosition = if(index > -1) index else 0
+            if(index > -1) {
+                mPadGroupSpinner?.selectedItemPosition = index
+            }
         }
     }
 
@@ -139,6 +134,7 @@ class EditPadDialog: NewPadDialog() {
      */
     override fun onResume() {
         super.onResume()
+        initViewModels()
         applyFormData()
     }
 }
