@@ -19,6 +19,8 @@ import com.mikifus.padland.Utils.PadServer
 import com.mikifus.padland.Utils.PadUrl
 import com.mikifus.padland.Utils.Views.Helpers.SpinnerHelper
 import java.lang.Exception
+import java.net.MalformedURLException
+import java.net.URL
 
 
 /**
@@ -117,6 +119,16 @@ class NewPadDialog: FormDialog() {
         if(!NAME_VALIDATION.matcher(name).matches()) {
             Toast.makeText(context, getString(R.string.serverlist_dialog_new_server_name_title), Toast.LENGTH_LONG).show()
             return false
+        }
+        // Check if just pasted URL
+        try {
+            URL(name)
+            // If it reaches this line, the name is an URL, remove the server baseurl
+//            name = name.replace(server.second, "")
+            Toast.makeText(context, getString(R.string.serverlist_dialog_new_server_name_title), Toast.LENGTH_LONG).show()
+            return false
+        } catch (e: MalformedURLException) {
+            // Not an URL, perfect, do nothing
         }
 
         val server: Pair<String, String> = serverSpinnerData!![mServerSpinner!!.selectedItemPosition]
