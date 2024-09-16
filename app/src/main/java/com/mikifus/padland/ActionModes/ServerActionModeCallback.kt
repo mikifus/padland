@@ -17,12 +17,8 @@ class ServerActionModeCallback(activity: ServerListActivity):
     IManagesEditServerDialog by ManagesEditServerDialog() {
 
     override var serverViewModel: ServerViewModel? = null
-    private var padGrupActionMode: ActionMode? = null
-    private var serverListActivity: ServerListActivity
-
-    init {
-        serverListActivity = activity
-    }
+    private var serverActionMode: ActionMode? = null
+    private var serverListActivity: ServerListActivity = activity
 
     /**
      * Called when the action mode is created; startActionMode() was called
@@ -36,7 +32,7 @@ class ServerActionModeCallback(activity: ServerListActivity):
         if(mode != null) {
             val inflater = mode.menuInflater
             inflater.inflate(R.menu.server_action_mode_menu, menu)
-            padGrupActionMode = mode
+            serverActionMode = mode
         }
         return true
     }
@@ -80,8 +76,8 @@ class ServerActionModeCallback(activity: ServerListActivity):
     }
 
     override fun onDestroyActionMode(mode: ActionMode?) {
-        if(padGrupActionMode != null) {
-            padGrupActionMode = null
+        if(serverActionMode != null) {
+            serverActionMode = null
             serverListActivity.onDestroyServerActionMode()
         }
     }
