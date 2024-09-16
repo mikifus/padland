@@ -38,15 +38,6 @@ class MakesServerSelectionTracker: IMakesServerSelectionTracker {
             StorageStrategy.createLongStorage()
         )
             .withSelectionPredicate(SelectionPredicates.createSelectAnything())
-//            .withOnItemActivatedListener { item, event ->
-//                if(serverActionMode != null) {
-//                    if(item.selectionKey != null) {
-//                        serverAdapter.tracker!!.select(item.selectionKey!!)
-//                    }
-//                    return@withOnItemActivatedListener true
-//                }
-//                return@withOnItemActivatedListener false
-//            }
             .build()
 
         serverSelectionTracker!!.addObserver(object : SelectionTracker.SelectionObserver<Long>() {
@@ -76,6 +67,7 @@ class MakesServerSelectionTracker: IMakesServerSelectionTracker {
 
         return serverSelectionTracker!!
     }
+
     override fun getServerSelection(): List<Long> {
         return serverSelectionTracker!!.selection.toList()
     }
