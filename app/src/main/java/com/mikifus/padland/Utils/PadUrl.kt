@@ -99,10 +99,9 @@ class PadUrl private constructor(builder: Builder) {
                 .authority(uri.authority)
                 .path(uri.path)
                 .encodedQuery(queryParams.toString())
-                .fragment(uri.fragment)
+                .encodedFragment(uri.fragment)
                 .build()
                 .toString()
-
         }
     }
 }

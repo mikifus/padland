@@ -92,7 +92,7 @@ class PadLandWebViewClient(hostsWhitelist: List<String>, private val callbacks: 
         if ((URLUtil.isHttpUrl(url) || URLUtil.isHttpsUrl(url)) &&
             !WhiteListMatcher.isValidHost(url, hostsWhitelist)) {
 
-            // WARNING: Runs blocking, try to not block the UI on the callback
+            // WARNING: Runs blocking, avoid blocking the UI on the callback
             return runBlocking {
                 return@runBlocking onExternalHostUrlLoad(url)
             }
