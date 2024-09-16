@@ -1,6 +1,7 @@
 package com.mikifus.padland.Dialogs
 
 import android.os.Bundle
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import com.mikifus.padland.Database.PadGroupModel.PadGroup
 import com.mikifus.padland.Database.PadGroupModel.PadGroupViewModel
@@ -26,19 +28,19 @@ import java.net.URL
 /**
  * Created by mikifus on 10/03/16.
  */
-class NewPadDialog: FormDialog() {
+open class NewPadDialog: FormDialog() {
 
-    private var padGroupViewModel: PadGroupViewModel? = null
-    private var serverViewModel: ServerViewModel? = null
+    var padGroupViewModel: PadGroupViewModel? = null
+    var serverViewModel: ServerViewModel? = null
 
-    private var mNameEditText: EditText? = null
-    private var mAliasEditText: EditText? = null
-    private var mServerSpinner: SpinnerHelper? = null
-    private var mPadGroupSpinner: SpinnerHelper? = null
-    private var mSaveCheckBox: CheckBox? = null
+    var mNameEditText: EditText? = null
+    var mAliasEditText: EditText? = null
+    var mServerSpinner: SpinnerHelper? = null
+    var mPadGroupSpinner: SpinnerHelper? = null
+    var mSaveCheckBox: CheckBox? = null
 
-    private var padGroupsSpinnerData: List<PadGroup>? = listOf()
-    private var serverSpinnerData: List<Pair<String, String>>? = listOf()
+    var padGroupsSpinnerData: List<PadGroup>? = listOf()
+    var serverSpinnerData: List<Pair<String, String>>? = listOf()
 
     private fun initViewModels() {
         if(padGroupViewModel == null) {
@@ -99,6 +101,30 @@ class NewPadDialog: FormDialog() {
         }
     }
 
+    override fun initEvents() {
+        super.initEvents()
+
+        mNameEditText?.addTextChangedListener { name ->
+            // Check if just pasted URL
+            try {
+                URL(name.toString())
+                // If it reaches this line, the name is an URL, remove the server baseurl
+                var newName = name.toString()
+                for (server in serverSpinnerData!!) {
+                    if(newName.contains(server.second)) {
+                        // Use the server defined by the URL
+                        mServerSpinner?.selectedItemPosition = serverSpinnerData?.indexOfFirst { it == server } ?: 0
+                        newName = name.toString().replace(server.second,"")
+                        break
+                    }
+                }
+                mNameEditText?.text = Editable.Factory.getInstance().newEditable(newName)
+            } catch (e: MalformedURLException) {
+                // Not an URL, perfect, do nothing
+            }
+        }
+    }
+
     private fun initCheckBox() {
         // Get new pad save from user preferences
         val userDetails = context?.getSharedPreferences(context?.packageName + "_preferences",
@@ -123,8 +149,6 @@ class NewPadDialog: FormDialog() {
         // Check if just pasted URL
         try {
             URL(name)
-            // If it reaches this line, the name is an URL, remove the server baseurl
-//            name = name.replace(server.second, "")
             Toast.makeText(context, getString(R.string.serverlist_dialog_new_server_name_title), Toast.LENGTH_LONG).show()
             return false
         } catch (e: MalformedURLException) {
@@ -187,19 +211,20 @@ class NewPadDialog: FormDialog() {
 
     override fun onStart() {
         super.onStart()
-
-        mNameEditText = requireView().findViewById(R.id.txt_pad_name)
         mNameEditText?.requestFocus()
-        mAliasEditText = requireView().findViewById(R.id.txt_pad_local_name)
-        mPadGroupSpinner = requireView().findViewById(R.id.spinner_pad_pad_group)
-        mServerSpinner = requireView().findViewById(R.id.spinner_pad_server)
-        mSaveCheckBox = requireView().findViewById(R.id.checkbox_pad_save)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
+        val v = inflater.inflate(R.layout.dialog_new_pad, container, false)
 
-        return inflater.inflate(R.layout.dialog_new_pad, container, false)
+        mNameEditText = v.findViewById(R.id.txt_pad_name)
+        mAliasEditText = v.findViewById(R.id.txt_pad_local_name)
+        mPadGroupSpinner = v.findViewById(R.id.spinner_pad_pad_group)
+        mServerSpinner = v.findViewById(R.id.spinner_pad_server)
+        mSaveCheckBox = v.findViewById(R.id.checkbox_pad_save)
+
+        return v
     }
 
     override fun initToolBar() {
