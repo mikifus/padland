@@ -44,7 +44,7 @@ class PadLandWebViewClient(hostsWhitelist: List<String>, private val callbacks: 
             field = value
         }
 
-    override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
+    override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
         super.onPageStarted(view, url, favicon)
         ++webViewHttpConnections
         Log.d(TAG, "Added connection $webViewHttpConnections")
