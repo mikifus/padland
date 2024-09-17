@@ -1,7 +1,5 @@
 package com.mikifus.padland.Dialogs
 
-import android.app.Dialog
-import android.os.Bundle
 import android.text.Editable
 import com.mikifus.padland.R
 
