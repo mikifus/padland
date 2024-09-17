@@ -175,17 +175,7 @@
 
     <string name="show_padgroup_title" translatable="false">(%d) %s</string>
     <string name="default_pad_prefix_lite" translatable="false">/p/</string>
-    <string name="default_pad_prefix_cryptpad" translatable="false">/pad/#/</string>
-    <string-array name="default_prefixes_cryptpad">
-        <item>/pad/#/</item>
-        <item>/doc/#/</item>
-        <item>/sheet/#/</item>
-        <item>/kanban/#/</item>
-        <item>/code/#/</item>
-        <item>/form/#/</item>
-        <item>/diagram/#/</item>
-        <item>/slide/#/</item>
-    </string-array>
+    <string name="default_pad_prefix_cryptpad" translatable="false">/</string>
 
     <string name="model_padgroup">Groups</string>
     <string name="model_pad">Documents</string>
