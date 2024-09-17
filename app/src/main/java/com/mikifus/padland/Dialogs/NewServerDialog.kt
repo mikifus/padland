@@ -25,6 +25,7 @@ open class NewServerDialog: FormDialog() {
     protected var mUrlEditText: EditText? = null
     protected var mPadPrefixEditText: EditText? = null
     protected var mLiteCheckbox: CheckBox? = null
+    protected var mCryptPadCheckbox: CheckBox? = null
     protected var mJqueryCheckBox: CheckBox? = null
     private var mAdvancedButton: Button? = null
     private var mAdvancedLayout: LinearLayout? = null
@@ -32,6 +33,9 @@ open class NewServerDialog: FormDialog() {
     var initialName: String? = null
     var initialUrl: String? = null
     var initialPrefix: String? = null
+    var initialCryptPad: Boolean? = false
+
+    var isNew: Boolean = true
 
     override fun validateForm(): Boolean {
         val name = mNameEditText!!.text.toString()
@@ -71,6 +75,7 @@ open class NewServerDialog: FormDialog() {
         val url = mUrlEditText!!.text.toString()
         val jquery = mJqueryCheckBox!!.isChecked
         var padprefix = mPadPrefixEditText!!.text.toString()
+        val cryptpad = mCryptPadCheckbox!!.isChecked
 
         val saveUrl = URL(url)
             .toString()
@@ -78,6 +83,10 @@ open class NewServerDialog: FormDialog() {
 
         if (padprefix.isNotEmpty()) {
             // Must start and end with /
+            if (padprefix.startsWith(saveUrl)) {
+                // Autodetect from full URL
+                padprefix = padprefix.substring(saveUrl.length)
+            }
             if (!padprefix.startsWith("/")) {
                 padprefix = "/$padprefix"
             }
@@ -91,6 +100,7 @@ open class NewServerDialog: FormDialog() {
         data["url"] = saveUrl
         data["prefix"] = padprefix
         data["jquery"] = jquery
+        data["cryptpad"] = cryptpad
 
         return data
     }
@@ -99,8 +109,9 @@ open class NewServerDialog: FormDialog() {
         mNameEditText!!.text = null
         mUrlEditText!!.text = null
         mLiteCheckbox?.isChecked = true
-        mPadPrefixEditText!!.text = Editable.Factory.getInstance().newEditable(getString(R.string.default_pad_prefix))
+        mPadPrefixEditText!!.text = Editable.Factory.getInstance().newEditable(getString(R.string.default_pad_prefix_lite))
         mJqueryCheckBox?.isChecked = true
+        mCryptPadCheckbox?.isChecked = false
 
         initialName = null
         initialUrl = null
@@ -112,12 +123,13 @@ open class NewServerDialog: FormDialog() {
         mUrlEditText = requireView().findViewById(R.id.txt_server_url)
         mPadPrefixEditText = requireView().findViewById(R.id.txt_server_padprefix)
         mLiteCheckbox = requireView().findViewById(R.id.checkbox_lite)
+        mCryptPadCheckbox = requireView().findViewById(R.id.checkbox_cryptpad)
         mJqueryCheckBox = requireView().findViewById(R.id.checkbox_jquery)
         mAdvancedButton = requireView().findViewById(R.id.button_advanced)
         mAdvancedLayout = requireView().findViewById(R.id.layout_advanced)
 
         mNameEditText?.requestFocus()
-        mPadPrefixEditText?.text = Editable.Factory.getInstance().newEditable(getString(R.string.default_pad_prefix))
+        mPadPrefixEditText?.text = Editable.Factory.getInstance().newEditable(getString(R.string.default_pad_prefix_lite))
 
         super.onViewCreated(view, savedInstanceState)
     }
@@ -147,18 +159,27 @@ open class NewServerDialog: FormDialog() {
                 mAdvancedLayout!!.requestFocus()
             }
         }
+        mUrlEditText?.addTextChangedListener{ url ->
+            if (isNew && url?.contains("cryptpad") == true) {
+                mCryptPadCheckbox?.isChecked = true
+                mLiteCheckbox?.isChecked = false
+            }
+        }
         mPadPrefixEditText?.addTextChangedListener { padprefix ->
             mLiteCheckbox?.isChecked = (padprefix.toString() ==
-                    activity?.getString(R.string.default_pad_prefix)
+                    activity?.getString(R.string.default_pad_prefix_lite)
                     && mJqueryCheckBox?.isChecked == true)
         }
         mLiteCheckbox?.setOnCheckedChangeListener { compoundButton, b ->
+            if (b && mCryptPadCheckbox?.isChecked == true) {
+                mCryptPadCheckbox?.isChecked = false
+            }
             if (b && mPadPrefixEditText?.text.toString() !=
-                activity?.getString(R.string.default_pad_prefix))
+                activity?.getString(R.string.default_pad_prefix_lite))
             {
                 mPadPrefixEditText?.text =
                     Editable.Factory.getInstance().newEditable(
-                        activity?.getString(R.string.default_pad_prefix))
+                        activity?.getString(R.string.default_pad_prefix_lite))
             }
             if (b && mJqueryCheckBox?.isChecked == false) {
                 mJqueryCheckBox?.isChecked = true
@@ -166,9 +187,24 @@ open class NewServerDialog: FormDialog() {
                 mJqueryCheckBox?.isChecked = false
             }
         }
-        mJqueryCheckBox?.setOnCheckedChangeListener { compoundButton, b ->
-            mLiteCheckbox?.isChecked = b && mPadPrefixEditText?.text.toString() ==
-                    activity?.getString(R.string.default_pad_prefix)
+        mJqueryCheckBox?.setOnCheckedChangeListener { _, b ->
+            if (!b && activity?.resources?.getStringArray(R.array.default_prefixes_cryptpad)?.contains(mPadPrefixEditText?.text.toString()) == true) {
+                mCryptPadCheckbox?.isChecked = true
+            } else if(b && mPadPrefixEditText?.text.toString() ==
+                activity?.getString(R.string.default_pad_prefix_lite)) {
+                mLiteCheckbox?.isChecked = true
+            }
+        }
+        mCryptPadCheckbox?.setOnCheckedChangeListener { _, b ->
+            if (b && mLiteCheckbox?.isChecked == true) {
+                mLiteCheckbox?.isChecked = false
+            }
+            if (b && activity?.resources?.getStringArray(R.array.default_prefixes_cryptpad)?.contains(mPadPrefixEditText?.text.toString()) != true)
+            {
+                mPadPrefixEditText?.text =
+                    Editable.Factory.getInstance().newEditable(
+                        activity?.getString(R.string.default_pad_prefix_cryptpad))
+            }
         }
     }
 

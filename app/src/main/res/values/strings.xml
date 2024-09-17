@@ -143,6 +143,9 @@
     <string name="serverlist_dialog_new_server_lite_title">Runs Etherpad Lite</string>
     <string name="serverlist_dialog_new_server_lite_label">I know that this server uses Etherpad Lite.</string>
 
+    <string name="serverlist_dialog_new_server_cryptpad_title">Runs CryptPad</string>
+    <string name="serverlist_dialog_new_server_cryptpad_label">I know that this server uses CryptPad.</string>
+
     <string name="serverlist_dialog_new_server_padprefix_title">Url pad prefix</string>
     <string name="serverlist_dialog_new_server_padprefix_label">New servers have an url segment between the server domain and the pad name. By default it is \"/p/\". Change it here if it is different.</string>
     <string name="serverlist_dialog_new_server_padprefix_invalid">Invalid pad prefix.</string>
@@ -171,7 +174,18 @@
     <string name="add_padgroup_name">Group name</string>
 
     <string name="show_padgroup_title" translatable="false">(%d) %s</string>
-    <string name="default_pad_prefix" translatable="false">/p/</string>
+    <string name="default_pad_prefix_lite" translatable="false">/p/</string>
+    <string name="default_pad_prefix_cryptpad" translatable="false">/pad/#/</string>
+    <string-array name="default_prefixes_cryptpad">
+        <item>/pad/#/</item>
+        <item>/doc/#/</item>
+        <item>/sheet/#/</item>
+        <item>/kanban/#/</item>
+        <item>/code/#/</item>
+        <item>/form/#/</item>
+        <item>/diagram/#/</item>
+        <item>/slide/#/</item>
+    </string-array>
 
     <string name="model_padgroup">Groups</string>
     <string name="model_pad">Documents</string>

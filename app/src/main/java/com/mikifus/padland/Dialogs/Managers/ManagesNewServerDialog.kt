@@ -71,7 +71,8 @@ class ManagesNewServerDialog: ManagesDialog(), IManagesNewServerDialog {
                 mName = data["name"].toString(),
                 mPadprefix = data["prefix"].toString(),
                 mUrl = data["url"].toString(),
-                mJquery = data["jquery"] as Boolean
+                mJquery = data["jquery"] as Boolean,
+                mCryptPad = data["cryptpad"] as Boolean
             )
 
             serverViewModel!!.insertServer(updateServer)
