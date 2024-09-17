@@ -16,6 +16,14 @@
         <item>Picasoft</item>
         <item>Ouvaton.coop</item>
         <item>CHATONS</item>
+        <item>CryptPad.fr</item>
+        <item>cryptpad.private.coffee</item>
+        <item>Piratenpartei Baden-Württemberg</item>
+        <item>pad.4d2.org</item>
+        <item>CipherPad</item>
+        <item>cryptpad.disroot.org</item>
+        <item>ComputerLiebe Cryptpad</item>
+        <item>cryptpad.piratenpartei.de</item>
     </string-array>
 
     <string-array name="etherpad_servers_url_home" translatable="false">
@@ -34,6 +42,14 @@
         <item>https://pad.picasoft.net</item>
         <item>https://pad.ouvaton.coop</item>
         <item>https://pad.infini.fr</item>
+        <item>https://cryptpad.fr</item>
+        <item>https://cryptpad.private.coffee</item>
+        <item>https://cryptpad.piratenpartei-bw.de</item>
+        <item>https://pad.4d2.org</item>
+        <item>https://cryptpad.malacher.fr</item>
+        <item>https://cryptpad.disroot.org</item>
+        <item>https://notes.dunst.be</item>
+        <item>https://cryptpad.piratenpartei.de</item>
     </string-array>
 
     <string-array name="etherpad_servers_url_padprefix" translatable="false">
@@ -52,6 +68,14 @@
         <item>https://pad.picasoft.net/p/</item>
         <item>https://pad.ouvaton.coop/</item>
         <item>https://pad.infini.fr/p/</item>
+        <item>https://cryptpad.fr/</item>
+        <item>https://cryptpad.private.coffee/</item>
+        <item>https://cryptpad.piratenpartei-bw.de/</item>
+        <item>https://pad.4d2.org/</item>
+        <item>https://cryptpad.malacher.fr/</item>
+        <item>https://cryptpad.disroot.org/</item>
+        <item>https://notes.dunst.be/</item>
+        <item>https://cryptpad.piratenpartei.de/</item>
     </string-array>
 
     <string-array name="etherpad_servers_whitelist" translatable="false">
@@ -76,5 +100,21 @@
         <item>pad.picasoft.net</item>
         <item>pad.ouvaton.coop</item>
         <item>pad.infini.fr</item>
+        <item>cryptpad.fr</item>
+        <item>sandbox.cryptpad.info</item>
+        <item>cryptpad.private.coffee</item>
+        <item>cryptpad-sandbox.private.coffee</item>
+        <item>cryptpad.piratenpartei-bw.de</item>
+        <item>sandbox.piratenpartei-bw.de</item>
+        <item>pad.4d2.org</item>
+        <item>padsbx.4d2.org</item>
+        <item>cryptpad.malacher.fr</item>
+        <item>sandbox.malacher.fr</item>
+        <item>cryptpad.disroot.org</item>
+        <item>sandbox.cryptpad.disroot.org</item>
+        <item>notes.dunst.be</item>
+        <item>admin.notes.dunst.be</item>
+        <item>cryptpad.piratenpartei.de</item>
+        <item>cryptpad-sandbox.piratenpartei.de</item>
     </string-array>
 </resources>
