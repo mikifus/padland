@@ -188,7 +188,7 @@ open class NewServerDialog: FormDialog() {
             }
         }
         mJqueryCheckBox?.setOnCheckedChangeListener { _, b ->
-            if (!b && activity?.resources?.getStringArray(R.array.default_prefixes_cryptpad)?.contains(mPadPrefixEditText?.text.toString()) == true) {
+            if (!b && activity?.getString(R.string.default_pad_prefix_cryptpad) == mPadPrefixEditText?.text.toString()) {
                 mCryptPadCheckbox?.isChecked = true
             } else if(b && mPadPrefixEditText?.text.toString() ==
                 activity?.getString(R.string.default_pad_prefix_lite)) {
@@ -199,7 +199,7 @@ open class NewServerDialog: FormDialog() {
             if (b && mLiteCheckbox?.isChecked == true) {
                 mLiteCheckbox?.isChecked = false
             }
-            if (b && activity?.resources?.getStringArray(R.array.default_prefixes_cryptpad)?.contains(mPadPrefixEditText?.text.toString()) != true)
+            if (b && activity?.getString(R.string.default_pad_prefix_cryptpad)  != mPadPrefixEditText?.text.toString())
             {
                 mPadPrefixEditText?.text =
                     Editable.Factory.getInstance().newEditable(
