@@ -445,9 +445,6 @@ class PadViewActivity :
             }
         }
 
-        webView!!.settings
-
-
         // Cookies will be needed for pads
         val cookieManager = CookieManager.getInstance()
         cookieManager.setAcceptCookie(true)
