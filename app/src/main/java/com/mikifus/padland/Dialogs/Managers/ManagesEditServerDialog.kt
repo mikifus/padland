@@ -56,6 +56,9 @@ public class ManagesEditServerDialog: ManagesDialog(), IManagesEditServerDialog 
             server?.mJquery?.let {
                 data["jquery"] = it
             }
+            server?.mCryptPad?.let {
+                data["cryptpad"] = it
+            }
 
             activity.lifecycleScope.launch {
                 dialog.setFormData(data)
@@ -85,7 +88,8 @@ public class ManagesEditServerDialog: ManagesDialog(), IManagesEditServerDialog 
                 mName = data["name"].toString(),
                 mPadprefix = data["prefix"].toString(),
                 mUrl = data["url"].toString(),
-                mJquery = data["jquery"] as Boolean
+                mJquery = data["jquery"] as Boolean,
+                mCryptPad = data["cryptpad"] as Boolean
             )
 
             if (updateServer != null) {
