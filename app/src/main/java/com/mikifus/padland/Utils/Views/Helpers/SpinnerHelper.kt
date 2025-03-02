@@ -3,6 +3,9 @@ package com.mikifus.padland.Utils.Views.Helpers
 import android.content.Context
 import android.text.InputType
 import android.util.AttributeSet
+import android.view.View
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemSelectedListener
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.mikifus.padland.R
 
@@ -22,6 +25,7 @@ class SpinnerHelper @JvmOverloads constructor(context: Context,
                                               defStyleAttr: Int = R.attr.autoCompleteTextViewStyle)
     : MaterialAutoCompleteTextView(context, attributeSet, defStyleAttr) {
 
+    var helperOnItemSelectedListener: OnItemSelectedListener? = null
     var selectedItemPosition: Int = 0
         /**
          * On setting this the input will display
@@ -43,6 +47,15 @@ class SpinnerHelper @JvmOverloads constructor(context: Context,
         setOnItemClickListener { _, _, position, _ ->
             selectedItemPosition = position
         }
+        setOnItemSelectedListener(object: OnItemSelectedListener {
+            override fun onItemSelected(adapter: AdapterView<*>?, view: View?, pos: Int, p3: Long) {
+                helperOnItemSelectedListener?.onItemSelected(adapter, view, pos, p3)
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                helperOnItemSelectedListener?.onNothingSelected(p0)
+            }
+        })
 
         // This doesn't work until a second click, idk why.
         // Yes, I tried setting an OnClickListener that would
