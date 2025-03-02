@@ -51,10 +51,4 @@ class ManagesDetectedPadDialog: ManagesDialog(), IManagesDetectedPadDialog {
             onConfirmCallback?.let { it() }
         }
     }
-
-    private fun confirmBrowser(activity: AppCompatActivity, url: String) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-        activity.startActivity(intent)
-    }
-
 }

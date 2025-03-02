@@ -1,4 +1,4 @@
-package com.mikifus.padland.Dialogs.Managers;
+package com.mikifus.padland.Dialogs.Managers
 
 import android.content.Intent
 import android.net.Uri
@@ -12,11 +12,9 @@ import com.mikifus.padland.Database.PadGroupModel.PadGroupsAndPadList
 import com.mikifus.padland.Database.PadModel.Pad
 import com.mikifus.padland.Database.PadModel.PadViewModel
 import com.mikifus.padland.Dialogs.NewPadDialog
-import com.mikifus.padland.R
 import com.mikifus.padland.Utils.CryptPad.CryptPadUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.HashMap
 
 interface IManagesNewPadDialog {
     var padViewModel: PadViewModel?
@@ -28,7 +26,7 @@ interface IManagesNewPadDialog {
     fun initUrl(url: String?) {}
 }
 
-public class ManagesNewPadDialog: ManagesDialog(), IManagesNewPadDialog {
+class ManagesNewPadDialog: ManagesDialog(), IManagesNewPadDialog {
     override val DIALOG_TAG: String = "DIALOG_NEW_PAD"
 
     override val dialog by lazy { NewPadDialog() }
