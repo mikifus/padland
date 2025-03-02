@@ -36,8 +36,6 @@ open class NewPadDialog: FormDialog() {
     var padGroupViewModel: PadGroupViewModel? = null
     var serverViewModel: ServerViewModel? = null
 
-    var serverList: List<PadGroup>? = listOf()
-
     var mButtonPaste: MaterialButton? = null
     var mNameEditText: EditText? = null
     var mPadNameContainer: TextInputLayout? = null

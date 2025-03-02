@@ -460,7 +460,6 @@ class PadViewActivity :
     /**
      * Enables the required settings and features for the webview
      *
-     * @param webView
      */
     @SuppressLint("SetJavaScriptEnabled")
     private fun makeWebSettings() {
