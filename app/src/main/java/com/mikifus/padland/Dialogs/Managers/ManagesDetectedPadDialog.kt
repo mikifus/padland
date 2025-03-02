@@ -1,8 +1,6 @@
 package com.mikifus.padland.Dialogs.Managers
 
 import android.content.DialogInterface
-import android.content.Intent
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import com.mikifus.padland.Dialogs.ConfirmDialog
 import com.mikifus.padland.R
