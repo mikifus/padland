@@ -4,11 +4,13 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
+import android.graphics.Bitmap
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.webkit.CookieManager
@@ -35,8 +37,10 @@ import com.mikifus.padland.Dialogs.Managers.ManagesPadViewAuthDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesSslErrorDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesWhitelistServerDialog
 import com.mikifus.padland.R
+import com.mikifus.padland.Utils.CryptPad.CryptPadUtils
 import com.mikifus.padland.Utils.PadLandWebViewClient.PadLandWebClientCallbacks
 import com.mikifus.padland.Utils.PadLandWebViewClient.PadLandWebViewClient
+import com.mikifus.padland.Utils.PadLandWebViewClient.PadLandWebViewClient.Companion.TAG
 import com.mikifus.padland.Utils.PadServer
 import com.mikifus.padland.Utils.PadUrl
 import com.mikifus.padland.Utils.WhiteListMatcher
@@ -57,8 +61,12 @@ class PadViewActivity :
     override var serverViewModel: ServerViewModel? = null
     private var webView: WebView? = null
     private var webViewClient: PadLandWebViewClient? = null
+    private var deferredSave: Boolean = false
 
-    private var currentPadUrl: String? = null
+    private var currentUrl: String? = null
+        get() {
+            return webView?.url
+        }
         set(value) {
             lifecycleScope.launch(Dispatchers.IO) {
                 value?.let { loadUrl(value) }
@@ -129,6 +137,7 @@ class PadViewActivity :
             return
         }
 
+        val activity = this
         webViewClient = PadLandWebViewClient(urlWhitelist, object: PadLandWebClientCallbacks {
             override fun onStartLoading() {
                 showProgress()
@@ -199,6 +208,17 @@ class PadViewActivity :
             ) {
                 showPadViewAuthDialog(this@PadViewActivity, view, handler)
             }
+
+            override fun onPageFinishedCallback(view: WebView?, url: String?) {
+                if(url.isNullOrBlank()) {
+                    return
+                }
+                Pad.fromUrl(url, activity).value!!
+                if(deferredSave && WhiteListMatcher.isValidHost(url, webViewClient!!.hostsWhitelist) && CryptPadUtils.seemsCrpytPadUrl(url)) {
+                    deferredSave = false
+                    savePadFromUrl(url)
+                }
+            }
         })
 
         makeWebSettings()
@@ -252,8 +272,12 @@ class PadViewActivity :
         if(intent.extras?.containsKey("padUrlDontSave") == true
             && intent.extras!!.getBoolean("padUrlDontSave")) {
             save = false
+        } else if(intent.extras?.containsKey("deferredSave") == true
+            && intent.extras!!.getBoolean("deferredSave")) {
+            this.deferredSave = true
+            save = false
         }
-        currentPadUrl = padUrl
+        currentUrl = padUrl
 
         if(save) {
             savePadFromUrl(padUrl)
@@ -265,7 +289,7 @@ class PadViewActivity :
             val pad = padViewModel?.getById(id)
 
             if (pad != null) {
-                currentPadUrl = pad.mUrl
+                currentUrl = pad.mUrl
                 updateViewedPad(pad)
             } else {
                 lifecycleScope.launch {
@@ -281,6 +305,7 @@ class PadViewActivity :
 
     private fun savePadFromUrl(padUrl: String) {
         val activity = this
+        val localName = intent.extras?.getString("localName", "") ?: ""
         lifecycleScope.launch(Dispatchers.IO) {
             val pad = withContext(Dispatchers.IO){
                 padViewModel?.getByUrl(padUrl)
@@ -292,7 +317,7 @@ class PadViewActivity :
                 )) {
 
                 val newPad = withContext(Dispatchers.Main){
-                    Pad.fromUrl(padUrl, activity).value!!
+                    Pad.fromUrl(padUrl, activity).value!!.copy(mLocalName = localName)
                 }
 
                 withContext(Dispatchers.IO){
