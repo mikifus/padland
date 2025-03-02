@@ -127,7 +127,6 @@
     <string name="padinfo_times_accessed">Times accessed</string>
     <string name="pref_default_display_name">Anonymous</string>
     <string name="settings_default_username_dialog_title">Set username</string>
-    <string name="serverlist_dialog_new_server_paste">Paste from clipboard</string>
 
     <string name="title_activity_server_list">Server list</string>
     <string name="pref_server_list_summary">Add your custom etherpad servers.</string>
@@ -165,6 +164,8 @@
     <string name="write_pad_local_name">Pad Alias (optional)</string>
     <string name="new_pad_name_invalid">The pad name contains invalid characters.</string>
     <string name="new_pad_wrong_server">The server is not allowed. The operation cannot continue. Check your server settings and try again.</string>
+    <string name="new_pad_paste">Paste from clipboard</string>
+    <string name="new_pad_cryptpad_drive">Go to CryptPad drive</string>
 
     <!-- Titanpad notice -->
     <string name="titanpad_deprecated_title">Warning: Titanpad.com is deprecated</string>

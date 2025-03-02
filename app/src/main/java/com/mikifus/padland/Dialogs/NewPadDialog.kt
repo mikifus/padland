@@ -1,5 +1,7 @@
 package com.mikifus.padland.Dialogs
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.view.LayoutInflater
@@ -15,6 +17,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
+import com.mikifus.padland.Activities.PadViewActivity
 import com.mikifus.padland.Database.PadGroupModel.PadGroup
 import com.mikifus.padland.Database.PadGroupModel.PadGroupViewModel
 import com.mikifus.padland.Database.ServerModel.ServerViewModel
@@ -41,6 +44,7 @@ open class NewPadDialog: FormDialog() {
     var mPadNameContainer: TextInputLayout? = null
     var mAliasEditText: EditText? = null
     var mServerSpinner: SpinnerHelper? = null
+    var mButtonCryptpadDrive: MaterialButton? = null
     var mPadGroupSpinner: SpinnerHelper? = null
     var mSaveCheckBox: CheckBox? = null
     var mDocumentTypeSpinner: SpinnerHelper? = null
@@ -182,6 +186,15 @@ open class NewPadDialog: FormDialog() {
             }
         }
 
+        mButtonCryptpadDrive?.setOnClickListener {
+            val cryptPadDriveIntent = Intent(activity, PadViewActivity::class.java)
+            val url = CryptPadUtils.applyDriveUrl(serverSpinnerData!![mServerSpinner!!.selectedItemPosition].second)
+            cryptPadDriveIntent.data = Uri.parse(url)
+            cryptPadDriveIntent.putExtra("android.intent.extra.TEXT", url)
+            cryptPadDriveIntent.putExtra("padUrlDontSave", true)
+            activity?.startActivity(cryptPadDriveIntent)
+        }
+
         mDocumentTypeSpinner?.addTextChangedListener {
             mDocumentTypeSpinner!!.post {
                 val docTypePrefix = documentTypeSpinnerData!![mDocumentTypeSpinner!!.selectedItemPosition].second
@@ -314,6 +327,7 @@ open class NewPadDialog: FormDialog() {
         mAliasEditText = v.findViewById(R.id.txt_pad_local_name)
         mPadGroupSpinner = v.findViewById(R.id.spinner_pad_pad_group)
         mServerSpinner = v.findViewById(R.id.spinner_pad_server)
+        mButtonCryptpadDrive = v.findViewById(R.id.button_cryptpad_drive)
         mDocumentTypeSpinner = v.findViewById(R.id.spinner_cryptpad_prefix)
         mDocumentTypeSpinnerContainer = v.findViewById(R.id.spinner_cryptpad_prefix_container)
         mSaveCheckBox = v.findViewById(R.id.checkbox_pad_save)
@@ -344,6 +358,7 @@ open class NewPadDialog: FormDialog() {
 
     private fun setCryptPadServer() {
         mDocumentTypeSpinnerContainer?.visibility = View.VISIBLE
+        mButtonCryptpadDrive?.visibility = View.VISIBLE
         if (mNameEditText?.text.toString().isEmpty()) {
             mPadNameContainer?.visibility = View.GONE
         }
@@ -352,6 +367,7 @@ open class NewPadDialog: FormDialog() {
 
     private fun unsetCryptPadServer() {
         mDocumentTypeSpinnerContainer?.visibility = View.GONE
+        mButtonCryptpadDrive?.visibility = View.GONE
         mPadNameContainer?.visibility = View.VISIBLE
         mNameEditText?.isEnabled = true
     }
