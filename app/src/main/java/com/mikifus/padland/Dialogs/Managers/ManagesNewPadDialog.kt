@@ -13,6 +13,7 @@ import com.mikifus.padland.Database.PadModel.Pad
 import com.mikifus.padland.Database.PadModel.PadViewModel
 import com.mikifus.padland.Dialogs.NewPadDialog
 import com.mikifus.padland.R
+import com.mikifus.padland.Utils.CryptPad.CryptPadUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -49,13 +50,23 @@ public class ManagesNewPadDialog: ManagesDialog(), IManagesNewPadDialog {
 
     private fun initEvents(activity: AppCompatActivity) {
         dialog.setPositiveButtonCallback { data ->
-            if(data["save_pad"] as Boolean) {
+            if (data["save_pad"] as Boolean && !(data["_isCryptPadUrl"] as Boolean)) {
                 saveNewPadDialog(activity, data)
             } else {
                 val padViewIntent = Intent(activity, PadViewActivity::class.java)
-                padViewIntent.data = Uri.parse(data["url"].toString())
-                padViewIntent.putExtra("android.intent.extra.TEXT", data["url"].toString())
-                padViewIntent.putExtra("padUrlDontSave", true)
+                var url = data["url"].toString()
+                padViewIntent.data = Uri.parse(url)
+                padViewIntent.putExtra("android.intent.extra.TEXT", url)
+                if (data["_isCryptPadUrl"] as Boolean && data["save_pad"] as Boolean) {
+                    url = CryptPadUtils.applyNewPadUrl(url)
+
+                    padViewIntent.data = Uri.parse(url)
+                    padViewIntent.putExtra("android.intent.extra.TEXT", url)
+                    padViewIntent.putExtra("localName", data["local_name"] as String)
+                    padViewIntent.putExtra("deferredSave", true)
+                } else {
+                    padViewIntent.putExtra("padUrlDontSave", true)
+                }
                 activity.startActivity(padViewIntent)
             }
             dialog.clearForm()

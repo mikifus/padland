@@ -286,6 +286,7 @@ open class NewPadDialog: FormDialog() {
         data["url"] = url.string
         data["server"] = server.second
         data["group_id"] = groupId
+        data["_isCryptPadUrl"] = isCryptPadUrl
 
         data["save_pad"] = mSaveCheckBox?.isChecked!!
 
