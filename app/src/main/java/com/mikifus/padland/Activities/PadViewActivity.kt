@@ -4,13 +4,11 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
-import android.graphics.Bitmap
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.webkit.CookieManager
@@ -28,10 +26,14 @@ import androidx.webkit.WebViewFeature
 import com.mikifus.padland.Database.PadModel.Pad
 import com.mikifus.padland.Database.PadModel.PadViewModel
 import com.mikifus.padland.Database.ServerModel.ServerViewModel
+import com.mikifus.padland.Dialogs.Managers.IManagesDetectedPadDialog
+import com.mikifus.padland.Dialogs.Managers.IManagesNewPadDialog
 import com.mikifus.padland.Dialogs.Managers.IManagesNewServerDialog
 import com.mikifus.padland.Dialogs.Managers.IManagesPadViewAuthDialog
 import com.mikifus.padland.Dialogs.Managers.IManagesSslErrorDialog
 import com.mikifus.padland.Dialogs.Managers.IManagesWhitelistServerDialog
+import com.mikifus.padland.Dialogs.Managers.ManagesDetectedPadDialog
+import com.mikifus.padland.Dialogs.Managers.ManagesNewPadDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesNewServerDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesPadViewAuthDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesSslErrorDialog
@@ -40,7 +42,6 @@ import com.mikifus.padland.R
 import com.mikifus.padland.Utils.CryptPad.CryptPadUtils
 import com.mikifus.padland.Utils.PadLandWebViewClient.PadLandWebClientCallbacks
 import com.mikifus.padland.Utils.PadLandWebViewClient.PadLandWebViewClient
-import com.mikifus.padland.Utils.PadLandWebViewClient.PadLandWebViewClient.Companion.TAG
 import com.mikifus.padland.Utils.PadServer
 import com.mikifus.padland.Utils.PadUrl
 import com.mikifus.padland.Utils.WhiteListMatcher
@@ -55,9 +56,11 @@ class PadViewActivity :
     IManagesPadViewAuthDialog by ManagesPadViewAuthDialog(),
     IManagesWhitelistServerDialog by ManagesWhitelistServerDialog(),
     IManagesNewServerDialog by ManagesNewServerDialog() ,
-    IManagesSslErrorDialog by ManagesSslErrorDialog() {
+    IManagesSslErrorDialog by ManagesSslErrorDialog(),
+    IManagesNewPadDialog by ManagesNewPadDialog(),
+    IManagesDetectedPadDialog by ManagesDetectedPadDialog() {
 
-    private var padViewModel: PadViewModel? = null
+//    private var padViewModel: PadViewModel? = null
     override var serverViewModel: ServerViewModel? = null
     private var webView: WebView? = null
     private var webViewClient: PadLandWebViewClient? = null
@@ -214,7 +217,29 @@ class PadViewActivity :
                     return
                 }
                 Pad.fromUrl(url, activity).value!!
-                if(deferredSave && WhiteListMatcher.isValidHost(url, webViewClient!!.hostsWhitelist) && CryptPadUtils.seemsCrpytPadUrl(url)) {
+
+                // If it seems a version 2 cryptpad URL, check if it's a new pad created from drive
+                if (!deferredSave && CryptPadUtils.seemsCrpytPadUrl(url)) {
+
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        val pad = withContext(Dispatchers.IO) {
+                            padViewModel?.getByUrl(url)
+                        }
+                        if(pad == null &&
+                            webViewClient!!.hostsWhitelist.contains(
+                                PadServer.Builder().padUrl(url, activity).host
+                            )) {
+                            showDetectedPadDialog(activity, url,
+                                {
+                                    // Do nothing
+                                },
+                                {
+                                    savePadFromUrl(url)
+                                }
+                            )
+                        }
+                    }
+                } else if (deferredSave && WhiteListMatcher.isValidHost(url, webViewClient!!.hostsWhitelist) && CryptPadUtils.seemsCrpytPadUrl(url)) {
                     deferredSave = false
                     savePadFromUrl(url)
                 }

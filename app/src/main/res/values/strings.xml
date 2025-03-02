@@ -109,6 +109,8 @@
     <string name="padview_dialog_basicatuh_title" >Authentication required</string>
     <string name="padview_dialog_basicatuh_username" >User name</string>
     <string name="padview_dialog_basicatuh_password" >Password</string>
+    <string name="padview_dialog_detected_pad">Save new document?</string>
+    <string name="padview_dialog_detected_pad_desc">A new document has been found, do you want to save it?</string>
     <string name="basic_auth_error" >Authentication failed</string>
     <string name="basic_auth_warning" >The credentials will be sent without SSL encryption. This is highly discouraged. Try to use HTTPS protocol when available.</string>
     <string name="ssl_error" >SSL Error</string>

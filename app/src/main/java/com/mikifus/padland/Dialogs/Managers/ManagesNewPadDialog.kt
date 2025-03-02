@@ -16,12 +16,16 @@ import com.mikifus.padland.R
 import com.mikifus.padland.Utils.CryptPad.CryptPadUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.HashMap
 
 interface IManagesNewPadDialog {
     var padViewModel: PadViewModel?
     var padGroupViewModel: PadGroupViewModel?
     fun showNewPadDialog(activity: AppCompatActivity,
-                         animationOriginView: View? = null)
+                         animationOriginView: View? = null,
+                         url: String? = null)
+
+    fun initUrl(url: String?) {}
 }
 
 public class ManagesNewPadDialog: ManagesDialog(), IManagesNewPadDialog {
@@ -32,11 +36,14 @@ public class ManagesNewPadDialog: ManagesDialog(), IManagesNewPadDialog {
     override var padGroupViewModel: PadGroupViewModel? = null
 
     override fun showNewPadDialog(activity: AppCompatActivity,
-                                  animationOriginView: View?) {
+                                  animationOriginView: View?,
+                                  url: String?
+    ) {
         showDialog(activity)
         initViewModels(activity)
         initEvents(activity)
         initAnimations(animationOriginView)
+        initUrl(url)
     }
 
     private fun initViewModels(activity: AppCompatActivity) {
@@ -98,5 +105,9 @@ public class ManagesNewPadDialog: ManagesDialog(), IManagesNewPadDialog {
                 activity.startActivity(padViewIntent)
             }
         }
+    }
+
+    override fun initUrl(url: String?) {
+        url?.let { dialog.setFormData(hashMapOf("url" to url)) }
     }
 }
