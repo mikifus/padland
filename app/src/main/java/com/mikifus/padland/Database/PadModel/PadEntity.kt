@@ -1,6 +1,7 @@
 package com.mikifus.padland.Database.PadModel
 
 import android.content.ContentValues
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -67,10 +68,10 @@ data class Pad(
             return item
         }
 
-        fun fromUrl(padUrl: String): MutableLiveData<Pad> {
+        fun fromUrl(padUrl: String, context: AppCompatActivity? = null): MutableLiveData<Pad> {
             val item = MutableLiveData(Pad())
 
-            val padServer = PadServer.Builder().padUrl(padUrl)
+            val padServer = PadServer.Builder().padUrl(padUrl, context).build()
 
             val name = padServer.padName?: ""
             val server = padServer.server?: ""

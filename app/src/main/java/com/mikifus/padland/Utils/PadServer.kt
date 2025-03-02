@@ -1,5 +1,8 @@
 package com.mikifus.padland.Utils
 
+import android.content.res.Resources
+import androidx.appcompat.app.AppCompatActivity
+import com.mikifus.padland.R
 import java.net.URL
 
 class PadServer private constructor(builder: PadServer.Builder) {
@@ -29,29 +32,73 @@ class PadServer private constructor(builder: PadServer.Builder) {
         var padName: String? = null
         var baseUrl: String? = null
 
-        fun padUrl(url: String): Builder {
+        fun padUrl(url: String, context: AppCompatActivity? = null): Builder {
             val urlObject = URL(url)
             this.url = url
             this.host = urlObject.host.toString()
-            this.padName = urlObject.file.substring(
+
+            this.padName = getNameFromCryptPadUrl(url, context?.resources)
+            this.padName = this.padName.toString().ifBlank { urlObject.file.substring(
                 urlObject.file.lastIndexOf("/") + 1
-            )
+            ) }
+
             this.server = urlObject.protocol + "://" + urlObject.authority
-            this.prefix = getPrefixFromUrl(url)
+
+            this.prefix = getPrefixFromUrl(url, context?.resources)
             if(this.prefix == "/") {
                 this.prefix = ""
             }
-            this.baseUrl = this.server + this.prefix
-            if(!this.baseUrl!!.endsWith("/")) {
-                this.baseUrl += "/"
-            }
+
+            this.baseUrl = getBaseUrlFromServerAndPrefix(this.server.toString(), this.prefix.toString(), context?.resources)
 
             return this
         }
 
-        private fun getPrefixFromUrl(url: String): String {
+        private fun getPrefixFromUrl(url: String, resources: Resources? = null): String {
             val cutUrl =  url.substring(this.server!!.length)
+
+            if (resources !== null) {
+                val cryptPadPrefixes = resources.getStringArray(R.array.prefixes_cryptpad)
+                for (prefix in cryptPadPrefixes) {
+                    if (cutUrl.contains(prefix)) {
+                        return cutUrl.substring(cutUrl.indexOf(prefix), prefix.length)
+                    }
+                }
+            }
+
             return cutUrl.substring(0, cutUrl.lastIndexOf("/") + 1)
+        }
+
+        private fun getNameFromCryptPadUrl(url: String, resources: Resources?): String {
+            if (resources !== null) {
+                val cryptPadPrefixes = resources.getStringArray(R.array.prefixes_cryptpad)
+                for(prefix in cryptPadPrefixes) {
+                    if(url.contains(prefix)) {
+                        return url.substring(url.lastIndexOf(prefix) + prefix.length)
+                    }
+                }
+            }
+            return ""
+        }
+
+        private fun getBaseUrlFromServerAndPrefix(server: String, padPrefix: String, resources: Resources? = null): String {
+            var baseUrl = server + padPrefix
+
+            if (resources !== null) {
+                val cryptPadPrefixes = resources.getStringArray(R.array.prefixes_cryptpad)
+                for(prefix in cryptPadPrefixes) {
+                    if(padPrefix == prefix) {
+                        baseUrl = server
+                        break
+                    }
+                }
+            }
+
+            if(!baseUrl.endsWith("/")) {
+                baseUrl += "/"
+            }
+
+            return baseUrl
         }
 
         fun build(): PadServer {
