@@ -48,6 +48,7 @@ class PadLandWebViewClient(hostsWhitelist: List<String>, private val callbacks: 
         super.onPageStarted(view, url, favicon)
         ++webViewHttpConnections
         Log.d(TAG, "Added connection $webViewHttpConnections")
+        onPageStartedCallback(view, url, favicon)
     }
 
 
@@ -55,6 +56,7 @@ class PadLandWebViewClient(hostsWhitelist: List<String>, private val callbacks: 
         super.onPageFinished(view, url)
         --webViewHttpConnections
         Log.d(TAG, "Removed connection $webViewHttpConnections")
+        onPageFinishedCallback(view, url)
     }
 
     override fun onPageCommitVisible(view: WebView?, url: String?) {
