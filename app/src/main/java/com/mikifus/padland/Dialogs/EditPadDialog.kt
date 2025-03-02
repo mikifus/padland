@@ -34,7 +34,7 @@ class EditPadDialog: NewPadDialog() {
             mAliasEditText?.text = Editable.Factory.getInstance().newEditable(it.toString())
         }
         data?.get("server")?.let {
-            val index = serverSpinnerData?.indexOfFirst {
+            val index = serverSpinnerData?.indexOfFirst { it ->
                 it.second == data!!["server"]
             }!!
             if(index > -1) {
@@ -45,6 +45,14 @@ class EditPadDialog: NewPadDialog() {
             val index = padGroupsSpinnerData?.indexOfFirst { it.mId == data!!["group_id"] }!!
             if(index > -1) {
                 mPadGroupSpinner?.selectedItemPosition = index
+            }
+        }
+        data?.get("url")?.let {
+            for (prefix in documentTypeSpinnerData!!) {
+                if(it.toString().contains(prefix.second)) {
+                    mDocumentTypeSpinner?.selectedItemPosition = documentTypeSpinnerData?.indexOfFirst { it -> it == prefix } ?: 0
+                    break
+                }
             }
         }
     }
@@ -76,13 +84,15 @@ class EditPadDialog: NewPadDialog() {
 
         serverViewModel!!.getAll.observe(this) { servers ->
             // Get DB servers
-            serverSpinnerData = servers.map { Pair(it.mName, it.mUrl + it.mPadprefix) }
+            serverSpinnerData = servers.map { Triple(it.mName, it.mUrl + it.mPadprefix, it.mCryptPad) }
 
             // Get hardcoded servers
+            val cryptPadInfo = resources.obtainTypedArray(R.array.etherpad_servers_cryptpad)
             serverSpinnerData = serverSpinnerData!! + resources.getStringArray(R.array.etherpad_servers_name)
-                .zip(
-                    resources.getStringArray(R.array.etherpad_servers_url_padprefix)
-                ) { a,b -> Pair<String, String>(a, b) }
+                .zip(resources.getStringArray(R.array.etherpad_servers_url_padprefix))
+                .mapIndexed{ i, t -> Triple<String, String, Boolean>(t.first, t.second, cryptPadInfo.getBoolean(i, false)) }
+
+            cryptPadInfo.recycle()
 
             // Set adapter
             mServerSpinner?.setAdapter(
@@ -96,6 +106,20 @@ class EditPadDialog: NewPadDialog() {
             mServerSpinner?.selectedItemPosition = 0
             applyFormData()
         }
+
+        // CryptPad Document Types
+        documentTypeSpinnerData = resources.getStringArray(R.array.prefixes_name_cryptpad)
+            .zip(resources.getStringArray(R.array.prefixes_cryptpad))
+            .mapIndexed{ _, t -> Pair<String, String>(t.first, t.second) }
+
+        // Set adapter
+        mDocumentTypeSpinner?.setAdapter(
+            ArrayAdapter(
+                requireContext(),
+                R.layout.recyclerview_item,
+                documentTypeSpinnerData!!.map { it.first }
+            )
+        )
     }
 
     override fun clearForm() {
@@ -103,6 +127,7 @@ class EditPadDialog: NewPadDialog() {
         mAliasEditText!!.text = null
         mPadGroupSpinner!!.setSelection(0)
         mServerSpinner!!.setSelection(0)
+        mDocumentTypeSpinner!!.setSelection(0)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -113,6 +138,8 @@ class EditPadDialog: NewPadDialog() {
         mAliasEditText = v.findViewById(R.id.txt_pad_local_name)
         mPadGroupSpinner = v.findViewById(R.id.spinner_pad_pad_group)
         mServerSpinner = v.findViewById(R.id.spinner_pad_server)
+        mDocumentTypeSpinner = v.findViewById(R.id.spinner_cryptpad_prefix)
+        mDocumentTypeSpinnerContainer = v.findViewById(R.id.spinner_cryptpad_prefix_container)
 
         return v
     }

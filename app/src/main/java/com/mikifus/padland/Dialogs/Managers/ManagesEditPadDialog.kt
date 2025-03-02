@@ -51,7 +51,8 @@ public class ManagesEditPadDialog: ManagesDialog(), IManagesEditPadDialog {
                 data["local_name"] = it
             }
             pad?.mUrl?.let {
-                data["server"] = PadServer.Builder().padUrl(it).build().baseUrl!!
+                data["url"] = it
+                data["server"] = PadServer.Builder().padUrl(it, activity).build().baseUrl!!
             }
 
             data["group_id"] = 0

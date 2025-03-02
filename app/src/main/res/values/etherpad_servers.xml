@@ -117,4 +117,30 @@
         <item>cryptpad.piratenpartei.de</item>
         <item>cryptpad-sandbox.piratenpartei.de</item>
     </string-array>
+
+    <array name="etherpad_servers_cryptpad" translatable="false">
+        <item>false</item>
+        <item>false</item>
+        <item>false</item>
+        <item>false</item>
+        <item>false</item>
+        <item>false</item>
+        <item>false</item>
+        <item>false</item>
+        <item>false</item>
+        <item>false</item>
+        <item>false</item>
+        <item>false</item>
+        <item>false</item>
+        <item>false</item>
+        <item>false</item>
+        <item>true</item>
+        <item>true</item>
+        <item>true</item>
+        <item>true</item>
+        <item>true</item>
+        <item>true</item>
+        <item>true</item>
+        <item>true</item>
+    </array>
 </resources>

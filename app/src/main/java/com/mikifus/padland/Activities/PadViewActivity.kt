@@ -280,6 +280,7 @@ class PadViewActivity :
     }
 
     private fun savePadFromUrl(padUrl: String) {
+        val activity = this
         lifecycleScope.launch(Dispatchers.IO) {
             val pad = withContext(Dispatchers.IO){
                 padViewModel?.getByUrl(padUrl)
@@ -287,11 +288,11 @@ class PadViewActivity :
 
             if(pad == null &&
                 webViewClient!!.hostsWhitelist.contains(
-                    PadServer.Builder().padUrl(padUrl).host
+                    PadServer.Builder().padUrl(padUrl, activity).host
                 )) {
 
                 val newPad = withContext(Dispatchers.Main){
-                    Pad.fromUrl(padUrl).value!!
+                    Pad.fromUrl(padUrl, activity).value!!
                 }
 
                 withContext(Dispatchers.IO){
