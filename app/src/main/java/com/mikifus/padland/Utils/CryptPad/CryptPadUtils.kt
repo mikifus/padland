@@ -3,6 +3,8 @@ package com.mikifus.padland.Utils.CryptPad
 class CryptPadUtils {
     companion object {
         private val CRYPTPAD_PAD_URL = Regex("https?://[^/]+/[^/]+/#/\\d+/[^/]+/[^/]+/[^/]+/")
+        private val CRYPTPAD_PAD_URL_V2 = Regex("https?://[^/]+/[^/]+/#/1/[^/]+/[^/]+/[^/]+/")
+        private val CRYPTPAD_PAD_URL_V3 = Regex("https?://[^/]+/[^/]+/#/3/[^/]+/[^/]+/[^/]+/")
         private val CRYPTPAD_REPLACE_TYPE_NAME_REGEX = Regex("(\\d)/[a-z]+(/?)")
         private const val CRYPTPAD_REPLACE_TYPE_NAME_REGEX_SUBSTITUTION = "$1/__type__$2"
         private val CRYPTPAD_REPLACE_TYPE_PATH_REGEX = Regex("(/?)[a-z]+/#/(\\d)/[a-z]+(/?)")
@@ -35,8 +37,12 @@ class CryptPadUtils {
             return serverString + typeString
         }
 
-        fun seemsCrpytPadUrl(url: String): Boolean {
-            return CRYPTPAD_PAD_URL.matches(url)
+        fun seemsCrpytPadUrl(url: String, version: Number? = null): Boolean {
+            return when (version) {
+                2 -> CRYPTPAD_PAD_URL_V2.matches(url)
+                3 -> CRYPTPAD_PAD_URL_V3.matches(url)
+                else -> CRYPTPAD_PAD_URL.matches(url)
+            }
         }
 
         fun applyNewPadUrl(url: String): String {

@@ -357,4 +357,11 @@ open class NewPadDialog: FormDialog() {
         mPadNameContainer?.visibility = View.VISIBLE
         mNameEditText?.isEnabled = true
     }
+
+
+    override fun setFormData(data: HashMap<String, Any>) {
+        data["url"]?.let {
+            mNameEditText?.text = Editable.Factory.getInstance().newEditable(it.toString())
+        }
+    }
 }
