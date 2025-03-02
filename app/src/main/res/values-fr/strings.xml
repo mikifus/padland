@@ -105,7 +105,7 @@
     <string name="padinfo_times_accessed">Nombre de visualisation</string>
     <string name="pref_default_display_name">Anonyme</string>
     <string name="settings_default_username_dialog_title">Entrez le nom d\'utilisateur</string>
-    <string name="serverlist_dialog_new_server_paste">Options Avancées</string>
+    <string name="new_pad_paste">Options Avancées</string>
 
     <string name="title_activity_server_list">Liste des serveurs</string>
     <string name="pref_server_list_summary">Ajoutez votre propre serveur etherpad</string>

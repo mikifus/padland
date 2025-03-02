@@ -28,7 +28,7 @@
             <!-- Paste Option -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_paste"
-                android:text="@string/serverlist_dialog_new_server_paste"
+                android:text="@string/new_pad_paste"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center" />
@@ -102,6 +102,14 @@
                     android:inputType="none" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Paste Option -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_cryptpad_drive"
+                android:text="@string/new_pad_cryptpad_drive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"

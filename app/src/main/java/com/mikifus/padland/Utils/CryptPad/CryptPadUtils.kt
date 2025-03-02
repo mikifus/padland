@@ -11,6 +11,8 @@ class CryptPadUtils {
         private const val CRYPTPAD_REPLACE_TYPE_PATH_REGEX_SUBSTITUTION = "$1__type__/#/$2/__type__$3"
         private val CRYPTPAD_PAD_URL_NEW_REGEX = Regex("(https?://[^/]+/)([a-z]+)/#.*")
         private const val CRYPTPAD_PAD_URL_NEW_REGEX_SUBSTITUTION = "$1$2"
+        private val CRYPTPAD_DRIVE_URL = Regex("(https?://[^/]+/)[^/]*")
+        private const val CRYPTPAD_DRIVE_URL_SUBSTITUTION = "$1drive"
 
         fun replaceCryptPadType(nameOrUrl: String, type: String): String {
             var typeString = type
@@ -49,6 +51,13 @@ class CryptPadUtils {
             return url.replace(
                 CRYPTPAD_PAD_URL_NEW_REGEX,
                 CRYPTPAD_PAD_URL_NEW_REGEX_SUBSTITUTION
+            )
+        }
+
+        fun applyDriveUrl(url: String): String {
+            return url.replace(
+                CRYPTPAD_DRIVE_URL,
+                CRYPTPAD_DRIVE_URL_SUBSTITUTION
             )
         }
     }
