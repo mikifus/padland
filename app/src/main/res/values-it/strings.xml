@@ -83,7 +83,7 @@
     <string name="padinfo_times_accessed">Numero di accessi</string>
     <string name="pref_default_display_name">Anonimo</string>
     <string name="settings_default_username_dialog_title">Imposta nome utente</string>
-    <string name="serverlist_dialog_new_server_advanced">Opzioni avanzate</string>
+    <string name="serverlist_dialog_new_server_paste">Opzioni avanzate</string>
 
     <string name="title_activity_server_list">Lista dei server</string>
     <string name="pref_server_list_summary">Aggiungi il tuo server di Etherpad</string>

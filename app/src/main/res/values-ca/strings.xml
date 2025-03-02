@@ -100,7 +100,7 @@
 
     <string name="serverlist_dialog_delete_sure_to_delete">Segur que vols eliminar els servidors seleccionats?</string>
     <string name="serverlist_dialog_edit_server_title">Editar servidor</string>
-    <string name="serverlist_dialog_new_server_advanced">Opcions avançades</string>
+    <string name="serverlist_dialog_new_server_paste">Opcions avançades</string>
     <string name="serverlist_dialog_new_server_jquery_label">Marca per a servidors compatibles amb \"etherpad-lite-jquery-plugin\" (Etherpad Lite).</string>
     <string name="serverlist_dialog_new_server_jquery_title">Compatible amb jQuery</string>
     <string name="serverlist_dialog_new_server_lite_label">Marca si el servidor funciona amb Etherpad Lite (recomanat).</string>
