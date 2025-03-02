@@ -62,6 +62,7 @@
     <string name="title_activity_padlist">Padland documents</string>
     <string name="choose_a_server">Choose a server (optional):</string>
     <string name="default_pad_server">Default pad server</string>
+    <string name="cryptpad_document_type">Document type:</string>
     <string name="choose_default_pad_server">Choose a default pad server when opening a new document.</string>
     <string name="about_support_text">
         <p>This app is under development. To provide feedback and report bugs please open a new issue on GitHub.</p>\n
@@ -89,6 +90,7 @@
     <string name="padinfo_lastuseddate">Last viewed</string>
 
     <string name="newpad_noname_warning">You must specify a name for the document.</string>
+    <string name="newpad_nodoctype_warning">You must select a document type.</string>
     <string name="newpad_url_name_success">Detected url for known server.</string>
     <string name="newpad_url_name_warning">Warning: Pad name is a URL but no compatible server has been found.</string>
 
@@ -123,7 +125,7 @@
     <string name="padinfo_times_accessed">Times accessed</string>
     <string name="pref_default_display_name">Anonymous</string>
     <string name="settings_default_username_dialog_title">Set username</string>
-    <string name="serverlist_dialog_new_server_advanced">Advanced Options</string>
+    <string name="serverlist_dialog_new_server_paste">Paste from clipboard</string>
 
     <string name="title_activity_server_list">Server list</string>
     <string name="pref_server_list_summary">Add your custom etherpad servers.</string>
@@ -176,6 +178,30 @@
     <string name="show_padgroup_title" translatable="false">(%d) %s</string>
     <string name="default_pad_prefix_lite" translatable="false">/p/</string>
     <string name="default_pad_prefix_cryptpad" translatable="false">/</string>
+    <string-array name="prefixes_cryptpad">
+        <item>/pad/#/</item>
+        <item>/doc/#/</item>
+        <item>/presentation/#/</item>
+        <item>/sheet/#/</item>
+        <item>/kanban/#/</item>
+        <item>/code/#/</item>
+        <item>/form/#/</item>
+        <item>/whiteboard/#/</item>
+        <item>/slide/#/</item>
+        <item>/diagram/#/</item>
+    </string-array>
+    <string-array name="prefixes_name_cryptpad">
+        <item>Simple text document</item>
+        <item>Text document</item>
+        <item>Presentation</item>
+        <item>Spreadsheet</item>
+        <item>Kanban board</item>
+        <item>Code (Markdown)</item>
+        <item>Formulary</item>
+        <item>Whiteboard (Drawing)</item>
+        <item>Markdown slides</item>
+        <item>Diagram</item>
+    </string-array>
 
     <string name="model_padgroup">Groups</string>
     <string name="model_pad">Documents</string>
