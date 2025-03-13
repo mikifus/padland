@@ -91,7 +91,7 @@
 
     <string name="newpad_noname_warning">You must specify a name for the document.</string>
     <string name="newpad_nodoctype_warning">You must select a document type.</string>
-    <string name="newpad_url_name_success">Detected url for known server.</string>
+    <string name="newpad_url_name_success">Detected URL for known server.</string>
     <string name="newpad_url_name_warning">Warning: Pad name is a URL but no compatible server has been found.</string>
 
     <string name="padlist_empty_no_pads">You have no documents yet.</string>
@@ -164,12 +164,8 @@
     <string name="write_pad_local_name">Pad Alias (optional)</string>
     <string name="new_pad_name_invalid">The pad name contains invalid characters.</string>
     <string name="new_pad_wrong_server">The server is not allowed. The operation cannot continue. Check your server settings and try again.</string>
-    <string name="new_pad_paste">Paste from clipboard</string>
     <string name="new_pad_cryptpad_drive">Go to CryptPad drive</string>
 
-    <!-- Titanpad notice -->
-    <string name="titanpad_deprecated_title">Warning: Titanpad.com is deprecated</string>
-    <string name="titanpad_deprecated_text">On 1st May 2017 all documents will become read-only. On 31st Dec 2017 Titanpad.com will shut down. Make sure you backup your documents and avoid creating new ones.</string>
     <string name="edit_pad_local_name">Pad Alias</string>
     <string name="edit_pad_name">Pad Name (URL)</string>
     <string name="padlist_dialog_edit_pad_title">Edit Pad</string>
@@ -210,7 +206,6 @@
     <string name="model_pad">Documents</string>
     <string name="model_server">Servers</string>
     <string name="padview_pad_save_success">The document has been added to the list.</string>
-    <string name="validation_url_invalid_remove">The address (URL) is invalid.</string>
     <string name="none">None</string>
     <string name="ignore">Ignore</string>
     <string name="whitelist_server_dialog_open_browser">Open with browser</string>
@@ -227,5 +222,7 @@
     <string name="preference_export_database_summary">Export to a JSON file.</string>
     <string name="preference_import_database">Import database</string>
     <string name="preference_import_database_summary">Import from a JSON file.</string>
+    <string name="validation_url_invalid_remove">The address (URL) is invalid</string>
+    <string name="new_pad_paste">Paste from clipboard</string>
 
 </resources>
