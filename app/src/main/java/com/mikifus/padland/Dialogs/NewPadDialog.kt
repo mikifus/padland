@@ -112,6 +112,7 @@ open class NewPadDialog: FormDialog() {
 
             // Set default selection
             mServerSpinner?.selectedItemPosition = position
+            checkCryptPadServer()
         }
 
         // CryptPad Document Types
@@ -178,11 +179,7 @@ open class NewPadDialog: FormDialog() {
 
         mServerSpinner?.addTextChangedListener {
             mServerSpinner!!.post {
-                if (serverSpinnerData!![mServerSpinner!!.selectedItemPosition].third) {
-                    setCryptPadServer()
-                } else {
-                    unsetCryptPadServer()
-                }
+                checkCryptPadServer()
             }
         }
 
@@ -372,6 +369,13 @@ open class NewPadDialog: FormDialog() {
         mNameEditText?.isEnabled = true
     }
 
+    private fun checkCryptPadServer() {
+        if (serverSpinnerData!![mServerSpinner!!.selectedItemPosition].third) {
+            setCryptPadServer()
+        } else {
+            unsetCryptPadServer()
+        }
+    }
 
     override fun setFormData(data: HashMap<String, Any>) {
         data["url"]?.let {
