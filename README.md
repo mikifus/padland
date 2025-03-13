@@ -1,5 +1,5 @@
 # Padland
-Padland is a tool to manage, share, remember and read collaborative documents based on the Etherpad technology in Android.
+Padland is a tool for Android to manage collaborative documents based on the Etherpad or CryptPad technology.
 
 <p align="center" style="text-align:center;">
   <a href="https://f-droid.org/repository/browse/?fdid=com.mikifus.padland" alt='Download from F-Droid' target="_blank">
@@ -44,12 +44,13 @@ To try your new server create a new pad and choose it. You can make it the defau
 
 **Note:** The server hosts the user adds and their subdomains are now considered part of the _whitelist_. This means that http connections to these domains are allowed.
 
-## Opening a URL
-
-The user can now share a URL to the app in order to open it. Keep in mind that the host server must be previously added, otherwise the URL will be considered unsafe.
-
 ## Current version
-3.0
+3.1
+
+### v3.1
+- Minor bug fixes.
+- Minor QoL improvements.
+- Added CryptPad support.
 
 ### v3.0
 - Migrated database to Room.
