@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     android:layout_gravity="top"
     android:orientation="vertical"
-    android:background="?attr/colorSurface">
+    android:background="?attr/colorSurface"
+    android:focusable="true"
+    android:clickable="true">
 
     <include
         android:id="@+id/include"
