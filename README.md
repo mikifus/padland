@@ -172,17 +172,6 @@ To try your new server create a new pad and choose it. You can make it the defau
 - Added multiple-server support
 - Just commit
 
-## Technology
-Padland depends on:
-- jQuery
-- etherpad-lite-jquery-plugin
-
-
 ### License
 ----
 Apache
-
-
-
-[Etherpad]:http://etherpad.org/
-[etherpad-lite-jquery-plugin]:https://github.com/ether/etherpad-lite-jquery-plugin
