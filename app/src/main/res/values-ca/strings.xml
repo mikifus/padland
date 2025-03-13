@@ -100,7 +100,7 @@
 
     <string name="serverlist_dialog_delete_sure_to_delete">Segur que vols eliminar els servidors seleccionats?</string>
     <string name="serverlist_dialog_edit_server_title">Editar servidor</string>
-    <string name="new_pad_paste">Opcions avançades</string>
+    <string name="new_pad_paste">Enganxa del porta-retalls</string>
     <string name="serverlist_dialog_new_server_jquery_label">Marca per a servidors compatibles amb \"etherpad-lite-jquery-plugin\" (Etherpad Lite).</string>
     <string name="serverlist_dialog_new_server_jquery_title">Compatible amb jQuery</string>
     <string name="serverlist_dialog_new_server_lite_label">Marca si el servidor funciona amb Etherpad Lite (recomanat).</string>
@@ -153,5 +153,16 @@
     <string name="preference_export_database_summary">Exporta a un fitxer JSON.</string>
     <string name="preference_import_database">Importa la base de dades</string>
     <string name="preference_import_database_summary">Importa des d\'un fitxer JSON.</string>
+    <string name="cryptpad_document_type">Tipus de document</string>
+    <string name="newpad_nodoctype_warning">Has de seleccionar un tipus de document.</string>
+    <string name="newpad_nodoctype_warning">Has de seleccionar un tipus de document</string>
+    <string name="newpad_url_name_success">S\'ha detectat la URL per a un servidor conegut.</string>
+    <string name="newpad_url_name_warning">Advertència: el nom del pad és una URL però no s\'ha trobat cap servidor compatible.</string>
+    <string name="padview_dialog_detected_pad">Guardar el nou document?</string>
+    <string name="padview_dialog_detected_pad_desc">S\'ha trobat un nou document, vols guardar-lo?</string>
+    <string name="padview_dialog_detected_pad_desc">U</string>
+    <string name="serverlist_dialog_new_server_cryptpad_title">Funciona amb CryptPad</string>
+    <string name="serverlist_dialog_new_server_cryptpad_label">Marca la casella si aquest servidor utilitza CryptPad.</string>
+    <string name="new_pad_cryptpad_drive">Anar a la unitat de CryptPad</string>
 
 </resources>

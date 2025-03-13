@@ -84,7 +84,7 @@
 
     <string name="serverlist_dialog_delete_sure_to_delete">¿Seguro que quieres eliminar los servidores seleccionados?</string>
     <string name="serverlist_dialog_edit_server_title">Editar servidor</string>
-    <string name="new_pad_paste">Opciones avanzadas</string>
+    <string name="new_pad_paste">Pegar del portapapeles</string>
     <string name="serverlist_dialog_new_server_jquery_label">Marca la casilla para servidores compatibles con \"etherpad-lite-jquery-plugin\" (Etherpad Lite).</string>
     <string name="serverlist_dialog_new_server_jquery_title">Compatible con jQuery</string>
     <string name="serverlist_dialog_new_server_lite_label">Marca la casilla si el servidor funciona con Etherpad Lite (recomendado).</string>
@@ -133,6 +133,7 @@
     <string name="model_server">Servidores</string>
     <string name="new_pad_local_name_explanation">Opcionalmente indica un alias local para el documento.</string>
     <string name="padview_pad_save_success">El documento se ha añadido a la lista.</string>
+    <string name="validation_url_invalid_remove">La dirección (URL) no es válida.</string>
     <string name="none">Ninguno</string>
     <string name="ignore">Ignorar</string>
     <string name="whitelist_server_dialog_open_browser">Abrir en navegador</string>
@@ -149,5 +150,18 @@
     <string name="preference_export_database_summary">Exportar a un fichero JSON.</string>
     <string name="preference_import_database">Importar base de datos</string>
     <string name="preference_import_database_summary">Importar desde un fichero JSON.</string>
+    <string name="cryptpad_document_type">Tipo de documento</string>
+    <string name="newpad_nodoctype_warning">Debes seleccionar un tipo de documento.</string>
+    <string name="newpad_nodoctype_warning">D</string>
+    <string name="newpad_url_name_success">Se ha detectado la URL de un servidor conocido.</string>
+    <string name="newpad_url_name_warning">Advertencia: el nombre del pad es una URL pero no se encontró ningún servidor compatible.</string>
+    <string name="padview_dialog_detected_pad">Guardar nuevo documento?</string>
+    <string name="padview_dialog_detected_pad">G</string>
+    <string name="padview_dialog_detected_pad_desc">Se ha encontrado un nuevo documento ¿Quieres guardarlo?</string>
+    <string name="padview_dialog_detected_pad_desc">U</string>
+    <string name="serverlist_dialog_new_server_cryptpad_title">Funciona con CryptPad</string>
+    <string name="serverlist_dialog_new_server_cryptpad_label">Marcar la casilla si este servidor utiliza CryptPad.</string>
+    <string name="serverlist_dialog_new_server_cryptpad_label">E</string>
+    <string name="new_pad_cryptpad_drive">Ir a la unidad CryptPad</string>
 
 </resources>
