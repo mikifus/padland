@@ -152,16 +152,12 @@
     <string name="preference_import_database_summary">Importar desde un fichero JSON.</string>
     <string name="cryptpad_document_type">Tipo de documento</string>
     <string name="newpad_nodoctype_warning">Debes seleccionar un tipo de documento.</string>
-    <string name="newpad_nodoctype_warning">D</string>
     <string name="newpad_url_name_success">Se ha detectado la URL de un servidor conocido.</string>
     <string name="newpad_url_name_warning">Advertencia: el nombre del pad es una URL pero no se encontró ningún servidor compatible.</string>
     <string name="padview_dialog_detected_pad">Guardar nuevo documento?</string>
-    <string name="padview_dialog_detected_pad">G</string>
     <string name="padview_dialog_detected_pad_desc">Se ha encontrado un nuevo documento ¿Quieres guardarlo?</string>
-    <string name="padview_dialog_detected_pad_desc">U</string>
     <string name="serverlist_dialog_new_server_cryptpad_title">Funciona con CryptPad</string>
     <string name="serverlist_dialog_new_server_cryptpad_label">Marcar la casilla si este servidor utiliza CryptPad.</string>
-    <string name="serverlist_dialog_new_server_cryptpad_label">E</string>
     <string name="new_pad_cryptpad_drive">Ir a la unidad CryptPad</string>
 
 </resources>
