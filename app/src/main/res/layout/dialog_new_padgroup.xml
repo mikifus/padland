@@ -5,8 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="top"
+    android:focusable="true"
     android:orientation="vertical"
-    android:background="?attr/colorSurface">
+    android:background="?attr/colorSurface"
+    android:clickable="true">
 
     <include
         android:id="@+id/include"
