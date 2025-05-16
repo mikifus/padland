@@ -43,15 +43,18 @@ The url must be something like "https://examplehost.com". No more and no less in
 To try your new server create a new pad and choose it. You can make it the default option in the settings menu.
 
 **Note:** The server hosts the user adds and their subdomains are now considered part of the _whitelist_. This means that http connections to these domains are allowed.
-
+buildTypes
 ## Current version
-3.2
+3.3
+
+### v3.3
+- Merge chinese translation
 
 ### v3.2
 - Minor bug fixes.
 - Minor QoL improvements.
 - Added CryptPad support.
-- 
+
 ### v3.1
 - Minor bug fixes.
 
