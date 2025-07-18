@@ -25,7 +25,7 @@ class EditServerDialog: NewServerDialog() {
         }
         data?.get("jquery")?.let {
             mJqueryCheckBox?.isChecked = it as Boolean
-            if(!it) {
+            if(it == false) {
                 mLiteCheckbox?.isChecked = false
             }
         }
