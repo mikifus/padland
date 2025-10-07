@@ -43,7 +43,7 @@
     <string name="default_pad_server">Server predefinito</string>
     <string name="choose_default_pad_server">Scegli un server per i pad predefinito in cui aprire i pad nuovi.</string>
     <string name="about_support_text">
-        <p>Quest\'app è in continuo sviluppo. Per dare un feedback o segnalare un bug, contatta lo sviluppatore via email: mikifus@gmail.com.</p>\n
+        <p>Quest\'app è in continuo sviluppo. Per dare un feedback o segnalare un bug, contatta lo sviluppatore.</p>\n
         \n
         <p>Se vorresti contribuire ecco il repository:\n
             <a href='https://github.com/mikifus/padland'>https://github.com/mikifus/padland</a>

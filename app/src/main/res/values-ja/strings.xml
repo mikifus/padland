@@ -43,7 +43,7 @@
     <string name="default_pad_server">デフォルトのパッド サーバー</string>
     <string name="choose_default_pad_server">新しいサーバーを開くときの、デフォルトのパッド サーバーを選択してください。</string>
     <string name="about_support_text">
-        <p>このアプリは開発中です。 フィードバックやバグ報告は、開発者 mikifus@gmail.com までご連絡ください。</p>\n
+        <p>このアプリは開発中です。 フィードバックやバグ報告は、開発者 までご連絡ください。</p>\n
         \n
         <p>貢献していただける場合は、こちらのリポジトリまで:\n
             <a href='https://github.com/mikifus/padland'>https://github.com/mikifus/padland</a></p>
