@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.github.appintro.AppIntro
 import com.github.appintro.AppIntroFragment
-import com.google.android.material.color.DynamicColors
 import com.google.android.material.color.MaterialColors
 import com.mikifus.padland.Utils.Intro.LinkableAppIntroFragment
 import com.mikifus.padland.R
