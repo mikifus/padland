@@ -45,7 +45,11 @@ To try your new server create a new pad and choose it. You can make it the defau
 **Note:** The server hosts the user adds and their subdomains are now considered part of the _whitelist_. This means that http connections to these domains are allowed.
 buildTypes
 ## Current version
-3.3
+3.4
+
+### v3.4
+- Fix bug #76 that arised in API 35 (Android 15)
+- Fix styles in AppIntro
 
 ### v3.3
 - Merge chinese translation
