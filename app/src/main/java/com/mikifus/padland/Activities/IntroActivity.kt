@@ -5,6 +5,8 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.github.appintro.AppIntro
 import com.github.appintro.AppIntroFragment
+import com.google.android.material.color.DynamicColors
+import com.google.android.material.color.MaterialColors
 import com.mikifus.padland.Utils.Intro.LinkableAppIntroFragment
 import com.mikifus.padland.R
 
@@ -14,6 +16,15 @@ import com.mikifus.padland.R
 class IntroActivity : AppIntro() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        setDoneTextAppearance(R.style.TextAppearance_AppCompat_Large)
+        setSkipTextAppearance(R.style.TextAppearance_AppCompat_Large)
+        setNextArrowColor(MaterialColors.getColor(this, R.attr.colorOnSurface, 0))
+        setBackArrowColor(MaterialColors.getColor(this, R.attr.colorOnSurface, 0))
+        setIndicatorColor(
+            MaterialColors.getColor(this, R.attr.colorOnSurface, 0),
+            getColor(R.color.material_on_surface_disabled)
+        )
 
         // Note here that we DO NOT use setContentView();
 
