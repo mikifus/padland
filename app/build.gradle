@@ -23,8 +23,8 @@ android {
         applicationId "com.mikifus.padland"
         minSdkVersion 23
         targetSdkVersion 36
-        versionName '3.3'
-        versionCode 30
+        versionName '3.4'
+        versionCode 31
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
