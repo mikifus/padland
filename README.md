@@ -43,7 +43,7 @@ The url must be something like "https://examplehost.com". No more and no less in
 To try your new server create a new pad and choose it. You can make it the default option in the settings menu.
 
 **Note:** The server hosts the user adds and their subdomains are now considered part of the _whitelist_. This means that http connections to these domains are allowed.
-buildTypes
+
 ## Current version
 3.4
 
