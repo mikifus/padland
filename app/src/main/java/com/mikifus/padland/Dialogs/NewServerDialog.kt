@@ -53,7 +53,7 @@ open class NewServerDialog: FormDialog() {
 
         // Build URL, it will throw an exception if not correct
         try {
-            URL(url)
+            URL(url).toURI()
         } catch (exception: Exception) {
             Toast.makeText(context, getString(R.string.validation_url_invalid), Toast.LENGTH_LONG).show()
             return false
@@ -61,7 +61,7 @@ open class NewServerDialog: FormDialog() {
 
         // Now with pad prefix
         try {
-            URL(url + pathprefix)
+            URL(url + pathprefix).toURI()
         } catch (exception: Exception) {
             Toast.makeText(context, getString(R.string.serverlist_dialog_new_server_padprefix_invalid), Toast.LENGTH_LONG).show()
             return false
