@@ -9,6 +9,7 @@ import android.view.View.OnClickListener
 import android.widget.Button
 import androidx.annotation.StyleableRes
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.WindowCompat
 import androidx.fragment.app.DialogFragment
 import androidx.transition.Slide
 import com.google.android.material.color.DynamicColors
@@ -47,6 +48,11 @@ open class FormDialog: DialogFragment(), IFormDialog {
 
     override fun getTheme(): Int {
         return R.style.DialogStyleWhenLarge
+    }
+
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.let { WindowCompat.setDecorFitsSystemWindows(it, false) }
     }
 
     override fun setPositiveButtonCallback(callback: (Map<String, Any>) -> Unit) {

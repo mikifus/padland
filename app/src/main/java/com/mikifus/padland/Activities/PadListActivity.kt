@@ -57,6 +57,8 @@ import com.mikifus.padland.Dialogs.Managers.ManagesNewPadGroupDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+import androidx.activity.enableEdgeToEdge
+
 
 /**
  * This activity displays a list of previously checked documents.
@@ -90,6 +92,7 @@ class PadListActivity: AppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContentView(R.layout.activity_pad_list)
         setSupportActionBar(findViewById(R.id.activity_toolbar))
 

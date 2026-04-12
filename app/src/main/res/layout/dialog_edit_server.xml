@@ -8,7 +8,8 @@
     android:orientation="vertical"
     android:background="?attr/colorSurface"
     android:focusable="true"
-    android:clickable="true">
+    android:clickable="true"
+    android:fitsSystemWindows="true">
 
     <include
         android:id="@+id/include"
