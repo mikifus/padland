@@ -1,9 +1,9 @@
 # Padland
 Padland is a tool for Android to manage collaborative documents based on the Etherpad or CryptPad technology.
 
-<p align="center" style="text-align:center;">
-  <a href="https://f-droid.org/repository/browse/?fdid=com.mikifus.padland" alt='Download from F-Droid' target="_blank">
-    <img src="https://f-droid.org/badge/get-it-on.png" height="90"/>
+<p style="text-align:center;">
+  <a href="https://f-droid.org/repository/browse/?fdid=com.mikifus.padland" target="_blank">
+    <img src="https://f-droid.org/badge/get-it-on.png" height="90" alt='Download from F-Droid'/>
   </a>
 
   <a href='https://play.google.com/store/apps/details?id=com.mikifus.padland'>
@@ -11,11 +11,11 @@ Padland is a tool for Android to manage collaborative documents based on the Eth
   </a>
 </p>
 
-<p align="center" style="text-align:center;">
+<p style="text-align:center;">
   <img alt='Padland Logo' src='./metadata/en-US/images/icon.png'  height="90" />
 </p>
 
-<p align="center" style="text-align:center;">
+<p style="text-align:center;">
   <picture>
     <source media="(prefers-color-scheme: light)" srcset="./metadata/en-US/images/phoneScreenshots/1.png">
     <source media="(prefers-color-scheme: dark)" srcset="./metadata/en-US/images/phoneScreenshots/2.png">
@@ -45,7 +45,10 @@ To try your new server create a new pad and choose it. You can make it the defau
 **Note:** The server hosts the user adds and their subdomains are now considered part of the _whitelist_. This means that http connections to these domains are allowed.
 
 ## Current version
-3.5
+3.6
+
+### v3.6
+- Minor fixes for Android 16 compatibility
 
 ### v3.5
 - Minor fixes and library updates
