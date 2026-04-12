@@ -6,14 +6,17 @@ import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.mikifus.padland.R
+import androidx.activity.enableEdgeToEdge
 
 /**
  * Just displays an about message
  * @author
  */
+
 class AboutActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContentView(R.layout.activity_about)
         setSupportActionBar(findViewById(R.id.activity_toolbar))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

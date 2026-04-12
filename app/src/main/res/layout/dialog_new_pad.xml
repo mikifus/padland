@@ -9,7 +9,8 @@
     android:background="?attr/colorSurface"
     android:transitionName="dialog_transition"
     android:focusable="true"
-    android:clickable="true">
+    android:clickable="true"
+    android:fitsSystemWindows="true">
 
     <include
         android:id="@+id/include"

@@ -18,6 +18,7 @@ import com.mikifus.padland.Dialogs.Managers.IManagesNewServerDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesEditServerDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesNewServerDialog
 import com.mikifus.padland.R
+import androidx.activity.enableEdgeToEdge
 
 class ServerListActivity: AppCompatActivity(),
     IMakesServerSelectionTracker by MakesServerSelectionTracker(),
@@ -32,6 +33,7 @@ class ServerListActivity: AppCompatActivity(),
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContentView(R.layout.activity_server_list)
         setSupportActionBar(findViewById(R.id.activity_toolbar))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
