@@ -32,6 +32,10 @@ Padland is a tool for Android to manage collaborative documents based on the Eth
 ## Translations
 Thanks to all the volunteers that already contributed!
 More translations are still needed as well as spell checking and keeping the current ones up to date.
+Please transtale on the [Weblate](https://toolate.othing.xyz/projects/padland/). 
+<a href="https://toolate.othing.xyz/engage/padland/">
+<img src="https://toolate.othing.xyz/widget/padland/multi-auto.svg" alt="Translation status" />
+</a>
 
 ## Custom servers
 
