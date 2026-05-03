@@ -36,7 +36,7 @@ Please transtale on the [Weblate](https://toolate.othing.xyz/projects/padland/).
 
 <p style="text-align:center;">
   <a href="https://toolate.othing.xyz/engage/padland/">
-    <img src="https://toolate.othing.xyz/widget/padland/multi-auto.svg" alt="Translation status" width="150" />
+    <img src="https://toolate.othing.xyz/widget/padland/multi-auto.svg" alt="Translation status" width="460" />
   </a>
 </p>
 
