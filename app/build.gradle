@@ -20,7 +20,7 @@ android {
     defaultConfig {
         compileSdk = 36
         applicationId "com.mikifus.padland"
-        minSdkVersion 23
+        minSdkVersion 24
         targetSdkVersion 36
         versionName '3.6'
         versionCode 33
@@ -75,13 +75,13 @@ dependencies {
     implementation 'androidx.activity:activity-ktx:1.13.0'
     implementation 'com.github.paolorotolo:appintro:6.3.1'
     implementation 'androidx.recyclerview:recyclerview:1.4.0'
-    implementation 'com.google.android.material:material:1.13.0'
+    implementation 'com.google.android.material:material:1.14.0'
     implementation 'androidx.recyclerview:recyclerview-selection:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
     implementation "androidx.preference:preference-ktx:1.2.1"
     implementation 'com.github.martin-stone:hsv-alpha-color-picker-android:3.1.0'
-    implementation 'com.google.code.gson:gson:2.13.2'
-    implementation 'androidx.webkit:webkit:1.15.0'
+    implementation 'com.google.code.gson:gson:2.14.0'
+    implementation 'androidx.webkit:webkit:1.16.0'
 
     // Room database
     def room_version = "2.8.4"
@@ -99,7 +99,7 @@ dependencies {
 
 
     constraints {
-        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.2.0") {
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.2.10") {
             because("kotlin-stdlib-jdk7 is now a part of kotlin-stdlib")
         }
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.0") {
