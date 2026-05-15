@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.children
 import androidx.core.widget.NestedScrollView
-import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
+import com.google.android.material.behavior.HideViewOnScrollBehavior
 import com.mikifus.padland.R
 
 /**
@@ -48,10 +48,10 @@ class ResizeableNestedScrollView @JvmOverloads constructor(
                     if(child.layoutParams
                                 is CoordinatorLayout.LayoutParams &&
                         (child.layoutParams as CoordinatorLayout.LayoutParams).behavior
-                                is HideBottomViewOnScrollBehavior
+                                is HideViewOnScrollBehavior
                         ) {
                         ((child.layoutParams as CoordinatorLayout.LayoutParams).behavior
-                                as HideBottomViewOnScrollBehavior).slideUp(child, true)
+                                as HideViewOnScrollBehavior).slideIn(child, true)
                     }
                 }
             }

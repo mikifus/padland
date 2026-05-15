@@ -48,20 +48,19 @@ class DragAndDropListener internal constructor(listener: IDragAndDropListener) :
                 }
             }
             DragEvent.ACTION_DRAG_ENTERED -> {
-                var padGroupView: View? = null
-                when (viewId) {
+                val padGroupView = when (viewId) {
                     padGroupRvViewId -> {
-                        padGroupView = (view.parent.parent as View)
+                        (view.parent.parent as View)
                     }
+
                     padGroupViewId, unclassifiedContainerId -> {
-                        padGroupView = view
+                        view
                     }
+
                     else -> return false
                 }
-                if(padGroupView != null) {
-                    listener.onEnteredView(padGroupView, event)
-                    enteredViews.add(padGroupView)
-                }
+                listener.onEnteredView(padGroupView, event)
+                enteredViews.add(padGroupView)
             }
             DragEvent.ACTION_DRAG_EXITED -> {
                 var padGroupView: View? = null
