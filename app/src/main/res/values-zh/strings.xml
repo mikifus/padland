@@ -94,4 +94,7 @@
     <string name="padview_dialog_detected_pad">保存新文档？</string>
     <string name="serverlist_dialog_new_server_cryptpad_title">运行 Runs CryptPad</string>
     <string name="new_pad_cryptpad_drive">跳转到 CryptPad 磁盘</string>
+    <string name="launch_intro">启动介绍画面。</string>
+    <string name="intro_third_title">编辑存在的文档</string>
+    <string name="action_go_to_list">回到pad列表</string>
 </resources>
