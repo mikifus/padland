@@ -225,4 +225,10 @@
     <string name="validation_url_invalid_remove">The address (URL) is invalid</string>
     <string name="new_pad_paste">Paste from clipboard</string>
 
+    <string name="action_sort">Sort</string>
+    <string name="sort_groups_alphabetical">Groups: alphabetical</string>
+    <string name="sort_groups_last_access">Groups: last access</string>
+    <string name="sort_pads_alphabetical">Documents: alphabetical</string>
+    <string name="sort_pads_last_access">Documents: last access</string>
+
 </resources>

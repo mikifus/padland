@@ -27,6 +27,8 @@ data class PadGroupsWithPadList(
 //                padGroup.isPartiallyDifferentFrom(padGroupsWithPadList.padGroup)
                 padList.size != padGroupsWithPadList.padList.size ||
                 padList.withIndex().any { it ->
+                    // Different id at the same index means the order changed
+                    it.value.mId != padGroupsWithPadList.padList[it.index].mId ||
                     it.value.isPartiallyDifferentFrom(padGroupsWithPadList.padList[it.index])
                 }
 //                padList.any { //TODO: Use diffutil here?

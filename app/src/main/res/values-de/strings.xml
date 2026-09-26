@@ -77,4 +77,9 @@
     <string name="padinfo_times_accessed">Anzahl der Aufrufe</string>
     <string name="pref_default_display_name">Anonymous</string>
 
+    <string name="action_sort">Sortieren</string>
+    <string name="sort_groups_alphabetical">Gruppen: alphabetisch</string>
+    <string name="sort_groups_last_access">Gruppen: letzter Zugriff</string>
+    <string name="sort_pads_alphabetical">Dokumente: alphabetisch</string>
+    <string name="sort_pads_last_access">Dokumente: letzter Zugriff</string>
 </resources>

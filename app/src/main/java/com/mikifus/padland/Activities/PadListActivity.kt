@@ -26,6 +26,7 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.MenuCompat
 import androidx.core.view.ViewCompat
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.ViewModelProvider
@@ -54,6 +55,7 @@ import com.mikifus.padland.Dialogs.Managers.IManagesNewPadDialog
 import com.mikifus.padland.Dialogs.Managers.IManagesNewPadGroupDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesNewPadDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesNewPadGroupDialog
+import com.mikifus.padland.Utils.Sorting.PadListSortOrder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -148,13 +150,13 @@ class PadListActivity: AppCompatActivity(),
     private fun initListView() {
         initSelectionTrackers()
 
-        padGroupViewModel!!.getPadGroupsWithPadList.observe(this) { currentList ->
+        padGroupViewModel!!.getSortedPadGroupsWithPadList.observe(this) { currentList ->
             mainList = currentList ?: listOf()
             adapter!!.data = mainList!!
             showHideEmpty()
         }
 
-        padGroupViewModel!!.getPadsWithoutGroup.observe(this) { currentList ->
+        padGroupViewModel!!.getSortedPadsWithoutGroup.observe(this) { currentList ->
             unclassifiedList = currentList ?: listOf()
             padAdapter!!.data = unclassifiedList!!
             showHideUnclassified()
@@ -231,7 +233,37 @@ class PadListActivity: AppCompatActivity(),
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.pad_list, menu)
+        menu.findItem(R.id.action_sort)?.subMenu?.let {
+            MenuCompat.setGroupDividerEnabled(it, true)
+        }
         return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        updateSortMenuChecks(menu)
+        return super.onPrepareOptionsMenu(menu)
+    }
+
+    /**
+     * Reflects the persisted sort choices in the sort submenu radio items.
+     */
+    private fun updateSortMenuChecks(menu: Menu) {
+        val groupSortOrder = padGroupViewModel?.groupSortOrder?.value ?: PadListSortOrder.DEFAULT
+        val padSortOrder = padGroupViewModel?.padSortOrder?.value ?: PadListSortOrder.DEFAULT
+
+        menu.findItem(
+            when (groupSortOrder) {
+                PadListSortOrder.ALPHABETICAL -> R.id.action_sort_groups_alphabetical
+                PadListSortOrder.LAST_ACCESS -> R.id.action_sort_groups_last_access
+            }
+        )?.isChecked = true
+
+        menu.findItem(
+            when (padSortOrder) {
+                PadListSortOrder.ALPHABETICAL -> R.id.action_sort_pads_alphabetical
+                PadListSortOrder.LAST_ACCESS -> R.id.action_sort_pads_last_access
+            }
+        )?.isChecked = true
     }
 
     /**
@@ -245,6 +277,26 @@ class PadListActivity: AppCompatActivity(),
             R.id.action_settings -> {
                 intent = Intent(this, SettingsActivity::class.java)
                 this.startActivity(intent)
+            }
+
+            R.id.action_sort_groups_alphabetical -> {
+                item.isChecked = true
+                padGroupViewModel?.setGroupSortOrder(PadListSortOrder.ALPHABETICAL)
+            }
+
+            R.id.action_sort_groups_last_access -> {
+                item.isChecked = true
+                padGroupViewModel?.setGroupSortOrder(PadListSortOrder.LAST_ACCESS)
+            }
+
+            R.id.action_sort_pads_alphabetical -> {
+                item.isChecked = true
+                padGroupViewModel?.setPadSortOrder(PadListSortOrder.ALPHABETICAL)
+            }
+
+            R.id.action_sort_pads_last_access -> {
+                item.isChecked = true
+                padGroupViewModel?.setPadSortOrder(PadListSortOrder.LAST_ACCESS)
             }
 
             else -> return super.onOptionsItemSelected(item)

@@ -40,11 +40,20 @@ class PadAdapter(
     var tracker: SelectionTracker<Long>? = null
     var onTouchListener: OnTouchListener? = null
 
+    /**
+     * Incremented on every data update, so that only the latest diff is applied
+     * when several updates are requested in a row (e.g. changing sort order).
+     */
+    private var dataGeneration: Int = 0
+
     var data: List<Pad> = listOf()
         set(value) {
+            val generation = ++dataGeneration
+            val oldValue = field
             activity.lifecycleScope.launch(Dispatchers.IO) {
-                val diffResult = computeDataSetChanged(field, value)
+                val diffResult = computeDataSetChanged(oldValue, value)
                 withContext(Dispatchers.Main) {
+                    if (generation != dataGeneration) return@withContext
                     field = value
                     diffResult.dispatchUpdatesTo(this@PadAdapter)
                 }

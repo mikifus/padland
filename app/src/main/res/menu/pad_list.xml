@@ -2,6 +2,28 @@
     xmlns:padland="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.mikifus.padland.PadListActivity">
+    <item android:id="@+id/action_sort"
+        android:title="@string/action_sort"
+        android:orderInCategory="90"
+        padland:showAsAction="ifRoom"
+        android:icon="@drawable/ic_sort">
+        <menu>
+            <group android:id="@+id/group_sort_groups"
+                android:checkableBehavior="single">
+                <item android:id="@+id/action_sort_groups_alphabetical"
+                    android:title="@string/sort_groups_alphabetical" />
+                <item android:id="@+id/action_sort_groups_last_access"
+                    android:title="@string/sort_groups_last_access" />
+            </group>
+            <group android:id="@+id/group_sort_pads"
+                android:checkableBehavior="single">
+                <item android:id="@+id/action_sort_pads_alphabetical"
+                    android:title="@string/sort_pads_alphabetical" />
+                <item android:id="@+id/action_sort_pads_last_access"
+                    android:title="@string/sort_pads_last_access" />
+            </group>
+        </menu>
+    </item>
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings"
         android:orderInCategory="100"

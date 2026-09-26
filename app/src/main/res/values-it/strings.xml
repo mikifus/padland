@@ -113,4 +113,9 @@
     <string name="model_pad">Documenti</string>
     <string name="none">Nessuno</string>
 
+    <string name="action_sort">Ordina</string>
+    <string name="sort_groups_alphabetical">Gruppi: alfabetico</string>
+    <string name="sort_groups_last_access">Gruppi: ultimo accesso</string>
+    <string name="sort_pads_alphabetical">Documenti: alfabetico</string>
+    <string name="sort_pads_last_access">Documenti: ultimo accesso</string>
 </resources>

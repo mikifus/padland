@@ -160,4 +160,9 @@
     <string name="serverlist_dialog_new_server_cryptpad_label">Marcar la casilla si este servidor utiliza CryptPad.</string>
     <string name="new_pad_cryptpad_drive">Ir a la unidad CryptPad</string>
 
+    <string name="action_sort">Ordenar</string>
+    <string name="sort_groups_alphabetical">Grupos: alfabético</string>
+    <string name="sort_groups_last_access">Grupos: último acceso</string>
+    <string name="sort_pads_alphabetical">Documentos: alfabético</string>
+    <string name="sort_pads_last_access">Documentos: último acceso</string>
 </resources>
