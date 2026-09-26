@@ -173,4 +173,8 @@
     <string name="import_clipboard_summary">%1$d importats. %2$d ignorats. %3$d fallits.</string>
     <string name="import_clipboard_unknown_servers">%1$d de servidors desconeguts: %2$s</string>
     <string name="import_clipboard_add_server">Afegeix servidor</string>
+    <plurals name="import_clipboard_choose_group">
+        <item quantity="one">Importa %d URL a…</item>
+        <item quantity="other">Importa %d URLs a…</item>
+    </plurals>
 </resources>

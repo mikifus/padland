@@ -49,6 +49,12 @@ interface PadGroupDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPadGroupWithPadlist(padGroupsAndPadList: PadGroupsAndPadList): Long
 
+    /**
+     * Blocking on purpose, to be used inside RoomDatabase.runInTransaction().
+     */
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertPadGroupsWithPadlistBlocking(items: List<PadGroupsAndPadList>): List<Long>
+
     @Query("DELETE FROM padlist_padgroups WHERE _id_pad = :padId")
     fun deletePadGroupsAndPadList(padId: Long)
 

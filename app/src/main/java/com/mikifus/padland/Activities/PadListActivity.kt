@@ -59,6 +59,8 @@ import com.mikifus.padland.Dialogs.Managers.ManagesNewPadDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesNewPadGroupDialog
 import com.mikifus.padland.Dialogs.Managers.IManagesNewServerDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesNewServerDialog
+import com.mikifus.padland.Dialogs.Managers.IManagesChooseGroupDialog
+import com.mikifus.padland.Dialogs.Managers.ManagesChooseGroupDialog
 import com.mikifus.padland.Utils.Import.PadClipboardImporter
 import com.mikifus.padland.Utils.Import.PadUrlImport
 import com.mikifus.padland.Utils.Sorting.PadListSortOrder
@@ -82,7 +84,8 @@ class PadListActivity: AppCompatActivity(),
     IMakesPadGroupSelectionTracker by MakesPadGroupSelectionTracker(),
     IManagesNewPadGroupDialog by ManagesNewPadGroupDialog(),
     IManagesNewPadDialog by ManagesNewPadDialog(),
-    IManagesNewServerDialog by ManagesNewServerDialog() {
+    IManagesNewServerDialog by ManagesNewServerDialog(),
+    IManagesChooseGroupDialog by ManagesChooseGroupDialog() {
 
     private var isSelectionBlocked: Boolean = false
     override var padGroupViewModel: PadGroupViewModel? = null
@@ -325,29 +328,35 @@ class PadListActivity: AppCompatActivity(),
     }
 
     /**
-     * Clipboard import
+     * Clipboard import:
+     * read and validate -> choose target group -> import -> summary.
      */
     private fun importPadsFromClipboard() {
         if (isImportingFromClipboard) return
 
         // Read now, on the main thread and while focused, as Android requires
-        val text = clipboardImporter.readClipboard()
-        runImport { clipboardImporter.importText(text) }
+        val parsed = PadUrlImport.parse(clipboardImporter.readClipboard())
+        if (parsed.validUrls.isEmpty()) {
+            Toast.makeText(this, getString(R.string.import_clipboard_no_urls), Toast.LENGTH_LONG).show()
+            return
+        }
+
+        val title = resources.getQuantityString(
+            R.plurals.import_clipboard_choose_group, parsed.validUrls.size, parsed.validUrls.size)
+
+        // Cancelling the dialog cancels the import
+        showChooseGroupDialog(this, title, animationOriginView = newPadButton) { groupId ->
+            runImport(groupId) { clipboardImporter.importParsed(parsed, groupId) }
+        }
     }
 
-    private fun runImport(block: suspend () -> PadClipboardImporter.Result?) {
+    private fun runImport(groupId: Long, block: suspend () -> PadClipboardImporter.Result) {
         if (isImportingFromClipboard) return
         isImportingFromClipboard = true
 
         lifecycleScope.launch {
             try {
-                val result = block()
-                if (result == null) {
-                    Toast.makeText(this@PadListActivity,
-                        getString(R.string.import_clipboard_no_urls), Toast.LENGTH_LONG).show()
-                } else {
-                    showImportSummary(result)
-                }
+                showImportSummary(block(), groupId)
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
@@ -363,7 +372,7 @@ class PadListActivity: AppCompatActivity(),
      * Toast with the summary. If some URLs belong to unknown servers, a snackbar
      * with the same summary is shown instead, with an action to add the server.
      */
-    private fun showImportSummary(result: PadClipboardImporter.Result) {
+    private fun showImportSummary(result: PadClipboardImporter.Result, groupId: Long) {
         val summary = getString(R.string.import_clipboard_summary,
             result.imported, result.ignored, result.failed)
 
@@ -383,19 +392,19 @@ class PadListActivity: AppCompatActivity(),
             .setAnchorView(anchor)
             .setTextMaxLines(4)
             .setAction(R.string.import_clipboard_add_server) {
-                addServerAndRetryImport(result.unknownHostUrls)
+                addServerAndRetryImport(result.unknownHostUrls, groupId)
             }
             .show()
     }
 
     /**
      * Opens the new server dialog prefilled with the first unknown URL. Once saved, the
-     * pending URLs are imported again: the ones from the new server get imported and,
-     * if other unknown servers remain, the snackbar is offered again.
+     * pending URLs are imported again into the same group: the ones from the new server
+     * get imported and, if other unknown servers remain, the snackbar is offered again.
      */
-    private fun addServerAndRetryImport(unknownHostUrls: List<String>) {
+    private fun addServerAndRetryImport(unknownHostUrls: List<String>, groupId: Long) {
         showNewServerDialog(this, unknownHostUrls.first(), onSavedCallBack = {
-            runImport { clipboardImporter.importUrls(unknownHostUrls) }
+            runImport(groupId) { clipboardImporter.importUrls(unknownHostUrls, groupId) }
         })
     }
 

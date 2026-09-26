@@ -1,6 +1,8 @@
 package com.mikifus.padland.Utils.Import
 
+import android.database.sqlite.SQLiteConstraintException
 import androidx.appcompat.app.AppCompatActivity
+import com.mikifus.padland.Database.PadGroupModel.PadGroupsAndPadList
 import com.mikifus.padland.Database.PadListDatabase
 import com.mikifus.padland.Database.PadModel.Pad
 import com.mikifus.padland.R
@@ -34,15 +36,13 @@ class PadClipboardImporter(private val activity: AppCompatActivity) {
     fun readClipboard(): String = PadClipboardHelper.getAllTextFromClipboard(activity)
 
     /**
-     * @return null if the text does not contain any valid URL.
+     * Imports the valid URLs of an already parsed text.
+     * The caller is expected to check [PadUrlImport.ParseResult.validUrls] is not empty.
+     *
+     * @param groupId target group, 0 for unclassified
      */
-    suspend fun importText(text: String): Result? {
-        val parsed = PadUrlImport.parse(text)
-        if (parsed.validUrls.isEmpty()) {
-            return null
-        }
-
-        val result = importUrls(parsed.validUrls)
+    suspend fun importParsed(parsed: PadUrlImport.ParseResult, groupId: Long = 0): Result {
+        val result = importUrls(parsed.validUrls, groupId)
         return result.copy(
             ignored = result.ignored + parsed.duplicateCount,
             failed = result.failed + parsed.invalidCount,
@@ -52,8 +52,10 @@ class PadClipboardImporter(private val activity: AppCompatActivity) {
     /**
      * Imports already validated and deduplicated URLs.
      * Used as well to retry the URLs from unknown servers once one is added.
+     *
+     * @param groupId target group, 0 for unclassified
      */
-    suspend fun importUrls(urls: List<String>): Result = withContext(Dispatchers.IO) {
+    suspend fun importUrls(urls: List<String>, groupId: Long = 0): Result = withContext(Dispatchers.IO) {
         val classification = PadUrlImport.classify(
             urls,
             database.padDao().getAllUrls(),
@@ -68,7 +70,7 @@ class PadClipboardImporter(private val activity: AppCompatActivity) {
         }
 
         if (pads.isNotEmpty()) {
-            database.padDao().insertAll(pads)
+            insertPads(pads, groupId)
         }
 
         Result(
@@ -77,6 +79,29 @@ class PadClipboardImporter(private val activity: AppCompatActivity) {
             failed = classification.unknownHostUrls.size + buildFailedCount,
             unknownHostUrls = classification.unknownHostUrls,
         )
+    }
+
+    /**
+     * Inserts the pads and their group relation atomically. If the group no longer
+     * exists (deleted meanwhile, foreign key failure) the transaction is rolled back
+     * and the pads are imported as unclassified instead.
+     */
+    private fun insertPads(pads: List<Pad>, groupId: Long) {
+        if (groupId <= 0) {
+            database.padDao().insertAll(pads)
+            return
+        }
+
+        try {
+            database.runInTransaction(Runnable {
+                val padIds = database.padDao().insertAll(pads)
+                database.padGroupDao().insertPadGroupsWithPadlistBlocking(
+                    padIds.map { PadGroupsAndPadList(mGroupId = groupId, mPadId = it) }
+                )
+            })
+        } catch (e: SQLiteConstraintException) {
+            database.padDao().insertAll(pads)
+        }
     }
 
     /**
