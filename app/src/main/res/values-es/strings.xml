@@ -166,4 +166,8 @@
     <string name="sort_pads_alphabetical">Documentos: alfabético</string>
     <string name="sort_pads_last_access">Documentos: último acceso</string>
     <string name="select_all">Seleccionar todo</string>
+    <string name="import_clipboard_no_urls">El portapapeles no contiene URLs válidas. Copia una dirección completa (https://…) por línea.</string>
+    <string name="import_clipboard_summary">%1$d importados. %2$d ignorados. %3$d fallidos.</string>
+    <string name="import_clipboard_unknown_servers">%1$d de servidores desconocidos: %2$s</string>
+    <string name="import_clipboard_add_server">Añadir servidor</string>
 </resources>

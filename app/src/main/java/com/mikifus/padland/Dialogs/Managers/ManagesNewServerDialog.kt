@@ -10,11 +10,18 @@ import com.mikifus.padland.R
 import com.mikifus.padland.Utils.PadServer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 interface IManagesNewServerDialog {
     var serverViewModel: ServerViewModel?
+
+    /**
+     * @param onSavedCallBack called on the main thread once the new server is stored
+     * @param onDismissCallBack called when the dialog is closed (saved or not)
+     */
     fun showNewServerDialog(activity: AppCompatActivity,
                             url: String? = null,
+                            onSavedCallBack: ((Server) -> Unit)? = null,
                             onDismissCallBack: (() -> Unit)? = null)
 }
 
@@ -23,10 +30,14 @@ class ManagesNewServerDialog: ManagesDialog(), IManagesNewServerDialog {
 
     override val dialog by lazy { NewServerDialog() }
     override var serverViewModel: ServerViewModel? = null
+    private var onSavedCallBack: ((Server) -> Unit)? = null
 
     override fun showNewServerDialog(activity: AppCompatActivity,
                                      url: String?,
+                                     onSavedCallBack: ((Server) -> Unit)?,
                                      onDismissCallBack: (() -> Unit)?) {
+        // Always replaced, the dialog instance is reused between calls
+        this.onSavedCallBack = onSavedCallBack
         showDialog(activity)
         initViewModels(activity)
         initEvents(activity, onDismissCallBack)
@@ -76,6 +87,10 @@ class ManagesNewServerDialog: ManagesDialog(), IManagesNewServerDialog {
             )
 
             serverViewModel!!.insertServer(updateServer)
+
+            onSavedCallBack?.let { callback ->
+                withContext(Dispatchers.Main) { callback(updateServer) }
+            }
         }
     }
 }

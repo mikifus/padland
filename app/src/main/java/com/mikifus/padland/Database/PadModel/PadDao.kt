@@ -47,6 +47,9 @@ interface PadDao {
     @Query("SELECT * FROM padlist WHERE url == :url")
     fun getByUrlCursor(url: String): Cursor
 
+    @Query("SELECT url FROM padlist")
+    suspend fun getAllUrls(): List<String>
+
     @Query("DELETE FROM padlist WHERE _id IN (:selectionArgs)")
     fun deleteBy(selectionArgs: Array<String>?): Int
 

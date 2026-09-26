@@ -24,6 +24,9 @@ interface ServerDao {
     @Query("SELECT * FROM padland_servers WHERE enabled = 1")
     fun getAllEnabled(): LiveData<List<Server>>
 
+    @Query("SELECT * FROM padland_servers WHERE enabled = 1")
+    suspend fun getAllEnabledList(): List<Server>
+
 //    @Query("SELECT * FROM padland_servers WHERE _id == :id")
 //    fun getById(id: Long): LiveData<Server>
 

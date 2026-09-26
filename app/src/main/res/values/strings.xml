@@ -232,4 +232,9 @@
     <string name="sort_pads_last_access">Documents: last access</string>
     <string name="select_all">Select all</string>
 
+    <string name="import_clipboard_no_urls">The clipboard does not contain valid URLs. Copy one full address (https://…) per line.</string>
+    <string name="import_clipboard_summary">%1$d imported. %2$d ignored. %3$d failed.</string>
+    <string name="import_clipboard_unknown_servers">%1$d from unknown servers: %2$s</string>
+    <string name="import_clipboard_add_server">Add server</string>
+
 </resources>
