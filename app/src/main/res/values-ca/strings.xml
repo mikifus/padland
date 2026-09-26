@@ -168,4 +168,5 @@
     <string name="sort_groups_last_access">Grups: últim accés</string>
     <string name="sort_pads_alphabetical">Documents: alfabètic</string>
     <string name="sort_pads_last_access">Documents: últim accés</string>
+    <string name="select_all">Selecciona tot</string>
 </resources>

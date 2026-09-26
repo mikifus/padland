@@ -230,5 +230,6 @@
     <string name="sort_groups_last_access">Groups: last access</string>
     <string name="sort_pads_alphabetical">Documents: alphabetical</string>
     <string name="sort_pads_last_access">Documents: last access</string>
+    <string name="select_all">Select all</string>
 
 </resources>
