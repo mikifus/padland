@@ -157,4 +157,37 @@
         <item quantity="one">Importer %d URL dans…</item>
         <item quantity="other">Importer %d URL dans…</item>
     </plurals>
+
+    <!-- Error reporting -->
+    <string name="settings_debug">Débogage</string>
+    <string name="settings_error_popup_title">Afficher les fenêtres d\'erreur</string>
+    <string name="settings_error_popup_desc">Lorsqu\'une erreur se produit, affiche ses détails pour que vous puissiez les copier et signaler le problème. Les erreurs sont enregistrées sur cet appareil. Supprimez toute donnée sensible du rapport avant de le partager.</string>
+    <string name="error_report_list_delete_all_summary">Supprimer toutes les erreurs enregistrées sur cet appareil.</string>
+    <string name="title_activity_error_report_list">Erreurs enregistrées</string>
+    <string name="pref_error_report_list_summary_none">Aucune erreur enregistrée.</string>
+    <plurals name="pref_error_report_list_summary">
+        <item quantity="one">%d erreur enregistrée sur cet appareil.</item>
+        <item quantity="other">%d erreurs enregistrées sur cet appareil.</item>
+    </plurals>
+    <string name="error_report_list_empty_no_errors">Aucune erreur n\'a été enregistrée.</string>
+    <string name="error_report_list_delete_all">Supprimer les erreurs enregistrées</string>
+    <string name="error_report_list_dialog_delete_sure_to_delete">Tous les rapports d\'erreur enregistrés seront supprimés.</string>
+    <string name="error_report_dialog_close">Fermer</string>
+    <string name="error_report_dialog_show_all">Tout afficher</string>
+    <string name="error_report_dialog_popup_title">Une erreur s\'est produite</string>
+    <string name="error_report_dialog_popup_summary">Vous pouvez copier les détails ci-dessous et les inclure en signalant le problème.</string>
+    <string name="error_report_dialog_previous_crash_title">Padland s\'est fermé de manière inattendue</string>
+    <string name="error_report_dialog_previous_crash_summary">Lors de sa dernière utilisation, Padland s\'est arrêté à cause d\'une erreur. Vous pouvez copier les détails ci-dessous et les inclure en signalant le problème.</string>
+    <string name="error_report_dialog_detail_crash">Plantage le %s</string>
+    <string name="error_report_dialog_detail_error">Erreur le %s</string>
+    <plurals name="error_report_dialog_more_reports">
+        <item quantity="one">%d autre erreur se trouve dans Paramètres → Erreurs enregistrées.</item>
+        <item quantity="other">%d autres erreurs se trouvent dans Paramètres → Erreurs enregistrées.</item>
+    </plurals>
+    <string name="error_report_dialog_not_found_title">Erreur introuvable</string>
+    <string name="error_report_dialog_not_found">Ce rapport d\'erreur n\'est plus disponible.</string>
+    <string name="error_report_clip_label">Rapport d\'erreur Padland</string>
+    <string name="error_report_dialog_copy_failed">Le rapport n\'a pas pu être copié.</string>
+    <string name="error_report_type_crash">Plantage</string>
+    <string name="error_report_type_error">Erreur</string>
 </resources>

@@ -177,4 +177,38 @@
         <item quantity="one">Importa %d URL a…</item>
         <item quantity="other">Importa %d URLs a…</item>
     </plurals>
+
+    <!-- Error reporting -->
+    <string name="settings_debug">Depuració</string>
+    <string name="settings_error_popup_title">Mostra finestres d\'error</string>
+    <string name="settings_error_popup_desc">Quan es produeix un error, mostra\'n els detalls perquè els puguis copiar i informar del problema. Els errors es desen en aquest dispositiu. Elimina qualsevol dada sensible de l\'informe abans de compartir-lo.</string>
+    <string name="error_report_list_delete_all_summary">Esborra tots els errors desats en aquest dispositiu.</string>
+    <string name="title_activity_error_report_list">Errors desats</string>
+    <string name="pref_error_report_list_summary_none">No hi ha errors desats.</string>
+    <plurals name="pref_error_report_list_summary">
+        <item quantity="one">%d error desat en aquest dispositiu.</item>
+        <item quantity="other">%d errors desats en aquest dispositiu.</item>
+    </plurals>
+    <string name="error_report_list_empty_no_errors">No s\'ha desat cap error.</string>
+    <string name="error_report_list_delete_all">Esborra els errors desats</string>
+    <string name="error_report_list_dialog_delete_sure_to_delete">S\'esborraran tots els informes d\'error desats.</string>
+    <string name="error_report_dialog_close">Tanca</string>
+    <string name="error_report_dialog_show_all">Mostra-ho tot</string>
+    <string name="error_report_dialog_popup_title">S\'ha produït un error</string>
+    <string name="error_report_dialog_popup_summary">Pots copiar els detalls següents i incloure\'ls quan informis del problema.</string>
+    <string name="error_report_dialog_previous_crash_title">Padland s\'ha tancat inesperadament</string>
+    <string name="error_report_dialog_previous_crash_summary">L\'última vegada que es va utilitzar, Padland es va aturar a causa d\'un error. Pots copiar els detalls següents i incloure\'ls quan informis del problema.</string>
+    <string name="error_report_dialog_detail_crash">Tancament inesperat el %s</string>
+    <string name="error_report_dialog_detail_error">Error el %s</string>
+    <plurals name="error_report_dialog_more_reports">
+        <item quantity="one">Hi ha %d error més a Preferències → Errors desats.</item>
+        <item quantity="other">Hi ha %d errors més a Preferències → Errors desats.</item>
+    </plurals>
+    <string name="error_report_dialog_not_found_title">Error no trobat</string>
+    <string name="error_report_dialog_not_found">Aquest informe d\'error ja no està disponible.</string>
+    <string name="error_report_clip_label">Informe d\'error de Padland</string>
+    <string name="error_report_dialog_copy_failed">No s\'ha pogut copiar l\'informe.</string>
+    <string name="error_report_type_crash">Tancament inesperat</string>
+    <string name="error_report_type_error">Error</string>
 </resources>
+

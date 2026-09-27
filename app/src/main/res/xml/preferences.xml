@@ -85,4 +85,25 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="@string/settings_debug">
+
+        <SwitchPreferenceCompat
+            android:key="padland_debug_error_popup"
+            android:title="@string/settings_error_popup_title"
+            android:summary="@string/settings_error_popup_desc"
+            android:defaultValue="false" />
+
+        <Preference
+            android:key="padland_error_report_list"
+            android:title="@string/title_activity_error_report_list"
+            android:summary="@string/pref_error_report_list_summary_none" />
+
+        <Preference
+            android:key="padland_error_report_list_delete"
+            android:title="@string/error_report_list_delete_all"
+            android:summary="@string/error_report_list_delete_all_summary" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

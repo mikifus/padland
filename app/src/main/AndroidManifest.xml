@@ -98,6 +98,17 @@
                 android:value=".Activities.SettingsActivity" />
         </activity>
 
+        <activity
+            android:name=".Activities.ErrorReportListActivity"
+            android:label="@string/title_activity_error_report_list"
+            android:parentActivityName=".Activities.SettingsActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activities.SettingsActivity" />
+        </activity>
+
         <provider
             android:name="com.mikifus.padland.PadLandContentProvider"
             android:authorities="com.mikifus.padland.padlandcontentprovider"

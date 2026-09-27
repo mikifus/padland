@@ -61,6 +61,7 @@ import com.mikifus.padland.Dialogs.Managers.IManagesNewServerDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesNewServerDialog
 import com.mikifus.padland.Dialogs.Managers.IManagesChooseGroupDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesChooseGroupDialog
+import com.mikifus.padland.Utils.ErrorReporting.ErrorReporter
 import com.mikifus.padland.Utils.Import.PadClipboardImporter
 import com.mikifus.padland.Utils.Import.PadUrlImport
 import com.mikifus.padland.Utils.Sorting.PadListSortOrder
@@ -360,6 +361,7 @@ class PadListActivity: AppCompatActivity(),
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
+                ErrorReporter.reportNonFatal(e, this@PadListActivity)
                 Toast.makeText(this@PadListActivity,
                     getString(R.string.unexpected_error), Toast.LENGTH_LONG).show()
             } finally {

@@ -22,6 +22,20 @@ class PadClipboardHelper {
             clipboard.setPrimaryClip(clip)
         }
 
+        /**
+         * Copies any plain text.
+         * @return false if the clipboard rejected it (e.g. too large)
+         */
+        fun copyText(context: Context, label: String, text: String): Boolean {
+            return try {
+                val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                clipboard.setPrimaryClip(ClipData.newPlainText(label, text))
+                true
+            } catch (e: RuntimeException) {
+                false
+            }
+        }
+
         fun getFromClipboard(activity: AppCompatActivity): String {
             val clipboard = activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             return clipboard.primaryClip?.getItemAt(0)?.text?.toString() ?: ""

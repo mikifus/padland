@@ -1,5 +1,6 @@
 package com.mikifus.padland.Activities
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
@@ -8,17 +9,24 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NavUtils
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import com.mikifus.padland.Database.ServerModel.ServerViewModel
+import com.mikifus.padland.Dialogs.Managers.IManagesDeleteErrorReportsDialog
+import com.mikifus.padland.Dialogs.Managers.ManagesDeleteErrorReportsDialog
 import com.mikifus.padland.R
+import com.mikifus.padland.Utils.ErrorReporting.ErrorReporter
 import com.mikifus.padland.Utils.Export.ExportHelper
 import com.mikifus.padland.Utils.Export.IExportHelper
 import com.mikifus.padland.Utils.Export.IImportHelper
 import com.mikifus.padland.Utils.Export.ImportHelper
 import com.rarepebble.colorpicker.ColorPreference
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -45,7 +53,8 @@ class SettingsActivity : AppCompatActivity() {
 
 
     class SettingsFragment : PreferenceFragmentCompat(),
-        SharedPreferences.OnSharedPreferenceChangeListener {
+        SharedPreferences.OnSharedPreferenceChangeListener,
+        IManagesDeleteErrorReportsDialog by ManagesDeleteErrorReportsDialog() {
 
         private var sharedPreferences: SharedPreferences? = null
         var serverViewModel: ServerViewModel? = null
@@ -62,6 +71,54 @@ class SettingsActivity : AppCompatActivity() {
             initDefaultServerPreference()
             initExportPreference()
             initImportPreference()
+            initErrorReportPreferences()
+        }
+
+        override fun onResume() {
+            super.onResume()
+            updateErrorReportsSummary()
+        }
+
+        private fun initErrorReportPreferences() {
+            val listPreference = findPreference<Preference>("padland_error_report_list")
+            listPreference?.setOnPreferenceClickListener {
+                startActivity(Intent(requireContext(), ErrorReportListActivity::class.java))
+                true
+            }
+
+            val deletePreference = findPreference<Preference>("padland_error_report_list_delete")
+            deletePreference?.setOnPreferenceClickListener {
+                showDeleteErrorReportsDialog(requireActivity() as AppCompatActivity) {
+                    updateErrorReportsSummary()
+                }
+                true
+            }
+        }
+
+        private fun updateErrorReportsSummary() {
+            if(!isAdded) {
+                return
+            }
+
+            val errorReportStore = ErrorReporter.getStore(requireContext())
+            lifecycleScope.launch {
+                val count = withContext(Dispatchers.IO) {
+                    errorReportStore.count()
+                }
+                if(!isAdded) {
+                    return@launch
+                }
+
+                val listPreference = findPreference<Preference>("padland_error_report_list")
+                listPreference?.summary = if(count > 0) {
+                    resources.getQuantityString(R.plurals.pref_error_report_list_summary, count, count)
+                } else {
+                    getString(R.string.pref_error_report_list_summary_none)
+                }
+
+                val deletePreference = findPreference<Preference>("padland_error_report_list_delete")
+                deletePreference?.isEnabled = count > 0
+            }
         }
 
         private fun initDefaultServerPreference() {

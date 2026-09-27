@@ -91,4 +91,37 @@
         <item quantity="one">%d URL importieren nach…</item>
         <item quantity="other">%d URLs importieren nach…</item>
     </plurals>
+
+    <!-- Error reporting -->
+    <string name="settings_debug">Fehlersuche</string>
+    <string name="settings_error_popup_title">Fehlerfenster anzeigen</string>
+    <string name="settings_error_popup_desc">Wenn ein Fehler auftritt, werden die Details angezeigt, damit du sie kopieren und das Problem melden kannst. Fehler werden auf diesem Gerät gespeichert. Entferne vor dem Teilen alle sensiblen Daten aus dem Bericht.</string>
+    <string name="error_report_list_delete_all_summary">Alle auf diesem Gerät gespeicherten Fehler löschen.</string>
+    <string name="title_activity_error_report_list">Gespeicherte Fehler</string>
+    <string name="pref_error_report_list_summary_none">Keine Fehler gespeichert.</string>
+    <plurals name="pref_error_report_list_summary">
+        <item quantity="one">%d Fehler auf diesem Gerät gespeichert.</item>
+        <item quantity="other">%d Fehler auf diesem Gerät gespeichert.</item>
+    </plurals>
+    <string name="error_report_list_empty_no_errors">Es wurden keine Fehler gespeichert.</string>
+    <string name="error_report_list_delete_all">Gespeicherte Fehler löschen</string>
+    <string name="error_report_list_dialog_delete_sure_to_delete">Alle gespeicherten Fehlerberichte werden gelöscht.</string>
+    <string name="error_report_dialog_close">Schließen</string>
+    <string name="error_report_dialog_show_all">Alle anzeigen</string>
+    <string name="error_report_dialog_popup_title">Ein Fehler ist aufgetreten</string>
+    <string name="error_report_dialog_popup_summary">Du kannst die folgenden Details kopieren und beim Melden des Problems angeben.</string>
+    <string name="error_report_dialog_previous_crash_title">Padland wurde unerwartet beendet</string>
+    <string name="error_report_dialog_previous_crash_summary">Bei der letzten Nutzung wurde Padland wegen eines Fehlers beendet. Du kannst die folgenden Details kopieren und beim Melden des Problems angeben.</string>
+    <string name="error_report_dialog_detail_crash">Absturz am %s</string>
+    <string name="error_report_dialog_detail_error">Fehler am %s</string>
+    <plurals name="error_report_dialog_more_reports">
+        <item quantity="one">%d weiterer Fehler ist unter Einstellungen → Gespeicherte Fehler zu finden.</item>
+        <item quantity="other">%d weitere Fehler sind unter Einstellungen → Gespeicherte Fehler zu finden.</item>
+    </plurals>
+    <string name="error_report_dialog_not_found_title">Fehler nicht gefunden</string>
+    <string name="error_report_dialog_not_found">Dieser Fehlerbericht ist nicht mehr verfügbar.</string>
+    <string name="error_report_clip_label">Padland-Fehlerbericht</string>
+    <string name="error_report_dialog_copy_failed">Der Bericht konnte nicht kopiert werden.</string>
+    <string name="error_report_type_crash">Absturz</string>
+    <string name="error_report_type_error">Fehler</string>
 </resources>
