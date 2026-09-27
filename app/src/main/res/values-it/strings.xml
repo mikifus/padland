@@ -113,4 +113,18 @@
     <string name="model_pad">Documenti</string>
     <string name="none">Nessuno</string>
 
+    <string name="action_sort">Ordina</string>
+    <string name="sort_groups_alphabetical">Gruppi: alfabetico</string>
+    <string name="sort_groups_last_access">Gruppi: ultimo accesso</string>
+    <string name="sort_pads_alphabetical">Documenti: alfabetico</string>
+    <string name="sort_pads_last_access">Documenti: ultimo accesso</string>
+    <string name="select_all">Seleziona tutto</string>
+    <string name="import_clipboard_no_urls">Gli appunti non contengono URL validi. Copia un indirizzo completo (https://…) per riga.</string>
+    <string name="import_clipboard_summary">%1$d importati. %2$d ignorati. %3$d non riusciti.</string>
+    <string name="import_clipboard_unknown_servers">%1$d da server sconosciuti: %2$s</string>
+    <string name="import_clipboard_add_server">Aggiungi server</string>
+    <plurals name="import_clipboard_choose_group">
+        <item quantity="one">Importa %d URL in…</item>
+        <item quantity="other">Importa %d URL in…</item>
+    </plurals>
 </resources>

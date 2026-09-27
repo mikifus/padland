@@ -26,5 +26,18 @@ class PadClipboardHelper {
             val clipboard = activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             return clipboard.primaryClip?.getItemAt(0)?.text?.toString() ?: ""
         }
+
+        /**
+         * Text of every item in the clipboard (rich text and URIs coerced to text),
+         * joined with new lines.
+         */
+        fun getAllTextFromClipboard(activity: AppCompatActivity): String {
+            val clipboard = activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = clipboard.primaryClip ?: return ""
+
+            return (0 until clip.itemCount)
+                .mapNotNull { clip.getItemAt(it)?.coerceToText(activity)?.toString() }
+                .joinToString("\n")
+        }
     }
 }

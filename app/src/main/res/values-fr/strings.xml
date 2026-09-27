@@ -143,4 +143,18 @@
    <string name="model_server">Serveurs</string>
    <string name="none">Aucun</string>
 
+    <string name="action_sort">Trier</string>
+    <string name="sort_groups_alphabetical">Groupes : alphabétique</string>
+    <string name="sort_groups_last_access">Groupes : dernier accès</string>
+    <string name="sort_pads_alphabetical">Documents : alphabétique</string>
+    <string name="sort_pads_last_access">Documents : dernier accès</string>
+    <string name="select_all">Sélectionner tout</string>
+    <string name="import_clipboard_no_urls">Le presse-papiers ne contient pas d\'URL valide. Copiez une adresse complète (https://…) par ligne.</string>
+    <string name="import_clipboard_summary">%1$d importés. %2$d ignorés. %3$d échoués.</string>
+    <string name="import_clipboard_unknown_servers">%1$d de serveurs inconnus : %2$s</string>
+    <string name="import_clipboard_add_server">Ajouter un serveur</string>
+    <plurals name="import_clipboard_choose_group">
+        <item quantity="one">Importer %d URL dans…</item>
+        <item quantity="other">Importer %d URL dans…</item>
+    </plurals>
 </resources>

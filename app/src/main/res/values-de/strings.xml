@@ -77,4 +77,18 @@
     <string name="padinfo_times_accessed">Anzahl der Aufrufe</string>
     <string name="pref_default_display_name">Anonymous</string>
 
+    <string name="action_sort">Sortieren</string>
+    <string name="sort_groups_alphabetical">Gruppen: alphabetisch</string>
+    <string name="sort_groups_last_access">Gruppen: letzter Zugriff</string>
+    <string name="sort_pads_alphabetical">Dokumente: alphabetisch</string>
+    <string name="sort_pads_last_access">Dokumente: letzter Zugriff</string>
+    <string name="select_all">Alle auswählen</string>
+    <string name="import_clipboard_no_urls">Die Zwischenablage enthält keine gültigen URLs. Kopiere eine vollständige Adresse (https://…) pro Zeile.</string>
+    <string name="import_clipboard_summary">%1$d importiert. %2$d ignoriert. %3$d fehlgeschlagen.</string>
+    <string name="import_clipboard_unknown_servers">%1$d von unbekannten Servern: %2$s</string>
+    <string name="import_clipboard_add_server">Server hinzufügen</string>
+    <plurals name="import_clipboard_choose_group">
+        <item quantity="one">%d URL importieren nach…</item>
+        <item quantity="other">%d URLs importieren nach…</item>
+    </plurals>
 </resources>

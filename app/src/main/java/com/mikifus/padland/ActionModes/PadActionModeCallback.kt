@@ -80,6 +80,11 @@ class PadActionModeCallback(activity: PadListActivity): ActionMode.Callback,
      */
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.menuitem_select_all -> {
+                // Keeps the action mode open, only extends the selection
+                padListActivity.selectAllPads()
+                true
+            }
             R.id.menuitem_group -> {
                 showGroupPadDialog(
                     padListActivity,

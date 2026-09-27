@@ -28,8 +28,11 @@ class ServerViewModel(application: Application): AndroidViewModel(application) {
         getAllEnabled = repository.getAllEnabled
     }
 
+    /**
+     * Suspends until the server is stored, so callers can react after saving.
+     */
     suspend fun insertServer(server: Server) {
-        viewModelScope.launch(Dispatchers.IO) {
+        withContext(Dispatchers.IO) {
             repository.insertServer(server)
         }
     }

@@ -163,4 +163,18 @@
     <string name="serverlist_dialog_new_server_cryptpad_label">Marca la casella si aquest servidor utilitza CryptPad.</string>
     <string name="new_pad_cryptpad_drive">Anar a la unitat de CryptPad</string>
 
+    <string name="action_sort">Ordenar</string>
+    <string name="sort_groups_alphabetical">Grups: alfabètic</string>
+    <string name="sort_groups_last_access">Grups: últim accés</string>
+    <string name="sort_pads_alphabetical">Documents: alfabètic</string>
+    <string name="sort_pads_last_access">Documents: últim accés</string>
+    <string name="select_all">Selecciona-ho tot</string>
+    <string name="import_clipboard_no_urls">El porta-retalls no conté URLs vàlides. Copia una adreça completa (https://…) per línia.</string>
+    <string name="import_clipboard_summary">%1$d importats. %2$d ignorats. %3$d fallits.</string>
+    <string name="import_clipboard_unknown_servers">%1$d de servidors desconeguts: %2$s</string>
+    <string name="import_clipboard_add_server">Afegeix servidor</string>
+    <plurals name="import_clipboard_choose_group">
+        <item quantity="one">Importa %d URL a…</item>
+        <item quantity="other">Importa %d URLs a…</item>
+    </plurals>
 </resources>

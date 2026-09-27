@@ -27,6 +27,11 @@ class GroupPadDialog: FormDialog() {
 
     private var padGroupsSpinnerData: List<PadGroup>? = listOf()
 
+    /**
+     * Optional custom toolbar title. Falls back to the default group selection title.
+     */
+    var title: String? = null
+
     override fun setFormData(data: HashMap<String, Any>) {
         this.data = data
         applyFormData()
@@ -91,7 +96,7 @@ class GroupPadDialog: FormDialog() {
     override fun initToolBar() {
         super.initToolBar()
 
-        toolbar!!.title = getString(R.string.padlist_group_select_dialog)
+        toolbar!!.title = title ?: getString(R.string.padlist_group_select_dialog)
     }
 
     /**

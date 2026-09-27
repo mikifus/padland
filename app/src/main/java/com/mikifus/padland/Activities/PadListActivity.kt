@@ -23,9 +23,11 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.MenuCompat
 import androidx.core.view.ViewCompat
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.ViewModelProvider
@@ -37,6 +39,7 @@ import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import com.mikifus.padland.Adapters.PadAdapter
 import com.mikifus.padland.Adapters.PadGroupAdapter
 import com.mikifus.padland.Adapters.PadGroupSelectionTracker.IMakesPadGroupSelectionTracker
@@ -54,6 +57,14 @@ import com.mikifus.padland.Dialogs.Managers.IManagesNewPadDialog
 import com.mikifus.padland.Dialogs.Managers.IManagesNewPadGroupDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesNewPadDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesNewPadGroupDialog
+import com.mikifus.padland.Dialogs.Managers.IManagesNewServerDialog
+import com.mikifus.padland.Dialogs.Managers.ManagesNewServerDialog
+import com.mikifus.padland.Dialogs.Managers.IManagesChooseGroupDialog
+import com.mikifus.padland.Dialogs.Managers.ManagesChooseGroupDialog
+import com.mikifus.padland.Utils.Import.PadClipboardImporter
+import com.mikifus.padland.Utils.Import.PadUrlImport
+import com.mikifus.padland.Utils.Sorting.PadListSortOrder
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -72,11 +83,17 @@ class PadListActivity: AppCompatActivity(),
     IMakesPadSelectionTracker by MakesPadSelectionTracker(),
     IMakesPadGroupSelectionTracker by MakesPadGroupSelectionTracker(),
     IManagesNewPadGroupDialog by ManagesNewPadGroupDialog(),
-    IManagesNewPadDialog by ManagesNewPadDialog() {
+    IManagesNewPadDialog by ManagesNewPadDialog(),
+    IManagesNewServerDialog by ManagesNewServerDialog(),
+    IManagesChooseGroupDialog by ManagesChooseGroupDialog() {
 
     private var isSelectionBlocked: Boolean = false
     override var padGroupViewModel: PadGroupViewModel? = null
     override var padViewModel: PadViewModel? = null
+
+    private val clipboardImporter by lazy { PadClipboardImporter(this) }
+    private var isImportingFromClipboard: Boolean = false
+    private var newPadButton: FloatingActionButton? = null
 
     private var mainList: List<PadGroupsWithPadList>? = null
     private var unclassifiedList: List<Pad>? = null
@@ -148,13 +165,13 @@ class PadListActivity: AppCompatActivity(),
     private fun initListView() {
         initSelectionTrackers()
 
-        padGroupViewModel!!.getPadGroupsWithPadList.observe(this) { currentList ->
+        padGroupViewModel!!.getSortedPadGroupsWithPadList.observe(this) { currentList ->
             mainList = currentList ?: listOf()
             adapter!!.data = mainList!!
             showHideEmpty()
         }
 
-        padGroupViewModel!!.getPadsWithoutGroup.observe(this) { currentList ->
+        padGroupViewModel!!.getSortedPadsWithoutGroup.observe(this) { currentList ->
             unclassifiedList = currentList ?: listOf()
             padAdapter!!.data = unclassifiedList!!
             showHideUnclassified()
@@ -181,6 +198,14 @@ class PadListActivity: AppCompatActivity(),
         newPadButton.setOnClickListener {
             finishAllActionModes()
             showNewPadDialog(this@PadListActivity, newPadButton)
+        }
+
+        // Long press: import a list of URLs (one per line) from the clipboard
+        this.newPadButton = newPadButton
+        newPadButton.setOnLongClickListener {
+            finishAllActionModes()
+            importPadsFromClipboard()
+            true
         }
 
         emptyButton?.setOnClickListener {
@@ -231,7 +256,37 @@ class PadListActivity: AppCompatActivity(),
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.pad_list, menu)
+        menu.findItem(R.id.action_sort)?.subMenu?.let {
+            MenuCompat.setGroupDividerEnabled(it, true)
+        }
         return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        updateSortMenuChecks(menu)
+        return super.onPrepareOptionsMenu(menu)
+    }
+
+    /**
+     * Reflects the persisted sort choices in the sort submenu radio items.
+     */
+    private fun updateSortMenuChecks(menu: Menu) {
+        val groupSortOrder = padGroupViewModel?.groupSortOrder?.value ?: PadListSortOrder.DEFAULT
+        val padSortOrder = padGroupViewModel?.padSortOrder?.value ?: PadListSortOrder.DEFAULT
+
+        menu.findItem(
+            when (groupSortOrder) {
+                PadListSortOrder.ALPHABETICAL -> R.id.action_sort_groups_alphabetical
+                PadListSortOrder.LAST_ACCESS -> R.id.action_sort_groups_last_access
+            }
+        )?.isChecked = true
+
+        menu.findItem(
+            when (padSortOrder) {
+                PadListSortOrder.ALPHABETICAL -> R.id.action_sort_pads_alphabetical
+                PadListSortOrder.LAST_ACCESS -> R.id.action_sort_pads_last_access
+            }
+        )?.isChecked = true
     }
 
     /**
@@ -247,9 +302,110 @@ class PadListActivity: AppCompatActivity(),
                 this.startActivity(intent)
             }
 
+            R.id.action_sort_groups_alphabetical -> {
+                item.isChecked = true
+                padGroupViewModel?.setGroupSortOrder(PadListSortOrder.ALPHABETICAL)
+            }
+
+            R.id.action_sort_groups_last_access -> {
+                item.isChecked = true
+                padGroupViewModel?.setGroupSortOrder(PadListSortOrder.LAST_ACCESS)
+            }
+
+            R.id.action_sort_pads_alphabetical -> {
+                item.isChecked = true
+                padGroupViewModel?.setPadSortOrder(PadListSortOrder.ALPHABETICAL)
+            }
+
+            R.id.action_sort_pads_last_access -> {
+                item.isChecked = true
+                padGroupViewModel?.setPadSortOrder(PadListSortOrder.LAST_ACCESS)
+            }
+
             else -> return super.onOptionsItemSelected(item)
         }
         return true
+    }
+
+    /**
+     * Clipboard import:
+     * read and validate -> choose target group -> import -> summary.
+     */
+    private fun importPadsFromClipboard() {
+        if (isImportingFromClipboard) return
+
+        // Read now, on the main thread and while focused, as Android requires
+        val parsed = PadUrlImport.parse(clipboardImporter.readClipboard())
+        if (parsed.validUrls.isEmpty()) {
+            Toast.makeText(this, getString(R.string.import_clipboard_no_urls), Toast.LENGTH_LONG).show()
+            return
+        }
+
+        val title = resources.getQuantityString(
+            R.plurals.import_clipboard_choose_group, parsed.validUrls.size, parsed.validUrls.size)
+
+        // Cancelling the dialog cancels the import
+        showChooseGroupDialog(this, title, animationOriginView = newPadButton) { groupId ->
+            runImport(groupId) { clipboardImporter.importParsed(parsed, groupId) }
+        }
+    }
+
+    private fun runImport(groupId: Long, block: suspend () -> PadClipboardImporter.Result) {
+        if (isImportingFromClipboard) return
+        isImportingFromClipboard = true
+
+        lifecycleScope.launch {
+            try {
+                showImportSummary(block(), groupId)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Toast.makeText(this@PadListActivity,
+                    getString(R.string.unexpected_error), Toast.LENGTH_LONG).show()
+            } finally {
+                isImportingFromClipboard = false
+            }
+        }
+    }
+
+    /**
+     * Toast with the summary. If some URLs belong to unknown servers, a snackbar
+     * with the same summary is shown instead, with an action to add the server.
+     */
+    private fun showImportSummary(result: PadClipboardImporter.Result, groupId: Long) {
+        val summary = getString(R.string.import_clipboard_summary,
+            result.imported, result.ignored, result.failed)
+
+        val anchor = newPadButton
+        if (result.unknownHostUrls.isEmpty() || anchor == null) {
+            Toast.makeText(this, summary, Toast.LENGTH_LONG).show()
+            return
+        }
+
+        val unknownHosts = result.unknownHostUrls
+            .mapNotNull { PadUrlImport.hostOf(it) }
+            .distinct()
+        val message = summary + "\n" + getString(R.string.import_clipboard_unknown_servers,
+            result.unknownHostUrls.size, unknownHosts.joinToString(", "))
+
+        Snackbar.make(anchor, message, IMPORT_SNACKBAR_DURATION)
+            .setAnchorView(anchor)
+            .setTextMaxLines(4)
+            .setAction(R.string.import_clipboard_add_server) {
+                addServerAndRetryImport(result.unknownHostUrls, groupId)
+            }
+            .show()
+    }
+
+    /**
+     * Opens the new server dialog prefilled with the first unknown URL. Once saved, the
+     * pending URLs are imported again into the same group: the ones from the new server
+     * get imported and, if other unknown servers remain, the snackbar is offered again.
+     */
+    private fun addServerAndRetryImport(unknownHostUrls: List<String>, groupId: Long) {
+        showNewServerDialog(this, unknownHostUrls.first(), onSavedCallBack = {
+            runImport(groupId) { clipboardImporter.importUrls(unknownHostUrls, groupId) }
+        })
     }
 
     /**
@@ -293,5 +449,10 @@ class PadListActivity: AppCompatActivity(),
 
     override fun onExitedView(view: View, event: DragEvent) {
         view.background = ContextCompat.getDrawable(this, R.drawable.background_selector)
+    }
+
+    companion object {
+        /** Long enough to read the summary and tap "Add server" */
+        private const val IMPORT_SNACKBAR_DURATION = 10_000
     }
 }

@@ -22,6 +22,7 @@ interface IMakesPadSelectionTracker {
     var padActionMode: ActionMode?
     fun makePadSelectionTracker(activity: PadListActivity, recyclerView: RecyclerView, padAdapter: PadAdapter): SelectionTracker<Long>
     fun getPadSelection(): List<Long>
+    fun selectAllPads()
     fun onDestroyPadActionMode()
     fun getSelectionBlock(): Boolean
     fun setSelectionBlock(value: Boolean)
@@ -34,6 +35,13 @@ class MakesPadSelectionTracker: IMakesPadSelectionTracker,
     override var lastSelectedPadView: View? = null
     override var padActionMode: ActionMode? = null
     var activity: PadListActivity? = null
+
+    /**
+     * RecyclerView and adapter holding the data for each tracker (one per group plus
+     * the unclassified list), so all the documents can be selected at once.
+     */
+    private val padSelectionTrackerSources:
+            MutableMap<SelectionTracker<Long>, Pair<RecyclerView, PadAdapter>> = LinkedHashMap()
 
     override fun makePadSelectionTracker(activity: PadListActivity, recyclerView: RecyclerView, padAdapter: PadAdapter): SelectionTracker<Long> {
         this.activity = activity
@@ -114,12 +122,32 @@ class MakesPadSelectionTracker: IMakesPadSelectionTracker,
         } else {
             padSelectionTrackers = mutableListOf(padSelectionTracker)
         }
+        padSelectionTrackerSources[padSelectionTracker] = Pair(recyclerView, padAdapter)
 
         return padSelectionTracker
     }
     override fun getPadSelection(): List<Long> {
-        val selection = padSelectionTrackers?.flatMap { it.selection.toList() }
+        val selection = padSelectionTrackers?.flatMap { it.selection.toList() }?.distinct()
         return selection?: listOf()
+    }
+
+    /**
+     * Selects every document across all groups and the unclassified list.
+     * Groups themselves are not selected.
+     */
+    override fun selectAllPads() {
+        padSelectionTrackerSources.forEach { (tracker, source) ->
+            val (recyclerView, adapter) = source
+            // Skip recycled group rows, which no longer represent a group in the list
+            if (!recyclerView.isAttachedToWindow) return@forEach
+
+            val keys = adapter.data
+                .map { it.mId }
+                .filterNot { tracker.isSelected(it) }
+            if (keys.isNotEmpty()) {
+                tracker.setItemsSelected(keys, true)
+            }
+        }
     }
 
     override fun onDestroyPadActionMode() {
