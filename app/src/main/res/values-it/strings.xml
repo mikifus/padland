@@ -127,4 +127,37 @@
         <item quantity="one">Importa %d URL in…</item>
         <item quantity="other">Importa %d URL in…</item>
     </plurals>
+
+    <!-- Error reporting -->
+    <string name="settings_debug">Debug</string>
+    <string name="settings_error_popup_title">Mostra finestre di errore</string>
+    <string name="settings_error_popup_desc">Quando si verifica un errore, ne mostra i dettagli per poterli copiare e segnalare il problema. Gli errori vengono salvati su questo dispositivo. Rimuovi eventuali dati sensibili dal rapporto prima di condividerlo.</string>
+    <string name="error_report_list_delete_all_summary">Elimina tutti gli errori salvati su questo dispositivo.</string>
+    <string name="title_activity_error_report_list">Errori salvati</string>
+    <string name="pref_error_report_list_summary_none">Nessun errore salvato.</string>
+    <plurals name="pref_error_report_list_summary">
+        <item quantity="one">%d errore salvato su questo dispositivo.</item>
+        <item quantity="other">%d errori salvati su questo dispositivo.</item>
+    </plurals>
+    <string name="error_report_list_empty_no_errors">Non è stato salvato alcun errore.</string>
+    <string name="error_report_list_delete_all">Elimina errori salvati</string>
+    <string name="error_report_list_dialog_delete_sure_to_delete">Tutti i rapporti di errore salvati verranno eliminati.</string>
+    <string name="error_report_dialog_close">Chiudi</string>
+    <string name="error_report_dialog_show_all">Mostra tutti</string>
+    <string name="error_report_dialog_popup_title">Si è verificato un errore</string>
+    <string name="error_report_dialog_popup_summary">Puoi copiare i dettagli qui sotto e includerli quando segnali il problema.</string>
+    <string name="error_report_dialog_previous_crash_title">Padland si è chiuso inaspettatamente</string>
+    <string name="error_report_dialog_previous_crash_summary">L\'ultima volta che è stato usato, Padland si è interrotto a causa di un errore. Puoi copiare i dettagli qui sotto e includerli quando segnali il problema.</string>
+    <string name="error_report_dialog_detail_crash">Arresto anomalo il %s</string>
+    <string name="error_report_dialog_detail_error">Errore il %s</string>
+    <plurals name="error_report_dialog_more_reports">
+        <item quantity="one">C\'è %d altro errore in Impostazioni → Errori salvati.</item>
+        <item quantity="other">Ci sono %d altri errori in Impostazioni → Errori salvati.</item>
+    </plurals>
+    <string name="error_report_dialog_not_found_title">Errore non trovato</string>
+    <string name="error_report_dialog_not_found">Questo rapporto di errore non è più disponibile.</string>
+    <string name="error_report_clip_label">Rapporto di errore di Padland</string>
+    <string name="error_report_dialog_copy_failed">Impossibile copiare il rapporto.</string>
+    <string name="error_report_type_crash">Arresto anomalo</string>
+    <string name="error_report_type_error">Errore</string>
 </resources>

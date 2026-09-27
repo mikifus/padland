@@ -198,8 +198,8 @@
     <string name="error_report_dialog_detail_crash">Cierre inesperado el %s</string>
     <string name="error_report_dialog_detail_error">Error el %s</string>
     <plurals name="error_report_dialog_more_reports">
-        <item quantity="one">Hay %d error más en Ajustes → Errores guardados.</item>
-        <item quantity="other">Hay %d errores más en Ajustes → Errores guardados.</item>
+        <item quantity="one">Hay %d error más en Preferencias → Errores guardados.</item>
+        <item quantity="other">Hay %d errores más en Preferencias → Errores guardados.</item>
     </plurals>
     <string name="error_report_dialog_not_found_title">Error no encontrado</string>
     <string name="error_report_dialog_not_found">Este informe de error ya no está disponible.</string>
