@@ -178,13 +178,13 @@
     <!-- Error reporting -->
     <string name="settings_debug">Depuración</string>
     <string name="settings_error_popup_title">Mostrar ventanas de error</string>
-    <string name="settings_error_popup_desc">Cuando ocurre un error, muestra sus detalles para que puedas copiarlos e informar del problema. Los errores se guardan en este dispositivo de todos modos.</string>
+    <string name="settings_error_popup_desc">Cuando ocurre un error, muestra sus detalles para que puedas copiarlos e informar del problema. Los errores se guardan en este dispositivo. Elimina cualquier dato sensible del informe antes de compartirlo.</string>
     <string name="error_report_list_delete_all_summary">Borrar todos los errores guardados en este dispositivo.</string>
     <string name="title_activity_error_report_list">Errores guardados</string>
     <string name="pref_error_report_list_summary_none">No hay errores guardados.</string>
     <plurals name="pref_error_report_list_summary">
-        <item quantity="one">%d error guardado en este dispositivo. Los informes pueden contener direcciones de documentos.</item>
-        <item quantity="other">%d errores guardados en este dispositivo. Los informes pueden contener direcciones de documentos.</item>
+        <item quantity="one">%d error guardado en este dispositivo.</item>
+        <item quantity="other">%d errores guardados en este dispositivo.</item>
     </plurals>
     <string name="error_report_list_empty_no_errors">No se ha guardado ningún error.</string>
     <string name="error_report_list_delete_all">Borrar errores guardados</string>

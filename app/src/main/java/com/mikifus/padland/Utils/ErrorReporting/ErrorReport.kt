@@ -157,8 +157,8 @@ data class ErrorReport(
                 timestamp = timestamp,
                 fatal = fatal,
                 exceptionClass = throwable.javaClass.name,
-                message = throwable.message,
-                stackTrace = truncate(safeStackTrace(throwable)),
+                message = throwable.message?.let { ErrorReportSanitizer.removeDocumentUrls(it) },
+                stackTrace = truncate(ErrorReportSanitizer.removeDocumentUrls(safeStackTrace(throwable))),
                 threadName = threadName,
                 screen = screen,
                 appVersionName = environment.appVersionName,
@@ -169,6 +169,8 @@ data class ErrorReport(
         }
 
         /**
+         * Document addresses are removed again, in case the report was saved by an older version.
+         *
          * @param id taken from the file name, it wins over the one inside the JSON
          * @return null if the JSON is not a valid report
          */
@@ -180,8 +182,9 @@ data class ErrorReport(
                     timestamp = obj.getLong(KEY_TIMESTAMP),
                     fatal = obj.optBoolean(KEY_FATAL, false),
                     exceptionClass = obj.getString(KEY_EXCEPTION_CLASS),
-                    message = obj.optStringOrNull(KEY_MESSAGE),
-                    stackTrace = obj.getString(KEY_STACK_TRACE),
+                    message = obj.optStringOrNull(KEY_MESSAGE)
+                        ?.let { ErrorReportSanitizer.removeDocumentUrls(it) },
+                    stackTrace = ErrorReportSanitizer.removeDocumentUrls(obj.getString(KEY_STACK_TRACE)),
                     threadName = obj.optString(KEY_THREAD_NAME, ""),
                     screen = obj.optStringOrNull(KEY_SCREEN),
                     appVersionName = obj.optString(KEY_APP_VERSION_NAME, "unknown"),

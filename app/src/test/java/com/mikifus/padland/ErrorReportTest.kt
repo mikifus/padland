@@ -2,6 +2,7 @@ package com.mikifus.padland
 
 import com.mikifus.padland.Utils.ErrorReporting.ErrorReport
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -63,6 +64,38 @@ class ErrorReportTest {
     fun fromJson_invalid_returnsNull() {
         assertNull(ErrorReport.fromJson("1_error_x", "{}"))
         assertNull(ErrorReport.fromJson("1_error_x", "garbage"))
+    }
+
+    @Test
+    fun fromThrowable_removesDocumentUrls_fromMessageAndTrace() {
+        val report = ErrorReport.fromThrowable(
+            IllegalStateException("Cannot load https://pad.riseup.net/p/my-secret-pad",
+                IllegalArgumentException("Bad pad.riseup.net/p/other-secret")),
+            fatal = false, threadName = "main", screen = null, environment = environment)
+
+        assertEquals("Cannot load https://pad.riseup.net/[removed]", report.message)
+        assertFalse(report.stackTrace.contains("my-secret-pad"))
+        assertFalse(report.stackTrace.contains("other-secret"))
+        assertTrue(report.stackTrace.contains("pad.riseup.net"))
+        assertFalse(report.toReportText().contains("secret"))
+    }
+
+    @Test
+    fun fromJson_removesDocumentUrls_savedByOlderVersions() {
+        val json = """
+            {
+              "timestamp": 1700000000000,
+              "fatal": true,
+              "exceptionClass": "java.lang.RuntimeException",
+              "message": "https://pad.riseup.net/p/my-secret-pad",
+              "stackTrace": "java.lang.RuntimeException: https://pad.riseup.net/p/my-secret-pad"
+            }
+        """.trimIndent()
+
+        val report = ErrorReport.fromJson("1700000000000_fatal_abc", json)!!
+
+        assertEquals("https://pad.riseup.net/[removed]", report.message)
+        assertEquals("java.lang.RuntimeException: https://pad.riseup.net/[removed]", report.stackTrace)
     }
 }
 

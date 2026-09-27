@@ -244,13 +244,13 @@
     <!-- Error reporting -->
     <string name="settings_debug">Debug</string>
     <string name="settings_error_popup_title">Show error popups</string>
-    <string name="settings_error_popup_desc">When an error happens, show its details so you can copy them and report the problem. Errors are saved on this device anyway.</string>
+    <string name="settings_error_popup_desc">When an error happens, show its details so you can copy them and report the problem. Errors are saved on this device. Remove any sensitive data from the report before sharing it.</string>
     <string name="error_report_list_delete_all_summary">Delete all the errors saved on this device.</string>
     <string name="title_activity_error_report_list">Saved errors</string>
     <string name="pref_error_report_list_summary_none">No errors saved.</string>
     <plurals name="pref_error_report_list_summary">
-        <item quantity="one">%d error saved on this device. Reports may contain document addresses.</item>
-        <item quantity="other">%d errors saved on this device. Reports may contain document addresses.</item>
+        <item quantity="one">%d error saved on this device.</item>
+        <item quantity="other">%d errors saved on this device.</item>
     </plurals>
     <string name="error_report_list_empty_no_errors">No errors have been saved.</string>
     <string name="error_report_list_delete_all">Delete saved errors</string>
