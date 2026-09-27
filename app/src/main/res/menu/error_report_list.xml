@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:padland="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/action_clear_error_reports"
-        android:title="@string/error_reports_clear"
+    <item android:id="@+id/action_delete_error_reports"
+        android:title="@string/error_report_list_delete_all"
         android:icon="@drawable/ic_delete"
         padland:showAsAction="ifRoom" />
 </menu>

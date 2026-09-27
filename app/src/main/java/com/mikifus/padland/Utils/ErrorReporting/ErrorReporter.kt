@@ -26,15 +26,15 @@ import kotlin.system.exitProcess
  * - Crashes (uncaught exceptions) are saved synchronously and marked as pending,
  *   then shown in a popup the next time the app runs.
  * - Non fatal errors reported with [reportNonFatal] are shown in a popup right away.
- * - Popups are only shown when enabled in the settings ([PREF_SHOW_POPUP]).
+ * - Popups are only shown when enabled in the settings ([KEY_SHOW_POPUP]).
  *
  * Call [install] once from [Application.onCreate].
  */
 object ErrorReporter {
-    private const val TAG = "ErrorReporter"
+    private const val TAG = "ERROR_REPORTER"
 
-    const val PREF_SHOW_POPUP = "padland_debug_error_popup"
-    const val PREF_SHOW_POPUP_DEFAULT = false
+    const val KEY_SHOW_POPUP = "padland_debug_error_popup"
+    const val DEFAULT_SHOW_POPUP = false
 
     /**
      * What a popup has to show. [previousCrash] popups acknowledge
@@ -91,7 +91,7 @@ object ErrorReporter {
 
     fun isPopupEnabled(context: Context): Boolean =
         PreferenceManager.getDefaultSharedPreferences(context)
-            .getBoolean(PREF_SHOW_POPUP, PREF_SHOW_POPUP_DEFAULT)
+            .getBoolean(KEY_SHOW_POPUP, DEFAULT_SHOW_POPUP)
 
     /**
      * Saves an unexpected (but caught) error and shows it if popups are enabled.
@@ -171,7 +171,7 @@ object ErrorReporter {
 
         val fragmentManager = activity.supportFragmentManager
         if (fragmentManager.isDestroyed || fragmentManager.isStateSaved) return
-        if (fragmentManager.findFragmentByTag(ErrorReportDialog.TAG) != null) return
+        if (fragmentManager.findFragmentByTag(ErrorReportDialog.DIALOG_TAG) != null) return
 
         if (!isPopupEnabled(activity)) {
             // Reports stay saved, just don't bother the user
@@ -183,7 +183,11 @@ object ErrorReporter {
 
         val request = popupQueue.removeFirstOrNull() ?: return
         try {
-            ErrorReportDialog.newPopup(request).show(fragmentManager, ErrorReportDialog.TAG)
+            val dialog = ErrorReportDialog()
+            dialog.setReportIds(request.ids,
+                if (request.previousCrash) ErrorReportDialog.MODE_PREVIOUS_CRASH
+                else ErrorReportDialog.MODE_POPUP)
+            dialog.show(fragmentManager, ErrorReportDialog.DIALOG_TAG)
         } catch (e: IllegalStateException) {
             popupQueue.addFirst(request)
         }
@@ -208,8 +212,8 @@ object ErrorReporter {
     }
 
     private class CrashHandler(
-        private val previousHandler: Thread.UncaughtExceptionHandler?,
-    ) : Thread.UncaughtExceptionHandler {
+        private val previousHandler: Thread.UncaughtExceptionHandler?):
+        Thread.UncaughtExceptionHandler {
 
         override fun uncaughtException(thread: Thread, throwable: Throwable) {
             // Avoid saving twice if several threads crash at the same time
@@ -232,7 +236,7 @@ object ErrorReporter {
         }
     }
 
-    private object LifecycleCallbacks : Application.ActivityLifecycleCallbacks {
+    private object LifecycleCallbacks: Application.ActivityLifecycleCallbacks {
         override fun onActivityResumed(activity: Activity) {
             lastScreenName = activity.javaClass.simpleName
             val appCompatActivity = activity as? AppCompatActivity ?: return
@@ -257,7 +261,4 @@ object ErrorReporter {
         override fun onActivityDestroyed(activity: Activity) {}
     }
 }
-
-
-
 

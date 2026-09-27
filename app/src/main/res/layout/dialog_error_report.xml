@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialog_scroll_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:scrollbars="vertical">
 
     <LinearLayout
+        android:id="@+id/dialog_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -14,14 +16,14 @@
         android:paddingBottom="8dp">
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/error_report_summary"
+            android:id="@+id/txt_error_report_summary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="12dp"
             android:textAppearance="?attr/textAppearanceBodyMedium" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/error_report_trace"
+            android:id="@+id/txt_error_report_trace"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="monospace"

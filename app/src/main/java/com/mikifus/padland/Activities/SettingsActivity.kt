@@ -1,6 +1,5 @@
 package com.mikifus.padland.Activities
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
@@ -16,7 +15,8 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import com.mikifus.padland.Database.ServerModel.ServerViewModel
-import com.mikifus.padland.Dialogs.ConfirmDialog
+import com.mikifus.padland.Dialogs.Managers.IManagesDeleteErrorReportsDialog
+import com.mikifus.padland.Dialogs.Managers.ManagesDeleteErrorReportsDialog
 import com.mikifus.padland.R
 import com.mikifus.padland.Utils.ErrorReporting.ErrorReporter
 import com.mikifus.padland.Utils.Export.ExportHelper
@@ -53,7 +53,8 @@ class SettingsActivity : AppCompatActivity() {
 
 
     class SettingsFragment : PreferenceFragmentCompat(),
-        SharedPreferences.OnSharedPreferenceChangeListener {
+        SharedPreferences.OnSharedPreferenceChangeListener,
+        IManagesDeleteErrorReportsDialog by ManagesDeleteErrorReportsDialog() {
 
         private var sharedPreferences: SharedPreferences? = null
         var serverViewModel: ServerViewModel? = null
@@ -79,40 +80,44 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         private fun initErrorReportPreferences() {
-            findPreference<Preference>(PREF_ERROR_REPORTS)?.setOnPreferenceClickListener {
+            val listPreference = findPreference<Preference>("padland_error_report_list")
+            listPreference?.setOnPreferenceClickListener {
                 startActivity(Intent(requireContext(), ErrorReportListActivity::class.java))
                 true
             }
 
-            findPreference<Preference>(PREF_ERROR_REPORTS_CLEAR)?.setOnPreferenceClickListener {
-                val dialog = ConfirmDialog()
-                dialog.setTitle(getString(R.string.error_reports_clear))
-                dialog.setMessage(getString(R.string.error_reports_clear_confirm))
-                dialog.positiveButtonText = getString(R.string.delete)
-                dialog.positiveButtonCallback = DialogInterface.OnClickListener { _, _ ->
-                    val store = ErrorReporter.getStore(requireContext())
-                    lifecycleScope.launch {
-                        withContext(Dispatchers.IO) { store.clear() }
-                        updateErrorReportsSummary()
-                    }
+            val deletePreference = findPreference<Preference>("padland_error_report_list_delete")
+            deletePreference?.setOnPreferenceClickListener {
+                showDeleteErrorReportsDialog(requireActivity() as AppCompatActivity) {
+                    updateErrorReportsSummary()
                 }
-                dialog.show(parentFragmentManager, CONFIRM_CLEAR_TAG)
                 true
             }
         }
 
         private fun updateErrorReportsSummary() {
-            val store = ErrorReporter.getStore(requireContext())
-            lifecycleScope.launch {
-                val count = withContext(Dispatchers.IO) { store.count() }
-                if (!isAdded) return@launch
+            if(!isAdded) {
+                return
+            }
 
-                findPreference<Preference>(PREF_ERROR_REPORTS)?.summary = if (count > 0) {
-                    resources.getQuantityString(R.plurals.error_reports_count, count, count)
-                } else {
-                    getString(R.string.error_reports_none)
+            val errorReportStore = ErrorReporter.getStore(requireContext())
+            lifecycleScope.launch {
+                val count = withContext(Dispatchers.IO) {
+                    errorReportStore.count()
                 }
-                findPreference<Preference>(PREF_ERROR_REPORTS_CLEAR)?.isEnabled = count > 0
+                if(!isAdded) {
+                    return@launch
+                }
+
+                val listPreference = findPreference<Preference>("padland_error_report_list")
+                listPreference?.summary = if(count > 0) {
+                    resources.getQuantityString(R.plurals.pref_error_report_list_summary, count, count)
+                } else {
+                    getString(R.string.pref_error_report_list_summary_none)
+                }
+
+                val deletePreference = findPreference<Preference>("padland_error_report_list_delete")
+                deletePreference?.isEnabled = count > 0
             }
         }
 
@@ -223,12 +228,6 @@ class SettingsActivity : AppCompatActivity() {
                     ).show()
                 }
             }
-        }
-
-        companion object {
-            private const val PREF_ERROR_REPORTS = "padland_error_reports"
-            private const val PREF_ERROR_REPORTS_CLEAR = "padland_error_reports_clear"
-            private const val CONFIRM_CLEAR_TAG = "ConfirmClearErrorReports"
         }
     }
 

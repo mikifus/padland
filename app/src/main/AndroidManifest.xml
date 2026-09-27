@@ -100,7 +100,7 @@
 
         <activity
             android:name=".Activities.ErrorReportListActivity"
-            android:label="@string/error_reports_title"
+            android:label="@string/title_activity_error_report_list"
             android:parentActivityName=".Activities.SettingsActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
 
