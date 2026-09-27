@@ -1,5 +1,7 @@
 package com.mikifus.padland.Activities
 
+import android.content.DialogInterface
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
@@ -8,17 +10,23 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NavUtils
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import com.mikifus.padland.Database.ServerModel.ServerViewModel
+import com.mikifus.padland.Dialogs.ConfirmDialog
 import com.mikifus.padland.R
+import com.mikifus.padland.Utils.ErrorReporting.ErrorReporter
 import com.mikifus.padland.Utils.Export.ExportHelper
 import com.mikifus.padland.Utils.Export.IExportHelper
 import com.mikifus.padland.Utils.Export.IImportHelper
 import com.mikifus.padland.Utils.Export.ImportHelper
 import com.rarepebble.colorpicker.ColorPreference
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -62,6 +70,50 @@ class SettingsActivity : AppCompatActivity() {
             initDefaultServerPreference()
             initExportPreference()
             initImportPreference()
+            initErrorReportPreferences()
+        }
+
+        override fun onResume() {
+            super.onResume()
+            updateErrorReportsSummary()
+        }
+
+        private fun initErrorReportPreferences() {
+            findPreference<Preference>(PREF_ERROR_REPORTS)?.setOnPreferenceClickListener {
+                startActivity(Intent(requireContext(), ErrorReportListActivity::class.java))
+                true
+            }
+
+            findPreference<Preference>(PREF_ERROR_REPORTS_CLEAR)?.setOnPreferenceClickListener {
+                val dialog = ConfirmDialog()
+                dialog.setTitle(getString(R.string.error_reports_clear))
+                dialog.setMessage(getString(R.string.error_reports_clear_confirm))
+                dialog.positiveButtonText = getString(R.string.delete)
+                dialog.positiveButtonCallback = DialogInterface.OnClickListener { _, _ ->
+                    val store = ErrorReporter.getStore(requireContext())
+                    lifecycleScope.launch {
+                        withContext(Dispatchers.IO) { store.clear() }
+                        updateErrorReportsSummary()
+                    }
+                }
+                dialog.show(parentFragmentManager, CONFIRM_CLEAR_TAG)
+                true
+            }
+        }
+
+        private fun updateErrorReportsSummary() {
+            val store = ErrorReporter.getStore(requireContext())
+            lifecycleScope.launch {
+                val count = withContext(Dispatchers.IO) { store.count() }
+                if (!isAdded) return@launch
+
+                findPreference<Preference>(PREF_ERROR_REPORTS)?.summary = if (count > 0) {
+                    resources.getQuantityString(R.plurals.error_reports_count, count, count)
+                } else {
+                    getString(R.string.error_reports_none)
+                }
+                findPreference<Preference>(PREF_ERROR_REPORTS_CLEAR)?.isEnabled = count > 0
+            }
         }
 
         private fun initDefaultServerPreference() {
@@ -171,6 +223,12 @@ class SettingsActivity : AppCompatActivity() {
                     ).show()
                 }
             }
+        }
+
+        companion object {
+            private const val PREF_ERROR_REPORTS = "padland_error_reports"
+            private const val PREF_ERROR_REPORTS_CLEAR = "padland_error_reports_clear"
+            private const val CONFIRM_CLEAR_TAG = "ConfirmClearErrorReports"
         }
     }
 

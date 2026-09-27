@@ -241,4 +241,38 @@
         <item quantity="other">Import %d URLs into…</item>
     </plurals>
 
+    <!-- Error reporting -->
+    <string name="settings_debug">Debug</string>
+    <string name="settings_error_popup_title">Show error popups</string>
+    <string name="settings_error_popup_summary">When an error happens, show its details so you can copy them and report the problem. Errors are saved on this device anyway.</string>
+    <string name="settings_error_reports_clear_summary">Delete all the errors saved on this device.</string>
+    <string name="error_reports_title">Saved errors</string>
+    <string name="error_reports_none">No errors saved.</string>
+    <plurals name="error_reports_count">
+        <item quantity="one">%d error saved on this device. Reports may contain document addresses.</item>
+        <item quantity="other">%d errors saved on this device. Reports may contain document addresses.</item>
+    </plurals>
+    <string name="error_reports_empty">No errors have been saved.</string>
+    <string name="error_reports_clear">Delete saved errors</string>
+    <string name="error_reports_clear_confirm">All the saved error reports will be deleted.</string>
+    <string name="error_report_close">Close</string>
+    <string name="error_report_show_all">Show all</string>
+    <string name="error_report_popup_title">An error happened</string>
+    <string name="error_report_popup_summary">You can copy the details below and include them when reporting the problem.</string>
+    <string name="error_report_previous_crash_title">Padland closed unexpectedly</string>
+    <string name="error_report_previous_crash_summary">The last time it was used, Padland stopped because of an error. You can copy the details below and include them when reporting the problem.</string>
+    <string name="error_report_detail_crash">Crash on %s</string>
+    <string name="error_report_detail_error">Error on %s</string>
+    <plurals name="error_report_more_reports">
+        <item quantity="one">%d more error can be found in Settings → Saved errors.</item>
+        <item quantity="other">%d more errors can be found in Settings → Saved errors.</item>
+    </plurals>
+    <string name="error_report_not_found_title">Error not found</string>
+    <string name="error_report_not_found">This error report is no longer available.</string>
+    <string name="error_report_clip_label">Padland error report</string>
+    <string name="error_report_copy_failed">The report could not be copied.</string>
+    <string name="error_report_type_crash">Crash</string>
+    <string name="error_report_type_error">Error</string>
+    <string name="error_report_item_title">%1$s: %2$s</string>
+
 </resources>

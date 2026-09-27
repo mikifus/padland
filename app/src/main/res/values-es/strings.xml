@@ -174,4 +174,37 @@
         <item quantity="one">Importar %d URL en…</item>
         <item quantity="other">Importar %d URLs en…</item>
     </plurals>
+
+    <!-- Error reporting -->
+    <string name="settings_debug">Depuración</string>
+    <string name="settings_error_popup_title">Mostrar ventanas de error</string>
+    <string name="settings_error_popup_summary">Cuando ocurre un error, muestra sus detalles para que puedas copiarlos e informar del problema. Los errores se guardan en este dispositivo de todos modos.</string>
+    <string name="settings_error_reports_clear_summary">Borrar todos los errores guardados en este dispositivo.</string>
+    <string name="error_reports_title">Errores guardados</string>
+    <string name="error_reports_none">No hay errores guardados.</string>
+    <plurals name="error_reports_count">
+        <item quantity="one">%d error guardado en este dispositivo. Los informes pueden contener direcciones de documentos.</item>
+        <item quantity="other">%d errores guardados en este dispositivo. Los informes pueden contener direcciones de documentos.</item>
+    </plurals>
+    <string name="error_reports_empty">No se ha guardado ningún error.</string>
+    <string name="error_reports_clear">Borrar errores guardados</string>
+    <string name="error_reports_clear_confirm">Se borrarán todos los informes de error guardados.</string>
+    <string name="error_report_close">Cerrar</string>
+    <string name="error_report_show_all">Ver todos</string>
+    <string name="error_report_popup_title">Ha ocurrido un error</string>
+    <string name="error_report_popup_summary">Puedes copiar los detalles de abajo e incluirlos al informar del problema.</string>
+    <string name="error_report_previous_crash_title">Padland se cerró inesperadamente</string>
+    <string name="error_report_previous_crash_summary">La última vez que se usó, Padland se detuvo por un error. Puedes copiar los detalles de abajo e incluirlos al informar del problema.</string>
+    <string name="error_report_detail_crash">Cierre inesperado el %s</string>
+    <string name="error_report_detail_error">Error el %s</string>
+    <plurals name="error_report_more_reports">
+        <item quantity="one">Hay %d error más en Ajustes → Errores guardados.</item>
+        <item quantity="other">Hay %d errores más en Ajustes → Errores guardados.</item>
+    </plurals>
+    <string name="error_report_not_found_title">Error no encontrado</string>
+    <string name="error_report_not_found">Este informe de error ya no está disponible.</string>
+    <string name="error_report_clip_label">Informe de error de Padland</string>
+    <string name="error_report_copy_failed">No se pudo copiar el informe.</string>
+    <string name="error_report_type_crash">Cierre inesperado</string>
+    <string name="error_report_type_error">Error</string>
 </resources>
