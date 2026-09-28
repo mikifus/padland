@@ -64,6 +64,16 @@ class OfflinePadStore(private val directory: File) {
     @Synchronized
     fun delete(padId: Long): Boolean = fileFor(padId).delete()
 
+    fun count(): Int = directory.listFiles { file -> file.name.endsWith(EXTENSION) }?.size ?: 0
+
+    /**
+     * Removes all the copies, i.e. to free space.
+     */
+    @Synchronized
+    fun clear() {
+        directory.listFiles()?.forEach { it.delete() }
+    }
+
     /**
      * Removes the copies of the pads not in [padIds], i.e. deleted pads or pads
      * without offline access anymore, and any leftover temp file.

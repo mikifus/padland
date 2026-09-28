@@ -127,12 +127,16 @@
     <string name="download_file_success">Datei heruntergeladen</string>
     <string name="download_file_failed">Die Datei konnte nicht heruntergeladen werden</string>
     <string name="offline_access">Offline-Zugriff</string>
-    <string name="offline_access_explanation">Speichert eine schreibgeschützte Kopie auf diesem Gerät, die bei jedem Öffnen des Dokuments aktualisiert wird.</string>
+    <string name="offline_access_explanation">Speichert eine schreibgeschützte Kopie auf diesem Gerät, die jedes Mal aktualisiert wird, wenn du das Dokument verlässt.</string>
     <string name="padview_offline_copy_shown">Offline-Kopie vom %s (schreibgeschützt)</string>
     <string name="padinfo_offline_copy">Offline-Kopie</string>
     <string name="padinfo_offline_copy_saved">Gespeichert am %s. Tippen zum Öffnen.</string>
-    <string name="padinfo_offline_copy_missing">Noch nicht gespeichert. Sie wird beim nächsten Öffnen des Dokuments mit Verbindung gespeichert.</string>
+    <string name="padinfo_offline_copy_missing">Noch nicht gespeichert. Sie wird gespeichert, wenn du das Dokument das nächste Mal mit Verbindung verlässt.</string>
     <string name="padinfo_offline_copy_updating">Wird gespeichert…</string>
     <string name="padinfo_offline_copy_saved_updating">Gespeichert am %s, wird gerade aktualisiert. Tippen zum Öffnen.</string>
-    <string name="padinfo_offline_copy_failed">Die Offline-Kopie konnte nicht gespeichert werden. Beim nächsten Öffnen des Dokuments wird es erneut versucht.</string>
+    <string name="padinfo_offline_copy_failed">Die Offline-Kopie konnte nicht gespeichert werden. Es wird erneut versucht, wenn du das Dokument das nächste Mal verlässt.</string>
+    <string name="offline_copies_delete_all">Offline-Kopien löschen</string>
+    <string name="offline_copies_delete_all_summary">Löscht die auf diesem Gerät gespeicherten Offline-Kopien. Dokumente mit Offline-Zugriff speichern eine neue, wenn du sie verlässt.</string>
+    <string name="offline_copies_dialog_sure_to_delete">Alle Offline-Kopien werden gelöscht.</string>
+    <string name="offline_copies_deleted">Offline-Kopien gelöscht</string>
 </resources>

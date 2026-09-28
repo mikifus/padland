@@ -65,6 +65,12 @@
             android:summary="@string/preference_import_database_summary"
             />
 
+        <Preference
+            android:key="padland_offline_copies_delete"
+            android:title="@string/offline_copies_delete_all"
+            android:summary="@string/offline_copies_delete_all_summary"
+            />
+
         <PreferenceScreen
             android:key="padland_about"
             android:title="@string/about"

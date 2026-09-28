@@ -13,6 +13,7 @@ import com.mikifus.padland.Utils.ErrorReporting.ErrorReporter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
@@ -88,10 +89,13 @@ object OfflinePadFetcher {
      * The pad is read from the database, so call it after saving any change.
      * If the pad is already updating, it is updated once more afterwards.
      *
+     * @param delayMillis wait before downloading, i.e. for the last changes
+     * to reach the server
      * @param callback called on the main thread when done, not called if
      * an update of the same pad is already running
      */
-    fun update(context: Context, padId: Long, callback: ((updated: Boolean) -> Unit)? = null) {
+    fun update(context: Context, padId: Long, delayMillis: Long = 0L,
+               callback: ((updated: Boolean) -> Unit)? = null) {
         synchronized(lock) {
             if (padId in runningPadIds) {
                 pendingPadIds.add(padId)
@@ -104,6 +108,8 @@ object OfflinePadFetcher {
         val applicationContext = context.applicationContext
 
         scope.launch {
+            delay(delayMillis)
+
             var updated: Boolean
             do {
                 updated = updateCopy(applicationContext, padId)

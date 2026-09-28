@@ -87,6 +87,20 @@ class OfflinePadTest {
         assertEquals(listOf("2.html"), directory.list()!!.toList())
     }
 
+    @Test
+    fun store_countAndClear() {
+        assertEquals(0, offlinePadStore.count())
+
+        offlinePadStore.save(1, "one")
+        offlinePadStore.save(2, "two")
+        File(directory, "3.tmp").writeText("half written")
+        assertEquals(2, offlinePadStore.count())
+
+        offlinePadStore.clear()
+        assertEquals(0, offlinePadStore.count())
+        assertEquals(0, directory.list()!!.size)
+    }
+
     // Fetcher
 
     @Test

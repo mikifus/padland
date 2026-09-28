@@ -16,13 +16,16 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import com.mikifus.padland.Database.ServerModel.ServerViewModel
 import com.mikifus.padland.Dialogs.Managers.IManagesDeleteErrorReportsDialog
+import com.mikifus.padland.Dialogs.Managers.IManagesDeleteOfflineCopiesDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesDeleteErrorReportsDialog
+import com.mikifus.padland.Dialogs.Managers.ManagesDeleteOfflineCopiesDialog
 import com.mikifus.padland.R
 import com.mikifus.padland.Utils.ErrorReporting.ErrorReporter
 import com.mikifus.padland.Utils.Export.ExportHelper
 import com.mikifus.padland.Utils.Export.IExportHelper
 import com.mikifus.padland.Utils.Export.IImportHelper
 import com.mikifus.padland.Utils.Export.ImportHelper
+import com.mikifus.padland.Utils.Offline.OfflinePadStore
 import com.rarepebble.colorpicker.ColorPreference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -54,7 +57,8 @@ class SettingsActivity : AppCompatActivity() {
 
     class SettingsFragment : PreferenceFragmentCompat(),
         SharedPreferences.OnSharedPreferenceChangeListener,
-        IManagesDeleteErrorReportsDialog by ManagesDeleteErrorReportsDialog() {
+        IManagesDeleteErrorReportsDialog by ManagesDeleteErrorReportsDialog(),
+        IManagesDeleteOfflineCopiesDialog by ManagesDeleteOfflineCopiesDialog() {
 
         private var sharedPreferences: SharedPreferences? = null
         var serverViewModel: ServerViewModel? = null
@@ -71,12 +75,50 @@ class SettingsActivity : AppCompatActivity() {
             initDefaultServerPreference()
             initExportPreference()
             initImportPreference()
+            initOfflineCopiesPreference()
             initErrorReportPreferences()
         }
 
         override fun onResume() {
             super.onResume()
             updateErrorReportsSummary()
+            updateOfflineCopiesPreference()
+        }
+
+        private fun initOfflineCopiesPreference() {
+            val preference = findPreference<Preference>("padland_offline_copies_delete")
+            preference?.setOnPreferenceClickListener {
+                showDeleteOfflineCopiesDialog(requireActivity() as AppCompatActivity) {
+                    updateOfflineCopiesPreference()
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.offline_copies_deleted),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                true
+            }
+        }
+
+        /**
+         * Nothing to delete, nothing to click.
+         */
+        private fun updateOfflineCopiesPreference() {
+            if(!isAdded) {
+                return
+            }
+
+            val offlinePadStore = OfflinePadStore(requireContext())
+            lifecycleScope.launch {
+                val count = withContext(Dispatchers.IO) {
+                    offlinePadStore.count()
+                }
+                if(!isAdded) {
+                    return@launch
+                }
+
+                findPreference<Preference>("padland_offline_copies_delete")?.isEnabled = count > 0
+            }
         }
 
         private fun initErrorReportPreferences() {

@@ -8,7 +8,6 @@ import com.mikifus.padland.Database.PadGroupModel.PadGroupViewModel
 import com.mikifus.padland.Database.PadGroupModel.PadGroupsAndPadList
 import com.mikifus.padland.Database.PadModel.PadViewModel
 import com.mikifus.padland.Dialogs.EditPadDialog
-import com.mikifus.padland.Utils.Offline.OfflinePadFetcher
 import com.mikifus.padland.Utils.Offline.OfflinePadStore
 import com.mikifus.padland.Utils.PadServer
 import kotlinx.coroutines.Dispatchers
@@ -104,10 +103,9 @@ public class ManagesEditPadDialog: ManagesDialog(), IManagesEditPadDialog {
 
             padViewModel?.updatePad(savePad)
 
-            // The offline copy belongs to the previous URL
+            // The offline copy belongs to the previous URL, a new one is saved when leaving the pad
             if (savePad.mUrl != pad.mUrl) {
                 OfflinePadStore(activity).delete(padId)
-                OfflinePadFetcher.update(activity, padId)
             }
 
             padGroupViewModel?.deletePadGroupsAndPadList(padId)

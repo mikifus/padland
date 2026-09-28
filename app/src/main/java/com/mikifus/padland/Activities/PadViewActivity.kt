@@ -366,10 +366,7 @@ class PadViewActivity :
         }
 
         lifecycleScope.launch(Dispatchers.IO) {
-            padViewModel?.getByUrl(padUrl)?.let { pad ->
-                viewedPad = pad
-                OfflinePadFetcher.update(applicationContext, pad.mId)
-            }
+            viewedPad = padViewModel?.getByUrl(padUrl)
         }
     }
 
@@ -381,7 +378,6 @@ class PadViewActivity :
                 viewedPad = pad
                 currentUrl = pad.mUrl
                 updateViewedPad(pad)
-                OfflinePadFetcher.update(applicationContext, pad.mId)
             } else {
                 lifecycleScope.launch {
                     Toast.makeText(
@@ -437,12 +433,15 @@ class PadViewActivity :
     }
 
     /**
-     * Leaving the pad, the offline copy gets the latest changes.
+     * Leaving the pad, the offline copy gets the last edits.
+     * Paused also when switching apps, so they are saved before the app is killed.
      */
-    override fun onStop() {
-        super.onStop()
+    override fun onPause() {
+        super.onPause()
         if (!isOfflineMode) {
-            viewedPad?.let { OfflinePadFetcher.update(applicationContext, it.mId) }
+            viewedPad?.let {
+                OfflinePadFetcher.update(applicationContext, it.mId, PENDING_CHANGES_DELAY)
+            }
         }
     }
 
@@ -680,5 +679,8 @@ class PadViewActivity :
     companion object {
         /** Boolean extra, shows the offline copy even if there is connection */
         const val EXTRA_OFFLINE_COPY = "offlineCopy"
+
+        /** Etherpad sends the typed changes to the server every half a second or so */
+        private const val PENDING_CHANGES_DELAY = 2_000L
     }
 }
