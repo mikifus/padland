@@ -29,7 +29,6 @@ import com.mikifus.padland.Utils.PadClipboardHelper
 import com.mikifus.padland.Utils.PadShareHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.text.DateFormat
 import java.util.Date
 
@@ -118,11 +117,16 @@ class PadInfoActivity: AppCompatActivity(),
                 ).show()
             }
         }
-        mOfflineAccessCheckBox?.setOnCheckedChangeListener { _, isChecked ->
-            onOfflineAccessChanged(isChecked)
+        // Click instead of checked change, onPadUpdate also checks it
+        mOfflineAccessCheckBox?.setOnClickListener {
+            onOfflineAccessChanged(mOfflineAccessCheckBox!!.isChecked)
         }
         mOfflineCopyView?.setOnClickListener {
             onOfflineCopyClick()
+        }
+        // Updates can be started from other screens, i.e. when leaving the pad
+        OfflinePadFetcher.updatingPadIds.observe(this) {
+            padViewModel?.pad?.value?.let { pad -> updateOfflineCopyStatus(pad) }
         }
     }
 
@@ -133,38 +137,31 @@ class PadInfoActivity: AppCompatActivity(),
         mLastUsedDateTextView?.text = pad.mLastUsedDate.toString()
         mAccessCountTextView?.text = pad.mAccessCount.toString()
         mOfflineAccessCheckBox?.isChecked = pad.mOfflineAccess
+        mOfflineAccessCheckBox?.isEnabled = true
         updateOfflineCopyStatus(pad)
     }
 
     private fun onOfflineAccessChanged(isChecked: Boolean) {
         val pad = padViewModel!!.pad.value ?: return
-        // Set from onPadUpdate
-        if (pad.mOfflineAccess == isChecked) {
-            return
-        }
+        // Until it is saved, enabled again in onPadUpdate
+        mOfflineAccessCheckBox?.isEnabled = false
 
-        val updatedPad = pad.copy(mOfflineAccess = isChecked)
         lifecycleScope.launch(Dispatchers.IO) {
-            padViewModel!!.updatePad(updatedPad)
-            if (!isChecked) {
-                offlinePadStore.delete(pad.mId)
+            if (padViewModel!!.updatePad(pad.copy(mOfflineAccess = isChecked)) == 0) {
+                // Not saved, back to the saved state
+                padViewModel!!.getById(pad.mId)
+                return@launch
             }
 
-            withContext(Dispatchers.Main) {
-                if (isChecked) {
-                    // First copy right away
-                    OfflinePadFetcher.update(this@PadInfoActivity, updatedPad) { updated ->
-                        padViewModel?.pad?.value?.let { updateOfflineCopyStatus(it) }
-                        if (!updated) {
-                            Toast.makeText(
-                                this@PadInfoActivity,
-                                getString(R.string.padinfo_offline_copy_failed),
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                    }
+            // Saves the first copy, or deletes it
+            OfflinePadFetcher.update(this@PadInfoActivity, pad.mId) { updated ->
+                if (isChecked && !updated && !isDestroyed) {
+                    Toast.makeText(
+                        this@PadInfoActivity,
+                        getString(R.string.padinfo_offline_copy_failed),
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
-                updateOfflineCopyStatus(updatedPad)
             }
         }
     }
@@ -178,10 +175,15 @@ class PadInfoActivity: AppCompatActivity(),
         mOfflineCopyView?.visibility = if (isAvailable && pad.mOfflineAccess) View.VISIBLE else View.GONE
 
         val savedTime = offlinePadStore.getSavedTime(pad.mId)
+        val isUpdating = OfflinePadFetcher.isUpdating(pad.mId)
+        val savedDate = savedTime?.let {
+            DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).format(Date(it))
+        }
+        // The saved copy can be opened while it is updated
         mOfflineCopyStatusTextView?.text = when {
-            OfflinePadFetcher.isUpdating(pad.mId) -> getString(R.string.padinfo_offline_copy_updating)
-            savedTime != null -> getString(R.string.padinfo_offline_copy_saved,
-                DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).format(Date(savedTime)))
+            savedDate != null && isUpdating -> getString(R.string.padinfo_offline_copy_saved_updating, savedDate)
+            savedDate != null -> getString(R.string.padinfo_offline_copy_saved, savedDate)
+            isUpdating -> getString(R.string.padinfo_offline_copy_updating)
             else -> getString(R.string.padinfo_offline_copy_missing)
         }
         // Nothing to open yet

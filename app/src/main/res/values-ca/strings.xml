@@ -155,6 +155,7 @@
     <string name="padinfo_offline_copy_saved">Desada el %s. Toca per obrir-la.</string>
     <string name="padinfo_offline_copy_missing">Encara no s\'ha desat. Es desarà la propera vegada que s\'obri el document amb connexió.</string>
     <string name="padinfo_offline_copy_updating">Desant…</string>
+    <string name="padinfo_offline_copy_saved_updating">Desada el %s, s\'està actualitzant ara. Toca per obrir-la.</string>
     <string name="padinfo_offline_copy_failed">No s\'ha pogut desar la còpia sense connexió. Es tornarà a provar la propera vegada que s\'obri el document.</string>
     <string name="import_importing_file">Selecciona el fitxer…</string>
     <string name="import_importing_success">Importació finalitzada (resultat: %s)</string>

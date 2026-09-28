@@ -169,5 +169,6 @@
     <string name="padinfo_offline_copy_saved">Salvata il %s. Tocca per aprirla.</string>
     <string name="padinfo_offline_copy_missing">Non ancora salvata. Verrà salvata la prossima volta che il documento viene aperto con una connessione.</string>
     <string name="padinfo_offline_copy_updating">Salvataggio…</string>
+    <string name="padinfo_offline_copy_saved_updating">Salvata il %s, aggiornamento in corso. Tocca per aprirla.</string>
     <string name="padinfo_offline_copy_failed">Impossibile salvare la copia offline. Verrà riprovato la prossima volta che il documento viene aperto.</string>
 </resources>

@@ -368,7 +368,7 @@ class PadViewActivity :
         lifecycleScope.launch(Dispatchers.IO) {
             padViewModel?.getByUrl(padUrl)?.let { pad ->
                 viewedPad = pad
-                OfflinePadFetcher.update(applicationContext, pad)
+                OfflinePadFetcher.update(applicationContext, pad.mId)
             }
         }
     }
@@ -381,7 +381,7 @@ class PadViewActivity :
                 viewedPad = pad
                 currentUrl = pad.mUrl
                 updateViewedPad(pad)
-                OfflinePadFetcher.update(applicationContext, pad)
+                OfflinePadFetcher.update(applicationContext, pad.mId)
             } else {
                 lifecycleScope.launch {
                     Toast.makeText(
@@ -442,7 +442,7 @@ class PadViewActivity :
     override fun onStop() {
         super.onStop()
         if (!isOfflineMode) {
-            viewedPad?.let { OfflinePadFetcher.update(applicationContext, it) }
+            viewedPad?.let { OfflinePadFetcher.update(applicationContext, it.mId) }
         }
     }
 
@@ -455,7 +455,8 @@ class PadViewActivity :
     private fun loadOfflineCopy(finishIfMissing: Boolean) {
         lifecycleScope.launch {
             val pad = viewedPad ?: withContext(Dispatchers.IO) { findViewedPad() }
-            val html = pad?.takeIf { it.mOfflineAccess }?.let {
+            // The store follows the offline access of the pad, see OfflinePadFetcher.update
+            val html = pad?.let {
                 withContext(Dispatchers.IO) { offlinePadStore.get(it.mId) }
             }
 

@@ -199,5 +199,6 @@
     <string name="padinfo_offline_copy_saved">Enregistrée le %s. Touchez pour l\'ouvrir.</string>
     <string name="padinfo_offline_copy_missing">Pas encore enregistrée. Elle le sera à la prochaine ouverture du document avec une connexion.</string>
     <string name="padinfo_offline_copy_updating">Enregistrement…</string>
+    <string name="padinfo_offline_copy_saved_updating">Enregistrée le %s, mise à jour en cours. Touchez pour l\'ouvrir.</string>
     <string name="padinfo_offline_copy_failed">La copie hors ligne n\'a pas pu être enregistrée. Une nouvelle tentative aura lieu à la prochaine ouverture du document.</string>
 </resources>

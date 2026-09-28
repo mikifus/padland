@@ -105,9 +105,9 @@ public class ManagesEditPadDialog: ManagesDialog(), IManagesEditPadDialog {
             padViewModel?.updatePad(savePad)
 
             // The offline copy belongs to the previous URL
-            if (savePad.mOfflineAccess && savePad.mUrl != pad.mUrl) {
+            if (savePad.mUrl != pad.mUrl) {
                 OfflinePadStore(activity).delete(padId)
-                OfflinePadFetcher.update(activity, savePad)
+                OfflinePadFetcher.update(activity, padId)
             }
 
             padGroupViewModel?.deletePadGroupsAndPadList(padId)

@@ -4,6 +4,9 @@ import android.content.Context
 import android.util.Log
 import android.webkit.CookieManager
 import android.webkit.WebSettings
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.mikifus.padland.Database.PadListDatabase
 import com.mikifus.padland.Database.PadModel.Pad
 import com.mikifus.padland.Utils.CryptPad.CryptPadUtils
 import com.mikifus.padland.Utils.ErrorReporting.ErrorReporter
@@ -18,7 +21,6 @@ import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
 import java.nio.charset.Charset
-import java.util.Collections
 
 /**
  * Updates the offline copy of Etherpad Lite pads with their public HTML export,
@@ -29,7 +31,7 @@ import java.util.Collections
  * ```
  *
  * Updates run in their own scope, so they finish even if the screen that
- * started them is closed.
+ * started them is closed. Only one update per pad runs at a time.
  */
 object OfflinePadFetcher {
     private const val TAG = "OFFLINE_PAD_FETCHER"
@@ -39,7 +41,17 @@ object OfflinePadFetcher {
     private const val MAX_SIZE = 10 * 1024 * 1024
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-    private val updatingPadIds: MutableSet<Long> = Collections.synchronizedSet(mutableSetOf())
+
+    private val lock = Any()
+    private val runningPadIds = mutableSetOf<Long>()
+    private val pendingPadIds = mutableSetOf<Long>()
+
+    private val mUpdatingPadIds = MutableLiveData<Set<Long>>(emptySet())
+
+    /**
+     * Pads with an update running, to show the status of the copies.
+     */
+    val updatingPadIds: LiveData<Set<Long>> = mUpdatingPadIds
 
     /**
      * Offline copies are only available for Etherpad Lite pads (for now).
@@ -66,48 +78,94 @@ object OfflinePadFetcher {
         return URL(url.protocol, url.host, url.port, path + EXPORT_PATH).toString()
     }
 
-    fun isUpdating(padId: Long): Boolean = updatingPadIds.contains(padId)
+    fun isUpdating(padId: Long): Boolean = synchronized(lock) { padId in runningPadIds }
 
     /**
-     * Downloads the copy in the background if the pad has offline access.
+     * Brings the offline copy in line with the saved pad, in the background:
+     * downloads it if the pad has offline access, deletes it otherwise.
      * Network errors are only logged, the previous copy is kept.
+     *
+     * The pad is read from the database, so call it after saving any change.
+     * If the pad is already updating, it is updated once more afterwards.
      *
      * @param callback called on the main thread when done, not called if
      * an update of the same pad is already running
      */
-    fun update(context: Context, pad: Pad, callback: ((updated: Boolean) -> Unit)? = null) {
-        if (!pad.mOfflineAccess || !isAvailable(pad)) return
-        if (!updatingPadIds.add(pad.mId)) return
+    fun update(context: Context, padId: Long, callback: ((updated: Boolean) -> Unit)? = null) {
+        synchronized(lock) {
+            if (padId in runningPadIds) {
+                pendingPadIds.add(padId)
+                return
+            }
+            runningPadIds.add(padId)
+            mUpdatingPadIds.postValue(runningPadIds.toSet())
+        }
 
         val applicationContext = context.applicationContext
 
         scope.launch {
-            var updated = false
-            try {
-                val exportUrl = makeExportUrl(pad.mUrl)
-                val html = download(
-                    exportUrl,
-                    WebSettings.getDefaultUserAgent(applicationContext),
-                    CookieManager.getInstance().getCookie(exportUrl)
-                )
-
-                if (!OfflinePadStore(applicationContext).save(pad.mId, html)) {
-                    throw IOException("The offline copy could not be saved")
-                }
-                updated = true
-                Log.d(TAG, "Offline copy updated for pad ${pad.mId}")
-            } catch (e: IOException) {
-                Log.w(TAG, "The offline copy could not be updated for pad ${pad.mId}", e)
-            } catch (e: Exception) {
-                ErrorReporter.reportNonFatal(e)
-            } finally {
-                updatingPadIds.remove(pad.mId)
-            }
+            var updated: Boolean
+            do {
+                updated = updateCopy(applicationContext, padId)
+            } while (finishOrRepeat(padId))
 
             callback?.let {
                 withContext(Dispatchers.Main) { it(updated) }
             }
         }
+    }
+
+    /**
+     * @return true if it was requested again meanwhile, the pad keeps updating
+     */
+    private fun finishOrRepeat(padId: Long): Boolean = synchronized(lock) {
+        if (pendingPadIds.remove(padId)) {
+            return true
+        }
+        runningPadIds.remove(padId)
+        mUpdatingPadIds.postValue(runningPadIds.toSet())
+        false
+    }
+
+    private suspend fun updateCopy(context: Context, padId: Long): Boolean {
+        val store = OfflinePadStore(context)
+        try {
+            val pad = getPad(context, padId)
+            if (pad == null || !pad.mOfflineAccess || !isAvailable(pad)) {
+                store.delete(padId)
+                return false
+            }
+
+            val exportUrl = makeExportUrl(pad.mUrl)
+            val html = download(
+                exportUrl,
+                WebSettings.getDefaultUserAgent(context),
+                CookieManager.getInstance().getCookie(exportUrl)
+            )
+
+            // Changed while downloading, whoever changed it requested another update
+            val currentPad = getPad(context, padId)
+            if (currentPad == null || !currentPad.mOfflineAccess || currentPad.mUrl != pad.mUrl) {
+                return false
+            }
+
+            if (!store.save(padId, html)) {
+                throw IOException("The offline copy could not be saved")
+            }
+            Log.d(TAG, "Offline copy updated for pad $padId")
+            return true
+        } catch (e: IOException) {
+            Log.w(TAG, "The offline copy could not be updated for pad $padId", e)
+        } catch (e: Exception) {
+            ErrorReporter.reportNonFatal(e)
+        }
+        return false
+    }
+
+    private suspend fun getPad(context: Context, padId: Long): Pad? {
+        return PadListDatabase.getInstance(context).padDao()
+            .getByIds(listOf(padId))
+            .firstOrNull()
     }
 
     private fun download(url: String, userAgent: String?, cookies: String?): String {

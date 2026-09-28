@@ -133,5 +133,6 @@
     <string name="padinfo_offline_copy_saved">Gespeichert am %s. Tippen zum Öffnen.</string>
     <string name="padinfo_offline_copy_missing">Noch nicht gespeichert. Sie wird beim nächsten Öffnen des Dokuments mit Verbindung gespeichert.</string>
     <string name="padinfo_offline_copy_updating">Wird gespeichert…</string>
+    <string name="padinfo_offline_copy_saved_updating">Gespeichert am %s, wird gerade aktualisiert. Tippen zum Öffnen.</string>
     <string name="padinfo_offline_copy_failed">Die Offline-Kopie konnte nicht gespeichert werden. Beim nächsten Öffnen des Dokuments wird es erneut versucht.</string>
 </resources>

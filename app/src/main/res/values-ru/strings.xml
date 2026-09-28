@@ -153,6 +153,7 @@
     <string name="padinfo_offline_copy_saved">Сохранена %s. Нажмите, чтобы открыть.</string>
     <string name="padinfo_offline_copy_missing">Ещё не сохранена. Она будет сохранена при следующем открытии документа с подключением.</string>
     <string name="padinfo_offline_copy_updating">Сохранение…</string>
+    <string name="padinfo_offline_copy_saved_updating">Сохранена %s, сейчас обновляется. Нажмите, чтобы открыть.</string>
     <string name="padinfo_offline_copy_failed">Не удалось сохранить офлайн-копию. Попытка будет повторена при следующем открытии документа.</string>
     <string name="import_importing_success">Импорт завершён (размер результата: %s)</string>
     <string name="import_importing_failed">Импорт отменён</string>

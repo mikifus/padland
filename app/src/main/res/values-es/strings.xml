@@ -152,6 +152,7 @@
     <string name="padinfo_offline_copy_saved">Guardada el %s. Toca para abrirla.</string>
     <string name="padinfo_offline_copy_missing">Aún no se ha guardado. Se guardará la próxima vez que se abra el documento con conexión.</string>
     <string name="padinfo_offline_copy_updating">Guardando…</string>
+    <string name="padinfo_offline_copy_saved_updating">Guardada el %s, actualizándola ahora. Toca para abrirla.</string>
     <string name="padinfo_offline_copy_failed">No se ha podido guardar la copia sin conexión. Se volverá a intentar la próxima vez que se abra el documento.</string>
     <string name="import_importing_file">Selecciona el fichero…</string>
     <string name="import_importing_success">Importación finalizada (resultado: %s)</string>
