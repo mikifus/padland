@@ -144,6 +144,8 @@
     <string name="padgroup_empty_no_pads">В этой группе нет документов. Вы можете выбрать один и перетащить его сюда.</string>
     <string name="export_exporting_success">Экспорт файла завершён</string>
     <string name="export_exporting_failed">Файл не может быть экспортирован</string>
+    <string name="download_file_success">Файл загружен</string>
+    <string name="download_file_failed">Не удалось загрузить файл</string>
     <string name="import_importing_success">Импорт завершён (размер результата: %s)</string>
     <string name="import_importing_failed">Импорт отменён</string>
     <string name="preference_export_database">Экспорт базы данных</string>

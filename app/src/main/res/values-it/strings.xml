@@ -160,4 +160,6 @@
     <string name="error_report_dialog_copy_failed">Impossibile copiare il rapporto.</string>
     <string name="error_report_type_crash">Arresto anomalo</string>
     <string name="error_report_type_error">Errore</string>
+    <string name="download_file_success">File scaricato</string>
+    <string name="download_file_failed">Impossibile scaricare il file</string>
 </resources>

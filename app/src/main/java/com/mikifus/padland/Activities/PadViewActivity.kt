@@ -43,6 +43,7 @@ import com.mikifus.padland.Dialogs.Managers.ManagesSslErrorDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesWhitelistServerDialog
 import com.mikifus.padland.R
 import com.mikifus.padland.Utils.CryptPad.CryptPadUtils
+import com.mikifus.padland.Utils.Download.DownloadHelper
 import com.mikifus.padland.Utils.PadLandWebViewClient.PadLandWebClientCallbacks
 import com.mikifus.padland.Utils.PadLandWebViewClient.PadLandWebViewClient
 import com.mikifus.padland.Utils.PadServer
@@ -67,6 +68,7 @@ class PadViewActivity :
     override var serverViewModel: ServerViewModel? = null
     private var webView: WebView? = null
     private var webViewClient: PadLandWebViewClient? = null
+    private var downloadHelper: DownloadHelper? = null
     private var deferredSave: Boolean = false
 
     private var currentUrl: String? = null
@@ -139,7 +141,21 @@ class PadViewActivity :
 
         loadProgress()
         showProgress()
+        initDownloadHelper()
         initViewModels()
+    }
+
+    /**
+     * Must be done before the activity starts, it registers an activity result.
+     */
+    private fun initDownloadHelper() {
+        downloadHelper = DownloadHelper(this) { done ->
+            Toast.makeText(
+                applicationContext,
+                getString(if (done) R.string.download_file_success else R.string.download_file_failed),
+                Toast.LENGTH_LONG
+            ).show()
+        }
     }
 
     private fun makeWebView(urlWhitelist: List<String>) {
@@ -477,6 +493,7 @@ class PadViewActivity :
         webView = findViewById(R.id.activity_main_webview)
         webView!!.webViewClient = webViewClient!!
         webView!!.setInitialScale(1)
+        downloadHelper?.attach(webView!!)
 
         val webSettings = webView!!.settings
 

@@ -190,4 +190,6 @@
     <string name="error_report_dialog_copy_failed">Le rapport n\'a pas pu être copié.</string>
     <string name="error_report_type_crash">Plantage</string>
     <string name="error_report_type_error">Erreur</string>
+    <string name="download_file_success">Fichier téléchargé</string>
+    <string name="download_file_failed">Le fichier n\'a pas pu être téléchargé</string>
 </resources>
