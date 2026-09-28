@@ -127,7 +127,10 @@ object OfflinePadFetcher {
 
     /**
      * Brings the offline copy in line with the saved pad, in the background:
-     * downloads it if the pad has offline access, deletes it otherwise.
+     * downloads it if the pad has offline access and its server supports it.
+     * Otherwise the previous copy is kept: it belongs to the pad, not to the
+     * server or the offline access setting. It is only deleted with the pad
+     * (or from the settings).
      * Network errors are only logged, the previous copy is kept.
      *
      * The pad is read from the database, so call it after saving any change.
@@ -181,8 +184,13 @@ object OfflinePadFetcher {
         val offlinePadStore = getStore(context)
         try {
             val pad = getPad(context, padId)
-            if (pad == null || !pad.mOfflineAccess || !isAvailable(context, pad)) {
+            if (pad == null) {
+                // The copy belongs to the pad, it goes with it
                 offlinePadStore.delete(padId)
+                return false
+            }
+            // The previous copy is kept, even if the server is gone or changed
+            if (!pad.mOfflineAccess || !isAvailable(context, pad)) {
                 return false
             }
 

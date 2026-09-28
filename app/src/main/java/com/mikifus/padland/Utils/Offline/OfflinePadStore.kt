@@ -78,8 +78,8 @@ class OfflinePadStore(private val directory: File) {
     }
 
     /**
-     * Removes the copies of the pads not in [padIds], i.e. deleted pads or pads
-     * without offline access anymore, and any leftover temp file.
+     * Removes the copies of the pads not in [padIds], i.e. deleted pads,
+     * and any leftover temp file.
      */
     @Synchronized
     fun keepOnly(padIds: Collection<Long>) {

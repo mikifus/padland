@@ -166,9 +166,12 @@ class PadInfoActivity: AppCompatActivity(),
                 return@launch
             }
 
-            // Saves the first copy, or deletes it
+            // Saves the first copy. Turned off, the saved copy is kept
+            if (!isChecked) {
+                return@launch
+            }
             OfflinePadFetcher.update(this@PadInfoActivity, pad.mId) { updated ->
-                if (isChecked && !updated && !isDestroyed) {
+                if (!updated && !isDestroyed) {
                     Toast.makeText(
                         this@PadInfoActivity,
                         getString(R.string.padinfo_offline_copy_failed),
@@ -180,16 +183,23 @@ class PadInfoActivity: AppCompatActivity(),
     }
 
     /**
-     * Only pads of Etherpad Lite servers have offline access (for now).
-     * Hidden until the servers are loaded.
+     * Offline access can only be turned on for pads of Etherpad Lite servers (for now),
+     * the checkbox is hidden until the servers are loaded.
+     *
+     * The copy row follows the copy itself: it belongs to the pad, so it is shown
+     * while there is a copy or one is being saved, whatever the server or the
+     * checkbox. Without any, it is only shown to tell a copy will be saved.
      */
     private fun updateOfflineCopyStatus(pad: Pad) {
         val isAvailable = servers?.let { OfflinePadFetcher.isAvailable(pad, it, resources) } ?: false
-        mOfflineAccessContainer?.visibility = if (isAvailable) View.VISIBLE else View.GONE
-        mOfflineCopyContainer?.visibility = if (isAvailable && pad.mOfflineAccess) View.VISIBLE else View.GONE
-
         val savedTime = offlinePadStore.getSavedTime(pad.mId)
         val isUpdating = OfflinePadFetcher.isUpdating(pad.mId)
+        val isPending = isAvailable && pad.mOfflineAccess
+
+        mOfflineAccessContainer?.visibility = if (isAvailable) View.VISIBLE else View.GONE
+        mOfflineCopyContainer?.visibility =
+            if (savedTime != null || isUpdating || isPending) View.VISIBLE else View.GONE
+
         val savedDate = savedTime?.let {
             DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).format(Date(it))
         }

@@ -449,7 +449,7 @@ class PadViewActivity :
     private fun loadOfflineCopy(finishIfMissing: Boolean) {
         lifecycleScope.launch {
             val pad = viewedPad ?: withContext(Dispatchers.IO) { findViewedPad() }
-            // The store follows the offline access of the pad, see OfflinePadFetcher.update
+            // The copy belongs to the pad, it may be there even without offline access
             val hasCopy = pad != null && withContext(Dispatchers.IO) { offlinePadStore.has(pad.mId) }
 
             if (pad == null || !hasCopy) {
