@@ -7,6 +7,7 @@ import android.view.View.OnClickListener
 import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -79,6 +80,7 @@ class PadAdapter(
         val content: LinearLayout
         val buttonCopy: ImageButton
         val itemLayout: ConstraintLayout
+        val offlineAccessIcon: ImageView
 
         var padId: Long = 0
         var padGroupId: Long = 0
@@ -89,6 +91,7 @@ class PadAdapter(
             content = itemView.findViewById(R.id.content)
             buttonCopy = itemView.findViewById(R.id.button_copy)
             itemLayout = itemView.findViewById(R.id.pad_list_recyclerview_item_pad)
+            offlineAccessIcon = itemView.findViewById(R.id.icon_offline_access)
         }
 
         fun getItem(): ItemDetailsLookup.ItemDetails<Long> =
@@ -102,6 +105,10 @@ class PadAdapter(
         }
         fun bindUrl(url: String) {
             urlTextView.text = url
+        }
+
+        fun bindOfflineAccess(offlineAccess: Boolean) {
+            offlineAccessIcon.visibility = if (offlineAccess) View.VISIBLE else View.GONE
         }
 
         fun bindSelected(selected: Boolean) {
@@ -119,6 +126,7 @@ class PadAdapter(
         val current: Pad = data[position]
         holder.bindName(current.mLocalName.ifBlank { current.mName })
         holder.bindUrl(current.mUrl)
+        holder.bindOfflineAccess(current.mOfflineAccess)
 
         holder.padGroupId = padGroupId
         holder.itemLayout.tag = current.mId
@@ -170,6 +178,8 @@ class PadAdapter(
         return DiffUtil.calculateDiff(object: PadAdapterDiffUtilCallback(oldValue, newValue) {
             override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
                 return when {
+                    // Full bind
+                    oldValue[oldItemPosition].mOfflineAccess != newValue[newItemPosition].mOfflineAccess -> null
                     oldValue[oldItemPosition].mName != newValue[newItemPosition].mName ||
                             oldValue[oldItemPosition].mLocalName != newValue[newItemPosition].mLocalName
                     -> {

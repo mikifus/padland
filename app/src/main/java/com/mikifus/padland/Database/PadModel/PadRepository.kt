@@ -29,6 +29,10 @@ class PadRepository(private val padDao: PadDao) {
         return padDao.getByUrl(url)
     }
 
+    suspend fun getOfflineAccessIds(): List<Long> {
+        return padDao.getOfflineAccessIds()
+    }
+
     suspend fun updatePadGroup(padGroup: Pad): Int {
         return padDao.update(padGroup)
     }

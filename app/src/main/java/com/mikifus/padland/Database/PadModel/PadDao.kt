@@ -50,6 +50,9 @@ interface PadDao {
     @Query("SELECT url FROM padlist")
     suspend fun getAllUrls(): List<String>
 
+    @Query("SELECT _id FROM padlist WHERE offline_access = 1")
+    suspend fun getOfflineAccessIds(): List<Long>
+
     @Query("DELETE FROM padlist WHERE _id IN (:selectionArgs)")
     fun deleteBy(selectionArgs: Array<String>?): Int
 

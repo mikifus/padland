@@ -21,6 +21,7 @@ data class Pad(
     @ColumnInfo(name = "create_date", defaultValue = "(strftime('%s','now'))") val mCreateDate: Date,
     @ColumnInfo(name = "access_count", defaultValue = "0") val mAccessCount: Long,
 //    @ColumnInfo(name = "position") val mPosition: Int,
+    @ColumnInfo(name = "offline_access", defaultValue = "0") val mOfflineAccess: Boolean = false,
 )
 {
     constructor() : this(
@@ -33,6 +34,7 @@ data class Pad(
         Date(System.currentTimeMillis()),
         0,
 //        0
+        false,
     )
 
     companion object {
@@ -86,7 +88,8 @@ data class Pad(
         return (
                 mName != pad.mName ||
                         mUrl != pad.mUrl ||
-                        mLocalName != pad.mLocalName
+                        mLocalName != pad.mLocalName ||
+                        mOfflineAccess != pad.mOfflineAccess
                 )
     }
 }

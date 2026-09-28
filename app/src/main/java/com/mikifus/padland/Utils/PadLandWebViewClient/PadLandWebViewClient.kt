@@ -69,6 +69,9 @@ class PadLandWebViewClient(hostsWhitelist: List<String>, private val callbacks: 
         super.onReceivedError(view, request, error)
         --webViewHttpConnections
         Log.e(TAG, "WebView Error $error, Request: $request")
+        if (request.isForMainFrame) {
+            onReceivedMainFrameErrorCallback(view, error.errorCode)
+        }
     }
 
     @Deprecated("Deprecated in Java")

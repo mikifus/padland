@@ -64,6 +64,7 @@ import com.mikifus.padland.Dialogs.Managers.ManagesChooseGroupDialog
 import com.mikifus.padland.Utils.ErrorReporting.ErrorReporter
 import com.mikifus.padland.Utils.Import.PadClipboardImporter
 import com.mikifus.padland.Utils.Import.PadUrlImport
+import com.mikifus.padland.Utils.Offline.OfflinePadStore
 import com.mikifus.padland.Utils.Sorting.PadListSortOrder
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
@@ -145,6 +146,18 @@ class PadListActivity: AppCompatActivity(),
 
         initListView()
         initEvents()
+        cleanUpOfflineCopies()
+    }
+
+    /**
+     * Removes the offline copies of deleted pads or pads without offline access,
+     * i.e. deleted through the content provider.
+     */
+    private fun cleanUpOfflineCopies() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val padIds = padViewModel!!.getOfflineAccessIds()
+            OfflinePadStore(this@PadListActivity).keepOnly(padIds)
+        }
     }
 
     private fun getOnItemClickListener(): View.OnClickListener {

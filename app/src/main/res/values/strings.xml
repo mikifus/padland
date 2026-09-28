@@ -217,6 +217,14 @@
     <string name="export_exporting_failed">The file could not be exported</string>
     <string name="download_file_success">File downloaded</string>
     <string name="download_file_failed">The file could not be downloaded</string>
+    <string name="offline_access">Offline access</string>
+    <string name="offline_access_explanation">Keeps a read-only copy on this device, updated every time the document is opened.</string>
+    <string name="padview_offline_copy_shown">Offline copy from %s (read-only)</string>
+    <string name="padinfo_offline_copy">Offline copy</string>
+    <string name="padinfo_offline_copy_saved">Saved on %s. Touch to open it.</string>
+    <string name="padinfo_offline_copy_missing">Not saved yet. It will be saved the next time the document is opened with a connection.</string>
+    <string name="padinfo_offline_copy_updating">Saving…</string>
+    <string name="padinfo_offline_copy_failed">The offline copy could not be saved. It will be tried again the next time the document is opened.</string>
     <string name="import_importing_file">Select the file…</string>
     <string name="import_importing_success">Import finished (result size: %s)</string>
     <string name="import_importing_failed">Import cancelled</string>

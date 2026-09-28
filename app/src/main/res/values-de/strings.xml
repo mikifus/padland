@@ -126,4 +126,12 @@
     <string name="error_report_type_error">Fehler</string>
     <string name="download_file_success">Datei heruntergeladen</string>
     <string name="download_file_failed">Die Datei konnte nicht heruntergeladen werden</string>
+    <string name="offline_access">Offline-Zugriff</string>
+    <string name="offline_access_explanation">Speichert eine schreibgeschützte Kopie auf diesem Gerät, die bei jedem Öffnen des Dokuments aktualisiert wird.</string>
+    <string name="padview_offline_copy_shown">Offline-Kopie vom %s (schreibgeschützt)</string>
+    <string name="padinfo_offline_copy">Offline-Kopie</string>
+    <string name="padinfo_offline_copy_saved">Gespeichert am %s. Tippen zum Öffnen.</string>
+    <string name="padinfo_offline_copy_missing">Noch nicht gespeichert. Sie wird beim nächsten Öffnen des Dokuments mit Verbindung gespeichert.</string>
+    <string name="padinfo_offline_copy_updating">Wird gespeichert…</string>
+    <string name="padinfo_offline_copy_failed">Die Offline-Kopie konnte nicht gespeichert werden. Beim nächsten Öffnen des Dokuments wird es erneut versucht.</string>
 </resources>
