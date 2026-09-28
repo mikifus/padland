@@ -146,6 +146,8 @@
     <string name="export_exporting_file">Selecciona on guardar…</string>
     <string name="export_exporting_success">Exportació finalitzada</string>
     <string name="export_exporting_failed">No s\'ha pogut exportar el fitxer</string>
+    <string name="download_file_success">Fitxer descarregat</string>
+    <string name="download_file_failed">No s\'ha pogut descarregar el fitxer</string>
     <string name="import_importing_file">Selecciona el fitxer…</string>
     <string name="import_importing_success">Importació finalitzada (resultat: %s)</string>
     <string name="import_importing_failed">L\'importació s\'ha cancel·lat</string>

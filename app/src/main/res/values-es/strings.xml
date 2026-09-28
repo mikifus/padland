@@ -143,6 +143,8 @@
     <string name="export_exporting_file">Selecciona donde guardar…</string>
     <string name="export_exporting_success">Exportación finalizada</string>
     <string name="export_exporting_failed">No se ha podido exportar el fichero</string>
+    <string name="download_file_success">Fichero descargado</string>
+    <string name="download_file_failed">No se ha podido descargar el fichero</string>
     <string name="import_importing_file">Selecciona el fichero…</string>
     <string name="import_importing_success">Importación finalizada (resultado: %s)</string>
     <string name="import_importing_failed">Importación cancelada</string>

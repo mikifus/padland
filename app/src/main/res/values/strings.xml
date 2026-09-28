@@ -215,6 +215,8 @@
     <string name="export_exporting_file">Select file location…</string>
     <string name="export_exporting_success">File export finished</string>
     <string name="export_exporting_failed">The file could not be exported</string>
+    <string name="download_file_success">File downloaded</string>
+    <string name="download_file_failed">The file could not be downloaded</string>
     <string name="import_importing_file">Select the file…</string>
     <string name="import_importing_success">Import finished (result size: %s)</string>
     <string name="import_importing_failed">Import cancelled</string>

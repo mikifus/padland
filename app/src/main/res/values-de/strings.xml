@@ -124,4 +124,6 @@
     <string name="error_report_dialog_copy_failed">Der Bericht konnte nicht kopiert werden.</string>
     <string name="error_report_type_crash">Absturz</string>
     <string name="error_report_type_error">Fehler</string>
+    <string name="download_file_success">Datei heruntergeladen</string>
+    <string name="download_file_failed">Die Datei konnte nicht heruntergeladen werden</string>
 </resources>
