@@ -1,6 +1,7 @@
 package com.mikifus.padland.Utils.Offline
 
 import android.content.Context
+import android.content.res.Resources
 import android.util.Log
 import android.webkit.CookieManager
 import android.webkit.WebSettings
@@ -8,7 +9,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.mikifus.padland.Database.PadListDatabase
 import com.mikifus.padland.Database.PadModel.Pad
-import com.mikifus.padland.Utils.CryptPad.CryptPadUtils
+import com.mikifus.padland.Database.ServerModel.Server
+import com.mikifus.padland.R
 import com.mikifus.padland.Utils.ErrorReporting.ErrorReporter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +21,6 @@ import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.net.HttpURLConnection
-import java.net.MalformedURLException
 import java.net.URL
 import java.nio.charset.Charset
 
@@ -67,19 +68,50 @@ object OfflinePadFetcher {
     }
 
     /**
-     * Offline copies are only available for Etherpad Lite pads (for now).
+     * Offline copies are only available for pads of Etherpad Lite servers (for now).
      */
-    fun isAvailable(pad: Pad): Boolean {
-        return isEtherpadUrl(pad.mUrl)
+    suspend fun isAvailable(context: Context, pad: Pad): Boolean {
+        val servers = PadListDatabase.getInstance(context).serverDao().getAllList()
+        return isAvailable(pad, servers, context.resources)
     }
 
-    fun isEtherpadUrl(padUrl: String): Boolean {
-        return try {
-            URL(padUrl)
-            !padUrl.contains("#") && !CryptPadUtils.seemsCrpytPadUrl(padUrl)
-        } catch (e: MalformedURLException) {
-            false
+    /**
+     * The server of the pad is the one its URL starts with (URL and pad prefix):
+     * the saved servers set up with the Etherpad Lite jQuery plugin, or the
+     * built-in ones that are not CryptPad.
+     * Pads of unknown servers are not available.
+     *
+     * @param servers the saved servers, they come first: they may be
+     * set up differently than a built-in one
+     */
+    fun isAvailable(pad: Pad, servers: List<Server>, resources: Resources): Boolean {
+        val server = servers
+            .filter { pad.mUrl.startsWith(getPadUrlPrefix(it)) }
+            .maxByOrNull { getPadUrlPrefix(it).length }
+        if (server != null) {
+            return server.mJquery && !server.mCryptPad
         }
+
+        val padPrefixes = resources.getStringArray(R.array.etherpad_servers_url_padprefix)
+        val cryptPadInfo = resources.obtainTypedArray(R.array.etherpad_servers_cryptpad)
+        try {
+            val index = padPrefixes.indices
+                .filter { pad.mUrl.startsWith(padPrefixes[it]) }
+                .maxByOrNull { padPrefixes[it].length }
+                ?: return false
+
+            return !cryptPadInfo.getBoolean(index, false)
+        } finally {
+            cryptPadInfo.recycle()
+        }
+    }
+
+    /**
+     * Ends with a slash, so another host starting the same way does not match.
+     */
+    private fun getPadUrlPrefix(server: Server): String {
+        val prefix = server.mUrl + server.mPadprefix
+        return if (prefix.endsWith("/")) prefix else "$prefix/"
     }
 
     /**
@@ -149,7 +181,7 @@ object OfflinePadFetcher {
         val offlinePadStore = getStore(context)
         try {
             val pad = getPad(context, padId)
-            if (pad == null || !pad.mOfflineAccess || !isAvailable(pad)) {
+            if (pad == null || !pad.mOfflineAccess || !isAvailable(context, pad)) {
                 offlinePadStore.delete(padId)
                 return false
             }

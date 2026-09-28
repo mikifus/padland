@@ -18,6 +18,8 @@ import com.google.android.material.button.MaterialButton
 import com.mikifus.padland.Database.PadGroupModel.PadGroupViewModel
 import com.mikifus.padland.Database.PadModel.Pad
 import com.mikifus.padland.Database.PadModel.PadViewModel
+import com.mikifus.padland.Database.ServerModel.Server
+import com.mikifus.padland.Database.ServerModel.ServerViewModel
 import com.mikifus.padland.Dialogs.Managers.IManagesDeletePadDialog
 import com.mikifus.padland.Dialogs.Managers.IManagesEditPadDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesDeletePadDialog
@@ -37,6 +39,8 @@ class PadInfoActivity: AppCompatActivity(),
 
     override var padViewModel: PadViewModel? = null
     override var padGroupViewModel: PadGroupViewModel? = null
+    private var serverViewModel: ServerViewModel? = null
+    private var servers: List<Server>? = null
 
     private var mPadViewButton: MaterialButton? = null
     private var mCopyButton: ImageButton? = null
@@ -87,6 +91,9 @@ class PadInfoActivity: AppCompatActivity(),
         if(padGroupViewModel == null) {
             padGroupViewModel = ViewModelProvider(this)[PadGroupViewModel::class.java]
         }
+        if(serverViewModel == null) {
+            serverViewModel = ViewModelProvider(this)[ServerViewModel::class.java]
+        }
 
         padViewModel!!.pad.removeObservers(this) // Remove because called from onResume
         padViewModel!!.pad.observe(this@PadInfoActivity) { pad ->
@@ -98,6 +105,13 @@ class PadInfoActivity: AppCompatActivity(),
         }
         lifecycleScope.launch(Dispatchers.IO) {
             padViewModel!!.getById(intent!!.extras!!.getLong("padId"))
+        }
+
+        // The server of the pad tells whether offline access is available
+        serverViewModel!!.getAll.removeObservers(this) // Remove because called from onResume
+        serverViewModel!!.getAll.observe(this@PadInfoActivity) { servers ->
+            this.servers = servers
+            padViewModel?.pad?.value?.let { updateOfflineCopyStatus(it) }
         }
     }
 
@@ -166,10 +180,11 @@ class PadInfoActivity: AppCompatActivity(),
     }
 
     /**
-     * Only Etherpad Lite pads have offline access (for now).
+     * Only pads of Etherpad Lite servers have offline access (for now).
+     * Hidden until the servers are loaded.
      */
     private fun updateOfflineCopyStatus(pad: Pad) {
-        val isAvailable = OfflinePadFetcher.isAvailable(pad)
+        val isAvailable = servers?.let { OfflinePadFetcher.isAvailable(pad, it, resources) } ?: false
         mOfflineAccessContainer?.visibility = if (isAvailable) View.VISIBLE else View.GONE
         mOfflineCopyContainer?.visibility = if (isAvailable && pad.mOfflineAccess) View.VISIBLE else View.GONE
 
