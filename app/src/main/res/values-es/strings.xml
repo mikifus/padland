@@ -156,8 +156,9 @@
     <string name="padinfo_offline_copy_failed">No se ha podido guardar la copia sin conexión. Se volverá a intentar la próxima vez que salgas del documento.</string>
     <string name="offline_copies_delete_all">Borrar copias sin conexión</string>
     <string name="offline_copies_delete_all_summary">Borra las copias sin conexión guardadas en este dispositivo. Los documentos con acceso sin conexión guardan una nueva al salir de ellos.</string>
-    <string name="offline_copies_dialog_sure_to_delete">Se borrarán todas las copias sin conexión.</string>
-    <string name="offline_copies_deleted">Copias sin conexión borradas</string>
+    <string name="offline_copies_dialog_delete_sure_to_delete">Se borrarán todas las copias sin conexión.</string>
+    <string name="offline_copies_dialog_delete_copies_deleted">Copias sin conexión borradas</string>
+    <string name="title_activity_pad_offline_view">Copia sin conexión</string>
     <string name="import_importing_file">Selecciona el fichero…</string>
     <string name="import_importing_success">Importación finalizada (resultado: %s)</string>
     <string name="import_importing_failed">Importación cancelada</string>

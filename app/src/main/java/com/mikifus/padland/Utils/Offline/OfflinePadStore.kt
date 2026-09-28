@@ -51,11 +51,13 @@ class OfflinePadStore(private val directory: File) {
         }
     }
 
+    @Synchronized
     fun has(padId: Long): Boolean = fileFor(padId).isFile
 
     /**
      * @return when the copy was saved, in milliseconds, or null if there is no copy
      */
+    @Synchronized
     fun getSavedTime(padId: Long): Long? {
         val file = fileFor(padId)
         return if (file.isFile) file.lastModified() else null
@@ -64,6 +66,7 @@ class OfflinePadStore(private val directory: File) {
     @Synchronized
     fun delete(padId: Long): Boolean = fileFor(padId).delete()
 
+    @Synchronized
     fun count(): Int = directory.listFiles { file -> file.name.endsWith(EXTENSION) }?.size ?: 0
 
     /**

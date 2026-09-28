@@ -43,6 +43,9 @@ object OfflinePadFetcher {
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
+    @Volatile
+    private var store: OfflinePadStore? = null
+
     private val lock = Any()
     private val runningPadIds = mutableSetOf<Long>()
     private val pendingPadIds = mutableSetOf<Long>()
@@ -53,6 +56,15 @@ object OfflinePadFetcher {
      * Pads with an update running, to show the status of the copies.
      */
     val updatingPadIds: LiveData<Set<Long>> = mUpdatingPadIds
+
+    /**
+     * The store shared by the whole app, so its writes are synchronized.
+     */
+    fun getStore(context: Context): OfflinePadStore {
+        return store ?: synchronized(this) {
+            store ?: OfflinePadStore(context.applicationContext).also { store = it }
+        }
+    }
 
     /**
      * Offline copies are only available for Etherpad Lite pads (for now).
@@ -134,11 +146,11 @@ object OfflinePadFetcher {
     }
 
     private suspend fun updateCopy(context: Context, padId: Long): Boolean {
-        val store = OfflinePadStore(context)
+        val offlinePadStore = getStore(context)
         try {
             val pad = getPad(context, padId)
             if (pad == null || !pad.mOfflineAccess || !isAvailable(pad)) {
-                store.delete(padId)
+                offlinePadStore.delete(padId)
                 return false
             }
 
@@ -155,7 +167,7 @@ object OfflinePadFetcher {
                 return false
             }
 
-            if (!store.save(padId, html)) {
+            if (!offlinePadStore.save(padId, html)) {
                 throw IOException("The offline copy could not be saved")
             }
             Log.d(TAG, "Offline copy updated for pad $padId")

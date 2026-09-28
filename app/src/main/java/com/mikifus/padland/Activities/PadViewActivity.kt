@@ -46,7 +46,6 @@ import com.mikifus.padland.R
 import com.mikifus.padland.Utils.CryptPad.CryptPadUtils
 import com.mikifus.padland.Utils.Download.DownloadHelper
 import com.mikifus.padland.Utils.Offline.OfflinePadFetcher
-import com.mikifus.padland.Utils.Offline.OfflinePadStore
 import com.mikifus.padland.Utils.PadLandWebViewClient.PadLandWebClientCallbacks
 import com.mikifus.padland.Utils.PadLandWebViewClient.PadLandWebViewClient
 import com.mikifus.padland.Utils.PadServer
@@ -76,8 +75,9 @@ class PadViewActivity :
 
     /** The saved pad being viewed, null if it is not in the list */
     private var viewedPad: Pad? = null
-    private var isOfflineMode: Boolean = false
-    private val offlinePadStore by lazy { OfflinePadStore(this) }
+    /** Moved to the offline copy, see [loadOfflineCopy] */
+    private var isOfflineCopyOpened: Boolean = false
+    private val offlinePadStore by lazy { OfflinePadFetcher.getStore(this) }
 
     private var currentUrl: String? = null
         get() {
@@ -303,7 +303,7 @@ class PadViewActivity :
         }
 
         serverViewModel?.getAllEnabled!!.observe(this) { servers ->
-            if (isOfflineMode) {
+            if (isOfflineCopyOpened) {
                 return@observe
             }
             if (!isNetworkAvailable) {
@@ -433,7 +433,7 @@ class PadViewActivity :
      */
     override fun onPause() {
         super.onPause()
-        if (!isOfflineMode) {
+        if (!isOfflineCopyOpened) {
             viewedPad?.let {
                 OfflinePadFetcher.update(applicationContext, it.mId, PENDING_CHANGES_DELAY)
             }
@@ -461,10 +461,10 @@ class PadViewActivity :
                 return@launch
             }
 
-            if (isOfflineMode) {
+            if (isOfflineCopyOpened) {
                 return@launch
             }
-            isOfflineMode = true
+            isOfflineCopyOpened = true
 
             val offlineViewIntent = Intent(this@PadViewActivity, PadOfflineViewActivity::class.java)
             offlineViewIntent.putExtra("padId", pad.mId)

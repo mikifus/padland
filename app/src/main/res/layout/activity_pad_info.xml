@@ -197,7 +197,7 @@
 
                 <!-- Shown when offline access is enabled, opens the copy -->
                 <LinearLayout
-                    android:id="@+id/padinfo_offline_copy"
+                    android:id="@+id/padinfo_offline_copy_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"

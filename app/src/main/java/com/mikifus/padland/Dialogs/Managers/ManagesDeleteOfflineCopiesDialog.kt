@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.mikifus.padland.Dialogs.ConfirmDialog
 import com.mikifus.padland.R
-import com.mikifus.padland.Utils.Offline.OfflinePadStore
+import com.mikifus.padland.Utils.Offline.OfflinePadFetcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -34,7 +34,7 @@ class ManagesDeleteOfflineCopiesDialog: ManagesDialog(), IManagesDeleteOfflineCo
         initEvents(activity, onDeletedCallback)
 
         dialog.setTitle(activity.getString(R.string.offline_copies_delete_all))
-        dialog.setMessage(activity.getString(R.string.offline_copies_dialog_sure_to_delete))
+        dialog.setMessage(activity.getString(R.string.offline_copies_dialog_delete_sure_to_delete))
         dialog.positiveButtonText = activity.getString(R.string.delete)
 
         dialog.show(activity.supportFragmentManager, DIALOG_TAG)
@@ -48,7 +48,7 @@ class ManagesDeleteOfflineCopiesDialog: ManagesDialog(), IManagesDeleteOfflineCo
 
     private fun confirmDeleteOfflineCopies(activity: AppCompatActivity,
                                            onDeletedCallback: (() -> Unit)?) {
-        val offlinePadStore = OfflinePadStore(activity)
+        val offlinePadStore = OfflinePadFetcher.getStore(activity)
         activity.lifecycleScope.launch {
             withContext(Dispatchers.IO) {
                 offlinePadStore.clear()

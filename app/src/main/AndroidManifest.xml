@@ -63,7 +63,7 @@
 
         <activity
             android:name=".Activities.PadOfflineViewActivity"
-            android:label="@string/padinfo_offline_copy"
+            android:label="@string/title_activity_pad_offline_view"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
 
         <activity

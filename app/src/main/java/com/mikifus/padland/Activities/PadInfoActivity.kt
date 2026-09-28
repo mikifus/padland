@@ -24,7 +24,6 @@ import com.mikifus.padland.Dialogs.Managers.ManagesDeletePadDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesEditPadDialog
 import com.mikifus.padland.R
 import com.mikifus.padland.Utils.Offline.OfflinePadFetcher
-import com.mikifus.padland.Utils.Offline.OfflinePadStore
 import com.mikifus.padland.Utils.PadClipboardHelper
 import com.mikifus.padland.Utils.PadShareHelper
 import kotlinx.coroutines.Dispatchers
@@ -48,10 +47,10 @@ class PadInfoActivity: AppCompatActivity(),
     private var mAccessCountTextView: TextView? = null
     private var mOfflineAccessContainer: View? = null
     private var mOfflineAccessCheckBox: CheckBox? = null
-    private var mOfflineCopyView: View? = null
+    private var mOfflineCopyContainer: View? = null
     private var mOfflineCopyStatusTextView: TextView? = null
 
-    private val offlinePadStore by lazy { OfflinePadStore(this) }
+    private val offlinePadStore by lazy { OfflinePadFetcher.getStore(this) }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,7 +68,7 @@ class PadInfoActivity: AppCompatActivity(),
         mAccessCountTextView = findViewById(R.id.txt_padinfo_times_accessed)
         mOfflineAccessContainer = findViewById(R.id.padinfo_offline_access_container)
         mOfflineAccessCheckBox = findViewById(R.id.checkbox_padinfo_offline_access)
-        mOfflineCopyView = findViewById(R.id.padinfo_offline_copy)
+        mOfflineCopyContainer = findViewById(R.id.padinfo_offline_copy_container)
         mOfflineCopyStatusTextView = findViewById(R.id.txt_padinfo_offline_copy_status)
 
         initEvents()
@@ -121,7 +120,7 @@ class PadInfoActivity: AppCompatActivity(),
         mOfflineAccessCheckBox?.setOnClickListener {
             onOfflineAccessChanged(mOfflineAccessCheckBox!!.isChecked)
         }
-        mOfflineCopyView?.setOnClickListener {
+        mOfflineCopyContainer?.setOnClickListener {
             onOfflineCopyClick()
         }
         // Updates can be started from other screens, i.e. when leaving the pad
@@ -172,7 +171,7 @@ class PadInfoActivity: AppCompatActivity(),
     private fun updateOfflineCopyStatus(pad: Pad) {
         val isAvailable = OfflinePadFetcher.isAvailable(pad)
         mOfflineAccessContainer?.visibility = if (isAvailable) View.VISIBLE else View.GONE
-        mOfflineCopyView?.visibility = if (isAvailable && pad.mOfflineAccess) View.VISIBLE else View.GONE
+        mOfflineCopyContainer?.visibility = if (isAvailable && pad.mOfflineAccess) View.VISIBLE else View.GONE
 
         val savedTime = offlinePadStore.getSavedTime(pad.mId)
         val isUpdating = OfflinePadFetcher.isUpdating(pad.mId)
@@ -187,7 +186,7 @@ class PadInfoActivity: AppCompatActivity(),
             else -> getString(R.string.padinfo_offline_copy_missing)
         }
         // Nothing to open yet
-        mOfflineCopyView?.isEnabled = savedTime != null
+        mOfflineCopyContainer?.isEnabled = savedTime != null
     }
 
     private fun onOfflineCopyClick() {

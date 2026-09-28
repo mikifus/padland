@@ -22,7 +22,7 @@ import androidx.webkit.WebViewFeature
 import com.mikifus.padland.Database.PadModel.Pad
 import com.mikifus.padland.Database.PadModel.PadViewModel
 import com.mikifus.padland.R
-import com.mikifus.padland.Utils.Offline.OfflinePadStore
+import com.mikifus.padland.Utils.Offline.OfflinePadFetcher
 import com.mikifus.padland.Utils.PadLandWebViewClient.PadLandOfflineWebViewClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -43,7 +43,7 @@ class PadOfflineViewActivity: AppCompatActivity() {
     private var pad: Pad? = null
     private var html: String? = null
 
-    private val offlinePadStore by lazy { OfflinePadStore(this) }
+    private val offlinePadStore by lazy { OfflinePadFetcher.getStore(this) }
 
     // Must be registered before the activity starts
     private val downloadLauncher = registerForActivityResult(

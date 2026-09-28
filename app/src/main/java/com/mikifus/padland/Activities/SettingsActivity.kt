@@ -25,7 +25,7 @@ import com.mikifus.padland.Utils.Export.ExportHelper
 import com.mikifus.padland.Utils.Export.IExportHelper
 import com.mikifus.padland.Utils.Export.IImportHelper
 import com.mikifus.padland.Utils.Export.ImportHelper
-import com.mikifus.padland.Utils.Offline.OfflinePadStore
+import com.mikifus.padland.Utils.Offline.OfflinePadFetcher
 import com.rarepebble.colorpicker.ColorPreference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -92,7 +92,7 @@ class SettingsActivity : AppCompatActivity() {
                     updateOfflineCopiesPreference()
                     Toast.makeText(
                         requireContext(),
-                        getString(R.string.offline_copies_deleted),
+                        getString(R.string.offline_copies_dialog_delete_copies_deleted),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -108,7 +108,7 @@ class SettingsActivity : AppCompatActivity() {
                 return
             }
 
-            val offlinePadStore = OfflinePadStore(requireContext())
+            val offlinePadStore = OfflinePadFetcher.getStore(requireContext())
             lifecycleScope.launch {
                 val count = withContext(Dispatchers.IO) {
                     offlinePadStore.count()

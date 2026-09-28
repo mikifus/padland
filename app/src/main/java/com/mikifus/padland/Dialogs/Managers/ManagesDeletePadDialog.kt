@@ -8,7 +8,7 @@ import com.mikifus.padland.Database.PadGroupModel.PadGroupViewModel
 import com.mikifus.padland.Database.PadModel.PadViewModel
 import com.mikifus.padland.Dialogs.ConfirmDialog
 import com.mikifus.padland.R
-import com.mikifus.padland.Utils.Offline.OfflinePadStore
+import com.mikifus.padland.Utils.Offline.OfflinePadFetcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -58,7 +58,7 @@ class ManagesDeletePadDialog: ManagesDialog(), IManagesDeletePadDialog {
     }
 
     private fun confirmDeletePadDialog(activity: AppCompatActivity) {
-        val offlinePadStore = OfflinePadStore(activity)
+        val offlinePadStore = OfflinePadFetcher.getStore(activity)
         activity.lifecycleScope.launch(Dispatchers.IO) {
             ids.forEach {
                 padGroupViewModel!!.deletePadGroupsAndPadList(it)

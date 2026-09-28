@@ -157,8 +157,9 @@
     <string name="padinfo_offline_copy_failed">Не удалось сохранить офлайн-копию. Попытка будет повторена, когда вы в следующий раз выйдете из документа.</string>
     <string name="offline_copies_delete_all">Удалить офлайн-копии</string>
     <string name="offline_copies_delete_all_summary">Удаляет офлайн-копии, сохранённые на этом устройстве. Документы с офлайн-доступом сохранят новую копию, когда вы из них выйдете.</string>
-    <string name="offline_copies_dialog_sure_to_delete">Все офлайн-копии будут удалены.</string>
-    <string name="offline_copies_deleted">Офлайн-копии удалены</string>
+    <string name="offline_copies_dialog_delete_sure_to_delete">Все офлайн-копии будут удалены.</string>
+    <string name="offline_copies_dialog_delete_copies_deleted">Офлайн-копии удалены</string>
+    <string name="title_activity_pad_offline_view">Офлайн-копия</string>
     <string name="import_importing_success">Импорт завершён (размер результата: %s)</string>
     <string name="import_importing_failed">Импорт отменён</string>
     <string name="preference_export_database">Экспорт базы данных</string>

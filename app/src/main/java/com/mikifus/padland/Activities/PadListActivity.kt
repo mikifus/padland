@@ -64,7 +64,7 @@ import com.mikifus.padland.Dialogs.Managers.ManagesChooseGroupDialog
 import com.mikifus.padland.Utils.ErrorReporting.ErrorReporter
 import com.mikifus.padland.Utils.Import.PadClipboardImporter
 import com.mikifus.padland.Utils.Import.PadUrlImport
-import com.mikifus.padland.Utils.Offline.OfflinePadStore
+import com.mikifus.padland.Utils.Offline.OfflinePadFetcher
 import com.mikifus.padland.Utils.Sorting.PadListSortOrder
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
@@ -156,7 +156,7 @@ class PadListActivity: AppCompatActivity(),
     private fun cleanUpOfflineCopies() {
         lifecycleScope.launch(Dispatchers.IO) {
             val padIds = padViewModel!!.getOfflineAccessIds()
-            OfflinePadStore(this@PadListActivity).keepOnly(padIds)
+            OfflinePadFetcher.getStore(this@PadListActivity).keepOnly(padIds)
         }
     }
 
