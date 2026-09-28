@@ -32,8 +32,8 @@ import java.text.DateFormat
 import java.util.Date
 
 /**
- * Shows the offline copy of a pad, read-only: no javascript, no network
- * and links are not followed. The copy can be downloaded or shared as an HTML file.
+ * Shows the offline copy of a pad, read-only: no javascript and no network,
+ * links are opened in the user's browser. The copy can be downloaded or shared as an HTML file.
  */
 class PadOfflineViewActivity: AppCompatActivity() {
 

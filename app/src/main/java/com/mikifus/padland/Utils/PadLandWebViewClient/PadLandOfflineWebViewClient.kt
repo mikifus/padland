@@ -1,5 +1,8 @@
 package com.mikifus.padland.Utils.PadLandWebViewClient
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.util.Log
 import android.webkit.URLUtil
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
@@ -9,7 +12,8 @@ import java.io.ByteArrayInputStream
 
 /**
  * Shows an offline copy: nothing is loaded from outside the copy
- * (only inline data: resources) and links are not followed.
+ * (only inline data: resources) and the copy is not left.
+ * Touched links are opened in the user's browser, or the app for the link.
  */
 class PadLandOfflineWebViewClient : WebViewClient() {
 
@@ -22,12 +26,29 @@ class PadLandOfflineWebViewClient : WebViewClient() {
     }
 
     override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
+        val url = request.url
+
+        // Anchors within the copy (its base URL is about:blank)
+        if (url.scheme == ABOUT_SCHEME && url.fragment != null) {
+            return false
+        }
+
+        // Only links touched by the user, i.e. not a redirect of the copy
+        if (request.hasGesture() && url.scheme?.lowercase() in EXTERNAL_SCHEMES) {
+            try {
+                view.context.startActivity(Intent(Intent.ACTION_VIEW, url))
+            } catch (e: ActivityNotFoundException) {
+                Log.w(TAG, "No app to open $url", e)
+            }
+        }
         return true
     }
 
-    @Deprecated("Deprecated in Java")
-    override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-        return true
+    companion object {
+        const val TAG: String = "OFFLINE_WEB_VIEW_CLIENT"
+
+        private const val ABOUT_SCHEME = "about"
+        private val EXTERNAL_SCHEMES = listOf("http", "https", "mailto")
     }
 }
 
