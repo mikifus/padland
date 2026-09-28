@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:padland="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/menuitem_download"
+        android:title="@string/download"
+        padland:showAsAction="always"
+        android:icon="@drawable/ic_download" />
+
+    <item android:id="@+id/menuitem_share"
+        android:title="@string/share"
+        padland:showAsAction="always"
+        android:icon="@drawable/ic_share" />
+</menu>
+

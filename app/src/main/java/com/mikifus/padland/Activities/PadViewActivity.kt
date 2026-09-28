@@ -27,7 +27,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
-import com.google.android.material.snackbar.Snackbar
 import com.mikifus.padland.Database.PadModel.Pad
 import com.mikifus.padland.Database.PadModel.PadViewModel
 import com.mikifus.padland.Database.ServerModel.ServerViewModel
@@ -48,7 +47,6 @@ import com.mikifus.padland.Utils.CryptPad.CryptPadUtils
 import com.mikifus.padland.Utils.Download.DownloadHelper
 import com.mikifus.padland.Utils.Offline.OfflinePadFetcher
 import com.mikifus.padland.Utils.Offline.OfflinePadStore
-import com.mikifus.padland.Utils.PadLandWebViewClient.PadLandOfflineWebViewClient
 import com.mikifus.padland.Utils.PadLandWebViewClient.PadLandWebClientCallbacks
 import com.mikifus.padland.Utils.PadLandWebViewClient.PadLandWebViewClient
 import com.mikifus.padland.Utils.PadServer
@@ -59,8 +57,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.net.URL
-import java.text.DateFormat
-import java.util.Date
 
 class PadViewActivity :
     AppCompatActivity(),
@@ -310,8 +306,7 @@ class PadViewActivity :
             if (isOfflineMode) {
                 return@observe
             }
-            // Requested from the pad info, whatever the connection
-            if (!isNetworkAvailable || intent.getBooleanExtra(EXTRA_OFFLINE_COPY, false)) {
+            if (!isNetworkAvailable) {
                 loadOfflineCopy(finishIfMissing = true)
                 return@observe
             }
@@ -446,7 +441,7 @@ class PadViewActivity :
     }
 
     /**
-     * Shows the offline copy of the pad when it can not be loaded.
+     * Opens the offline copy of the pad instead, when it can not be loaded.
      *
      * @param finishIfMissing close if there is no offline copy, otherwise keep
      * the current page (i.e. the WebView error page)
@@ -455,11 +450,9 @@ class PadViewActivity :
         lifecycleScope.launch {
             val pad = viewedPad ?: withContext(Dispatchers.IO) { findViewedPad() }
             // The store follows the offline access of the pad, see OfflinePadFetcher.update
-            val html = pad?.let {
-                withContext(Dispatchers.IO) { offlinePadStore.get(it.mId) }
-            }
+            val hasCopy = pad != null && withContext(Dispatchers.IO) { offlinePadStore.has(pad.mId) }
 
-            if (pad == null || html == null) {
+            if (pad == null || !hasCopy) {
                 if (finishIfMissing) {
                     Toast.makeText(applicationContext, getString(R.string.network_is_unreachable), Toast.LENGTH_LONG)
                         .show()
@@ -468,7 +461,15 @@ class PadViewActivity :
                 return@launch
             }
 
-            showOfflineCopy(pad, html)
+            if (isOfflineMode) {
+                return@launch
+            }
+            isOfflineMode = true
+
+            val offlineViewIntent = Intent(this@PadViewActivity, PadOfflineViewActivity::class.java)
+            offlineViewIntent.putExtra("padId", pad.mId)
+            startActivity(offlineViewIntent)
+            finish()
         }
     }
 
@@ -484,48 +485,6 @@ class PadViewActivity :
         return padViewModel?.getByUrl(padUrl)
     }
 
-    /**
-     * Read only: no javascript, no network and links are not followed.
-     */
-    private fun showOfflineCopy(pad: Pad, html: String) {
-        if (isOfflineMode) {
-            return
-        }
-        isOfflineMode = true
-        viewedPad = pad
-
-        webView = findViewById(R.id.activity_main_webview)
-        webView!!.stopLoading()
-        webView!!.setOnKeyListener(null)
-        webView!!.setDownloadListener(null)
-        webView!!.webViewClient = PadLandOfflineWebViewClient()
-        webView!!.settings.javaScriptEnabled = false
-        webView!!.settings.allowContentAccess = false
-        webView!!.settings.allowFileAccess = false
-
-        // The export has no viewport, undo the settings made for the pad (if any)
-        webView!!.setInitialScale(0)
-        webView!!.settings.useWideViewPort = false
-        webView!!.settings.loadWithOverviewMode = false
-        webView!!.settings.setSupportZoom(true)
-        webView!!.settings.builtInZoomControls = true
-        webView!!.settings.displayZoomControls = false
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            webView!!.settings.isAlgorithmicDarkeningAllowed = true
-        }
-
-        webView!!.loadDataWithBaseURL(null, html, "text/html", "UTF-8", null)
-        hideProgress()
-
-        val savedTime = offlinePadStore.getSavedTime(pad.mId) ?: System.currentTimeMillis()
-        val savedDate = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT)
-            .format(Date(savedTime))
-
-        Snackbar.make(webView!!, getString(R.string.padview_offline_copy_shown, savedDate),
-            Snackbar.LENGTH_INDEFINITE)
-            .setAction(R.string.ok) {}
-            .show()
-    }
 
     /**
      * Loads the fancy ProgressWheel to show it's loading.
@@ -677,8 +636,6 @@ class PadViewActivity :
     }
 
     companion object {
-        /** Boolean extra, shows the offline copy even if there is connection */
-        const val EXTRA_OFFLINE_COPY = "offlineCopy"
 
         /** Etherpad sends the typed changes to the server every half a second or so */
         private const val PENDING_CHANGES_DELAY = 2_000L

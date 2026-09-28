@@ -147,7 +147,7 @@
     <string name="download_file_failed">No se ha podido descargar el fichero</string>
     <string name="offline_access">Acceso sin conexión</string>
     <string name="offline_access_explanation">Guarda una copia de solo lectura en este dispositivo, que se actualiza cada vez que sales del documento.</string>
-    <string name="padview_offline_copy_shown">Copia sin conexión del %s (solo lectura)</string>
+    <string name="download">Descargar</string>
     <string name="padinfo_offline_copy">Copia sin conexión</string>
     <string name="padinfo_offline_copy_saved">Guardada el %s. Toca para abrirla.</string>
     <string name="padinfo_offline_copy_missing">Aún no se ha guardado. Se guardará la próxima vez que salgas del documento con conexión.</string>

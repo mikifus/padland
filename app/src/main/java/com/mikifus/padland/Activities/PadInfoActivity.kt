@@ -192,10 +192,9 @@ class PadInfoActivity: AppCompatActivity(),
 
     private fun onOfflineCopyClick() {
         val pad = padViewModel!!.pad.value ?: return
-        val padViewIntent = Intent(this@PadInfoActivity, PadViewActivity::class.java)
-        padViewIntent.putExtra("padId", pad.mId)
-        padViewIntent.putExtra(PadViewActivity.EXTRA_OFFLINE_COPY, true)
-        startActivity(padViewIntent)
+        val offlineViewIntent = Intent(this@PadInfoActivity, PadOfflineViewActivity::class.java)
+        offlineViewIntent.putExtra("padId", pad.mId)
+        startActivity(offlineViewIntent)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

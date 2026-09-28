@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Files shared with other apps -->
+<paths>
+    <cache-path
+        name="shared"
+        path="shared/" />
+</paths>
+

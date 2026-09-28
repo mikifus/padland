@@ -194,7 +194,7 @@
     <string name="download_file_failed">Le fichier n\'a pas pu être téléchargé</string>
     <string name="offline_access">Accès hors ligne</string>
     <string name="offline_access_explanation">Conserve une copie en lecture seule sur cet appareil, mise à jour chaque fois que vous quittez le document.</string>
-    <string name="padview_offline_copy_shown">Copie hors ligne du %s (lecture seule)</string>
+    <string name="download">Télécharger</string>
     <string name="padinfo_offline_copy">Copie hors ligne</string>
     <string name="padinfo_offline_copy_saved">Enregistrée le %s. Touchez pour l\'ouvrir.</string>
     <string name="padinfo_offline_copy_missing">Pas encore enregistrée. Elle le sera la prochaine fois que vous quitterez le document avec une connexion.</string>

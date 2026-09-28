@@ -219,7 +219,7 @@
     <string name="download_file_failed">The file could not be downloaded</string>
     <string name="offline_access">Offline access</string>
     <string name="offline_access_explanation">Keeps a read-only copy on this device, updated every time you leave the document.</string>
-    <string name="padview_offline_copy_shown">Offline copy from %s (read-only)</string>
+    <string name="download">Download</string>
     <string name="padinfo_offline_copy">Offline copy</string>
     <string name="padinfo_offline_copy_saved">Saved on %s. Touch to open it.</string>
     <string name="padinfo_offline_copy_missing">Not saved yet. It will be saved the next time you leave the document with a connection.</string>
