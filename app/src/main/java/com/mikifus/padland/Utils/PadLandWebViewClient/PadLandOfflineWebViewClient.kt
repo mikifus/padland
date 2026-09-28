@@ -12,7 +12,7 @@ import java.io.ByteArrayInputStream
 
 /**
  * Shows an offline copy: nothing is loaded from outside the copy
- * (only inline data: resources) and the copy is not left.
+ * (only inline data: resources).
  * Touched links are opened in the user's browser, or the app for the link.
  */
 class PadLandOfflineWebViewClient : WebViewClient() {
