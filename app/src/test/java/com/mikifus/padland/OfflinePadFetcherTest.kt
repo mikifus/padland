@@ -3,7 +3,6 @@ package com.mikifus.padland
 import com.mikifus.padland.Database.PadModel.Pad
 import com.mikifus.padland.Database.ServerModel.Server
 import com.mikifus.padland.Utils.Offline.OfflinePadFetcher
-import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -17,23 +16,10 @@ import org.robolectric.annotation.Config
 class OfflinePadFetcherTest {
 
     @Test
-    fun makeExportUrl() {
-        assertEquals("https://pad.riseup.net/p/test/export/html",
-            OfflinePadFetcher.makeExportUrl("https://pad.riseup.net/p/test"))
-        assertEquals("https://pad.riseup.net/p/test/export/html",
-            OfflinePadFetcher.makeExportUrl("https://pad.riseup.net/p/test/"))
-    }
-
-    @Test
-    fun makeExportUrl_dropsQueryAndKeepsPrefixAndPort() {
-        assertEquals("http://example.org:9001/etherpad/p/my%20pad/export/html",
-            OfflinePadFetcher.makeExportUrl(
-                "http://example.org:9001/etherpad/p/my%20pad?userName=me&userColor=%23ff0000"))
-    }
-
-    @Test
     fun isAvailable_builtInServers() {
         assertTrue(isAvailable("https://pad.riseup.net/p/test"))
+        // Without pad prefix
+        assertTrue(isAvailable("https://pad.ouvaton.coop/test"))
         // CryptPad
         assertFalse(isAvailable("https://cryptpad.fr/pad/#/2/pad/edit/abcdefghijklmnop/"))
     }

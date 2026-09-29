@@ -12,6 +12,8 @@ import com.mikifus.padland.Database.PadModel.Pad
 import com.mikifus.padland.Database.ServerModel.Server
 import com.mikifus.padland.R
 import com.mikifus.padland.Utils.ErrorReporting.ErrorReporter
+import com.mikifus.padland.Utils.PadServer
+import com.mikifus.padland.Utils.PadUrl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -21,6 +23,7 @@ import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.net.HttpURLConnection
+import java.net.MalformedURLException
 import java.net.URL
 import java.nio.charset.Charset
 
@@ -38,7 +41,7 @@ import java.nio.charset.Charset
 object OfflinePadFetcher {
     private const val TAG = "OFFLINE_PAD_FETCHER"
 
-    private const val EXPORT_PATH = "/export/html"
+    private const val EXPORT_FORMAT = "html"
     private const val CONNECTION_TIMEOUT = 30_000
     private const val MAX_SIZE = 10 * 1024 * 1024
 
@@ -76,7 +79,7 @@ object OfflinePadFetcher {
     }
 
     /**
-     * The server of the pad is the one its URL starts with (URL and pad prefix):
+     * The server of the pad is the one with the same base URL (URL and pad prefix):
      * the saved servers set up with the Etherpad Lite jQuery plugin, or the
      * built-in ones that are not CryptPad.
      * Pads of unknown servers are not available.
@@ -85,42 +88,31 @@ object OfflinePadFetcher {
      * set up differently than a built-in one
      */
     fun isAvailable(pad: Pad, servers: List<Server>, resources: Resources): Boolean {
-        val server = servers
-            .filter { pad.mUrl.startsWith(getPadUrlPrefix(it)) }
-            .maxByOrNull { getPadUrlPrefix(it).length }
+        val baseUrl = try {
+            PadServer.Builder().padUrl(pad.mUrl).build().baseUrl
+        } catch (e: MalformedURLException) {
+            return false
+        }
+
+        val server = servers.firstOrNull {
+            PadServer.Builder().padUrl(it.mUrl + it.mPadprefix).build().baseUrl == baseUrl
+        }
         if (server != null) {
             return server.mJquery && !server.mCryptPad
         }
 
-        val padPrefixes = resources.getStringArray(R.array.etherpad_servers_url_padprefix)
+        val index = resources.getStringArray(R.array.etherpad_servers_url_padprefix)
+            .indexOfFirst { PadServer.Builder().padUrl(it).build().baseUrl == baseUrl }
+        if (index < 0) {
+            return false
+        }
+
         val cryptPadInfo = resources.obtainTypedArray(R.array.etherpad_servers_cryptpad)
         try {
-            val index = padPrefixes.indices
-                .filter { pad.mUrl.startsWith(padPrefixes[it]) }
-                .maxByOrNull { padPrefixes[it].length }
-                ?: return false
-
             return !cryptPadInfo.getBoolean(index, false)
         } finally {
             cryptPadInfo.recycle()
         }
-    }
-
-    /**
-     * Ends with a slash, so another host starting the same way does not match.
-     */
-    private fun getPadUrlPrefix(server: Server): String {
-        val prefix = server.mUrl + server.mPadprefix
-        return if (prefix.endsWith("/")) prefix else "$prefix/"
-    }
-
-    /**
-     * Query and fragment are dropped, i.e. the username and color added when viewing.
-     */
-    fun makeExportUrl(padUrl: String): String {
-        val url = URL(padUrl)
-        val path = url.path.trimEnd('/')
-        return URL(url.protocol, url.host, url.port, path + EXPORT_PATH).toString()
     }
 
     fun isUpdating(padId: Long): Boolean = synchronized(lock) { padId in runningPadIds }
@@ -194,7 +186,7 @@ object OfflinePadFetcher {
                 return false
             }
 
-            val exportUrl = makeExportUrl(pad.mUrl)
+            val exportUrl = PadUrl.etherpadExportUrl(pad.mUrl, EXPORT_FORMAT)
             val html = download(
                 exportUrl,
                 WebSettings.getDefaultUserAgent(context),
