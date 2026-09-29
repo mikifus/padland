@@ -142,4 +142,5 @@
     <string name="offline_copy_delete">Offline-Kopie löschen</string>
     <string name="offline_copy_dialog_delete_sure_to_delete">Die Offline-Kopie dieses Dokuments wird gelöscht.</string>
     <string name="title_activity_pad_offline_view">Offline-Kopie</string>
+    <string name="serverlist_dialog_new_server_advanced_title">Erweiterte Einstellungen</string>
 </resources>
