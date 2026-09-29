@@ -11,6 +11,7 @@ import com.mikifus.padland.Database.PadListDatabase
 import com.mikifus.padland.Database.PadModel.Pad
 import com.mikifus.padland.Database.ServerModel.Server
 import com.mikifus.padland.R
+import com.mikifus.padland.Utils.Download.DownloadUtils
 import com.mikifus.padland.Utils.ErrorReporting.ErrorReporter
 import com.mikifus.padland.Utils.PadServer
 import com.mikifus.padland.Utils.PadUrl
@@ -25,7 +26,6 @@ import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
-import java.nio.charset.Charset
 
 /**
  * Updates the offline copy of Etherpad Lite pads with their public HTML export,
@@ -254,23 +254,9 @@ object OfflinePadFetcher {
                 output.toByteArray()
             }
 
-            return String(bytes, getCharset(contentType))
+            return String(bytes, DownloadUtils.getCharset(contentType))
         } finally {
             connection.disconnect()
-        }
-    }
-
-    private fun getCharset(contentType: String): Charset {
-        val charsetName = contentType.split(';')
-            .map { it.trim() }
-            .firstOrNull { it.startsWith("charset=", true) }
-            ?.substringAfter('=')
-            ?.trim('"', ' ')
-
-        return try {
-            charsetName?.let { Charset.forName(it) } ?: Charsets.UTF_8
-        } catch (e: Exception) {
-            Charsets.UTF_8
         }
     }
 }
