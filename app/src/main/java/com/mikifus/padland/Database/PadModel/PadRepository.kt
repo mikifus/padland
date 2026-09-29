@@ -17,7 +17,7 @@ class PadRepository(private val padDao: PadDao) {
 //    suspend fun getById(id: Long): LiveData<Pad> {
 //        return padDao.getById(id)
 //    }
-    suspend fun getById(id: Long): Pad {
+    suspend fun getById(id: Long): Pad? {
         return padDao.getById(id)
     }
 
@@ -25,7 +25,7 @@ class PadRepository(private val padDao: PadDao) {
         return padDao.getByIds(ids)
     }
 
-    suspend fun getByUrl(url: String): Pad {
+    suspend fun getByUrl(url: String): Pad? {
         return padDao.getByUrl(url)
     }
 

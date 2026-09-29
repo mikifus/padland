@@ -91,7 +91,8 @@ public class ManagesEditPadDialog: ManagesDialog(), IManagesEditPadDialog {
 
     private fun saveEditPadDialog(activity: AppCompatActivity, padId: Long, data: Map<String, Any>) {
         activity.lifecycleScope.launch(Dispatchers.IO) {
-            val pad = padViewModel?.getById(padId)!!
+            // Deleted meanwhile
+            val pad = padViewModel?.getById(padId) ?: return@launch
 
             val savePad = pad.copy(
                 mName = data["name"].toString(),
