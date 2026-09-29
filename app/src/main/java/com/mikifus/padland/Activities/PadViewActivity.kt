@@ -596,7 +596,7 @@ class PadViewActivity :
         webSettings.displayZoomControls = false
         webSettings.loadWithOverviewMode = true
         webSettings.domStorageEnabled = true // Required for some NodeJS based code
-        webSettings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK // Feature?: keep cookies
+        webSettings.cacheMode = WebSettings.LOAD_DEFAULT // Keeping too much cache is bad, we have offline mode now, set to default
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             webSettings.isAlgorithmicDarkeningAllowed = true
