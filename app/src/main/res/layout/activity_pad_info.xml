@@ -196,7 +196,7 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- Shown while there is a local copy, whatever the server, opens it -->
+            <!-- Local copy status: tap opens it, long press deletes it -->
             <LinearLayout
                 android:id="@+id/padinfo_offline_copy_container"
                 android:layout_width="match_parent"

@@ -205,5 +205,7 @@
     <string name="offline_copies_delete_all_summary">Supprime les copies hors ligne enregistrées sur cet appareil. Les documents avec accès hors ligne en enregistrent une nouvelle quand vous les quittez.</string>
     <string name="offline_copies_dialog_delete_sure_to_delete">Toutes les copies hors ligne seront supprimées.</string>
     <string name="offline_copies_dialog_delete_copies_deleted">Copies hors ligne supprimées</string>
+    <string name="offline_copy_delete">Supprimer la copie hors ligne</string>
+    <string name="offline_copy_dialog_delete_sure_to_delete">La copie hors ligne de ce document sera supprimée.</string>
     <string name="title_activity_pad_offline_view">Copie hors ligne</string>
 </resources>

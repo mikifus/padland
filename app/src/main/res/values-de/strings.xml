@@ -139,5 +139,7 @@
     <string name="offline_copies_delete_all_summary">Löscht die auf diesem Gerät gespeicherten Offline-Kopien. Dokumente mit Offline-Zugriff speichern eine neue, wenn du sie verlässt.</string>
     <string name="offline_copies_dialog_delete_sure_to_delete">Alle Offline-Kopien werden gelöscht.</string>
     <string name="offline_copies_dialog_delete_copies_deleted">Offline-Kopien gelöscht</string>
+    <string name="offline_copy_delete">Offline-Kopie löschen</string>
+    <string name="offline_copy_dialog_delete_sure_to_delete">Die Offline-Kopie dieses Dokuments wird gelöscht.</string>
     <string name="title_activity_pad_offline_view">Offline-Kopie</string>
 </resources>

@@ -158,6 +158,8 @@
     <string name="offline_copies_delete_all_summary">Borra las copias sin conexión guardadas en este dispositivo. Los documentos con acceso sin conexión guardan una nueva al salir de ellos.</string>
     <string name="offline_copies_dialog_delete_sure_to_delete">Se borrarán todas las copias sin conexión.</string>
     <string name="offline_copies_dialog_delete_copies_deleted">Copias sin conexión borradas</string>
+    <string name="offline_copy_delete">Borrar copia sin conexión</string>
+    <string name="offline_copy_dialog_delete_sure_to_delete">Se borrará la copia sin conexión de este documento.</string>
     <string name="title_activity_pad_offline_view">Copia sin conexión</string>
     <string name="import_importing_file">Selecciona el fichero…</string>
     <string name="import_importing_success">Importación finalizada (resultado: %s)</string>

@@ -230,6 +230,8 @@
     <string name="offline_copies_delete_all_summary">Deletes the offline copies saved on this device. Documents with offline access save a new one when you leave them.</string>
     <string name="offline_copies_dialog_delete_sure_to_delete">All the offline copies will be deleted.</string>
     <string name="offline_copies_dialog_delete_copies_deleted">Offline copies deleted</string>
+    <string name="offline_copy_delete">Delete offline copy</string>
+    <string name="offline_copy_dialog_delete_sure_to_delete">The offline copy of this document will be deleted.</string>
     <string name="title_activity_pad_offline_view">Offline copy</string>
     <string name="import_importing_file">Select the file…</string>
     <string name="import_importing_success">Import finished (result size: %s)</string>

@@ -175,5 +175,7 @@
     <string name="offline_copies_delete_all_summary">Elimina le copie offline salvate su questo dispositivo. I documenti con accesso offline ne salvano una nuova quando ne esci.</string>
     <string name="offline_copies_dialog_delete_sure_to_delete">Tutte le copie offline verranno eliminate.</string>
     <string name="offline_copies_dialog_delete_copies_deleted">Copie offline eliminate</string>
+    <string name="offline_copy_delete">Elimina copia offline</string>
+    <string name="offline_copy_dialog_delete_sure_to_delete">La copia offline di questo documento verrà eliminata.</string>
     <string name="title_activity_pad_offline_view">Copia offline</string>
 </resources>

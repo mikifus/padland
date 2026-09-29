@@ -20,8 +20,10 @@ import com.mikifus.padland.Database.PadModel.Pad
 import com.mikifus.padland.Database.PadModel.PadViewModel
 import com.mikifus.padland.Database.ServerModel.Server
 import com.mikifus.padland.Database.ServerModel.ServerViewModel
+import com.mikifus.padland.Dialogs.Managers.IManagesDeleteOfflineCopyDialog
 import com.mikifus.padland.Dialogs.Managers.IManagesDeletePadDialog
 import com.mikifus.padland.Dialogs.Managers.IManagesEditPadDialog
+import com.mikifus.padland.Dialogs.Managers.ManagesDeleteOfflineCopyDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesDeletePadDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesEditPadDialog
 import com.mikifus.padland.R
@@ -35,7 +37,8 @@ import java.util.Date
 
 class PadInfoActivity: AppCompatActivity(),
     IManagesEditPadDialog by ManagesEditPadDialog(),
-    IManagesDeletePadDialog by ManagesDeletePadDialog() {
+    IManagesDeletePadDialog by ManagesDeletePadDialog(),
+    IManagesDeleteOfflineCopyDialog by ManagesDeleteOfflineCopyDialog() {
 
     override var padViewModel: PadViewModel? = null
     override var padGroupViewModel: PadGroupViewModel? = null
@@ -137,6 +140,10 @@ class PadInfoActivity: AppCompatActivity(),
         mOfflineCopyContainer?.setOnClickListener {
             onOfflineCopyClick()
         }
+        mOfflineCopyContainer?.setOnLongClickListener {
+            onOfflineCopyLongClick()
+            true
+        }
         // Updates can be started from other screens, i.e. when leaving the pad
         OfflinePadFetcher.updatingPadIds.observe(this) {
             padViewModel?.pad?.value?.let { pad -> updateOfflineCopyStatus(pad) }
@@ -183,12 +190,7 @@ class PadInfoActivity: AppCompatActivity(),
     }
 
     /**
-     * Offline access can only be turned on for pads of Etherpad Lite servers (for now),
-     * the checkbox is hidden until the servers are loaded.
-     *
-     * The copy row follows the copy itself: it belongs to the pad, so it is shown
-     * while there is a copy or one is being saved, whatever the server or the
-     * checkbox. Without any, it is only shown to tell a copy will be saved.
+     * The checkbox depends on the server, the copy row only on the copy.
      */
     private fun updateOfflineCopyStatus(pad: Pad) {
         val isAvailable = servers?.let { OfflinePadFetcher.isAvailable(pad, it, resources) } ?: false
@@ -219,6 +221,13 @@ class PadInfoActivity: AppCompatActivity(),
         val offlineViewIntent = Intent(this@PadInfoActivity, PadOfflineViewActivity::class.java)
         offlineViewIntent.putExtra("padId", pad.mId)
         startActivity(offlineViewIntent)
+    }
+
+    private fun onOfflineCopyLongClick() {
+        val pad = padViewModel!!.pad.value ?: return
+        showDeleteOfflineCopyDialog(this, pad.mId) {
+            padViewModel?.pad?.value?.let { updateOfflineCopyStatus(it) }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
