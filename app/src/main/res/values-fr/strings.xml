@@ -196,13 +196,13 @@
     <string name="offline_access_explanation">Conserve une copie en lecture seule sur cet appareil, mise à jour chaque fois que vous quittez le document.</string>
     <string name="download">Télécharger</string>
     <string name="padinfo_offline_copy">Copie hors ligne</string>
-    <string name="padinfo_offline_copy_saved">Enregistrée le %s. Touchez pour l\'ouvrir.</string>
+    <string name="padinfo_offline_copy_saved">Enregistrée le %s. Appuyez pour l\'ouvrir.</string>
     <string name="padinfo_offline_copy_missing">Pas encore enregistrée. Elle le sera la prochaine fois que vous quitterez le document avec une connexion.</string>
     <string name="padinfo_offline_copy_updating">Enregistrement…</string>
-    <string name="padinfo_offline_copy_saved_updating">Enregistrée le %s, mise à jour en cours. Touchez pour l\'ouvrir.</string>
-    <string name="padinfo_offline_copy_failed">La copie hors ligne n\'a pas pu être enregistrée. Une nouvelle tentative aura lieu la prochaine fois que vous quitterez le document.</string>
+    <string name="padinfo_offline_copy_saved_updating">Enregistrée le %s, mise à jour en cours. Appuyez pour l\'ouvrir.</string>
+    <string name="padinfo_offline_copy_failed">La copie hors ligne n\'a pas pu être enregistrée. Nouvel essai la prochaine fois que vous quitterez le document.</string>
     <string name="offline_copies_delete_all">Supprimer les copies hors ligne</string>
-    <string name="offline_copies_delete_all_summary">Supprime les copies hors ligne enregistrées sur cet appareil. Les documents avec accès hors ligne en enregistrent une nouvelle quand vous les quittez.</string>
+    <string name="offline_copies_delete_all_summary">Supprime les copies hors ligne de cet appareil. Les documents avec accès hors ligne en enregistrent une nouvelle quand vous les quittez.</string>
     <string name="offline_copies_dialog_delete_sure_to_delete">Toutes les copies hors ligne seront supprimées.</string>
     <string name="offline_copies_dialog_delete_copies_deleted">Copies hors ligne supprimées</string>
     <string name="offline_copy_delete">Supprimer la copie hors ligne</string>

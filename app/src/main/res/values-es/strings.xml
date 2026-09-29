@@ -152,10 +152,10 @@
     <string name="padinfo_offline_copy_saved">Guardada el %s. Toca para abrirla.</string>
     <string name="padinfo_offline_copy_missing">Aún no se ha guardado. Se guardará la próxima vez que salgas del documento con conexión.</string>
     <string name="padinfo_offline_copy_updating">Guardando…</string>
-    <string name="padinfo_offline_copy_saved_updating">Guardada el %s, actualizándola ahora. Toca para abrirla.</string>
-    <string name="padinfo_offline_copy_failed">No se ha podido guardar la copia sin conexión. Se volverá a intentar la próxima vez que salgas del documento.</string>
+    <string name="padinfo_offline_copy_saved_updating">Guardada el %s, actualizándose. Toca para abrirla.</string>
+    <string name="padinfo_offline_copy_failed">No se ha podido guardar la copia sin conexión. Se reintentará la próxima vez que salgas del documento.</string>
     <string name="offline_copies_delete_all">Borrar copias sin conexión</string>
-    <string name="offline_copies_delete_all_summary">Borra las copias sin conexión guardadas en este dispositivo. Los documentos con acceso sin conexión guardan una nueva al salir de ellos.</string>
+    <string name="offline_copies_delete_all_summary">Borra las copias sin conexión de este dispositivo. Los documentos con acceso sin conexión guardan una nueva al salir de ellos.</string>
     <string name="offline_copies_dialog_delete_sure_to_delete">Se borrarán todas las copias sin conexión.</string>
     <string name="offline_copies_dialog_delete_copies_deleted">Copias sin conexión borradas</string>
     <string name="offline_copy_delete">Borrar copia sin conexión</string>
