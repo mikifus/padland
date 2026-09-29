@@ -542,7 +542,7 @@ class PadViewActivity :
         val newUrl = PadUrl.etherpadAddUsernameAndColor(url, username, color)
 
         lifecycleScope.launch(Dispatchers.Main) {
-            webView!!.loadUrl(newUrl)
+            webViewClient!!.loadUrl(webView!!, newUrl)
         }
     }
 
