@@ -40,7 +40,10 @@ class PadViewModel(application: Application): AndroidViewModel(application) {
         return deferred.await()
     }
 
-    suspend fun getById(id: Long): Pad {
+    /**
+     * Null if it does not exist, i.e. it was deleted. Posted to [pad] too.
+     */
+    suspend fun getById(id: Long): Pad? {
         val padQuery = repository.getById(id)
         pad.postValue(padQuery)
         return padQuery
@@ -50,7 +53,10 @@ class PadViewModel(application: Application): AndroidViewModel(application) {
         return repository.getByIds(ids)
     }
 
-    suspend fun getByUrl(url: String): Pad {
+    /**
+     * Null if it is not saved.
+     */
+    suspend fun getByUrl(url: String): Pad? {
         return repository.getByUrl(url)
     }
 
