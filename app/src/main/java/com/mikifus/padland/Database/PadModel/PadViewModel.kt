@@ -54,6 +54,10 @@ class PadViewModel(application: Application): AndroidViewModel(application) {
         return repository.getByUrl(url)
     }
 
+    suspend fun getOfflineAccessIds(): List<Long> {
+        return repository.getOfflineAccessIds()
+    }
+
     suspend fun updatePad(pad: Pad): Int {
         val result = repository.updatePadGroup(pad)
         if(result > 0 && this.pad.value != null && pad.mId == this.pad.value!!.mId) {

@@ -5,6 +5,8 @@ import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.CheckBox
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
@@ -16,22 +18,32 @@ import com.google.android.material.button.MaterialButton
 import com.mikifus.padland.Database.PadGroupModel.PadGroupViewModel
 import com.mikifus.padland.Database.PadModel.Pad
 import com.mikifus.padland.Database.PadModel.PadViewModel
+import com.mikifus.padland.Database.ServerModel.Server
+import com.mikifus.padland.Database.ServerModel.ServerViewModel
+import com.mikifus.padland.Dialogs.Managers.IManagesDeleteOfflineCopyDialog
 import com.mikifus.padland.Dialogs.Managers.IManagesDeletePadDialog
 import com.mikifus.padland.Dialogs.Managers.IManagesEditPadDialog
+import com.mikifus.padland.Dialogs.Managers.ManagesDeleteOfflineCopyDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesDeletePadDialog
 import com.mikifus.padland.Dialogs.Managers.ManagesEditPadDialog
 import com.mikifus.padland.R
+import com.mikifus.padland.Utils.Offline.OfflinePadFetcher
 import com.mikifus.padland.Utils.PadClipboardHelper
 import com.mikifus.padland.Utils.PadShareHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.text.DateFormat
+import java.util.Date
 
 class PadInfoActivity: AppCompatActivity(),
     IManagesEditPadDialog by ManagesEditPadDialog(),
-    IManagesDeletePadDialog by ManagesDeletePadDialog() {
+    IManagesDeletePadDialog by ManagesDeletePadDialog(),
+    IManagesDeleteOfflineCopyDialog by ManagesDeleteOfflineCopyDialog() {
 
     override var padViewModel: PadViewModel? = null
     override var padGroupViewModel: PadGroupViewModel? = null
+    private var serverViewModel: ServerViewModel? = null
+    private var servers: List<Server>? = null
 
     private var mPadViewButton: MaterialButton? = null
     private var mCopyButton: ImageButton? = null
@@ -40,6 +52,12 @@ class PadInfoActivity: AppCompatActivity(),
     private var mCreateDateTextView: TextView? = null
     private var mLastUsedDateTextView: TextView? = null
     private var mAccessCountTextView: TextView? = null
+    private var mOfflineAccessContainer: View? = null
+    private var mOfflineAccessCheckBox: CheckBox? = null
+    private var mOfflineCopyContainer: View? = null
+    private var mOfflineCopyStatusTextView: TextView? = null
+
+    private val offlinePadStore by lazy { OfflinePadFetcher.getStore(this) }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,6 +73,10 @@ class PadInfoActivity: AppCompatActivity(),
         mCreateDateTextView = findViewById(R.id.txt_padinfo_createdate)
         mLastUsedDateTextView = findViewById(R.id.txt_padinfo_lastuseddate)
         mAccessCountTextView = findViewById(R.id.txt_padinfo_times_accessed)
+        mOfflineAccessContainer = findViewById(R.id.padinfo_offline_access_container)
+        mOfflineAccessCheckBox = findViewById(R.id.checkbox_padinfo_offline_access)
+        mOfflineCopyContainer = findViewById(R.id.padinfo_offline_copy_container)
+        mOfflineCopyStatusTextView = findViewById(R.id.txt_padinfo_offline_copy_status)
 
         initEvents()
     }
@@ -72,6 +94,9 @@ class PadInfoActivity: AppCompatActivity(),
         if(padGroupViewModel == null) {
             padGroupViewModel = ViewModelProvider(this)[PadGroupViewModel::class.java]
         }
+        if(serverViewModel == null) {
+            serverViewModel = ViewModelProvider(this)[ServerViewModel::class.java]
+        }
 
         padViewModel!!.pad.removeObservers(this) // Remove because called from onResume
         padViewModel!!.pad.observe(this@PadInfoActivity) { pad ->
@@ -83,6 +108,13 @@ class PadInfoActivity: AppCompatActivity(),
         }
         lifecycleScope.launch(Dispatchers.IO) {
             padViewModel!!.getById(intent!!.extras!!.getLong("padId"))
+        }
+
+        // The server of the pad tells whether offline access is available
+        serverViewModel!!.getAll.removeObservers(this) // Remove because called from onResume
+        serverViewModel!!.getAll.observe(this@PadInfoActivity) { servers ->
+            this.servers = servers
+            padViewModel?.pad?.value?.let { updateOfflineCopyStatus(it) }
         }
     }
 
@@ -101,6 +133,21 @@ class PadInfoActivity: AppCompatActivity(),
                 ).show()
             }
         }
+        // Click instead of checked change, onPadUpdate also checks it
+        mOfflineAccessCheckBox?.setOnClickListener {
+            onOfflineAccessChanged(mOfflineAccessCheckBox!!.isChecked)
+        }
+        mOfflineCopyContainer?.setOnClickListener {
+            onOfflineCopyClick()
+        }
+        mOfflineCopyContainer?.setOnLongClickListener {
+            onOfflineCopyLongClick()
+            true
+        }
+        // Updates can be started from other screens, i.e. when leaving the pad
+        OfflinePadFetcher.updatingPadIds.observe(this) {
+            padViewModel?.pad?.value?.let { pad -> updateOfflineCopyStatus(pad) }
+        }
     }
 
     private fun onPadUpdate(pad: Pad) {
@@ -109,6 +156,78 @@ class PadInfoActivity: AppCompatActivity(),
         mCreateDateTextView?.text = pad.mCreateDate.toString()
         mLastUsedDateTextView?.text = pad.mLastUsedDate.toString()
         mAccessCountTextView?.text = pad.mAccessCount.toString()
+        mOfflineAccessCheckBox?.isChecked = pad.mOfflineAccess
+        mOfflineAccessCheckBox?.isEnabled = true
+        updateOfflineCopyStatus(pad)
+    }
+
+    private fun onOfflineAccessChanged(isChecked: Boolean) {
+        val pad = padViewModel!!.pad.value ?: return
+        // Until it is saved, enabled again in onPadUpdate
+        mOfflineAccessCheckBox?.isEnabled = false
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            if (padViewModel!!.updatePad(pad.copy(mOfflineAccess = isChecked)) == 0) {
+                // Not saved, back to the saved state
+                padViewModel!!.getById(pad.mId)
+                return@launch
+            }
+
+            // Saves the first copy. Turned off, the saved copy is kept
+            if (!isChecked) {
+                return@launch
+            }
+            OfflinePadFetcher.update(this@PadInfoActivity, pad.mId) { updated ->
+                if (!updated && !isDestroyed) {
+                    Toast.makeText(
+                        this@PadInfoActivity,
+                        getString(R.string.padinfo_offline_copy_failed),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
+    }
+
+    /**
+     * The checkbox depends on the server, the copy row only on the copy.
+     */
+    private fun updateOfflineCopyStatus(pad: Pad) {
+        val isAvailable = servers?.let { OfflinePadFetcher.isAvailable(pad, it, resources) } ?: false
+        val savedTime = offlinePadStore.getSavedTime(pad.mId)
+        val isUpdating = OfflinePadFetcher.isUpdating(pad.mId)
+        val isPending = isAvailable && pad.mOfflineAccess
+
+        mOfflineAccessContainer?.visibility = if (isAvailable) View.VISIBLE else View.GONE
+        mOfflineCopyContainer?.visibility =
+            if (savedTime != null || isUpdating || isPending) View.VISIBLE else View.GONE
+
+        val savedDate = savedTime?.let {
+            DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).format(Date(it))
+        }
+        // The saved copy can be opened while it is updated
+        mOfflineCopyStatusTextView?.text = when {
+            savedDate != null && isUpdating -> getString(R.string.padinfo_offline_copy_saved_updating, savedDate)
+            savedDate != null -> getString(R.string.padinfo_offline_copy_saved, savedDate)
+            isUpdating -> getString(R.string.padinfo_offline_copy_updating)
+            else -> getString(R.string.padinfo_offline_copy_missing)
+        }
+        // Nothing to open yet
+        mOfflineCopyContainer?.isEnabled = savedTime != null
+    }
+
+    private fun onOfflineCopyClick() {
+        val pad = padViewModel!!.pad.value ?: return
+        val offlineViewIntent = Intent(this@PadInfoActivity, PadOfflineViewActivity::class.java)
+        offlineViewIntent.putExtra("padId", pad.mId)
+        startActivity(offlineViewIntent)
+    }
+
+    private fun onOfflineCopyLongClick() {
+        val pad = padViewModel!!.pad.value ?: return
+        showDeleteOfflineCopyDialog(this, pad.mId) {
+            padViewModel?.pad?.value?.let { updateOfflineCopyStatus(it) }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

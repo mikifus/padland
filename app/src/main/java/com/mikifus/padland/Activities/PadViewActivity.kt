@@ -16,6 +16,7 @@ import android.webkit.HttpAuthHandler
 import android.webkit.SslErrorHandler
 import android.webkit.WebSettings
 import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -44,6 +45,7 @@ import com.mikifus.padland.Dialogs.Managers.ManagesWhitelistServerDialog
 import com.mikifus.padland.R
 import com.mikifus.padland.Utils.CryptPad.CryptPadUtils
 import com.mikifus.padland.Utils.Download.DownloadHelper
+import com.mikifus.padland.Utils.Offline.OfflinePadFetcher
 import com.mikifus.padland.Utils.PadLandWebViewClient.PadLandWebClientCallbacks
 import com.mikifus.padland.Utils.PadLandWebViewClient.PadLandWebViewClient
 import com.mikifus.padland.Utils.PadServer
@@ -70,6 +72,12 @@ class PadViewActivity :
     private var webViewClient: PadLandWebViewClient? = null
     private var downloadHelper: DownloadHelper? = null
     private var deferredSave: Boolean = false
+
+    /** The saved pad being viewed, null if it is not in the list */
+    private var viewedPad: Pad? = null
+    /** Moved to the offline copy, see [loadOfflineCopy] */
+    private var isOfflineCopyOpened: Boolean = false
+    private val offlinePadStore by lazy { OfflinePadFetcher.getStore(this) }
 
     private var currentUrl: String? = null
         get() {
@@ -175,6 +183,15 @@ class PadViewActivity :
 
             override fun onStopLoading() {
                 hideProgress()
+            }
+
+            override fun onReceivedMainFrameErrorCallback(view: WebView, errorCode: Int) {
+                // The server can not be reached, the offline copy is shown if there is one
+                if (errorCode == WebViewClient.ERROR_HOST_LOOKUP ||
+                    errorCode == WebViewClient.ERROR_CONNECT ||
+                    errorCode == WebViewClient.ERROR_TIMEOUT) {
+                    loadOfflineCopy(finishIfMissing = false)
+                }
             }
 
             override suspend fun onUnsafeUrlProtocol(url: String): Boolean {
@@ -286,6 +303,14 @@ class PadViewActivity :
         }
 
         serverViewModel?.getAllEnabled!!.observe(this) { servers ->
+            if (isOfflineCopyOpened) {
+                return@observe
+            }
+            if (!isNetworkAvailable) {
+                loadOfflineCopy(finishIfMissing = true)
+                return@observe
+            }
+
             val serverList = servers.map {
                     URL(it.mUrl).host
                 } + resources.getStringArray(R.array.etherpad_servers_whitelist)
@@ -334,6 +359,10 @@ class PadViewActivity :
         if(save) {
             savePadFromUrl(padUrl)
         }
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            viewedPad = padViewModel?.getByUrl(padUrl)
+        }
     }
 
     private fun loadPadById(id: Long) {
@@ -341,6 +370,7 @@ class PadViewActivity :
             val pad = padViewModel?.getById(id)
 
             if (pad != null) {
+                viewedPad = pad
                 currentUrl = pad.mUrl
                 updateViewedPad(pad)
             } else {
@@ -396,6 +426,65 @@ class PadViewActivity :
 
         padViewModel?.updatePad(updatedPad)
     }
+
+    /**
+     * Leaving the pad, the offline copy gets the last edits.
+     * Paused also when switching apps, so they are saved before the app is killed.
+     */
+    override fun onPause() {
+        super.onPause()
+        if (!isOfflineCopyOpened) {
+            viewedPad?.let {
+                OfflinePadFetcher.update(applicationContext, it.mId, PENDING_CHANGES_DELAY)
+            }
+        }
+    }
+
+    /**
+     * Opens the offline copy of the pad instead, when it can not be loaded.
+     *
+     * @param finishIfMissing close if there is no offline copy, otherwise keep
+     * the current page (i.e. the WebView error page)
+     */
+    private fun loadOfflineCopy(finishIfMissing: Boolean) {
+        lifecycleScope.launch {
+            val pad = viewedPad ?: withContext(Dispatchers.IO) { findViewedPad() }
+            // The copy belongs to the pad, it may be there even without offline access
+            val hasCopy = pad != null && withContext(Dispatchers.IO) { offlinePadStore.has(pad.mId) }
+
+            if (pad == null || !hasCopy) {
+                if (finishIfMissing) {
+                    Toast.makeText(applicationContext, getString(R.string.network_is_unreachable), Toast.LENGTH_LONG)
+                        .show()
+                    finish()
+                }
+                return@launch
+            }
+
+            if (isOfflineCopyOpened) {
+                return@launch
+            }
+            isOfflineCopyOpened = true
+
+            val offlineViewIntent = Intent(this@PadViewActivity, PadOfflineViewActivity::class.java)
+            offlineViewIntent.putExtra("padId", pad.mId)
+            startActivity(offlineViewIntent)
+            finish()
+        }
+    }
+
+    private suspend fun findViewedPad(): Pad? {
+        val extras = intent.extras ?: return null
+        if (extras.containsKey("padId")) {
+            return padViewModel?.getById(extras.getLong("padId"))
+        }
+        val padUrl = extras.getString("android.intent.extra.TEXT")
+        if (padUrl.isNullOrBlank()) {
+            return null
+        }
+        return padViewModel?.getByUrl(padUrl)
+    }
+
 
     /**
      * Loads the fancy ProgressWheel to show it's loading.
@@ -544,5 +633,11 @@ class PadViewActivity :
                 return false
             }
         })
+    }
+
+    companion object {
+
+        /** Etherpad sends the typed changes to the server every half a second or so */
+        private const val PENDING_CHANGES_DELAY = 2_000L
     }
 }

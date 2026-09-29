@@ -162,4 +162,20 @@
     <string name="error_report_type_error">Errore</string>
     <string name="download_file_success">File scaricato</string>
     <string name="download_file_failed">Impossibile scaricare il file</string>
+    <string name="offline_access">Accesso offline</string>
+    <string name="offline_access_explanation">Conserva una copia di sola lettura su questo dispositivo, aggiornata ogni volta che esci dal documento.</string>
+    <string name="download">Scarica</string>
+    <string name="padinfo_offline_copy">Copia offline</string>
+    <string name="padinfo_offline_copy_saved">Salvata il %s. Tocca per aprirla.</string>
+    <string name="padinfo_offline_copy_missing">Non ancora salvata. Verrà salvata la prossima volta che esci dal documento con una connessione.</string>
+    <string name="padinfo_offline_copy_updating">Salvataggio…</string>
+    <string name="padinfo_offline_copy_saved_updating">Salvata il %s, aggiornamento in corso. Tocca per aprirla.</string>
+    <string name="padinfo_offline_copy_failed">Impossibile salvare la copia offline. Si riproverà la prossima volta che esci dal documento.</string>
+    <string name="offline_copies_delete_all">Elimina copie offline</string>
+    <string name="offline_copies_delete_all_summary">Elimina le copie offline di questo dispositivo. I documenti con accesso offline ne salvano una nuova quando ne esci.</string>
+    <string name="offline_copies_dialog_delete_sure_to_delete">Tutte le copie offline verranno eliminate.</string>
+    <string name="offline_copies_dialog_delete_copies_deleted">Copie offline eliminate</string>
+    <string name="offline_copy_delete">Elimina copia offline</string>
+    <string name="offline_copy_dialog_delete_sure_to_delete">La copia offline di questo documento verrà eliminata.</string>
+    <string name="title_activity_pad_offline_view">Copia offline</string>
 </resources>

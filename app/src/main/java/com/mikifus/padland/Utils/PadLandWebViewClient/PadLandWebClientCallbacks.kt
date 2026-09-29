@@ -11,6 +11,7 @@ interface PadLandWebClientCallbacks {
     fun onPageFinishedCallback(view: WebView?, url: String?){}
     fun onStartLoading(){}
     fun onStopLoading(){}
+    fun onReceivedMainFrameErrorCallback(view: WebView, errorCode: Int){}
     suspend fun onUnsafeUrlProtocol(url: String): Boolean
     fun onReceivedSslError(handler: SslErrorHandler, url: String, message: String)
 

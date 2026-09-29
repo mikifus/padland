@@ -72,6 +72,17 @@ class PadUrl private constructor(builder: Builder) {
     }
 
     companion object {
+        private const val ETHERPAD_EXPORT_PATH = "/export/"
+
+        /**
+         * Public export of the pad, i.e. `https://server/p/<pad>/export/html`.
+         * Query and fragment are dropped.
+         */
+        fun etherpadExportUrl(url: String, format: String): String {
+            val urlObject = URL(url)
+            val path = urlObject.path.trimEnd('/') + ETHERPAD_EXPORT_PATH + format
+            return URL(urlObject.protocol, urlObject.host, urlObject.port, path).toString()
+        }
 
         fun etherpadAddUsernameAndColor(url: String, username: String?, color: Int?): String {
             val uri = URI(url)

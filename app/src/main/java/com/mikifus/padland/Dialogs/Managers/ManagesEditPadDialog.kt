@@ -102,6 +102,9 @@ public class ManagesEditPadDialog: ManagesDialog(), IManagesEditPadDialog {
 
             padViewModel?.updatePad(savePad)
 
+            // The offline copy belongs to the pad, it is kept even if the URL or server changes:
+            // it is replaced next time a copy is saved
+
             padGroupViewModel?.deletePadGroupsAndPadList(padId)
             if(data["group_id"] as Long > 0) {
                 padGroupViewModel?.insertPadGroupsAndPadList(
