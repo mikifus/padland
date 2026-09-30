@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.mikifus.padland.Utils.Export.IImportMatchable
 import com.mikifus.padland.Utils.PadServer
 import java.sql.Date
 
@@ -22,7 +23,7 @@ data class Pad(
     @ColumnInfo(name = "access_count", defaultValue = "0") val mAccessCount: Long,
 //    @ColumnInfo(name = "position") val mPosition: Int,
     @ColumnInfo(name = "offline_access", defaultValue = "0") val mOfflineAccess: Boolean = false,
-)
+): IImportMatchable
 {
     constructor() : this(
         0,
@@ -92,4 +93,6 @@ data class Pad(
                         mOfflineAccess != pad.mOfflineAccess
                 )
     }
+
+    override fun toImportMatch() = copy(mId = 0, mLastUsedDate = Date(0), mAccessCount = 0)
 }

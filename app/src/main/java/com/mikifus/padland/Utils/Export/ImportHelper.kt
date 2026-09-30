@@ -63,17 +63,25 @@ class ImportHelper(
 
             activity.lifecycleScope.launch(Dispatchers.IO) {
                 var size = 0L
+                // Records identical to existing ones are skipped
                 dataMap.padland_servers?.let { it ->
-                    size += serverRepository.insertServers(it).size
+                    val servers = ImportMatcher.filterNew(it, serverRepository.getAllList())
+                    size += serverRepository.insertServers(servers).size
                 }
                 dataMap.padgroups?.let { it ->
-                    size += padGroupRepository.insertPadGroups(it).size
+                    val padGroups = ImportMatcher.filterNew(it, padGroupRepository.getAllList())
+                    size += padGroupRepository.insertPadGroups(padGroups).size
                 }
+                var skippedPadUrls = emptySet<String>()
                 dataMap.padlist?.let { it ->
-                    size += padRepository.insertPads(it).size
+                    val pads = ImportMatcher.filterNew(it, padRepository.getAllList())
+                    skippedPadUrls = it.map { pad -> pad.mUrl }.toSet() - pads.map { pad -> pad.mUrl }.toSet()
+                    size += padRepository.insertPads(pads).size
                 }
                 dataMap.padlist_padgroups?.let { it ->
-                    size += padGroupRepository.insertPadGroupWithPadlistByRelString(it).size
+                    // Skipped pads keep their current groups, we skip their relations.
+                    val relations = it.filter { rel -> rel.mPadRelString !in skippedPadUrls }
+                    size += padGroupRepository.insertPadGroupWithPadlistByRelString(relations).size
                 }
 
                 val insertedResult = "$size"

@@ -20,6 +20,10 @@ class PadGroupRepository(private val padGroupDao: PadGroupDao) {
         return padGroupDao.insertAll(*padGroups.toTypedArray())
     }
 
+    suspend fun getAllList(): List<PadGroup> {
+        return padGroupDao.getAllList()
+    }
+
     suspend fun getById(id: Long): PadGroup {
         return padGroupDao.getById(id)
     }

@@ -30,10 +30,13 @@ interface PadDao {
     fun getAll(): LiveData<List<Pad>>
 
     @Query("SELECT * FROM padlist")
+    suspend fun getAllList(): List<Pad>
+
+    @Query("SELECT * FROM padlist")
     fun getAllCursor(): /*List<Pad>*/ Cursor
 
     @Query("SELECT * FROM padlist WHERE _id == :id")
-    suspend fun getById(id: Long): Pad
+    suspend fun getById(id: Long): Pad?
 
     @Query("SELECT * FROM padlist WHERE _id IN (:ids)")
     suspend fun getByIds(ids: List<Long>): List<Pad>
@@ -42,7 +45,7 @@ interface PadDao {
     fun getByIdCursor(id: Long): /*LiveData<List<Pad>>*/Cursor
 
     @Query("SELECT * FROM padlist WHERE url == :url")
-    suspend fun getByUrl(url: String): Pad
+    suspend fun getByUrl(url: String): Pad?
 
     @Query("SELECT * FROM padlist WHERE url == :url")
     fun getByUrlCursor(url: String): Cursor

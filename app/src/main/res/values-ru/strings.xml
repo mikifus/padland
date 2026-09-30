@@ -112,6 +112,7 @@
     <string name="serverlist_dialog_new_server_lite_label">Я знаю, что этот сервер использует Etherpad Lite.</string>
     <string name="serverlist_dialog_new_server_cryptpad_title">Использует CryptPad</string>
     <string name="serverlist_dialog_new_server_cryptpad_label">Я знаю, что этот сервер использует CryptPad.</string>
+    <string name="serverlist_dialog_new_server_advanced_title">Дополнительные настройки</string>
     <string name="serverlist_dialog_new_server_padprefix_title">Префикс URL-адреса криптопадного блока</string>
     <string name="serverlist_dialog_new_server_padprefix_label">Новые серверы имеют сегмент URL между доменом сервера и именем криптопадного блока. По умолчанию это \"/p/\". Измените его здесь, если он отличается.</string>
     <string name="serverlist_dialog_new_server_padprefix_invalid">Недопустимый префикс страницы.</string>

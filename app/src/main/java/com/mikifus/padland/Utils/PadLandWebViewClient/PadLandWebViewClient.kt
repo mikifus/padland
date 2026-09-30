@@ -67,20 +67,14 @@ class PadLandWebViewClient(hostsWhitelist: List<String>, private val callbacks: 
 
     override fun onReceivedError(view: WebView, request: WebResourceRequest, error: WebResourceError) {
         super.onReceivedError(view, request, error)
-        --webViewHttpConnections
         Log.e(TAG, "WebView Error $error, Request: $request")
+        // Only the page (MainFrame) is counted, not its resources (images, etc.)
         if (request.isForMainFrame) {
+            --webViewHttpConnections
             onReceivedMainFrameErrorCallback(view, error.errorCode)
         }
     }
 
-    @Deprecated("Deprecated in Java")
-    override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
-        @Suppress("DEPRECATION")
-        super.onReceivedError(view, errorCode, description, failingUrl)
-        --webViewHttpConnections
-        Log.e(TAG, "WebView Error ($errorCode) $description, Request: $failingUrl")
-    }
 
     override fun onReceivedHttpAuthRequest(view: WebView, handler: HttpAuthHandler, host: String, realm: String) {
         onReceivedHttpAuthRequestCallback(view, handler, host, realm)

@@ -15,6 +15,10 @@ class ServerRepository(private val serverDao: ServerDao) {
         return serverDao.insertAll(*servers.toTypedArray())
     }
 
+    suspend fun getAllList(): List<Server> {
+        return serverDao.getAllList()
+    }
+
     suspend fun getById(id: Long): Server {
         return serverDao.getById(id)
     }
