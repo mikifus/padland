@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.mikifus.padland.Utils.Export.IImportMatchable
 
 @Entity(tableName = "padland_servers")
 data class Server(
@@ -18,7 +19,7 @@ data class Server(
     @ColumnInfo(name = "cryptpad", defaultValue = "0") val mCryptPad: Boolean,
     @ColumnInfo(name = "enabled", defaultValue = "1") val mEnabled: Boolean,
 //    @ColumnInfo(name = "create_date", defaultValue = "(strftime('%s','now'))") val mCreateDate: Date
-)
+): IImportMatchable
 {
     constructor() : this(
         0,
@@ -66,5 +67,7 @@ data class Server(
             mPosition != server.mPosition
         )
     }
+
+    override fun toImportMatch() = copy(mId = 0)
 }
 

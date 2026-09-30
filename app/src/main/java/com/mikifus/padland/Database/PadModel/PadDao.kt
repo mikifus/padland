@@ -30,6 +30,9 @@ interface PadDao {
     fun getAll(): LiveData<List<Pad>>
 
     @Query("SELECT * FROM padlist")
+    suspend fun getAllList(): List<Pad>
+
+    @Query("SELECT * FROM padlist")
     fun getAllCursor(): /*List<Pad>*/ Cursor
 
     @Query("SELECT * FROM padlist WHERE _id == :id")

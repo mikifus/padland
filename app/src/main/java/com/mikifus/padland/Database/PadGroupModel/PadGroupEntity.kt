@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.mikifus.padland.Utils.Export.IImportMatchable
 import java.sql.Date
 
 @Entity(tableName = PadGroup.TABLE_NAME )
@@ -16,7 +17,7 @@ data class PadGroup(
     @ColumnInfo(name = "last_used_date", defaultValue = "(strftime('%s','now'))") val mLastUsedDate: Date,
     @ColumnInfo(name = "create_date", defaultValue = "(strftime('%s','now'))") val mCreateDate: Date,
     @ColumnInfo(name = "access_count", defaultValue = "0") val mAccessCount: Long,
-)
+): IImportMatchable
 {
     constructor() : this(
         0,
@@ -56,4 +57,6 @@ data class PadGroup(
                         mPosition != padGroup.mPosition
                 )
     }
+
+    override fun toImportMatch() = copy(mId = 0, mLastUsedDate = Date(0), mAccessCount = 0)
 }

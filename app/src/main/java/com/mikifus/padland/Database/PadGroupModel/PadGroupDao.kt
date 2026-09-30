@@ -29,6 +29,9 @@ interface PadGroupDao {
     fun getAll(): LiveData<List<PadGroup>>
 
     @Query("SELECT * FROM padgroups")
+    suspend fun getAllList(): List<PadGroup>
+
+    @Query("SELECT * FROM padgroups")
     fun getAllCursor(): Cursor
 
     @Query("SELECT * FROM padgroups WHERE _id == :id")
