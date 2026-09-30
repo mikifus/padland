@@ -40,19 +40,33 @@ Please transtale on the [Weblate](https://toolate.othing.xyz/projects/padland/).
   </a>
 </p>
 
-## Custom servers
+## Features
+### Custom servers
+Allow the user to add a custom server like "pad.myserver.com".
 
-This features allows the user to add a custom server like "pad.myserver.com". It doesn't replace the default servers, it adds customization.
+### Groups
+Organize documents in groups.
 
-The feature is found in the settings menu as "Server list". The New server dialog will promp when the button is pressed. The server name is just an arbitrary name for the user.
-The url must be something like "https://examplehost.com". No more and no less info than the protocol and the host.
+### Compatibility
+Padland is compatible with any Etherpad or CryptPad server.
+Other providers may work but are not guaranteed to be compatible.
 
-To try your new server create a new pad and choose it. You can make it the default option in the settings menu.
-
-**Note:** The server hosts the user adds and their subdomains are now considered part of the _whitelist_. This means that http connections to these domains are allowed.
+### Import / Export
+Export the whole database to a file and import it back.
+It does not store settings.
+You can also paste a list of URLs to import from the clipboard by long pressing the 'new pad' button.
 
 ## Current version
-3.6
+4.0
+
+### v4.0
+- General bugfixes and improvements in stability
+- Added offline mode support
+- Added sorting options
+- Added a 'select all' button in the list
+- Long press the new pad button to add from clipboard
+- Added debug options, includes error popup and logs
+- Imports don't duplicate data anymore
 
 ### v3.6
 - Minor fixes for Android 16 compatibility
