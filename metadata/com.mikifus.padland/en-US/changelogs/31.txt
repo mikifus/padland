@@ -1,0 +1,3 @@
+- Fix bug #76 that arised in API 35 (Android 15)
+- Fix styles in AppIntro
+

@@ -1,0 +1,2 @@
+- Minor fixes for Android 16 compatibility
+
