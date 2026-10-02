@@ -16,3 +16,9 @@
 #   public *;
 #}
 -dontwarn javax.lang.model.element.Modifier
+
+# Gson import/export (Gson ships its own TypeToken/Signature rules).
+# DatabaseMap is only created by Gson: without this R8 makes it abstract -> import crash.
+-keep class com.mikifus.padland.Utils.Export.Maps.** { *; }
+# Field names are the JSON keys: keep them stable across builds.
+-keepclassmembers class com.mikifus.padland.Database.** { <fields>; }

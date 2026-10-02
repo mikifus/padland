@@ -17,9 +17,9 @@ import com.mikifus.padland.R
  * without option to show.
  *
  * This class listens for layout changes and detects when
- * the contents of the NestedScrollView's single child
- * are smaller than the scroll view in order to search
- * for FABs to show.
+ * the contents of the NestedScrollView can't be scrolled
+ * anymore in order to search for hidden FABs to show.
+ * FABs must use HideViewOnScrollBehavior.
  *
  * Combine it with some space in the child to avoid hiding
  * the content behind the buttons (padding won't do right).
@@ -40,8 +40,7 @@ class ResizeableNestedScrollView @JvmOverloads constructor(
                 left, top, right, bottom,
                 oldLeft, oldTop, oldRight, oldBottom->
 
-            val nestedChild = (view as NestedScrollView).children.iterator().next()
-            if(nestedChild.bottom < bottom - 1) {
+            if(!view.canScrollVertically(1) && !view.canScrollVertically(-1)) {
                 val it = (parent as ViewGroup).children.iterator()
                 while(it.hasNext()) {
                     val child = it.next()
@@ -50,8 +49,11 @@ class ResizeableNestedScrollView @JvmOverloads constructor(
                         (child.layoutParams as CoordinatorLayout.LayoutParams).behavior
                                 is HideViewOnScrollBehavior
                         ) {
-                        ((child.layoutParams as CoordinatorLayout.LayoutParams).behavior
-                                as HideViewOnScrollBehavior).slideIn(child, true)
+                        val behavior = (child.layoutParams as CoordinatorLayout.LayoutParams).behavior
+                                as HideViewOnScrollBehavior
+                        if(behavior.isScrolledOut) {
+                            behavior.slideIn(child, true)
+                        }
                     }
                 }
             }
