@@ -1,0 +1,12 @@
+Padland is an Android app to manage, organize and open collaborative documents based on Etherpad and CryptPad.
+
+Main features:
+- Add custom servers
+- Organize documents in groups
+- Compatible with Etherpad and CryptPad servers
+- Import and export your database
+- Sort and bulk-select pads
+- Long press the new pad button to import from the clipboard
+- Offline mode support
+
+Padland helps you keep collaborative documents together in one place while staying simple and lightweight.

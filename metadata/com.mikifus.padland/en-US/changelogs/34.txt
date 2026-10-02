@@ -1,0 +1,8 @@
+- General bugfixes and improvements in stability
+- Added offline mode support
+- Added sorting options
+- Added a 'select all' button in the list
+- Long press the new pad button to add from clipboard
+- Added debug options, includes error popup and logs
+- Imports don't duplicate data anymore
+

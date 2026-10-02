@@ -1,0 +1,4 @@
+- Minor bug fixes.
+- Minor QoL improvements.
+- Added CryptPad support.
+
