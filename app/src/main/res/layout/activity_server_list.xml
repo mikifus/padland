@@ -60,7 +60,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_add"
         android:layout_gravity="bottom|end"
-        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
+        app:layout_behavior="com.google.android.material.behavior.HideViewOnScrollBehavior"
         app:useCompatPadding="true"
         android:contentDescription="TODO" />
 
