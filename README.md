@@ -60,7 +60,7 @@ You can also paste a list of URLs to import from the clipboard by long pressing 
 4.0
 
 ### Changelog
-[Changelog](metadata/en-US/changelog.md).
+[Changelog](CHANGELOG.md).
 
 ### License
 ----
