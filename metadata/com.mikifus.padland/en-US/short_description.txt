@@ -1,1 +1,1 @@
-App for Etherpad to read, manage and share collaborative documents
+Android App to read, manage and share collaborative documents
