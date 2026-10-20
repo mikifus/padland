@@ -106,15 +106,15 @@
     <string name="serverlist_dialog_new_server_name_label">Название, которое вы хотите присвоить серверу (необязательно).</string>
     <string name="serverlist_dialog_new_server_name_invalid">Неверное имя сервера.</string>
     <string name="serverlist_dialog_new_server_url_title">URL сервера</string>
-    <string name="serverlist_dialog_new_server_url_label">URL-адрес, по которому доступен сервер. Добавьте https://, если доступно.</string>
+    <string name="serverlist_dialog_new_server_url_label">URL-адрес по которому доступен сервер. Добавьте https://, если доступно.</string>
     <string name="validation_url_invalid">Неверный URL сервера</string>
     <string name="serverlist_dialog_new_server_lite_title">Использует Etherpad Lite</string>
     <string name="serverlist_dialog_new_server_lite_label">Я знаю, что этот сервер использует Etherpad Lite.</string>
     <string name="serverlist_dialog_new_server_cryptpad_title">Использует CryptPad</string>
     <string name="serverlist_dialog_new_server_cryptpad_label">Я знаю, что этот сервер использует CryptPad.</string>
     <string name="serverlist_dialog_new_server_advanced_title">Дополнительные настройки</string>
-    <string name="serverlist_dialog_new_server_padprefix_title">Префикс URL-адреса криптопадного блока</string>
-    <string name="serverlist_dialog_new_server_padprefix_label">Новые серверы имеют сегмент URL между доменом сервера и именем криптопадного блока. По умолчанию это \"/p/\". Измените его здесь, если он отличается.</string>
+    <string name="serverlist_dialog_new_server_padprefix_title">Префикс URL-адреса</string>
+    <string name="serverlist_dialog_new_server_padprefix_label">Новые серверы имеют сегмент URL между доменом сервера и именем блокнота. По умолчанию это \"/p/\". Измените его здесь, если он отличается.</string>
     <string name="serverlist_dialog_new_server_padprefix_invalid">Недопустимый префикс страницы.</string>
     <string name="serverlist_dialog_new_server_jquery_title">Совместимо с jQuery</string>
     <string name="serverlist_dialog_new_server_jquery_label">Сервер поддерживается клиентским плагином \"etherpad-lite-jquery-plugin\".</string>
@@ -175,4 +175,56 @@
     <string name="about_support_text"><p>Это приложение находится в разработке. Чтобы оставить отзыв и сообщить об ошибках, пожалуйста, создайте новую проблему на GitHub.</p>\n\n<p>Если вы хотите внести свой вклад, вот репозиторий:\n<a href="https://github.com/mikifus/padland">https://github.com/mikifus/padland</a> </p></string>
     <string name="export_exporting_file">Выберите местоположение файла…</string>
     <string name="import_importing_file">Выберите файл…</string>
+    <string name="action_sort">Сортировать</string>
+    <string name="sort_groups_alphabetical">Группы: по алфавиту</string>
+    <string name="sort_groups_last_access">Группы: последнее открытие</string>
+    <string name="sort_pads_alphabetical">Документы: по алфавиту</string>
+    <string name="sort_pads_last_access">Документы: последнее открытие</string>
+    <string name="select_all">Выбрать все</string>
+    <string name="import_clipboard_no_urls">В буфере обмена нет правильных URL-адресов. Скопируйте по одному полному адресу (https://..) на строку.</string>
+    <string name="import_clipboard_summary">%1$d импортировано. %2$d пропущено. %3$d не удалось.</string>
+    <string name="import_clipboard_unknown_servers">%1$d с неизвестных серверов: %2$s</string>
+    <string name="import_clipboard_add_server">Добавить сервер</string>
+    <string name="settings_debug">Отладка</string>
+    <string name="settings_error_popup_title">Показать всплывающие окна ошибок</string>
+    <string name="settings_error_popup_desc">При ошибке, показывать подробности, чтобы вы могли скопировать их и сообщить о проблеме. Ошибки сохраняются на этом устройстве. Удалите любые конфиденциальные данные из отчёта, прежде чем делиться им.</string>
+    <string name="error_report_list_delete_all_summary">Удалить все ошибки, сохранённые на этом устройстве.</string>
+    <string name="error_report_list_dialog_delete_sure_to_delete">Все сохранённые сообщения об ошибках будут удалены.</string>
+    <string name="error_report_dialog_close">Закрыть</string>
+    <string name="error_report_dialog_show_all">Показать все</string>
+    <string name="error_report_dialog_popup_title">Произошла ошибка</string>
+    <string name="error_report_type_crash">Сбой</string>
+    <string name="error_report_type_error">Ошибка</string>
+    <string name="error_report_list_item_title">%1$s: %2$s</string>
+    <plurals name="import_clipboard_choose_group">
+        <item quantity="one">Импортировать %d URL-адрес в…</item>
+        <item quantity="few">Импортировать %d URL-адреса в…</item>
+        <item quantity="many">Импортировать %d URL-адресов в…</item>
+        <item quantity="other">Импортировать %d URL-адресов в…</item>
+    </plurals>
+    <string name="title_activity_error_report_list">Сохранённые ошибки</string>
+    <string name="pref_error_report_list_summary_none">Нет сохранённых ошибок.</string>
+    <plurals name="pref_error_report_list_summary">
+        <item quantity="one">%d ошибка,сохранённые на этом устройстве.</item>
+        <item quantity="few">%d ошибки сохранённые на этом устройстве.</item>
+        <item quantity="many">%d ошибки сохранённых на этом устройстве.</item>
+        <item quantity="other">%d ошибки сохранённых на этом устройстве.</item>
+    </plurals>
+    <string name="error_report_list_empty_no_errors">Нету сохранённых ошибок.</string>
+    <string name="error_report_dialog_detail_error">Ошибка в %s</string>
+    <string name="error_report_list_delete_all">Удалить сохранённые ошибки</string>
+    <string name="error_report_dialog_popup_summary">Вы можете скопировать данные ниже и присоединить их к сообщению о проблеме.</string>
+    <string name="error_report_dialog_previous_crash_title">Падланд закрылся из-за сбоя</string>
+    <string name="error_report_dialog_previous_crash_summary">В прошлый раз Пэдлэнд отвалился из-за сбоя. Вы можете скопировать подробности ниже и включить их при сообщении о проблеме.</string>
+    <string name="error_report_dialog_detail_crash">Сбой в %s</string>
+    <plurals name="error_report_dialog_more_reports">
+        <item quantity="one">%d ошибку можно найти в Настройках → Сохранённые ошибки.</item>
+        <item quantity="few">%d ошибки можно найти в Настройках → Сохранённые ошибки.</item>
+        <item quantity="many">%d ошибок можно найти в Настройках → Сохранённые ошибки.</item>
+        <item quantity="other">%d ошибок можно найти в Настройках → Сохранённые ошибки.</item>
+    </plurals>
+    <string name="error_report_dialog_not_found_title">Ошибка не найдена</string>
+    <string name="error_report_dialog_not_found">Этот отчёт об ошибке больше не доступен.</string>
+    <string name="error_report_clip_label">Отчёт об ошибке в Пэдлэнде</string>
+    <string name="error_report_dialog_copy_failed">Отчёт не был скопирован.</string>
 </resources>
